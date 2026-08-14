@@ -225,6 +225,15 @@ GitHub Actions runs the same locked Pixi validation. When a helper gains a
 dependency, use `pixi add <package>` and commit both `pixi.toml` and
 `pixi.lock`.
 
+## Design reports
+
+The
+[skill management landscape and standards comparison](docs/skill-management-landscape.md)
+assesses this workshop against the Agent Skills specification, existing
+installers and managers, overlay approaches, and current vendor behavior. Its
+[executive summary](docs/skill-management-executive-summary.md) condenses the
+recommended operating pattern and implementation priorities.
+
 ## STAMPED work
 
 [The STAMPED use-case map](docs/stamped-use-cases.md) turns
