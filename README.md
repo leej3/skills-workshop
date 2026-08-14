@@ -30,6 +30,7 @@ For an existing checkout:
 
 ```console
 git submodule update --init --recursive
+python3 scripts/manage_skills.py configure-upstreams
 python3 scripts/inventory.py
 ```
 
@@ -84,3 +85,15 @@ git add upstreams/<name>
 ```
 
 This makes every upstream update visible as a single pinned commit change.
+
+Each tracked collection follows the usual fork workflow:
+
+- `origin` is the `leej3` fork used for development branches;
+- `upstream` is the canonical community repository used to fetch updates;
+- `.gitmodules` points to the fork so a new workshop clone follows your copy;
+- `registry.toml` records both URLs, and `configure-upstreams` restores the
+  two-remote layout after cloning.
+
+Develop a contribution inside the relevant submodule, push its branch to
+`origin`, and open the pull request against `upstream`. After the upstream
+change merges, update the submodule pin to the canonical merged commit.

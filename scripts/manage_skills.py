@@ -149,6 +149,32 @@ def apply_cluster(name: str, project: Path, replace: bool) -> None:
     print(f"Cluster {name}: {len(locked)} copied skills into {destination_root}")
 
 
+def configure_upstreams() -> None:
+    with (REPOSITORY / "registry.toml").open("rb") as stream:
+        registry = tomllib.load(stream)
+    for entry in registry.get("upstreams", []):
+        path = REPOSITORY / entry["path"]
+        if not (path / ".git").exists():
+            raise FileNotFoundError(
+                f"submodule is not initialized: {path}; run git submodule update --init"
+            )
+        subprocess.run(
+            ["git", "-C", str(path), "remote", "set-url", "origin", entry["fork_url"]],
+            check=True,
+        )
+        result = subprocess.run(
+            ["git", "-C", str(path), "remote", "get-url", "upstream"],
+            check=False,
+            capture_output=True,
+        )
+        action = "set-url" if result.returncode == 0 else "add"
+        subprocess.run(
+            ["git", "-C", str(path), "remote", action, "upstream", entry["url"]],
+            check=True,
+        )
+        print(f"{entry['name']}: origin={entry['fork_url']} upstream={entry['url']}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -158,12 +184,17 @@ def main() -> None:
     cluster.add_argument("name")
     cluster.add_argument("project", type=Path)
     cluster.add_argument("--replace", action="store_true")
+    commands.add_parser(
+        "configure-upstreams", help="configure fork origins and canonical upstream remotes"
+    )
     args = parser.parse_args()
 
     if args.command == "link-core":
         link_core(args.target)
-    else:
+    elif args.command == "apply-cluster":
         apply_cluster(args.name, args.project, args.replace)
+    else:
+        configure_upstreams()
 
 
 if __name__ == "__main__":

@@ -15,17 +15,20 @@ path = "~/.claude/skills"
 [[upstreams]]
 name = "scientific-agent-skills"
 url = "https://github.com/K-Dense-AI/scientific-agent-skills.git"
+fork_url = "https://github.com/leej3/scientific-agent-skills.git"
 path = "upstreams/scientific-agent-skills"
 role = "Broad scientific skill discovery and general scientific contributions"
 
 [[upstreams]]
 name = "nipreps-skills-comm"
 url = "https://github.com/nipreps/skills-comm.git"
+fork_url = "https://github.com/leej3/skills-comm.git"
 path = "upstreams/nipreps-skills-comm"
 role = "Neuroimaging workflows, operational guardrails, and skill iteration examples"
 
 [[upstreams]]
 name = "con-skills"
 url = "https://github.com/con/skills.git"
+fork_url = "https://github.com/leej3/skills.git"
 path = "upstreams/con-skills"
 role = "Software maintenance, triage, and automation skills"
