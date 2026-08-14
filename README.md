@@ -69,9 +69,10 @@ project to use multiple clusters. The project ID defaults to its `origin` remote
 use `--project-id <name>` when the project has no remote or needs a stable
 override.
 
-When project and workshop copies differ, choose one of four explicit policies:
+When project and workshop copies differ, an interactive terminal presents four
+choices:
 
-- `--conflict abort` (default): report every conflict and change nothing;
+- `--conflict abort`: report every conflict and change nothing;
 - `--conflict record`: preserve both copies and update the workshop lock with
   separate source and project hashes marked `diverged`;
 - `--conflict back-propagate`: copy project changes into the workshop source and
@@ -84,6 +85,9 @@ For example:
 ```console
 pixi run apply-cluster datalad-core ../my-dataset --conflict record
 ```
+
+Omit `--conflict` for the menu. In non-interactive automation, omission stops
+safely and reports the flags rather than guessing a policy.
 
 Locks retain both fork (`origin`) and canonical (`upstream`) URLs and mark a
 workshop source dirty after back-propagation until its changes are committed in

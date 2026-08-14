@@ -9,6 +9,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import tomllib
@@ -152,10 +153,40 @@ def replace_tree(source: Path, destination: Path) -> None:
     shutil.copytree(source, destination, symlinks=False)
 
 
+def choose_conflict_policy(
+    conflicts: list[dict[str, object]], requested: str | None
+) -> str:
+    if requested:
+        return requested
+    names = ", ".join(item["entry"]["name"] for item in conflicts)
+    if not sys.stdin.isatty():
+        raise SystemExit(
+            f"project skills differ: {names}; rerun with --conflict abort, record, "
+            "back-propagate, or overwrite"
+        )
+
+    print(f"\nProject skills differ from the workshop: {names}\n")
+    print("1. Do not proceed")
+    print("2. Update workshop metadata and preserve both versions")
+    print("3. Back-propagate project changes into the workshop")
+    print("4. Force-update the project from the workshop")
+    choices = {
+        "1": "abort",
+        "2": "record",
+        "3": "back-propagate",
+        "4": "overwrite",
+    }
+    while True:
+        answer = input("Choose 1-4 [1]: ").strip() or "1"
+        if answer in choices:
+            return choices[answer]
+        print("Enter 1, 2, 3, or 4.")
+
+
 def apply_cluster(
     name: str,
     project: Path,
-    conflict: str,
+    conflict: str | None,
     requested_project_id: str | None,
 ) -> None:
     manifest_path = REPOSITORY / "clusters" / f"{name}.toml"
@@ -190,12 +221,10 @@ def apply_cluster(
         )
 
     conflicts = [item for item in planned if item["conflicting"]]
+    if conflicts:
+        conflict = choose_conflict_policy(conflicts, conflict)
     if conflicts and conflict == "abort":
-        names = ", ".join(item["entry"]["name"] for item in conflicts)
-        raise FileExistsError(
-            f"project skills differ: {names}; choose --conflict record, "
-            "back-propagate, or overwrite"
-        )
+        raise SystemExit("No changes made.")
 
     locked: list[dict[str, object]] = []
     for item in planned:
@@ -278,8 +307,7 @@ def main() -> None:
     cluster.add_argument(
         "--conflict",
         choices=("abort", "record", "back-propagate", "overwrite"),
-        default="abort",
-        help="how to handle project skills that differ from workshop sources",
+        help="conflict policy; omit to choose from a menu in an interactive terminal",
     )
     cluster.add_argument(
         "--project-id",
