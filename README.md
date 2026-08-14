@@ -44,6 +44,19 @@ The inventory is written to `inventory/installed-skills.json`. It is a local
 report and is intentionally ignored because installed skills and absolute host
 paths vary between machines.
 
+Generate a flattened organization table or explore it interactively in
+VisiData:
+
+```console
+pixi run inventory-table
+pixi run inventory-vd
+```
+
+The table joins each skill with its scope, collection, canonical source,
+upstream revision, clusters, materialized projects, and synchronization status.
+Use VisiData for sorting, filtering, grouping, and cross-project planning; use
+the workshop's dedicated commands to make validated filesystem changes.
+
 ## Profiles and clusters
 
 Keep `profiles/core.toml` intentionally small. Link its skills globally:
