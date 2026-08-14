@@ -1,0 +1,6 @@
+# Review records are keyed by the stable identity <source>#<name>.
+# A reviewed record is current only while its sha256 matches the skill tree.
+schema_version = 1
+identity_format = "<source>#<name>"
+
+[reviews]

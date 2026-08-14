@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/materialization-lock.schema.json",
+  "title": "Skills Workshop Materialization Lock",
+  "type": "object",
+  "required": ["schema_version", "cluster", "project", "skills"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "cluster": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "project": {
+      "type": "object",
+      "required": ["id", "remote"],
+      "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+        "remote": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "source",
+          "identity",
+          "source_sha256",
+          "project_sha256",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*\\\\).+$"
+          },
+          "identity": {"type": "string", "minLength": 3},
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "project_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "status": {"enum": ["synced", "diverged"]},
+          "revision": {"type": ["string", "null"]},
+          "origin_url": {"type": ["string", "null"]},
+          "upstream_url": {"type": ["string", "null"]},
+          "source_dirty": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
