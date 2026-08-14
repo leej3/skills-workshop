@@ -1,0 +1,34 @@
+name = "datalad-core"
+description = "Core DataLad dataset creation, retrieval, provenance, and publication"
+
+[[skills]]
+name = "datalad-clone"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-clone"
+
+[[skills]]
+name = "datalad-get"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-get"
+
+[[skills]]
+name = "datalad-init"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-init"
+
+[[skills]]
+name = "datalad-push"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-push"
+
+[[skills]]
+name = "datalad-run"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-run"
+
+[[skills]]
+name = "datalad-save"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-save"
+
+[[skills]]
+name = "datalad-status"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-status"
+
+[[skills]]
+name = "datalad-subdatasets"
+source = "upstreams/nipreps-skills-comm/plugins/datalad-cli/skills/datalad-subdatasets"

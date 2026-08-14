@@ -1,0 +1,31 @@
+schema_version = 1
+
+[[skill_roots]]
+name = "codex-user"
+path = "~/.codex/skills"
+
+[[skill_roots]]
+name = "agent-standard"
+path = "~/.agents/skills"
+
+[[skill_roots]]
+name = "claude-user"
+path = "~/.claude/skills"
+
+[[upstreams]]
+name = "scientific-agent-skills"
+url = "https://github.com/K-Dense-AI/scientific-agent-skills.git"
+path = "upstreams/scientific-agent-skills"
+role = "Broad scientific skill discovery and general scientific contributions"
+
+[[upstreams]]
+name = "nipreps-skills-comm"
+url = "https://github.com/nipreps/skills-comm.git"
+path = "upstreams/nipreps-skills-comm"
+role = "Neuroimaging workflows, operational guardrails, and skill iteration examples"
+
+[[upstreams]]
+name = "con-skills"
+url = "https://github.com/con/skills.git"
+path = "upstreams/con-skills"
+role = "Software maintenance, triage, and automation skills"

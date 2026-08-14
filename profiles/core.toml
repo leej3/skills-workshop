@@ -1,0 +1,6 @@
+name = "core"
+description = "Small host-wide skill set linked into ~/.agents/skills"
+
+# Add only skills useful in nearly every project. Each source is relative to
+# the skills-workshop repository.
+skills = []

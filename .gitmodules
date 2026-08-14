@@ -1,0 +1,9 @@
+[submodule "upstreams/scientific-agent-skills"]
+	path = upstreams/scientific-agent-skills
+	url = https://github.com/K-Dense-AI/scientific-agent-skills.git
+[submodule "upstreams/nipreps-skills-comm"]
+	path = upstreams/nipreps-skills-comm
+	url = https://github.com/nipreps/skills-comm.git
+[submodule "upstreams/con-skills"]
+	path = upstreams/con-skills
+	url = https://github.com/con/skills.git
