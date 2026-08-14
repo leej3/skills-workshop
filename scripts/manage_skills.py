@@ -7,21 +7,35 @@ import argparse
 import difflib
 import hashlib
 import json
+import os
 import re
+import secrets
 import shutil
+import stat as stat_module
 import subprocess
 import sys
 import tempfile
+import time
+from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urlsplit
 
 import tomllib
+
+try:
+    from .backup_store import store_snapshot
+except ImportError:  # Direct execution: python scripts/manage_skills.py
+    from backup_store import store_snapshot
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 CORE_STATE = ".skills-workshop-core.json"
 MATERIALIZATIONS = REPOSITORY / "materializations"
 BACKUPS = REPOSITORY / ".backups"
 SAFE_NAME = re.compile(r"[a-z0-9][a-z0-9-]{0,63}")
+SAFE_PROJECT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
+BACKUP_DIGEST = re.compile(r"[0-9a-f]{64}")
+BACKUP_SIDES = frozenset({"project", "project-pruned", "workshop"})
+DEFAULT_BACKUP_RETENTION_DAYS = 30
 
 
 def safe_name(value: object, *, context: str) -> str:
@@ -30,8 +44,8 @@ def safe_name(value: object, *, context: str) -> str:
     return value
 
 
-def declared_skill_name(skill_file: Path) -> str | None:
-    lines = skill_file.read_text(encoding="utf-8").splitlines()
+def _declared_skill_name_text(contents: str) -> str | None:
+    lines = contents.splitlines()
     if not lines or lines[0].strip() != "---":
         return None
     for line in lines[1:]:
@@ -41,6 +55,10 @@ def declared_skill_name(skill_file: Path) -> str | None:
         if separator and key.strip() == "name":
             return value.strip().strip("'\"") or None
     return None
+
+
+def declared_skill_name(skill_file: Path) -> str | None:
+    return _declared_skill_name_text(skill_file.read_text(encoding="utf-8"))
 
 
 def repository_source(
@@ -323,12 +341,398 @@ def backup_tree(
 ) -> Path | None:
     if not path.is_dir() or path.is_symlink():
         return None
-    digest = digest_tree(path)
-    destination = BACKUPS / f"{project_id}--{cluster}" / side / name / digest
-    if not destination.exists():
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(path, destination, symlinks=False)
-    return destination
+    return store_snapshot(
+        path,
+        BACKUPS,
+        (f"{project_id}--{cluster}", side, name),
+        expected_name=name,
+    )
+
+
+def _directory_flags() -> int:
+    no_follow = getattr(os, "O_NOFOLLOW", 0)
+    directory_only = getattr(os, "O_DIRECTORY", 0)
+    if not no_follow or not directory_only or not shutil.rmtree.avoids_symlink_attacks:
+        raise RuntimeError("safe descriptor-based backup cleanup is unavailable")
+    return os.O_RDONLY | no_follow | directory_only
+
+
+def _inode(stat: os.stat_result) -> tuple[int, int]:
+    return stat.st_dev, stat.st_ino
+
+
+def _snapshot(stat: os.stat_result) -> tuple[int, int, int]:
+    return stat.st_dev, stat.st_ino, stat.st_mtime_ns
+
+
+def _open_real_directory(
+    parent: int,
+    name: str,
+    expected: os.stat_result,
+) -> int:
+    try:
+        descriptor = os.open(name, _directory_flags(), dir_fd=parent)
+    except OSError as error:
+        raise RuntimeError(f"backup path changed during cleanup: {name}") from error
+    if _inode(os.fstat(descriptor)) != _inode(expected):
+        os.close(descriptor)
+        raise RuntimeError(f"backup path changed during cleanup: {name}")
+    return descriptor
+
+
+def _entries(descriptor: int) -> list[tuple[str, os.stat_result]]:
+    try:
+        with os.scandir(descriptor) as entries:
+            return sorted(
+                ((entry.name, entry.stat(follow_symlinks=False)) for entry in entries),
+                key=lambda item: item[0],
+            )
+    except OSError as error:
+        raise RuntimeError("backup directory changed during cleanup") from error
+
+
+def _read_regular_file(
+    parent: int,
+    name: str,
+    expected: os.stat_result,
+) -> bytes | None:
+    no_follow = getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(name, os.O_RDONLY | no_follow, dir_fd=parent)
+    except OSError:
+        return None
+    try:
+        current = os.fstat(descriptor)
+        if _inode(current) != _inode(expected) or not stat_module.S_ISREG(
+            current.st_mode
+        ):
+            return None
+        chunks: list[bytes] = []
+        while chunk := os.read(descriptor, 1024 * 1024):
+            chunks.append(chunk)
+        return b"".join(chunks)
+    finally:
+        os.close(descriptor)
+
+
+def _read_skill_tree(
+    descriptor: int,
+    relative: tuple[str, ...] = (),
+) -> list[tuple[str, bytes]] | None:
+    files: list[tuple[str, bytes]] = []
+    for name, entry_stat in _entries(descriptor):
+        path = (*relative, name)
+        if stat_module.S_ISLNK(entry_stat.st_mode):
+            return None
+        if stat_module.S_ISDIR(entry_stat.st_mode):
+            try:
+                child = _open_real_directory(descriptor, name, entry_stat)
+            except RuntimeError:
+                return None
+            try:
+                nested = _read_skill_tree(child, path)
+            finally:
+                os.close(child)
+            if nested is None:
+                return None
+            files.extend(nested)
+        elif stat_module.S_ISREG(entry_stat.st_mode):
+            contents = _read_regular_file(descriptor, name, entry_stat)
+            if contents is None:
+                return None
+            files.append(("/".join(path), contents))
+        else:
+            return None
+    return files
+
+
+def _inspect_backup_tree(
+    descriptor: int,
+    *,
+    expected_name: str,
+    expected_digest: str,
+) -> tuple[int, int, int] | None:
+    before = os.fstat(descriptor)
+    files = _read_skill_tree(descriptor)
+    after = os.fstat(descriptor)
+    if files is None or _snapshot(after) != _snapshot(before):
+        return None
+    skill_files = [contents for path, contents in files if path == "SKILL.md"]
+    if len(skill_files) != 1:
+        return None
+    try:
+        declared_name = _declared_skill_name_text(skill_files[0].decode("utf-8"))
+    except UnicodeDecodeError:
+        return None
+    if declared_name != expected_name:
+        return None
+
+    digest = hashlib.sha256()
+    for relative, contents in sorted(files):
+        digest.update(relative.encode())
+        digest.update(b"\0")
+        digest.update(contents)
+        digest.update(b"\0")
+    if digest.hexdigest() != expected_digest:
+        return None
+    return _snapshot(after)
+
+
+def _scan_backup_layout(
+    descriptor: int,
+    prefix: Path,
+    validators: tuple[Callable[[str], bool], ...],
+    candidates: list[tuple[Path, tuple[int, int, int]]],
+    unsafe: list[Path],
+    level: int = 0,
+) -> None:
+    for name, entry_stat in _entries(descriptor):
+        relative = prefix / name
+        if not stat_module.S_ISDIR(entry_stat.st_mode) or not validators[level](name):
+            unsafe.append(relative)
+            continue
+        try:
+            child = _open_real_directory(descriptor, name, entry_stat)
+        except RuntimeError:
+            unsafe.append(relative)
+            continue
+        try:
+            if level + 1 < len(validators):
+                _scan_backup_layout(
+                    child,
+                    relative,
+                    validators,
+                    candidates,
+                    unsafe,
+                    level + 1,
+                )
+                continue
+            snapshot = _inspect_backup_tree(
+                child,
+                expected_name=relative.parts[-2],
+                expected_digest=name,
+            )
+            if snapshot is None:
+                unsafe.append(relative)
+            else:
+                candidates.append((relative, snapshot))
+        finally:
+            os.close(child)
+
+
+def _materialization_collection(name: str) -> bool:
+    project_id, separator, cluster = name.rpartition("--")
+    return bool(
+        separator
+        and SAFE_PROJECT_ID.fullmatch(project_id)
+        and SAFE_NAME.fullmatch(cluster)
+    )
+
+
+def _backup_candidates(
+    root_descriptor: int,
+) -> tuple[list[tuple[Path, tuple[int, int, int]]], list[Path]]:
+    """Find only valid skill snapshots in recognized workshop backup layouts."""
+    candidates: list[tuple[Path, tuple[int, int, int]]] = []
+    unsafe: list[Path] = []
+    for name, entry_stat in _entries(root_descriptor):
+        relative = Path(name)
+        if not stat_module.S_ISDIR(entry_stat.st_mode):
+            unsafe.append(relative)
+            continue
+        if name == "project-import":
+            validators: tuple[Callable[[str], bool], ...] = (
+                lambda value: bool(SAFE_NAME.fullmatch(value)),
+                lambda value: bool(BACKUP_DIGEST.fullmatch(value)),
+            )
+        elif _materialization_collection(name):
+            validators = (
+                lambda value: value in BACKUP_SIDES,
+                lambda value: bool(SAFE_NAME.fullmatch(value)),
+                lambda value: bool(BACKUP_DIGEST.fullmatch(value)),
+            )
+        else:
+            unsafe.append(relative)
+            continue
+        try:
+            collection = _open_real_directory(root_descriptor, name, entry_stat)
+        except RuntimeError:
+            unsafe.append(relative)
+            continue
+        try:
+            _scan_backup_layout(
+                collection,
+                relative,
+                validators,
+                candidates,
+                unsafe,
+            )
+        finally:
+            os.close(collection)
+    return sorted(candidates), sorted(set(unsafe))
+
+
+def _assert_root_identity(
+    root: Path,
+    expected: tuple[int, int],
+) -> None:
+    try:
+        current = os.stat(root, follow_symlinks=False)
+    except OSError as error:
+        raise RuntimeError("backup root changed during cleanup") from error
+    if _inode(current) != expected or not stat_module.S_ISDIR(current.st_mode):
+        raise RuntimeError("backup root changed during cleanup")
+
+
+def _remove_backup_tree(
+    root_descriptor: int,
+    candidate: Path,
+    snapshot: tuple[int, int, int],
+) -> None:
+    """Remove a verified backup through descriptors anchored at BACKUPS."""
+    descriptors: list[int] = []
+    try:
+        parent = os.dup(root_descriptor)
+        descriptors.append(parent)
+        for part in candidate.parts[:-1]:
+            entry_stat = os.stat(part, dir_fd=parent, follow_symlinks=False)
+            parent = _open_real_directory(parent, part, entry_stat)
+            descriptors.append(parent)
+
+        current_stat = os.stat(
+            candidate.name,
+            dir_fd=parent,
+            follow_symlinks=False,
+        )
+        if _snapshot(current_stat) != snapshot or not stat_module.S_ISDIR(
+            current_stat.st_mode
+        ):
+            raise RuntimeError(f"backup changed during cleanup: {candidate}")
+
+        quarantine = f".skills-workshop-delete-{candidate.name}-{secrets.token_hex(8)}"
+        os.rename(
+            candidate.name,
+            quarantine,
+            src_dir_fd=parent,
+            dst_dir_fd=parent,
+        )
+        try:
+            quarantine_stat = os.stat(
+                quarantine,
+                dir_fd=parent,
+                follow_symlinks=False,
+            )
+            quarantine_descriptor = _open_real_directory(
+                parent,
+                quarantine,
+                quarantine_stat,
+            )
+            try:
+                valid = _inspect_backup_tree(
+                    quarantine_descriptor,
+                    expected_name=candidate.parts[-2],
+                    expected_digest=candidate.name,
+                )
+            finally:
+                os.close(quarantine_descriptor)
+            if valid != snapshot:
+                raise RuntimeError(f"backup changed during cleanup: {candidate}")
+            shutil.rmtree(quarantine, dir_fd=parent)
+        except Exception:
+            os.rename(
+                quarantine,
+                candidate.name,
+                src_dir_fd=parent,
+                dst_dir_fd=parent,
+            )
+            raise
+    finally:
+        for descriptor in reversed(descriptors):
+            os.close(descriptor)
+
+
+def cleanup_backups(
+    root: Path,
+    *,
+    retention_days: int = DEFAULT_BACKUP_RETENTION_DAYS,
+    apply: bool = False,
+    now: float | None = None,
+) -> dict[str, tuple[str, ...]]:
+    """Preview or remove real backup trees at least ``retention_days`` old."""
+    if retention_days < 1:
+        raise ValueError("backup retention must be at least one day")
+    try:
+        root_descriptor = os.open(root, _directory_flags())
+    except FileNotFoundError:
+        return {"expired": (), "retained": (), "unsafe": (), "removed": ()}
+    except OSError as error:
+        raise ValueError(f"backup root is not a real directory: {root}") from error
+
+    try:
+        root_identity = _inode(os.fstat(root_descriptor))
+        _assert_root_identity(root, root_identity)
+        candidates, unsafe = _backup_candidates(root_descriptor)
+        _assert_root_identity(root, root_identity)
+        current_time = time.time() if now is None else now
+        cutoff = current_time - retention_days * 24 * 60 * 60
+        expired: list[Path] = []
+        retained: list[Path] = []
+        snapshots: dict[Path, tuple[int, int, int]] = {}
+        for candidate, snapshot in candidates:
+            snapshots[candidate] = snapshot
+            modified = snapshot[2] / 1_000_000_000
+            (expired if modified <= cutoff else retained).append(candidate)
+
+        removed: list[Path] = []
+        if apply:
+            for candidate in expired:
+                _assert_root_identity(root, root_identity)
+                _remove_backup_tree(
+                    root_descriptor,
+                    candidate,
+                    snapshots[candidate],
+                )
+                removed.append(candidate)
+            _assert_root_identity(root, root_identity)
+
+        def relative(paths: list[Path]) -> tuple[str, ...]:
+            return tuple(path.as_posix() for path in sorted(set(paths)))
+
+        return {
+            "expired": relative(expired),
+            "retained": relative(retained),
+            "unsafe": relative(unsafe),
+            "removed": relative(removed),
+        }
+    finally:
+        os.close(root_descriptor)
+
+
+def report_backup_cleanup(
+    *,
+    retention_days: int = DEFAULT_BACKUP_RETENTION_DAYS,
+    apply: bool = False,
+) -> None:
+    result = cleanup_backups(
+        BACKUPS,
+        retention_days=retention_days,
+        apply=apply,
+    )
+    action = "Removed" if apply else "Would remove"
+    print(
+        f"{action} {len(result['removed'] if apply else result['expired'])} "
+        f"backup(s) at least {retention_days} days old."
+    )
+    for path in result["removed"] if apply else result["expired"]:
+        print(f"  {path}")
+    if result["unsafe"]:
+        print(
+            f"Skipped {len(result['unsafe'])} unrecognized, corrupt, or unsafe path(s):"
+        )
+        for path in result["unsafe"]:
+            print(f"  {path}")
+    if not apply:
+        print("Dry run: rerun with --apply to delete expired backups.")
 
 
 def tree_diff(source: Path, project: Path) -> str:
@@ -684,6 +1088,21 @@ def main() -> None:
         "configure-upstreams",
         help="configure fork origins and canonical upstream remotes",
     )
+    cleanup = commands.add_parser(
+        "cleanup-backups",
+        help="preview or remove expired local recovery backups",
+    )
+    cleanup.add_argument(
+        "--retention-days",
+        type=int,
+        default=DEFAULT_BACKUP_RETENTION_DAYS,
+        help=f"expire backups after this many days (default: {DEFAULT_BACKUP_RETENTION_DAYS})",
+    )
+    cleanup.add_argument(
+        "--apply",
+        action="store_true",
+        help="delete expired backups; without this flag the command is a dry run",
+    )
     args = parser.parse_args()
 
     if args.command == "link-core":
@@ -697,6 +1116,11 @@ def main() -> None:
             args.dry_run,
             args.prune,
             args.show_diff,
+        )
+    elif args.command == "cleanup-backups":
+        report_backup_cleanup(
+            retention_days=args.retention_days,
+            apply=args.apply,
         )
     else:
         configure_upstreams()

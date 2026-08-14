@@ -34,6 +34,11 @@ from textual.widgets import (
     TextArea,
 )
 
+try:
+    from .backup_store import store_snapshot
+except ImportError:  # Direct execution: python scripts/import_skills.py
+    from backup_store import store_snapshot
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 MATERIALIZATIONS = REPOSITORY / "materializations"
 BACKUPS = REPOSITORY / ".backups"
@@ -188,11 +193,12 @@ def source_metadata(source: Path) -> dict[str, str | bool | None]:
 
 
 def backup_source(path: Path, name: str) -> None:
-    digest = digest_tree(path)
-    destination = BACKUPS / "project-import" / name / digest
-    if not destination.exists():
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(path, destination, symlinks=False)
+    store_snapshot(
+        path,
+        BACKUPS,
+        ("project-import", name),
+        expected_name=name,
+    )
 
 
 def text_diff(source: Path, project: Path) -> str:

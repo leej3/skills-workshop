@@ -160,7 +160,19 @@ and non-directory paths are refused.
 Before replacement or pruning, the workshop makes a content-addressed local
 backup under `.backups/`. Backups are ignored by Git and are an emergency
 recovery aid rather than durable project history; review and commit intended
-skill changes in their owning repository.
+skill changes in their owning repository. The retention period is 30 days.
+Preview expired backups, then explicitly remove them:
+
+```console
+pixi run cleanup-backups
+pixi run cleanup-backups-apply
+```
+
+The cleanup includes backups that are at least 30 days old. It only considers
+strictly recognized backup layouts whose contents are a real, symlink-free
+skill tree matching the directory's content digest. Unrelated or corrupt
+trees are preserved. Discovery and deletion remain anchored to the originally
+opened `.backups/` directory and never follow symlinks outside it.
 
 ## Track forks and canonical upstreams
 
@@ -221,6 +233,12 @@ into bounded software-review, dataset-review, refactoring, dispatch, and skill-
 evaluation candidates. This workshop supplies the discovery, composition,
 provenance, trust, and forward-testing workflow around those skills without
 making that coordination pattern a downstream requirement.
+
+## License
+
+The workshop code is available under the [MIT License](LICENSE). Upstream
+submodules and imported skills retain their own licenses; review each source's
+terms before using or redistributing it.
 
 ## Working agreement
 
