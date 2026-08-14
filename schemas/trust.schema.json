@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/trust.schema.json",
+  "title": "Skills Workshop Trust Registry",
+  "type": "object",
+  "required": ["schema_version", "identity_format", "reviews"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "identity_format": {"const": "<source>#<name>"},
+    "reviews": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["source", "name", "state"],
+        "properties": {
+          "source": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*\\\\).+$"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "state": {
+            "enum": ["unreviewed", "in-review", "reviewed", "rejected"]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "revision": {"type": "string"},
+          "reviewer": {"type": "string"},
+          "reviewed_at": {"type": "string"},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

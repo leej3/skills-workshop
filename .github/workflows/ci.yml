@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository and upstream skills
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Pixi
+        uses: prefix-dev/setup-pixi@v0.10.1
+        with:
+          cache: true
+          frozen: true
+
+      - name: Validate
+        run: pixi run validate

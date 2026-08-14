@@ -1,168 +1,232 @@
 # Skills workshop
 
-This repository is the control plane for developing, installing, and
-contributing agent skills without mixing local work with upstream code.
+This repository is the control plane for discovering, reviewing, organizing,
+developing, and contributing agent skills. Upstream code stays pinned and
+traceable here; downstream projects receive ordinary skill directories and do
+not need this workshop's tooling or metadata.
 
-## Layout
+## Organization model
 
-- `skills/`: skills authored or substantially adapted here
-- `upstreams/`: read-only, commit-pinned upstream collections
-- `profiles/core.toml`: small host-wide selection linked into `~/.agents/skills`
-- `clusters/`: related selections copied into individual projects
-- `materializations/`: workshop-owned locks coordinating downstream skill copies
-- `registry.toml`: upstream purpose, policy, and local skill roots
-- `scripts/inventory.py`: reproducible inventory of installed and upstream skills
-- `scripts/manage_skills.py`: apply the core profile or materialize a cluster
-- `docs/stamped-use-cases.md`: candidate work for stamped-agent-skills issue #2
+| Layer | Purpose | Tracked where |
+| --- | --- | --- |
+| Upstream collection | Search and contribute to existing work | `upstreams/` submodules plus `registry.toml` |
+| Workshop skill | Author or substantially adapt a skill | `skills/` |
+| Core profile | Small host-wide set linked into `~/.agents/skills` | `profiles/core.toml` |
+| Cluster | Reusable, topic-oriented selection | `clusters/*.toml` |
+| Project copy | Independently editable standard skills | `<project>/.agents/skills/` |
+| Coordination lock | Separate workshop/project baselines and provenance | `materializations/*.lock.json` |
 
-The upstream checkouts are Git submodules. This preserves exact provenance and
-makes it possible to compare or contribute changes in the source repository
-instead of silently copying and diverging.
+The important boundary is the last one: locks remain in this repository.
+Projects can commit their copied skills, use them without the workshop, and
+develop them independently. The workshop uses its own locks to recognize and
+reconcile later changes.
 
-## Start here
+These locations follow
+[Codex's documented discovery scopes](https://developers.openai.com/codex/skills):
+user skills live under `$HOME/.agents/skills`, while repository skills live
+in `.agents/skills` from the working directory up to the repository root.
 
-Clone with upstreams:
+## Set up the workshop
+
+Clone the repository and its pinned upstreams:
 
 ```console
-git clone --recurse-submodules <this-repository>
+git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
+cd skills-workshop
+pixi install --locked
+pixi run configure-upstreams
+pixi run validate
 ```
 
-For an existing checkout:
+For an existing checkout, initialize any missing submodules first:
 
 ```console
 git submodule update --init --recursive
-pixi install --locked
-pixi run configure-upstreams
-pixi run inventory
 ```
 
-The scientific collection is large; its first checkout can take longer than
-the other two. The inventory still reports the pinned revision when a submodule
-has not been initialized and marks that source with `initialized: false`.
+The scientific collection is large, so its first checkout can take longer.
+Pixi owns the helper dependencies, and the committed `pixi.lock` keeps them
+reproducible on macOS and Linux.
 
-The inventory is written to `inventory/installed-skills.json`. It is a local
-report and is intentionally ignored because installed skills and absolute host
-paths vary between machines.
+## Discover and review skills
 
-Generate a flattened organization table or explore it interactively in
-VisiData:
+Build the inventory, create a flattened table, or explore it in VisiData:
 
 ```console
+pixi run inventory
 pixi run inventory-table
 pixi run inventory-vd
 ```
 
-The table joins each skill with its scope, collection, canonical source,
-upstream revision, clusters, materialized projects, and synchronization status.
-Use VisiData for sorting, filtering, grouping, and cross-project planning; use
-the workshop's dedicated commands to make validated filesystem changes.
+The table connects each skill to its collection, source, revision, clusters,
+materialized projects, and synchronization state. Generated inventory files
+are host-specific and intentionally ignored.
 
-## Profiles and clusters
+Before selecting a third-party skill, inspect its trust and licensing signals:
 
-Keep `profiles/core.toml` intentionally small. Link its skills globally:
+```console
+pixi run trust-inventory
+pixi run trust-inventory --format tsv --output inventory/trust.tsv
+pixi run trust-vd
+pixi run review-skill <source> <name> --state reviewed --reviewer <reviewer>
+```
+
+`policy/trust.toml` keys reviews by the stable identity `<source>#<name>` and
+binds a completed review to the skill tree hash. A later content change makes
+that review stale. License, executable, network, and credential results are
+review cues, not security findings or compliance conclusions.
+
+## Organize a core profile and clusters
+
+Keep `profiles/core.toml` intentionally small: it is for skills useful in
+nearly every project. Reconcile its links with:
 
 ```console
 pixi run link-core
 ```
 
-A cluster is a reusable selection, not an installation. Applying one copies
-complete skill directories into a project's `.agents/skills` directory:
+Clusters are reusable selections, not installations. They let the inventory
+grow by topic while each project chooses only what it needs. Applying a cluster
+copies complete skill directories into a project:
 
 ```console
 pixi run apply-cluster project-maintenance ../my-project
 pixi run apply-cluster datalad-core ../my-dataset
 ```
 
-Import independently developed project skills with the terminal UI:
+Materialization refuses skill trees containing symlinks. This prevents a link
+from silently copying or exposing content outside the selected skill tree.
+Codex supports the top-level skill-folder links made by `link-core`; the
+restriction applies to links nested inside a copied skill tree.
+
+## Import and organize project work
+
+Use the terminal UI to bring independently developed project skills under
+workshop coordination:
 
 ```console
 pixi run import-project ../my-project
+pixi run import-project ../my-project --project-id stable-project-name
 ```
 
-Use the skill list to choose the current project skill, edit its workshop source
-path, toggle zero or more clusters with Space, and review its scrollable
-`SKILL.md` preview. Press Ctrl+S or choose Import to copy new workshop sources
-and update cluster manifests. Existing differing sources are reported and left
-unchanged.
+The UI supports filtering, source-path suggestions, zero or more clusters per
+skill, creation of a new cluster, and a scrollable project/diff preview. It
+tracks mappings by source and name, so an unrelated skill with the same install
+name is not silently removed from another cluster. On differing workshop and
+project content, the import policy can stop, record both baselines, or
+back-propagate the project copy.
 
-The target receives only standard `.agents/skills/<name>` directories and can
-develop those copies independently. This workshop writes the coordination lock
-to `materializations/<project-id>--<cluster>.lock.json`, recording the cluster,
-downstream Git remote, content hashes, upstream URLs, and pinned revisions.
-Commit that lock here, not in the downstream project. Separate locks allow a
-project to use multiple clusters. The project ID defaults to its `origin` remote;
-use `--project-id <name>` when the project has no remote or needs a stable
-override.
+The project ID normally derives from its `origin` remote. Use `--project-id`
+when there is no remote or when the same stable identity must be retained after
+a move.
 
-When project and workshop copies differ, an interactive terminal presents four
-choices:
+## Inspect and reconcile changes
 
-- `--conflict abort`: report every conflict and change nothing;
-- `--conflict record`: preserve both copies and update the workshop lock with
-  separate source and project hashes marked `diverged`;
-- `--conflict back-propagate`: copy project changes into the workshop source and
-  update the lock—review and commit the resulting first-party or submodule work;
-- `--conflict overwrite`: replace the project copy from the workshop and update
-  the lock.
+Inspect all workshop and project copies represented by the project's locks:
+
+```console
+pixi run skill-status ../my-project
+pixi run skill-status ../my-project --diff
+pixi run skill-status ../my-project --format json
+pixi run skill-status ../my-project --plan overwrite --prune
+```
+
+Status distinguishes synchronized content, project-only changes,
+workshop-only changes, changes on both sides, recorded divergence, missing
+copies, lock collisions, obsolete selections, and fetched upstream updates.
+Plans and diffs are always read-only.
+
+Applying a cluster offers four explicit conflict policies:
+
+- `abort`: do not proceed;
+- `record`: preserve both copies and update the workshop metadata;
+- `back-propagate`: replace the workshop source from the project copy;
+- `overwrite`: force-update the project copy from the workshop.
 
 For example:
 
 ```console
-pixi run apply-cluster datalad-core ../my-dataset --conflict record
+pixi run apply-cluster datalad-core ../my-dataset --dry-run --prune
+pixi run apply-cluster datalad-core ../my-dataset \
+  --conflict back-propagate --show-diff --prune
 ```
 
-Omit `--conflict` for the menu. In non-interactive automation, omission stops
-safely and reports the flags rather than guessing a policy.
+Omit `--conflict` for the interactive menu. Non-interactive use stops rather
+than guessing. Normal reapplication never overwrites changed downstream
+skills. Pruning only removes a previously managed skill that is no longer in
+the cluster and still matches its recorded project baseline; changed, symlink,
+and non-directory paths are refused.
 
-Locks retain both fork (`origin`) and canonical (`upstream`) URLs and mark a
-workshop source dirty after back-propagation until its changes are committed in
-the appropriate first-party repository or upstream fork.
+Before replacement or pruning, the workshop makes a content-addressed local
+backup under `.backups/`. Backups are ignored by Git and are an emergency
+recovery aid rather than durable project history; review and commit intended
+skill changes in their owning repository.
 
-## Development environment
+## Track forks and canonical upstreams
 
-Pixi owns the workshop's Python and command-line dependencies. `pixi.lock` is
-committed so every checkout resolves the same environment. Common tasks are:
+Each collection uses the same contribution layout:
+
+- `origin` is the `leej3` fork used for development branches;
+- `upstream` is the canonical community repository;
+- `.gitmodules` points to the fork for reproducible clones;
+- `registry.toml` records both URLs and the collection's role.
+
+Inspect fork, canonical, and pinned revisions:
 
 ```console
-pixi run inventory
-pixi run configure-upstreams
-pixi run validate
+pixi run upstream-status
+pixi run upstream-status --fetch
+```
+
+Plan an update from the canonical upstream, then apply it only after review:
+
+```console
+pixi run upstream-update nipreps-skills-comm --fetch
+pixi run upstream-update nipreps-skills-comm --apply
+```
+
+Updates are dry runs by default. Applying requires verified remotes, a clean
+submodule, matching checkout/index/pin, an unchanged selected remote ref, and a
+fast-forward target. It moves only the submodule checkout; the resulting
+superproject gitlink still needs explicit review and commit.
+
+Develop broadly useful changes on a branch inside the relevant submodule, push
+that branch to its `origin`, and propose it to the canonical `upstream`. After
+merge, advance this workshop's submodule pin to the canonical commit.
+
+## Metadata and development
+
+Cluster manifests use schema version 1. Materialization locks use version 2,
+with separate source and project hashes and a `<source>#<name>` identity.
+Schemas live under `schemas/`; runtime validation also protects every path and
+field used by destructive operations.
+
+```console
+pixi run migrate-metadata          # report legacy locks
+pixi run migrate-metadata-apply    # rewrite v1 locks to v2
+pixi run validate-metadata
+pixi run validate                  # lint, format check, compile, tests, metadata
 pixi run format
 ```
 
-Use `pixi add <package>` when a helper script gains a runtime dependency, then
-commit both `pixi.toml` and the updated `pixi.lock`.
+GitHub Actions runs the same locked Pixi validation. When a helper gains a
+dependency, use `pixi add <package>` and commit both `pixi.toml` and
+`pixi.lock`.
+
+## STAMPED work
+
+[The STAMPED use-case map](docs/stamped-use-cases.md) turns
+[stamped-agent-skills issue #2](https://github.com/stamped-principles/stamped-agent-skills/issues/2)
+into bounded software-review, dataset-review, refactoring, dispatch, and skill-
+evaluation candidates. This workshop supplies the discovery, composition,
+provenance, trust, and forward-testing workflow around those skills without
+making that coordination pattern a downstream requirement.
 
 ## Working agreement
 
 1. Search the upstream collections before starting a new skill.
-2. Prefer contributing a generally useful improvement to its original project.
-3. Put genuinely personal or cross-upstream experiments in `skills/`.
-4. Record provenance when adapting an upstream skill; do not copy code without
-   checking its license.
-5. Keep only selected skills installed. Review `SKILL.md` and bundled scripts
-   before enabling third-party skills.
-6. Validate and forward-test skills on realistic tasks before proposing them
-   upstream.
-
-Update one upstream deliberately with:
-
-```console
-git -C upstreams/<name> fetch
-git -C upstreams/<name> switch --detach <tag-or-commit>
-git add upstreams/<name>
-```
-
-This makes every upstream update visible as a single pinned commit change.
-
-Each tracked collection follows the usual fork workflow:
-
-- `origin` is the `leej3` fork used for development branches;
-- `upstream` is the canonical community repository used to fetch updates;
-- `.gitmodules` points to the fork so a new workshop clone follows your copy;
-- `registry.toml` records both URLs, and `configure-upstreams` restores the
-  two-remote layout after cloning.
-
-Develop a contribution inside the relevant submodule, push its branch to
-`origin`, and open the pull request against `upstream`. After the upstream
-change merges, update the submodule pin to the canonical merged commit.
+2. Review provenance, licensing, scripts, and external access before selection.
+3. Prefer contributing generally useful behavior to its original project.
+4. Keep personal or cross-upstream experiments in `skills/`.
+5. Keep the core profile small and organize project needs into clusters.
+6. Forward-test on realistic tasks before proposing a skill upstream.

@@ -2,3 +2,4 @@ inventory/*
 __pycache__/
 *.py[cod]
 .pixi/
+.backups/
