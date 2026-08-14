@@ -1,3 +1,4 @@
-inventory/installed-skills.json
+inventory/*
 __pycache__/
 *.py[cod]
+.pixi/

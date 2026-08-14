@@ -9,6 +9,7 @@ contributing agent skills without mixing local work with upstream code.
 - `upstreams/`: read-only, commit-pinned upstream collections
 - `profiles/core.toml`: small host-wide selection linked into `~/.agents/skills`
 - `clusters/`: related selections copied into individual projects
+- `materializations/`: workshop-owned locks coordinating downstream skill copies
 - `registry.toml`: upstream purpose, policy, and local skill roots
 - `scripts/inventory.py`: reproducible inventory of installed and upstream skills
 - `scripts/manage_skills.py`: apply the core profile or materialize a cluster
@@ -30,7 +31,9 @@ For an existing checkout:
 
 ```console
 git submodule update --init --recursive
-python3 scripts/inventory.py
+pixi install --locked
+pixi run configure-upstreams
+pixi run inventory
 ```
 
 The scientific collection is large; its first checkout can take longer than
@@ -41,27 +44,94 @@ The inventory is written to `inventory/installed-skills.json`. It is a local
 report and is intentionally ignored because installed skills and absolute host
 paths vary between machines.
 
+Generate a flattened organization table or explore it interactively in
+VisiData:
+
+```console
+pixi run inventory-table
+pixi run inventory-vd
+```
+
+The table joins each skill with its scope, collection, canonical source,
+upstream revision, clusters, materialized projects, and synchronization status.
+Use VisiData for sorting, filtering, grouping, and cross-project planning; use
+the workshop's dedicated commands to make validated filesystem changes.
+
 ## Profiles and clusters
 
 Keep `profiles/core.toml` intentionally small. Link its skills globally:
 
 ```console
-python3 scripts/manage_skills.py link-core
+pixi run link-core
 ```
 
 A cluster is a reusable selection, not an installation. Applying one copies
 complete skill directories into a project's `.agents/skills` directory:
 
 ```console
-python3 scripts/manage_skills.py apply-cluster project-maintenance ../my-project
-python3 scripts/manage_skills.py apply-cluster datalad-core ../my-dataset
+pixi run apply-cluster project-maintenance ../my-project
+pixi run apply-cluster datalad-core ../my-dataset
 ```
 
-The target project receives `.agents/skills.lock.json` with source paths,
-content hashes, upstream URLs, and pinned revisions. Commit both `.agents/skills/`
-and the lock file in that project. It can then use the skills without this
-workshop checkout. Reapply with `--replace` to update a copied cluster after
-reviewing upstream changes.
+Import independently developed project skills with the terminal UI:
+
+```console
+pixi run import-project ../my-project
+```
+
+Use the skill list to choose the current project skill, edit its workshop source
+path, toggle zero or more clusters with Space, and review its scrollable
+`SKILL.md` preview. Press Ctrl+S or choose Import to copy new workshop sources
+and update cluster manifests. Existing differing sources are reported and left
+unchanged.
+
+The target receives only standard `.agents/skills/<name>` directories and can
+develop those copies independently. This workshop writes the coordination lock
+to `materializations/<project-id>--<cluster>.lock.json`, recording the cluster,
+downstream Git remote, content hashes, upstream URLs, and pinned revisions.
+Commit that lock here, not in the downstream project. Separate locks allow a
+project to use multiple clusters. The project ID defaults to its `origin` remote;
+use `--project-id <name>` when the project has no remote or needs a stable
+override.
+
+When project and workshop copies differ, an interactive terminal presents four
+choices:
+
+- `--conflict abort`: report every conflict and change nothing;
+- `--conflict record`: preserve both copies and update the workshop lock with
+  separate source and project hashes marked `diverged`;
+- `--conflict back-propagate`: copy project changes into the workshop source and
+  update the lock—review and commit the resulting first-party or submodule work;
+- `--conflict overwrite`: replace the project copy from the workshop and update
+  the lock.
+
+For example:
+
+```console
+pixi run apply-cluster datalad-core ../my-dataset --conflict record
+```
+
+Omit `--conflict` for the menu. In non-interactive automation, omission stops
+safely and reports the flags rather than guessing a policy.
+
+Locks retain both fork (`origin`) and canonical (`upstream`) URLs and mark a
+workshop source dirty after back-propagation until its changes are committed in
+the appropriate first-party repository or upstream fork.
+
+## Development environment
+
+Pixi owns the workshop's Python and command-line dependencies. `pixi.lock` is
+committed so every checkout resolves the same environment. Common tasks are:
+
+```console
+pixi run inventory
+pixi run configure-upstreams
+pixi run validate
+pixi run format
+```
+
+Use `pixi add <package>` when a helper script gains a runtime dependency, then
+commit both `pixi.toml` and the updated `pixi.lock`.
 
 ## Working agreement
 
@@ -84,3 +154,15 @@ git add upstreams/<name>
 ```
 
 This makes every upstream update visible as a single pinned commit change.
+
+Each tracked collection follows the usual fork workflow:
+
+- `origin` is the `leej3` fork used for development branches;
+- `upstream` is the canonical community repository used to fetch updates;
+- `.gitmodules` points to the fork so a new workshop clone follows your copy;
+- `registry.toml` records both URLs, and `configure-upstreams` restores the
+  two-remote layout after cloning.
+
+Develop a contribution inside the relevant submodule, push its branch to
+`origin`, and open the pull request against `upstream`. After the upstream
+change merges, update the submodule pin to the canonical merged commit.

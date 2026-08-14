@@ -1,0 +1,28 @@
+[workspace]
+name = "skills-workshop"
+version = "0.1.0"
+description = "Curate, develop, and materialize reusable agent skills"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "osx-64", "linux-64"]
+
+[dependencies]
+python = ">=3.11,<3.14"
+git = ">=2.40"
+gh = ">=2.60"
+ruff = ">=0.12"
+textual = ">=6,<7"
+visidata = ">=3.3,<4"
+
+[tasks]
+inventory = "python scripts/inventory.py"
+inventory-table = "python scripts/inventory.py --format tsv"
+inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }
+configure-upstreams = "python scripts/manage_skills.py configure-upstreams"
+link-core = "python scripts/manage_skills.py link-core"
+apply-cluster = "python scripts/manage_skills.py apply-cluster"
+import-project = "python scripts/import_skills.py"
+format = "ruff format scripts"
+lint = "ruff check scripts"
+check-format = "ruff format --check scripts"
+compile = "python -m compileall -q scripts"
+validate = { depends-on = ["lint", "check-format", "compile"] }
