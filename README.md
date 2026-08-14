@@ -69,8 +69,25 @@ project to use multiple clusters. The project ID defaults to its `origin` remote
 use `--project-id <name>` when the project has no remote or needs a stable
 override.
 
-Reapply with `--replace` to update differing copies after reviewing both their
-project-local changes and the newer workshop sources.
+When project and workshop copies differ, choose one of four explicit policies:
+
+- `--conflict abort` (default): report every conflict and change nothing;
+- `--conflict record`: preserve both copies and update the workshop lock with
+  separate source and project hashes marked `diverged`;
+- `--conflict back-propagate`: copy project changes into the workshop source and
+  update the lock—review and commit the resulting first-party or submodule work;
+- `--conflict overwrite`: replace the project copy from the workshop and update
+  the lock.
+
+For example:
+
+```console
+pixi run apply-cluster datalad-core ../my-dataset --conflict record
+```
+
+Locks retain both fork (`origin`) and canonical (`upstream`) URLs and mark a
+workshop source dirty after back-propagation until its changes are committed in
+the appropriate first-party repository or upstream fork.
 
 ## Development environment
 

@@ -52,7 +52,7 @@ def digest_tree(path: Path) -> str:
     return digest.hexdigest()
 
 
-def upstream_metadata(source: Path) -> dict[str, str | None]:
+def upstream_metadata(source: Path) -> dict[str, str | bool | None]:
     result = subprocess.run(
         ["git", "-C", str(source), "rev-parse", "--show-superproject-working-tree"],
         check=False,
@@ -61,7 +61,12 @@ def upstream_metadata(source: Path) -> dict[str, str | None]:
     )
     superproject = result.stdout.strip()
     if not superproject:
-        return {"revision": None, "url": None}
+        return {
+            "revision": None,
+            "origin_url": None,
+            "upstream_url": None,
+            "source_dirty": False,
+        }
     result = subprocess.run(
         ["git", "-C", str(source), "rev-parse", "HEAD"],
         check=True,
@@ -69,13 +74,22 @@ def upstream_metadata(source: Path) -> dict[str, str | None]:
         text=True,
     )
     revision = result.stdout.strip()
+    remotes: dict[str, str | None] = {}
+    for remote in ("origin", "upstream"):
+        result = subprocess.run(
+            ["git", "-C", str(source), "remote", "get-url", remote],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        remotes[f"{remote}_url"] = result.stdout.strip() or None
     result = subprocess.run(
-        ["git", "-C", str(source), "remote", "get-url", "origin"],
-        check=False,
+        ["git", "-C", str(source), "status", "--porcelain", "--", "."],
+        check=True,
         capture_output=True,
         text=True,
     )
-    return {"revision": revision, "url": result.stdout.strip() or None}
+    return {"revision": revision, **remotes, "source_dirty": bool(result.stdout)}
 
 
 def project_identity(project: Path, requested: str | None) -> tuple[str, str | None]:
@@ -130,8 +144,19 @@ def link_core(target: Path) -> None:
     print(f"Core profile: {len(desired)} linked skills in {target}")
 
 
+def replace_tree(source: Path, destination: Path) -> None:
+    if destination.is_dir() and not destination.is_symlink():
+        shutil.rmtree(destination)
+    elif destination.exists() or destination.is_symlink():
+        destination.unlink()
+    shutil.copytree(source, destination, symlinks=False)
+
+
 def apply_cluster(
-    name: str, project: Path, replace: bool, requested_project_id: str | None
+    name: str,
+    project: Path,
+    conflict: str,
+    requested_project_id: str | None,
 ) -> None:
     manifest_path = REPOSITORY / "clusters" / f"{name}.toml"
     if not manifest_path.is_file():
@@ -141,36 +166,62 @@ def apply_cluster(
     project_id, project_remote = project_identity(project, requested_project_id)
     destination_root = project / ".agents" / "skills"
     destination_root.mkdir(parents=True, exist_ok=True)
-    locked: list[dict[str, object]] = []
+    planned: list[dict[str, object]] = []
 
     for entry in manifest["skills"]:
         source = (REPOSITORY / entry["source"]).resolve()
         destination = destination_root / entry["name"]
         source_digest = digest_tree(source)
-        if destination.exists() or destination.is_symlink():
-            if (
-                destination.is_dir()
-                and not destination.is_symlink()
-                and digest_tree(destination) == source_digest
-            ):
-                pass
-            elif not replace:
-                raise FileExistsError(
-                    f"skill differs; use --replace to update: {destination}"
-                )
-            else:
-                if destination.is_dir() and not destination.is_symlink():
-                    shutil.rmtree(destination)
-                else:
-                    destination.unlink()
-                shutil.copytree(source, destination, symlinks=False)
-        else:
+        project_digest = (
+            digest_tree(destination)
+            if destination.is_dir() and not destination.is_symlink()
+            else None
+        )
+        planned.append(
+            {
+                "entry": entry,
+                "source": source,
+                "destination": destination,
+                "source_digest": source_digest,
+                "project_digest": project_digest,
+                "conflicting": (destination.exists() or destination.is_symlink())
+                and project_digest != source_digest,
+            }
+        )
+
+    conflicts = [item for item in planned if item["conflicting"]]
+    if conflicts and conflict == "abort":
+        names = ", ".join(item["entry"]["name"] for item in conflicts)
+        raise FileExistsError(
+            f"project skills differ: {names}; choose --conflict record, "
+            "back-propagate, or overwrite"
+        )
+
+    locked: list[dict[str, object]] = []
+    for item in planned:
+        entry = item["entry"]
+        source = item["source"]
+        destination = item["destination"]
+        if not destination.exists() and not destination.is_symlink():
             shutil.copytree(source, destination, symlinks=False)
+        elif item["conflicting"] and conflict == "back-propagate":
+            replace_tree(destination, source)
+        elif item["conflicting"] and conflict == "overwrite":
+            replace_tree(source, destination)
+
+        source_digest = digest_tree(source)
+        project_digest = (
+            digest_tree(destination)
+            if destination.is_dir() and not destination.is_symlink()
+            else None
+        )
         locked.append(
             {
                 "name": entry["name"],
                 "source": entry["source"],
-                "sha256": source_digest,
+                "source_sha256": source_digest,
+                "project_sha256": project_digest,
+                "status": "synced" if source_digest == project_digest else "diverged",
                 **upstream_metadata(source),
             }
         )
@@ -224,7 +275,12 @@ def main() -> None:
     cluster = commands.add_parser("apply-cluster", help="copy a cluster into a project")
     cluster.add_argument("name")
     cluster.add_argument("project", type=Path)
-    cluster.add_argument("--replace", action="store_true")
+    cluster.add_argument(
+        "--conflict",
+        choices=("abort", "record", "back-propagate", "overwrite"),
+        default="abort",
+        help="how to handle project skills that differ from workshop sources",
+    )
     cluster.add_argument(
         "--project-id",
         help="stable lock name; defaults to the project's origin remote or directory name",
@@ -238,7 +294,7 @@ def main() -> None:
     if args.command == "link-core":
         link_core(args.target)
     elif args.command == "apply-cluster":
-        apply_cluster(args.name, args.project, args.replace, args.project_id)
+        apply_cluster(args.name, args.project, args.conflict, args.project_id)
     else:
         configure_upstreams()
 
