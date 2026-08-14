@@ -9,6 +9,7 @@ contributing agent skills without mixing local work with upstream code.
 - `upstreams/`: read-only, commit-pinned upstream collections
 - `profiles/core.toml`: small host-wide selection linked into `~/.agents/skills`
 - `clusters/`: related selections copied into individual projects
+- `materializations/`: workshop-owned locks coordinating downstream skill copies
 - `registry.toml`: upstream purpose, policy, and local skill roots
 - `scripts/inventory.py`: reproducible inventory of installed and upstream skills
 - `scripts/manage_skills.py`: apply the core profile or materialize a cluster
@@ -59,11 +60,17 @@ pixi run apply-cluster project-maintenance ../my-project
 pixi run apply-cluster datalad-core ../my-dataset
 ```
 
-The target project receives `.agents/skills.lock.json` with source paths,
-content hashes, upstream URLs, and pinned revisions. Commit both `.agents/skills/`
-and the lock file in that project. It can then use the skills without this
-workshop checkout. Reapply with `--replace` to update a copied cluster after
-reviewing upstream changes.
+The target receives only standard `.agents/skills/<name>` directories and can
+develop those copies independently. This workshop writes the coordination lock
+to `materializations/<project-id>--<cluster>.lock.json`, recording the cluster,
+downstream Git remote, content hashes, upstream URLs, and pinned revisions.
+Commit that lock here, not in the downstream project. Separate locks allow a
+project to use multiple clusters. The project ID defaults to its `origin` remote;
+use `--project-id <name>` when the project has no remote or needs a stable
+override.
+
+Reapply with `--replace` to update differing copies after reviewing both their
+project-local changes and the newer workshop sources.
 
 ## Development environment
 

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -14,7 +15,7 @@ import tomllib
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 CORE_STATE = ".skills-workshop-core.json"
-PROJECT_LOCK = "skills.lock.json"
+MATERIALIZATIONS = REPOSITORY / "materializations"
 
 
 def load_manifest(path: Path) -> dict[str, object]:
@@ -77,6 +78,28 @@ def upstream_metadata(source: Path) -> dict[str, str | None]:
     return {"revision": revision, "url": result.stdout.strip() or None}
 
 
+def project_identity(project: Path, requested: str | None) -> tuple[str, str | None]:
+    result = subprocess.run(
+        ["git", "-C", str(project), "remote", "get-url", "origin"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    remote = result.stdout.strip() or None
+    candidate = requested
+    if not candidate and remote:
+        candidate = re.sub(r"^git@[^:]+:|^https?://[^/]+/", "", remote)
+        candidate = re.sub(r"\.git$", "", candidate).replace("/", "--")
+    if not candidate:
+        candidate = project.name
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", candidate):
+        raise ValueError(
+            "project identifier must contain only letters, digits, dots, underscores, "
+            "and hyphens"
+        )
+    return candidate, remote
+
+
 def link_core(target: Path) -> None:
     manifest = load_manifest(REPOSITORY / "profiles" / "core.toml")
     target.mkdir(parents=True, exist_ok=True)
@@ -107,12 +130,15 @@ def link_core(target: Path) -> None:
     print(f"Core profile: {len(desired)} linked skills in {target}")
 
 
-def apply_cluster(name: str, project: Path, replace: bool) -> None:
+def apply_cluster(
+    name: str, project: Path, replace: bool, requested_project_id: str | None
+) -> None:
     manifest_path = REPOSITORY / "clusters" / f"{name}.toml"
     if not manifest_path.is_file():
         raise FileNotFoundError(f"unknown cluster: {name}")
     manifest = load_manifest(manifest_path)
     project = project.resolve()
+    project_id, project_remote = project_identity(project, requested_project_id)
     destination_root = project / ".agents" / "skills"
     destination_root.mkdir(parents=True, exist_ok=True)
     locked: list[dict[str, object]] = []
@@ -152,11 +178,14 @@ def apply_cluster(name: str, project: Path, replace: bool) -> None:
     lock = {
         "schema_version": 1,
         "cluster": manifest["name"],
+        "project": {"id": project_id, "remote": project_remote},
         "skills": locked,
     }
-    lock_path = project / ".agents" / PROJECT_LOCK
+    MATERIALIZATIONS.mkdir(parents=True, exist_ok=True)
+    lock_path = MATERIALIZATIONS / f"{project_id}--{manifest['name']}.lock.json"
     lock_path.write_text(json.dumps(lock, indent=2) + "\n")
     print(f"Cluster {name}: {len(locked)} copied skills into {destination_root}")
+    print(f"Coordination record: {lock_path}")
 
 
 def configure_upstreams() -> None:
@@ -196,6 +225,10 @@ def main() -> None:
     cluster.add_argument("name")
     cluster.add_argument("project", type=Path)
     cluster.add_argument("--replace", action="store_true")
+    cluster.add_argument(
+        "--project-id",
+        help="stable lock name; defaults to the project's origin remote or directory name",
+    )
     commands.add_parser(
         "configure-upstreams",
         help="configure fork origins and canonical upstream remotes",
@@ -205,7 +238,7 @@ def main() -> None:
     if args.command == "link-core":
         link_core(args.target)
     elif args.command == "apply-cluster":
-        apply_cluster(args.name, args.project, args.replace)
+        apply_cluster(args.name, args.project, args.replace, args.project_id)
     else:
         configure_upstreams()
 
