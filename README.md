@@ -60,6 +60,18 @@ pixi run apply-cluster project-maintenance ../my-project
 pixi run apply-cluster datalad-core ../my-dataset
 ```
 
+Import independently developed project skills with the terminal UI:
+
+```console
+pixi run import-project ../my-project
+```
+
+Use the skill list to choose the current project skill, edit its workshop source
+path, toggle zero or more clusters with Space, and review its scrollable
+`SKILL.md` preview. Press Ctrl+S or choose Import to copy new workshop sources
+and update cluster manifests. Existing differing sources are reported and left
+unchanged.
+
 The target receives only standard `.agents/skills/<name>` directories and can
 develop those copies independently. This workshop writes the coordination lock
 to `materializations/<project-id>--<cluster>.lock.json`, recording the cluster,
