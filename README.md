@@ -30,8 +30,9 @@ For an existing checkout:
 
 ```console
 git submodule update --init --recursive
-python3 scripts/manage_skills.py configure-upstreams
-python3 scripts/inventory.py
+pixi install --locked
+pixi run configure-upstreams
+pixi run inventory
 ```
 
 The scientific collection is large; its first checkout can take longer than
@@ -47,15 +48,15 @@ paths vary between machines.
 Keep `profiles/core.toml` intentionally small. Link its skills globally:
 
 ```console
-python3 scripts/manage_skills.py link-core
+pixi run link-core
 ```
 
 A cluster is a reusable selection, not an installation. Applying one copies
 complete skill directories into a project's `.agents/skills` directory:
 
 ```console
-python3 scripts/manage_skills.py apply-cluster project-maintenance ../my-project
-python3 scripts/manage_skills.py apply-cluster datalad-core ../my-dataset
+pixi run apply-cluster project-maintenance ../my-project
+pixi run apply-cluster datalad-core ../my-dataset
 ```
 
 The target project receives `.agents/skills.lock.json` with source paths,
@@ -63,6 +64,21 @@ content hashes, upstream URLs, and pinned revisions. Commit both `.agents/skills
 and the lock file in that project. It can then use the skills without this
 workshop checkout. Reapply with `--replace` to update a copied cluster after
 reviewing upstream changes.
+
+## Development environment
+
+Pixi owns the workshop's Python and command-line dependencies. `pixi.lock` is
+committed so every checkout resolves the same environment. Common tasks are:
+
+```console
+pixi run inventory
+pixi run configure-upstreams
+pixi run validate
+pixi run format
+```
+
+Use `pixi add <package>` when a helper script gains a runtime dependency, then
+commit both `pixi.toml` and the updated `pixi.lock`.
 
 ## Working agreement
 

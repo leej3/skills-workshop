@@ -6,12 +6,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import shutil
 import subprocess
-import tomllib
 from pathlib import Path
 
+import tomllib
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 CORE_STATE = ".skills-workshop-core.json"
@@ -23,7 +22,7 @@ def load_manifest(path: Path) -> dict[str, object]:
         manifest = tomllib.load(stream)
     entries = manifest.get("skills", [])
     if not isinstance(entries, list):
-        raise ValueError(f"skills must be an array in {path}")
+        raise TypeError(f"skills must be an array in {path}")
     seen: set[str] = set()
     for entry in entries:
         name = entry.get("name")
@@ -34,7 +33,10 @@ def load_manifest(path: Path) -> dict[str, object]:
             raise ValueError(f"duplicate skill {name!r} in {path}")
         seen.add(name)
         source_path = (REPOSITORY / source).resolve()
-        if REPOSITORY not in source_path.parents or not (source_path / "SKILL.md").is_file():
+        if (
+            REPOSITORY not in source_path.parents
+            or not (source_path / "SKILL.md").is_file()
+        ):
             raise ValueError(f"invalid skill source: {source}")
     return manifest
 
@@ -79,7 +81,9 @@ def link_core(target: Path) -> None:
     manifest = load_manifest(REPOSITORY / "profiles" / "core.toml")
     target.mkdir(parents=True, exist_ok=True)
     state_path = target / CORE_STATE
-    old_state = json.loads(state_path.read_text()) if state_path.exists() else {"links": {}}
+    old_state = (
+        json.loads(state_path.read_text()) if state_path.exists() else {"links": {}}
+    )
     desired: dict[str, str] = {}
 
     for entry in manifest["skills"]:
@@ -118,10 +122,16 @@ def apply_cluster(name: str, project: Path, replace: bool) -> None:
         destination = destination_root / entry["name"]
         source_digest = digest_tree(source)
         if destination.exists() or destination.is_symlink():
-            if destination.is_dir() and not destination.is_symlink() and digest_tree(destination) == source_digest:
+            if (
+                destination.is_dir()
+                and not destination.is_symlink()
+                and digest_tree(destination) == source_digest
+            ):
                 pass
             elif not replace:
-                raise FileExistsError(f"skill differs; use --replace to update: {destination}")
+                raise FileExistsError(
+                    f"skill differs; use --replace to update: {destination}"
+                )
             else:
                 if destination.is_dir() and not destination.is_symlink():
                     shutil.rmtree(destination)
@@ -179,13 +189,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     core = commands.add_parser("link-core", help="reconcile the global core profile")
-    core.add_argument("--target", type=Path, default=Path("~/.agents/skills").expanduser())
+    core.add_argument(
+        "--target", type=Path, default=Path("~/.agents/skills").expanduser()
+    )
     cluster = commands.add_parser("apply-cluster", help="copy a cluster into a project")
     cluster.add_argument("name")
     cluster.add_argument("project", type=Path)
     cluster.add_argument("--replace", action="store_true")
     commands.add_parser(
-        "configure-upstreams", help="configure fork origins and canonical upstream remotes"
+        "configure-upstreams",
+        help="configure fork origins and canonical upstream remotes",
     )
     args = parser.parse_args()
 
