@@ -14,7 +14,7 @@ def lock_entry(
     source: str,
     digest: str,
     lock_path: Path,
-    cluster: str = "core",
+    bundle: str = "core",
 ) -> skill_status.LockEntry:
     return skill_status.LockEntry(
         name=name,
@@ -22,7 +22,7 @@ def lock_entry(
         identity=f"{source}#{name}",
         source_sha256=digest,
         project_sha256=digest,
-        cluster=cluster,
+        bundle=bundle,
         lock_path=lock_path,
     )
 
@@ -140,7 +140,7 @@ def test_v1_lock_without_explicit_schema_uses_legacy_digest(
     lock_path.write_text(
         json.dumps(
             {
-                "cluster": "core",
+                "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {
@@ -161,7 +161,7 @@ def test_v1_lock_without_explicit_schema_uses_legacy_digest(
 
 
 def test_inspection_builds_read_only_reconciliation_and_prune_plan(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
     alpha_source = make_skill(
@@ -188,13 +188,13 @@ def test_inspection_builds_read_only_reconciliation_and_prune_plan(
     make_skill(alpha_baseline_copy, "alpha", "Baseline.\n")
     alpha_baseline = skill_status.digest_tree(alpha_baseline_copy)
     old_baseline = skill_status.digest_tree(old_source)
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
     lock_path = workshop / "materializations" / "project--core.lock.json"
     lock_path.write_text(
         json.dumps(
             {
                 "schema_version": 2,
-                "cluster": "core",
+                "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {

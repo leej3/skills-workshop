@@ -5,6 +5,13 @@ developing, and contributing agent skills. Upstream code stays pinned and
 traceable here; downstream projects receive ordinary skill directories and do
 not need this workshop's tooling or metadata.
 
+The workshop follows a reuse-first rule: do not create a registry, package
+format, search engine, or vendor adapter when a suitable open implementation or
+credible emerging standard can be adopted, wrapped, or translated. Workshop
+state remains portable and provider-neutral so that any external component can
+be replaced without losing skill artifacts, provenance, review history, or
+project coordination.
+
 ## Organization model
 
 | Layer | Purpose | Tracked where |
@@ -12,7 +19,8 @@ not need this workshop's tooling or metadata.
 | Upstream collection | Search and contribute to existing work | `upstreams/` submodules plus `registry.toml` |
 | Workshop skill | Author or substantially adapt a skill | `skills/` |
 | Core profile | Small host-wide set linked into `~/.agents/skills` | `profiles/core.toml` |
-| Cluster | Reusable, topic-oriented selection | `clusters/*.toml` |
+| Tag | Nonexclusive descriptive or operational facet | Planned external recipe/curation metadata |
+| Bundle | Named, reusable selection of skills | Currently stored as `bundles/*.toml` |
 | Project copy | Independently editable standard skills | `<project>/.agents/skills/` |
 | Coordination lock | Separate workshop/project baselines and provenance | `materializations/*.lock.json` |
 
@@ -58,9 +66,10 @@ pixi run inventory-table
 pixi run inventory-vd
 ```
 
-The table connects each skill to its collection, source, revision, clusters,
-materialized projects, and synchronization state. Generated inventory files
-are host-specific and intentionally ignored.
+The table connects each skill to its collection, source, revision, bundles,
+materialized projects, and synchronization state. Tags will add many-to-many
+facets for discovery without changing which skills are installed. Generated
+inventory files are host-specific and intentionally ignored.
 
 Before selecting a third-party skill, inspect its trust and licensing signals:
 
@@ -76,7 +85,7 @@ binds a completed review to the skill tree hash. A later content change makes
 that review stale. License, executable, network, and credential results are
 review cues, not security findings or compliance conclusions.
 
-## Organize a core profile and clusters
+## Organize a core profile, tags, and bundles
 
 Keep `profiles/core.toml` intentionally small: it is for skills useful in
 nearly every project. Reconcile its links with:
@@ -85,13 +94,34 @@ nearly every project. Reconcile its links with:
 pixi run link-core
 ```
 
-Clusters are reusable selections, not installations. They let the inventory
-grow by topic while each project chooses only what it needs. Applying a cluster
-copies complete skill directories into a project:
+Tags and bundles have deliberately different meanings:
+
+- a **tag** describes a skill and may be assigned to any number of skills;
+- a **bundle** is a named, curated selection that may be applied to a project;
+- a skill may have zero or more tags and belong to zero or more bundles;
+- a profile selects a default host-wide policy, such as the intentionally
+  small core set.
+
+Tags are filters and retrieval evidence, not installation instructions.
+Generated search phrases, embeddings, and provider rankings are derived index
+data rather than authoritative tags. Bundles let the inventory grow while each
+project chooses only what it needs. Applying a bundle copies complete skill
+directories into a project.
+
+The provisional tag contract follows
+[Agent Skills packaging discussion #302](https://github.com/agentskills/agentskills/discussions/302):
+tags are external to `SKILL.md`, lowercase, free-form, and limited to eight per
+skill. Its recipe attaches tags to the stable skill identity and records each
+version with a Package URL (PURL) and content digest. Because the proposal
+leaves serialization open, the workshop will temporarily persist curated tags
+in a versioned `metadata/tags.yaml` sidecar and migrate at the earliest
+opportunity to an accepted format. Registry labels, categories, and generated
+tags remain namespaced observations until a person explicitly promotes them to
+workshop curation.
 
 ```console
-pixi run apply-cluster project-maintenance ../my-project
-pixi run apply-cluster datalad-core ../my-dataset
+pixi run apply-bundle project-maintenance ../my-project
+pixi run apply-bundle datalad-core ../my-dataset
 ```
 
 Materialization refuses skill trees containing symlinks. This prevents a link
@@ -109,12 +139,12 @@ pixi run import-project ../my-project
 pixi run import-project ../my-project --project-id stable-project-name
 ```
 
-The UI supports filtering, source-path suggestions, zero or more clusters per
-skill, creation of a new cluster, and a scrollable project/diff preview. It
-tracks mappings by source and name, so an unrelated skill with the same install
-name is not silently removed from another cluster. On differing workshop and
-project content, the import policy can stop, record both baselines, or
-back-propagate the project copy.
+The UI supports filtering, source-path suggestions, zero or more bundles per
+skill, creation of a new bundle manifest, and a scrollable project/diff
+preview. It tracks mappings by source and name, so an unrelated skill with the
+same install name is not silently removed from another bundle. On differing
+workshop and project content, the import policy can stop, record both
+baselines, or back-propagate the project copy.
 
 The project ID normally derives from its `origin` remote. Use `--project-id`
 when there is no remote or when the same stable identity must be retained after
@@ -136,7 +166,7 @@ workshop-only changes, changes on both sides, recorded divergence, missing
 copies, lock collisions, obsolete selections, and fetched upstream updates.
 Plans and diffs are always read-only.
 
-Applying a cluster offers four explicit conflict policies:
+Applying a bundle offers four explicit conflict policies:
 
 - `abort`: do not proceed;
 - `record`: preserve both copies and update the workshop metadata;
@@ -146,15 +176,15 @@ Applying a cluster offers four explicit conflict policies:
 For example:
 
 ```console
-pixi run apply-cluster datalad-core ../my-dataset --dry-run --prune
-pixi run apply-cluster datalad-core ../my-dataset \
+pixi run apply-bundle datalad-core ../my-dataset --dry-run --prune
+pixi run apply-bundle datalad-core ../my-dataset \
   --conflict back-propagate --show-diff --prune
 ```
 
 Omit `--conflict` for the interactive menu. Non-interactive use stops rather
 than guessing. Normal reapplication never overwrites changed downstream
 skills. Pruning only removes a previously managed skill that is no longer in
-the cluster and still matches its recorded project baseline; changed, symlink,
+the bundle and still matches its recorded project baseline; changed, symlink,
 and non-directory paths are refused.
 
 Before replacement or pruning, the workshop makes a content-addressed local
@@ -208,10 +238,10 @@ merge, advance this workshop's submodule pin to the canonical commit.
 
 ## Metadata and development
 
-Cluster manifests use schema version 1. Materialization locks use version 2,
-with separate source and project hashes and a `<source>#<name>` identity.
-Schemas live under `schemas/`; runtime validation also protects every path and
-field used by destructive operations.
+Bundle manifests use schema version 1 and live under `bundles/`.
+Materialization locks use version 2, with separate source and project hashes
+and a `<source>#<name>` identity. Schemas live under `schemas/`; runtime
+validation also protects every path and field used by destructive operations.
 
 ```console
 pixi run migrate-metadata          # report legacy locks
@@ -230,7 +260,10 @@ dependency, use `pixi add <package>` and commit both `pixi.toml` and
 The
 [skill management landscape and standards comparison](docs/skill-management-landscape.md)
 assesses this workshop against the Agent Skills specification, existing
-installers and managers, overlay approaches, and current vendor behavior. Its
+registries, search and retrieval systems, installers and managers, overlay
+approaches, and current vendor behavior. It also records a repeatable discovery
+method so new ecosystem components can be assessed without making any one
+provider authoritative. Its
 [executive summary](docs/skill-management-executive-summary.md) condenses the
 recommended operating pattern and implementation priorities.
 
@@ -251,9 +284,16 @@ terms before using or redistributing it.
 
 ## Working agreement
 
-1. Search the upstream collections before starting a new skill.
-2. Review provenance, licensing, scripts, and external access before selection.
-3. Prefer contributing generally useful behavior to its original project.
-4. Keep personal or cross-upstream experiments in `skills/`.
-5. Keep the core profile small and organize project needs into clusters.
-6. Forward-test on realistic tasks before proposing a skill upstream.
+1. Search standards, open tools, and upstream collections before designing or
+   implementing a component.
+2. Prefer an accepted standard; when none exists, follow a credible emerging
+   proposal through a replaceable adapter rather than inventing a competing
+   format.
+3. Keep canonical artifacts and workshop metadata exportable; treat provider
+   indexes, scores, and generated search data as rebuildable observations.
+4. Review provenance, licensing, scripts, and external access before selection.
+5. Prefer contributing generally useful behavior to its original project.
+6. Keep personal or cross-upstream experiments in `skills/`.
+7. Keep the core profile small, use tags for discovery, and organize project
+   selections into bundles.
+8. Forward-test on realistic tasks before proposing a skill upstream.

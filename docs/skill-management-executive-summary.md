@@ -1,6 +1,7 @@
 # Executive summary: a recommended skill management pattern
 
-Research snapshot: 2026-08-14. This summary condenses the findings in the
+Original research snapshot: 2026-08-14; ecosystem discovery expanded
+2026-08-17. This summary condenses the findings in the
 [full landscape and standards report](skill-management-landscape.md).
 
 ## Recommendation
@@ -8,16 +9,23 @@ Research snapshot: 2026-08-14. This summary condenses the findings in the
 Keep this workshop, but define it explicitly as a **curation and development
 control plane**, not as a new skill format or a universal installer.
 
+Make **reuse before invention** a governing rule. Prefer accepted standards,
+and follow credible emerging specifications through versioned adapters rather
+than creating a competing format while consensus is still forming. Existing
+open registries, resolvers, search engines, and installers should be pluggable
+components; none should own the durable workshop record.
+
 Use a layered pattern:
 
 | Layer | Recommended responsibility |
 | --- | --- |
 | Portable core | A specification-conformant Agent Skills directory with `SKILL.md` and relative resources |
-| Workshop | Upstream forks and pins, inventory, clusters, trust reviews, project locks, reconciliation, and backups |
+| Workshop curation | Upstream forks and pins, tags, bundles, profiles, trust reviews, project locks, reconciliation, and backups |
+| Provider observation | Namespaced, timestamped source metadata, audit signals, and rankings retained without becoming canonical facts |
+| Derived index | Rebuildable fuzzy, full-text, semantic, or provider-backed search data and generated task examples |
 | Overlay | A small, deterministic workshop-side transformation bound to a base digest |
 | Project copy | A complete, ordinary skill tree committed and editable with the project |
-| Vendor adapter | One effective copy and optional companion configuration for each intended host |
-| Distribution | `gh skill`, Vercel `skills`, or vendor plugins for one-way installation; `gh skill` or vendor packaging for publication |
+| Adapter | Replaceable discovery, registry, search, installation, publication, and vendor-materialization integrations |
 
 This preserves the current design's most important property: a downstream
 project can use and develop its copied skills without installing the workshop,
@@ -34,7 +42,7 @@ choices.
 ### The workshop complements the standard
 
 The Agent Skills standard specifies the contents of a skill directory. It does
-not specify installation roots, locks, profiles, clusters, overlays, trust
+not specify installation roots, locks, profiles, bundles, overlays, trust
 reviews, upstream contribution, reconciliation, or backups. The workshop's
 metadata is therefore a legitimate higher-level extension because it remains
 outside materialized skill directories.
@@ -58,9 +66,10 @@ evidence, and CON for focused maintenance workflows that benefit from added
 workshop governance. See
 [Lessons from the pinned upstreams](skill-management-landscape.md#lessons-from-the-pinned-upstreams).
 
-### Existing managers are complements, not replacements
+### Existing systems are components, not authorities
 
-Two substantial pre-existing efforts should be integrated selectively:
+The expanded review found several substantial pre-existing efforts that should
+be evaluated as components:
 
 - GitHub CLI's public-preview `gh skill` is strong for GitHub search, preview,
   host-aware install, exact pins, update, format/release checks, and publishing.
@@ -69,16 +78,65 @@ Two substantial pre-existing efforts should be integrated selectively:
 - Vercel's `skills` CLI and skills.sh are strong for multi-source discovery,
   many agent destinations, copy or symlink installation, project/global state,
   Packs, advisory audit signals, and convenient one-way updates.
+- MIT-licensed SkillPort already provides validation, lifecycle commands,
+  full-text search, metadata operations, and MCP search/load tools. Reuse those
+  interfaces, but do not copy its nested tag arrays into portable `SKILL.md`
+  metadata because the current specification permits only string values.
+- Apache-2.0 `skills-registry` already provides a personal GitHub-backed
+  registry, fuzzy TUI, live preview, synchronization, and MCP search/read
+  tools.
+- Apache-2.0 SkillHub provides a self-hosted organizational registry with
+  versions, filtered full-text search, namespaces, review, RBAC, and audit
+  logs.
+- MIT-licensed SkillsHub provides a task resolver, BM25-based ranking, and
+  keyword-generated tags over a large aggregated catalog. SkillNote, SkillsGo,
+  and the MCP Gateway & Registry cover additional self-hosted, desktop,
+  protocol, and governed discovery patterns.
+- SkillCorpus is directly relevant retrieval-and-evaluation research, although
+  its implementation and data are not yet released.
 
-Neither provides the workshop's full two-sided development model: separate
-source and project baselines, explicit record/back-propagate/overwrite/abort
-choices, fork-to-canonical coordination, hash-bound reviews, clusters, and
-verified recovery backups. Use these tools as discovery, import, installation,
-or publication adapters. Keep workshop locks authoritative when project copies
-are expected to evolve and contribute back.
+No one system needs to provide the workshop's full two-sided development
+model. Use each for the part it implements well, while retaining separate
+source and project baselines, explicit conflict choices, fork-to-canonical
+coordination, hash-bound reviews, bundles, and verified recovery backups in
+portable workshop state.
 
 See
 [Alternative approaches and existing tools](skill-management-landscape.md#alternative-approaches-and-existing-tools).
+
+### Durable metadata enables replacement
+
+Keep canonical skill artifacts and workshop curation separate from provider
+observations and derived indexes. A GitHub star count, Vercel rank, registry
+rating, automated audit, and workshop human review are different claims with
+different issuers and timestamps; they must not collapse into one provider-
+defined quality field.
+
+Tags are many-to-many descriptive facets and have no installation effect.
+Bundles are many-to-many curated selections applied explicitly to projects.
+Generated aliases, embeddings, hypothetical task descriptions, and search
+scores belong in rebuildable indexes rather than canonical tags.
+
+Do not invent a workshop tag format. The current Agent Skills specification
+has no tag field and restricts `SKILL.md` metadata to string values. Follow the
+logical contract in emerging packaging discussion #302 instead: keep zero to
+eight lowercase tags outside the skill tree and associate them with exact
+skill identity; record each observed version with a PURL and content hash when
+possible. Because that early proposal intentionally leaves serialization open,
+use a small, versioned `metadata/tags.yaml` sidecar in the interim. Retain
+provider labels and auto-tags as namespaced observations, keep the temporary
+format losslessly exportable, and migrate at the earliest opportunity to an
+accepted replacement.
+
+Define stable adapter contracts for discovery, immutable fetch, inspection,
+index construction, and ranked search. Require source identity, revision,
+provider, retrieval method, evidence, and observation time in results. Then
+fuzzy search, `skills-registry`, GitHub, Vercel, SkillHub, SkillsHub, or a local
+hybrid index can be compared and replaced without rewriting workshop metadata.
+
+See
+[Durable metadata and replaceable components](skill-management-landscape.md#durable-metadata-and-replaceable-components)
+and [Tags, bundles, and profiles](skill-management-landscape.md#tags-bundles-and-profiles).
 
 ### Overlays belong in the control plane
 
@@ -142,19 +200,33 @@ See [A tested manager skill](skill-management-landscape.md#a-tested-manager-skil
 
 ## Recommended next steps
 
-1. Add a separate strict `validate-skills` task and portability diagnostics.
+1. Create a machine-readable ecosystem candidate inventory and record the
+   reproducible discovery method, review state, evidence, and rejection reason.
+2. Define the minimal provider-neutral skill record, namespaced observation
+   model, bundle contract, and adapter interfaces. Adopt discussion #302's
+   external, lowercase, maximum-eight tag semantics provisionally. Implement a
+   tracked, versioned `metadata/tags.yaml` sidecar with validation, inventory
+   joins, minimal list/add/remove commands, and tests. Preserve provider tags
+   and labels losslessly without promoting them automatically, and migrate the
+   sidecar to the earliest suitable standard format.
+3. Build a versioned relevance set of realistic requests. Compare exact,
+   fuzzy, full-text, semantic, hypothetical-description, and external-provider
+   retrieval before selecting a default backend.
+4. Add a separate strict `validate-skills` task and portability diagnostics.
    Keep `validate-metadata` focused on workshop contracts.
-2. Add the thin manager skill and an evaluation suite with positive and
+5. Add the thin manager skill and an evaluation suite with positive and
    negative triggers, with/without-skill baselines, and safe conflict plans.
-3. Implement hash-bound, deterministic overlays that render ordinary complete
-   skill trees.
-4. Add explicit `.agents/skills` and `.claude/skills` target adapters with
+6. Implement hash-bound, deterministic overlays that render ordinary complete
+   skill trees, but first recheck emerging overlay and packaging proposals.
+7. Add explicit `.agents/skills` and `.claude/skills` target adapters with
    duplicate-root detection.
-5. Add optional `gh skill` and/or Vercel `skills` adapters for discovery,
-   preview, import, installation, and update. Use `gh skill` or vendor
-   packaging for publication.
-6. Continue gradual trust review and upstream contribution. Track proposed
-   package-lock and OCI standards without adopting an unstable schema.
+8. Implement discovery and registry integrations only as contract-tested
+   adapters. Begin with `gh skill`, Vercel `skills`, and one open self-hosted or
+   personal registry; preserve workshop artifacts and locks as the authority.
+9. Continue gradual trust review and upstream contribution, and monitor
+   emerging packaging, PURL, `.well-known` discovery, OCI, and MCP work through
+   dated compatibility notes and experimental adapters rather than competing
+   formats.
 
 The detailed sequencing and rationale are in the
 [Prioritized implementation roadmap](skill-management-landscape.md#prioritized-implementation-roadmap).

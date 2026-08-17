@@ -223,7 +223,7 @@ def test_update_plan_is_dry_run_and_surfaces_failed_safety_checks(
     monkeypatch.setattr(
         upstream_status,
         "affected_relationships",
-        lambda *args: {"clusters": [], "materializations": []},
+        lambda *args: {"bundles": [], "materializations": []},
     )
 
     plan = upstream_status.plan_update(record, "upstream", None, fetch=False)

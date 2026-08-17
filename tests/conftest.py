@@ -19,7 +19,7 @@ upstream_status = importlib.import_module("scripts.upstream_status")
 def workshop(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     root = tmp_path / "workshop"
     for directory in (
-        "clusters",
+        "bundles",
         "materializations",
         "profiles",
         "skills",
@@ -66,12 +66,12 @@ def make_skill():
 
 
 @pytest.fixture
-def write_cluster():
+def write_bundle():
     def write(
         root: Path,
         name: str,
         skills: list[tuple[str, str]],
-        description: str = "Test cluster",
+        description: str = "Test bundle",
     ) -> Path:
         lines = [
             "schema_version = 1",
@@ -89,7 +89,7 @@ def write_cluster():
                     f"source = {json.dumps(source)}",
                 ]
             )
-        path = root / "clusters" / f"{name}.toml"
+        path = root / "bundles" / f"{name}.toml"
         path.write_text("\n".join(lines) + "\n", encoding="utf-8")
         return path
 

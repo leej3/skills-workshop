@@ -21,7 +21,7 @@ inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }
 configure-upstreams = "python scripts/manage_skills.py configure-upstreams"
 link-core = "python scripts/manage_skills.py link-core"
-apply-cluster = "python scripts/manage_skills.py apply-cluster"
+apply-bundle = "python scripts/manage_skills.py apply-bundle"
 cleanup-backups = "python scripts/manage_skills.py cleanup-backups"
 cleanup-backups-apply = "python scripts/manage_skills.py cleanup-backups --apply"
 import-project = "python scripts/import_skills.py"
