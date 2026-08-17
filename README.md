@@ -1,7 +1,8 @@
 # Skills workshop
 
-This repository is the control plane for discovering, reviewing, organizing,
-developing, and contributing agent skills. Upstream code stays pinned and
+This repository is the control plane for inventorying pinned or promoted
+sources, reviewing, organizing, developing, and contributing agent skills. It
+is not a public discovery engine or registry. Upstream code stays pinned and
 traceable here; downstream projects receive ordinary skill directories and do
 not need this workshop's tooling or metadata.
 
@@ -12,6 +13,16 @@ state remains portable and provider-neutral so that any external component can
 be replaced without losing skill artifacts, provenance, review history, or
 project coordination.
 
+The workshop's primary justification is its narrow differentiator:
+parent-held, two-sided reconciliation for ordinary project copies that may be
+edited independently. Bundles, inventory, review records, core links, backups,
+and upstream helpers are bounded support for that workflow, not independent
+platform ambitions. Package resolution, general search, one-way installation,
+target mapping, publication, and organizational governance belong to existing
+tools. Further product expansion is frozen until a 60-day usage pilot proves
+repeated reconciliation and contribution-back value. See the [project
+viability decision](docs/project-viability.md).
+
 ## Organization model
 
 | Layer | Purpose | Tracked where |
@@ -19,7 +30,7 @@ project coordination.
 | Upstream collection | Search and contribute to existing work | `upstreams/` submodules plus `registry.toml` |
 | Workshop skill | Author or substantially adapt a skill | `skills/` |
 | Core profile | Small host-wide set linked into `~/.agents/skills` | `profiles/core.toml` |
-| Tag | Nonexclusive descriptive or operational facet | Planned external recipe/curation metadata |
+| Tag | Nonexclusive descriptive or operational facet | Not implemented; evidence-gated |
 | Bundle | Named, reusable selection of skills | Currently stored as `bundles/*.toml` |
 | Project copy | Independently editable standard skills | `<project>/.agents/skills/` |
 | Coordination lock | Separate workshop/project baselines and provenance | `materializations/*.lock.json` |
@@ -67,9 +78,10 @@ pixi run inventory-vd
 ```
 
 The table connects each skill to its collection, source, revision, bundles,
-materialized projects, and synchronization state. Tags will add many-to-many
-facets for discovery without changing which skills are installed. Generated
-inventory files are host-specific and intentionally ignored.
+materialized projects, and synchronization state. Tags could add many-to-many
+facets if the usage pilot demonstrates a need; they would not change which
+skills are installed. Generated inventory files are host-specific and
+intentionally ignored.
 
 Before selecting a third-party skill, inspect its trust and licensing signals:
 
@@ -108,16 +120,16 @@ data rather than authoritative tags. Bundles let the inventory grow while each
 project chooses only what it needs. Applying a bundle copies complete skill
 directories into a project.
 
-The provisional tag contract follows
+Tag persistence is not implemented. If real usage justifies it, the
+provisional contract will follow
 [Agent Skills packaging discussion #302](https://github.com/agentskills/agentskills/discussions/302):
 tags are external to `SKILL.md`, lowercase, free-form, and limited to eight per
 skill. Its recipe attaches tags to the stable skill identity and records each
 version with a Package URL (PURL) and content digest. Because the proposal
-leaves serialization open, the workshop will temporarily persist curated tags
-in a versioned `metadata/tags.yaml` sidecar and migrate at the earliest
-opportunity to an accepted format. Registry labels, categories, and generated
-tags remain namespaced observations until a person explicitly promotes them to
-workshop curation.
+leaves serialization open, the workshop will not create a sidecar or CLI until
+the pilot shows that names, descriptions, and bundles are insufficient.
+Registry labels, categories, and generated tags would remain namespaced
+observations until a person explicitly promoted them to workshop curation.
 
 ```console
 pixi run apply-bundle project-maintenance ../my-project
@@ -239,13 +251,17 @@ merge, advance this workshop's submodule pin to the canonical commit.
 ## Metadata and development
 
 Bundle manifests use schema version 1 and live under `bundles/`.
-Materialization locks use version 2, with separate source and project hashes
-and a `<source>#<name>` identity. Schemas live under `schemas/`; runtime
-validation also protects every path and field used by destructive operations.
+Materialization locks use version 3. Version 2 added stable skill identities
+and standardized the separate source/project baselines; version 3 renames the
+selection field from `cluster` to `bundle`. Readers accept legacy version 1
+and 2 locks, and
+`pixi run migrate-metadata-apply` rewrites them to version 3. Schemas live under
+`schemas/`; runtime validation also protects every path and field used by
+destructive operations.
 
 ```console
 pixi run migrate-metadata          # report legacy locks
-pixi run migrate-metadata-apply    # rewrite v1 locks to v2
+pixi run migrate-metadata-apply    # rewrite v1/v2 locks to v3
 pixi run validate-metadata
 pixi run validate                  # lint, format check, compile, tests, metadata
 pixi run format
@@ -256,6 +272,16 @@ dependency, use `pixi add <package>` and commit both `pixi.toml` and
 `pixi.lock`.
 
 ## Design reports
+
+The
+[project viability and scope decision](docs/project-viability.md) identifies
+the workshop's narrow value proposition, assigns commodity capabilities to
+existing tools, and defines measurable continue, pivot, and stop criteria.
+Its recommendation supersedes the feature-accumulation roadmap in earlier
+versions of the reports.
+The [usage-pilot ledger](docs/usage-pilot.md) records the start condition,
+unique-value events, alternatives, maintenance cost, and day-30/day-60
+decisions.
 
 The
 [skill management landscape and standards comparison](docs/skill-management-landscape.md)
@@ -272,9 +298,10 @@ recommended operating pattern and implementation priorities.
 [The STAMPED use-case map](docs/stamped-use-cases.md) turns
 [stamped-agent-skills issue #2](https://github.com/stamped-principles/stamped-agent-skills/issues/2)
 into bounded software-review, dataset-review, refactoring, dispatch, and skill-
-evaluation candidates. This workshop supplies the discovery, composition,
-provenance, trust, and forward-testing workflow around those skills without
-making that coordination pattern a downstream requirement.
+evaluation candidates. This workshop can supply inventory over promoted
+sources, bundle selection, provenance, trust records, and forward-testing
+around those skills without becoming a general discovery or composition
+engine or making its coordination pattern a downstream requirement.
 
 ## License
 
@@ -286,14 +313,18 @@ terms before using or redistributing it.
 
 1. Search standards, open tools, and upstream collections before designing or
    implementing a component.
-2. Prefer an accepted standard; when none exists, follow a credible emerging
-   proposal through a replaceable adapter rather than inventing a competing
-   format.
+2. Prefer an accepted standard; when none exists, test a credible emerging
+   proposal through a pinned, removable experiment rather than inventing a
+   competing format. Extract an adapter interface only after two real
+   integrations reveal a shared contract.
 3. Keep canonical artifacts and workshop metadata exportable; treat provider
    indexes, scores, and generated search data as rebuildable observations.
 4. Review provenance, licensing, scripts, and external access before selection.
 5. Prefer contributing generally useful behavior to its original project.
 6. Keep personal or cross-upstream experiments in `skills/`.
-7. Keep the core profile small, use tags for discovery, and organize project
-   selections into bundles.
+7. Keep the core profile small, use names, descriptions, and existing search
+   tools for discovery, and organize project selections into bundles. Add tags
+   only after their evidence gate is met.
 8. Forward-test on realistic tasks before proposing a skill upstream.
+9. Require the evidence gate in the project viability decision before adding
+   new workshop-owned product surface.
