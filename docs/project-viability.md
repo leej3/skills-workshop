@@ -1,5 +1,13 @@
 # Project viability and scope decision
 
+> **Superseded operating model.** This document records the earlier
+> reconciliation-first decision. The project now uses APM in downstream
+> projects and justifies the workshop by source-agnostic cross-project memory.
+> See [the current direction](current-direction.md) and
+> [executive summary](skill-management-executive-summary.md). The analysis
+> below remains as historical evidence for why the reconciliation prototype is
+> frozen rather than assumed valuable.
+
 Decision date: 2026-08-17.
 
 ## Verdict

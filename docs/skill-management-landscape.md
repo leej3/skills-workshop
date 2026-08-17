@@ -1,5 +1,10 @@
 # Skill management landscape and standards comparison
 
+> **Research ledger, not current operating policy.** Tool observations remain
+> useful, but the reconciliation-first recommendations in this dated review
+> are superseded by [the current direction](current-direction.md) and its
+> [executive summary](skill-management-executive-summary.md).
+
 Original research snapshot: 2026-08-14; ecosystem discovery expanded
 2026-08-17. The implementation stocktake was updated on the workshop branch
 after commit `c042277`, including the materialization-lock compatibility fix.

@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:051f96fc-09c4-49f5-83df-2755aee12f0f",
+  "occurred_at": "2026-08-17T19:47:17Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested that the existing co-commit trailer skill be tracked and installed in this project."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:b772464b-dc4c-49bb-b3c1-903e1b87c29a",
+  "type": "consideration"
+}

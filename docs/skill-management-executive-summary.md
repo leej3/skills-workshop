@@ -1,185 +1,147 @@
-# Executive summary: project scope and operating pattern
+# Executive summary: a memory layer over existing tools
 
-Decision date: 2026-08-17. This summary condenses the
-[project viability decision](project-viability.md) and the supporting
-[landscape and standards review](skill-management-landscape.md).
+Decision date: 2026-08-17.
 
-## Decision
+## Recommendation
 
-Continue the workshop, but pivot it to one narrow job:
+Keep the workshop, but give it one clear job:
 
-> **Two-sided reconciliation for independently editable project skill
-> copies.**
+> Preserve source-agnostic cross-project memory—what skills were considered,
+> used, useful, rejected, evaluated, or improved—and provide a concise,
+> transparent interface to existing discovery and project-management tools.
 
-The project should not become a general registry, package manager, search
-engine, installer, target-path mapper, or governance platform. Existing tools
-already cover those jobs, often much more completely. Further feature growth
-should pause until a 60-day pilot proves that the reconciliation workflow is
-used repeatedly.
+Use APM in every downstream project for reproducibility. Use ASM, `gh skill`,
+and Vercel `skills` for discovery. Keep skill contents and contribution history
+in ordinary Git. Do not build a second package manager, installer, public
+catalog, lock, or host-path mapper.
 
-See the full [verdict and value proposition](project-viability.md#verdict).
+See [the current direction](current-direction.md#decision).
 
-## Why this may still be worth keeping
+## Why the workshop still adds value
 
-The intended user is a maintainer who:
+APM can reproduce a project and public catalogs can find packages, but neither
+retains personal knowledge across unrelated projects:
 
-- curates skills from several upstream or forked repositories;
-- copies selected skills into independent downstream projects;
-- expects both source and project copies to change;
-- wants an explicit choice between stopping, recording divergence,
-  back-propagating the project change, and overwriting the project copy; and
-- does not want downstream projects to depend on this workshop or commit its
-  coordination lock.
+- remembered capabilities when the original name or source is forgotten;
+- aliases, moved sources, mirrors, and forks of the same logical skill;
+- selection and rejection reasons;
+- declared membership versus actual task use;
+- contextual outcomes and 1–5 ratings;
+- controlled evaluation evidence; and
+- upstream issues and contributions.
 
-No reviewed manager combines that parent-held, two-baseline model with the
-current contribution-back, conservative prune, and verified backup workflow.
-The individual mechanisms are not novel; their value is packaging careful Git
-and copy discipline into a repeatable skill-aware process.
+The workshop stores this as strict Git-tracked JSON and append-only events.
+Logical skill IDs are independent of source URLs. That structure is small
+enough to inspect and portable enough to migrate into a future service.
 
-That value is still hypothetical. The repository currently inventories 216
-upstream skills and has 2 bundles with 12 references, but its core profile,
-workshop-owned skills, materialization locks, and trust-review ledger are
-empty. The implementation has 5,491 Python lines and 98 automated tests. It
-has proved implementation care, not workflow demand.
+See [why the remaining workshop is useful](current-direction.md#why-the-remaining-workshop-is-useful).
 
-See [Current evidence](project-viability.md#current-evidence) and
-[The value that is not already commodity functionality](project-viability.md#the-value-that-is-not-already-commodity-functionality).
+## Tool stack
 
-## Do not reinvent these capabilities
-
-| Need | Prefer |
+| Need | Use |
 | --- | --- |
-| Portable skill format | [Agent Skills](https://agentskills.io/specification) |
-| Format-conformance differential | Pinned [`skills-ref`](https://github.com/agentskills/agentskills/tree/69ef37e9424c0a7ea9dd2293b559e43ec8176379/skills-ref) plus explicit workshop policy checks |
-| Package manifests, dependency resolution, integrity locks, frozen installs, target deployment, integrity/drift/hidden-Unicode audit, and provenance SBOMs | [Microsoft APM](https://github.com/microsoft/apm) |
-| GitHub search, preview, exact pins, updates, and publication | [`gh skill`](https://cli.github.com/manual/gh_skill) |
-| Broad source and host support, quick trials, one-way install, and Packs | [Vercel `skills`](https://github.com/vercel-labs/skills) |
-| Local management, full-text search, MCP delivery, and its own lint | [SkillPort](https://github.com/gotalab/skillport) |
-| Personal canonical store, profiles, symlinks, and TUI | [`skill-manager`](https://github.com/omrikais/skill-manager) |
-| GitHub-backed personal inventory, fuzzy TUI with metadata/description preview, and read-only MCP | [`skills-registry`](https://github.com/nikships/skills-registry) |
-| Organizational versions, review, RBAC, and audit | [SkillHub](https://github.com/iflytek/skillhub) |
+| Standard skill contents | [Agent Skills](https://agentskills.io/specification) |
+| Project manifest, lock, installation, frozen replay, update, and audit | [APM](https://microsoft.github.io/apm/) |
+| GitHub search, preview, provenance, and publication | [`gh skill`](https://cli.github.com/manual/gh_skill) |
+| Cross-provider discovery | [ASM](https://github.com/luongnv89/asm) |
+| skills.sh and `.well-known` discovery | [Vercel `skills`](https://github.com/vercel-labs/skills) |
+| Source development and contribution | Git repository/fork |
+| Personal cross-project evidence | Workshop memory and CLI |
 
-Microsoft APM materially changes the earlier build-versus-adopt decision. It
-already implements much of the former roadmap. Its project-local manifest and
-lock are preferable when collaborators should reproduce package state from the
-downstream repository. The workshop remains relevant only when coordination
-must stay in a separate parent and local copies are deliberately editable.
+ASM and Vercel are discovery providers, not alternate installers in an
+APM-managed project. Every external command is printed before it runs.
 
-The defaults are not all stable standards: APM is pre-1.0, its policy and
-external-scanner features are early preview, OpenAPM is a working draft, `gh
-skill` is a public preview, and SkillPort is work in progress. Pin each
-integration and keep it replaceable. APM SBOMs are provenance inventories, not
-compliance attestations; SkillPort lint is not the exact Agent Skills
-conformance oracle.
+See [one authority per concern](current-direction.md#one-authority-per-concern).
 
-The recommended hybrid is:
+## SkillNote decision
 
-> discover and try with an existing manager → promote only deliberately
-> developed skills → reconcile them in the workshop → contribute or publish
-> with Git, `gh skill`, APM, or the relevant vendor flow.
+SkillNote has an excellent interface concept: collections, live sync, version
+history, usage, ratings, and agent comments. Its rating loop is worth learning
+from.
 
-See [Adopt, wrap, or build](project-viability.md#adopt-wrap-or-build) and the
-full [alternative-tools comparison](skill-management-landscape.md#alternative-approaches-and-existing-tools).
+Do not make its database canonical yet. Its current portable ZIP exports skill
+files but not the complete structured history; its relations are coupled to
+SkillNote slugs/versions; its validator and renderer accept nonstandard names
+and write a top-level `collections` field; and its 15-skill collection limit is
+based on an overstated Claude claim. Current main contains a Codex integration
+that its README still calls future work, which warrants a real compatibility
+trial.
 
-## Scope now
+Retain portable workshop events first. Consider SkillNote later as a UI only if
+it can round-trip IDs, provenance, use, ratings, and evaluation evidence without
+becoming the sole store.
 
-Maintain:
+See [the SkillNote assessment](current-direction.md#skillnote-useful-interface-wrong-canonical-store-for-now).
 
-- bundles and exact source identities;
-- the small home core profile and existing link reconciliation;
-- basic inventory/VisiData views and the hash-bound review ledger, without
-  expanding them into search or generic scanning products;
-- project import and ordinary copied skill trees;
-- source/project baselines, status, diffs, and the four conflict choices;
-- conservative prune and verified recovery backups;
-- fork/canonical upstream coordination; and
-- tests protecting those operations.
+## Evaluation pattern
 
-Delegate:
+Keep ordinary feedback cheap: after real use, record a sanitized task summary,
+invocation mode, outcome, optional 1–5 rating, rationale, and agent/runtime
+context. This is useful observation, not causal proof.
 
-- general discovery, search, package resolution, transitive dependencies,
-  registries, publication, multi-agent path mapping, SBOMs, generic security
-  scans, and one-way installation.
+For consequential skills, compare two fresh isolated agents on the same pinned
+fixture and prompt, one with the exact skill and one without it. Match model,
+reasoning effort, tools, permissions, and budget; predeclare metrics and
+grading. One pair is exploratory. Controlled and replicated labels require
+stronger evidence.
 
-Freeze until a concrete trigger exists:
+See [ratings versus evaluation](current-direction.md#ratings-versus-evaluation)
+and the [evaluation protocol](evaluation-protocol.md).
 
-- tag storage and a tag CLI;
-- overlays or patch composition;
-- generic provider adapters;
-- custom retrieval and ranking;
-- broad vendor-target support; and
-- the manager skill.
+## What is not being developed
 
-Tags remain a useful concept distinct from bundles, but a new serialization is
-not justified by two bundles and no active materializations. Overlays become
-worth considering only after the same small, non-upstreamable modification
-recurs at least three times across at least two projects. A manager skill
-should be a thin interface over stable, tested commands after the pilot, not a
-new implementation layer.
+The earlier two-way source/project reconciliation engine is frozen. It may be
+technically differentiated without being useful. Prefer one of two simpler
+modes:
 
-See the detailed [feature disposition](project-viability.md#feature-disposition).
-The economic test is equally important: workshop engineering competes with
-reviewing, evaluating, using, and improving the skills themselves. See the
-[opportunity-cost and break-even test](project-viability.md#opportunity-cost-and-break-even-test).
+- develop in the project and export a generally useful change to Git; or
+- develop in shared Git source and let APM update projects.
 
-## Decision guide
+Revisit reconciliation or generic overlays only after repeated real episodes
+show continual import/export is materially error-prone.
 
-- Use plain committed copies for a few stable skills with no update workflow.
-- Use APM when package intent and a reproducible lock belong in the downstream
-  project.
-- Use `gh skill` for GitHub-native search, pins, update, and publication.
-- Use Vercel `skills` for many sources or agent hosts and for quick trials.
-- Use SkillPort for search-first or MCP delivery of a large local inventory.
-- Use `skill-manager` for a global canonical store and symlinked profiles, or
-  `skills-registry` for a GitHub-backed fuzzy TUI with metadata/description
-  preview.
-- Use SkillHub for organizational governance.
-- Use this workshop only when multiple independently edited projects share a
-  source and need parent-held reconciliation and contribution-back.
+SkillPort may later be trialed only as a read-only local search/MCP view; its
+nested metadata format and validator are not acceptable conformance authority.
+`skills-registry` does not currently provide the supported fully local,
+on-demand service desired here. Enterprise registries are out of scope.
 
-See [Tool choice by decision criterion](project-viability.md#tool-choice-by-decision-criterion).
+See [what happens to two-way synchronization](current-direction.md#what-happens-to-two-way-synchronization)
+and [SkillPort and other managers](current-direction.md#skillport-and-other-managers).
 
-## Proof before more development
+## Current implementation
 
-Run a 60-day pilot. Count only **unique-value events**: deliberate `record` or
-`back-propagate` decisions after source/project divergence, both-sides conflict
-resolution using separate baselines, or fork/canonical coordination that
-produces a submitted upstream pull request or issue-backed patch. Routine
-search, install, copy, overwrite, and update do not count.
+This repository now contains:
 
-Continue active development only if the pilot reaches all of these gates:
+- a `v0` source-agnostic memory schema for logical skills, projects,
+  append-only events, evaluations, tags, and bundles;
+- a tested `workshop` CLI for validation, recall, multi-provider discovery,
+  decisions, project membership, use/ratings, contribution links, exact
+  artifacts, APM install/audit, and evaluation scaffolds;
+- a tracked `skills-workshop` skill that gives agents the same workflow;
+- a tracked `commit-provenance` skill promoted from the host; and
+- project-local APM manifest, lock, and `.agents/skills` deployments for both.
 
-- two active downstream projects;
-- three unique-value events across at least two projects;
-- at least one record/back-propagate event;
-- at least one submitted upstream pull request or issue-backed patch, or one
-  skill change reused in two downstream projects;
-- no lost changes and no more than one manual lock repair;
-- cumulative operation benefit, including commodity-operation overhead, at
-  least twice cumulative maintenance time; and
-- every named alternative tested or evidence-backed disqualified, with no
-  replacement passing every safety-critical case plus at least six of seven
-  residual requirements within one day of removable integration.
+The schema deliberately remains `v0`. Promote it to `v1` only after a second
+real project exposes mistakes. Do not spend effort maintaining compatibility
+between discarded experimental layouts.
 
-Stop conditions take precedence; continue requires every gate; all other
-outcomes mean pivot or re-scope. The committed
-[pilot ledger](usage-pilot.md) defines the timing, evidence, maintenance-cost
-accounting, alternative comparisons, and archive review.
+The dogfood run also found two APM 0.28.0 limitations: positional-package dry
+runs can produce a contradictory plan, and `audit --ci` falsely expects nested
+APM manifests in standalone raw local-skill dependencies. Project-owned skills
+now use `.apm/skills`, which passes frozen replay and every CI audit check. The
+workshop keeps the operational safeguards but does not duplicate the upstream
+issue tracker or replace APM because of the defects.
 
-The complete gates, pivot cases, and safe exit path are in the
-[60-day proof-of-value pilot](project-viability.md#sixty-day-proof-of-value-pilot).
+## Next evidence
 
-## Immediate recommendation
+1. Repeat the completed three-intent search trial as provider versions change.
+2. Add one unrelated APM-managed project.
+3. Record both successful and failed real uses.
+4. Run one exploratory paired skill evaluation.
+5. Trial `.well-known` discovery through Vercel.
+6. Reassess whether a third-party UI can safely round-trip the accumulated
+   memory.
 
-1. Keep the version 3 migration and legacy readers as the metadata
-   compatibility baseline.
-2. Run pinned external conformance checks before the first pilot promotion.
-3. Dogfood one complete source → project edit → status/diff → reconcile →
-   reapply cycle.
-4. Test plain Git, `skill-manager`, ASM, and APM against the same seven residual
-   requirements, cheapest and closest first.
-5. Run the pilot before implementing tags, overlays, search, target adapters,
-   or a manager skill.
-
-This sequence tests the only defensible value proposition before adding more
-maintenance surface.
+The alternative proposed for
+[CON skills issue #5](con-issue-5-alternative.md) follows the same pattern:
+keep the coherent `find-skill` interface, delegate its installer.

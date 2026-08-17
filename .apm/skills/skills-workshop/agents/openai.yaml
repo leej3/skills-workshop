@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills Workshop"
+  short_description: "Discover, track, evaluate, and install skills"
+  default_prompt: "Use $skills-workshop to find, record, install, or evaluate a skill for this project."

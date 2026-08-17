@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:d31f5828-1dbf-427a-9d22-22ec4e39fb1a",
+  "occurred_at": "2026-08-17T19:47:18Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John identified source-agnostic cross-project recall and a coherent agent-facing workflow as durable needs."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "consideration"
+}

@@ -1,5 +1,11 @@
 # Sixty-day workshop usage pilot
 
+> **Superseded pilot.** This ledger measured the earlier reconciliation-first
+> operating model and has not started. Current experiments measure
+> source-agnostic recall, provider composition, APM-managed project state, use
+> evidence, and evaluation quality instead. See
+> [the current direction](current-direction.md).
+
 This is the auditable ledger for the
 [project viability decision](project-viability.md). Do not start the clock when
 the template is committed. Start it when the first real downstream project has
