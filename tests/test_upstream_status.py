@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +35,30 @@ def initialized_repository(path: Path) -> tuple[Path, str]:
     git_command(path, "add", "README.md")
     git_command(path, "commit", "-m", "test")
     return path, git_command(path, "rev-parse", "HEAD")
+
+
+def test_relationships_reports_v2_cluster_as_bundle(workshop: Path) -> None:
+    (workshop / "materializations" / "project--research.lock.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "cluster": "research",
+                "project": {"id": "project", "remote": None},
+                "skills": [
+                    {
+                        "name": "alpha",
+                        "source": "skills/alpha",
+                        "status": "synced",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    _, materializations = upstream_status.relationships()
+
+    assert materializations[0]["bundle"] == "research"
 
 
 def test_trust_inventory_detects_risk_license_and_review_staleness(

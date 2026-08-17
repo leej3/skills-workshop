@@ -27,6 +27,17 @@ try:
 except ImportError:  # Direct execution: python scripts/manage_skills.py
     from backup_store import store_snapshot
 
+try:
+    from .materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+    )
+except ImportError:  # Direct execution: python scripts/manage_skills.py
+    from materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+    )
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 CORE_STATE = ".skills-workshop-core.json"
 MATERIALIZATIONS = REPOSITORY / "materializations"
@@ -175,9 +186,8 @@ def load_previous_lock(
         ) from error
     if not isinstance(data, dict) or not isinstance(data.get("skills"), list):
         raise TypeError(f"invalid previous coordination lock: {path}")
-    if data.get("schema_version", 1) not in {1, 2}:
-        raise ValueError(f"unsupported coordination lock schema: {path}")
-    if data.get("bundle") != bundle:
+    context = f"coordination lock {path}"
+    if lock_bundle(data, context=context) != bundle:
         raise ValueError(f"coordination lock bundle does not match {bundle!r}: {path}")
     project = data.get("project")
     if not isinstance(project, dict) or project.get("id") != project_id:
@@ -1010,7 +1020,7 @@ def apply_bundle(
                 shutil.rmtree(destination)
 
     lock = {
-        "schema_version": 2,
+        "schema_version": CURRENT_LOCK_SCHEMA_VERSION,
         "bundle": manifest["name"],
         "project": {"id": project_id, "remote": project_remote},
         "skills": locked,

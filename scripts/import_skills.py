@@ -39,6 +39,17 @@ try:
 except ImportError:  # Direct execution: python scripts/import_skills.py
     from backup_store import store_snapshot
 
+try:
+    from .materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+    )
+except ImportError:  # Direct execution: python scripts/import_skills.py
+    from materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+    )
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 MATERIALIZATIONS = REPOSITORY / "materializations"
 BACKUPS = REPOSITORY / ".backups"
@@ -600,13 +611,13 @@ def load_existing_lock(
         raise ValueError(f"cannot read materialization lock {path}: {error}") from error
     if not isinstance(data, dict) or not isinstance(data.get("skills"), list):
         raise TypeError(f"invalid materialization lock: {path}")
-    if data.get("schema_version", 1) not in {1, 2}:
-        raise ValueError(f"unsupported materialization lock schema: {path}")
+    context = f"materialization lock {path}"
+    lock_name = lock_bundle(data, context=context)
     lock_project = data.get("project")
     if (
         not isinstance(lock_project, dict)
         or lock_project.get("id") != project_id
-        or data.get("bundle") != bundle
+        or lock_name != bundle
     ):
         raise ValueError(f"materialization lock identity mismatch: {path}")
     entries = [normalize_lock_entry(item, path) for item in data["skills"]]
@@ -671,7 +682,7 @@ def write_materialization_locks(
                 **source_metadata(source),
             }
         lock = {
-            "schema_version": 2,
+            "schema_version": CURRENT_LOCK_SCHEMA_VERSION,
             "bundle": bundle,
             "project": {"id": project_id, "remote": remote},
             "skills": sorted(entries.values(), key=lambda item: item["name"]),

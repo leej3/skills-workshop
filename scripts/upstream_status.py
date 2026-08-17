@@ -25,6 +25,11 @@ from typing import Any
 
 import tomllib
 
+try:
+    from .materialization_metadata import lock_bundle
+except ImportError:  # Direct execution: python scripts/upstream_status.py
+    from materialization_metadata import lock_bundle
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 REGISTRY = REPOSITORY / "registry.toml"
 TRUST_REGISTRY = REPOSITORY / "policy" / "trust.toml"
@@ -278,12 +283,13 @@ def relationships() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                 )
                 continue
             project = lock.get("project", {})
+            bundle = lock_bundle(lock, context=f"materialization lock {path}")
             for skill in lock.get("skills", []):
                 materializations.append(
                     {
                         "lock": path.relative_to(REPOSITORY).as_posix(),
                         "project": project.get("id"),
-                        "bundle": lock.get("bundle"),
+                        "bundle": bundle,
                         "name": skill.get("name"),
                         "source": skill.get("source"),
                         "status": skill.get("status"),

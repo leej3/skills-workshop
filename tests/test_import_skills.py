@@ -191,7 +191,7 @@ def test_import_preflights_existing_locks_before_copying(
     (workshop / "materializations" / "project--selected.lock.json").write_text(
         json.dumps(
             {
-                "schema_version": 2,
+                "schema_version": 3,
                 "bundle": "selected",
                 "project": {"id": "project", "remote": None},
                 "skills": [
@@ -222,7 +222,7 @@ def test_import_preflights_existing_locks_before_copying(
     assert bundle_path.read_bytes() == before_bundle
 
 
-def test_import_writes_v2_workshop_coordination_lock(
+def test_import_writes_v3_workshop_coordination_lock(
     workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
@@ -245,10 +245,47 @@ def test_import_writes_v2_workshop_coordination_lock(
             encoding="utf-8"
         )
     )
-    assert lock["schema_version"] == 2
+    assert lock["schema_version"] == 3
+    assert lock["bundle"] == "selected"
     assert lock["project"] == {"id": "project", "remote": None}
     assert lock["skills"][0]["identity"] == "skills/alpha#alpha"
     assert lock["skills"][0]["status"] == "synced"
+
+
+def test_import_reads_v2_cluster_lock_and_rewrites_v3(
+    workshop: Path, make_skill, write_bundle
+) -> None:
+    project = workshop.parent / "project"
+    project_skill = make_skill(
+        project / ".agents" / "skills" / "alpha",
+        "alpha",
+    )
+    write_bundle(workshop, "selected", [])
+    lock_path = workshop / "materializations" / "project--selected.lock.json"
+    lock_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "cluster": "selected",
+                "project": {"id": "project", "remote": None},
+                "skills": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mapping = import_skills.SkillMapping(
+        name="alpha",
+        project_path=project_skill,
+        source="skills/alpha",
+        bundles={"selected"},
+    )
+
+    import_skills.import_mappings([mapping], project=project)
+
+    rewritten = json.loads(lock_path.read_text(encoding="utf-8"))
+    assert rewritten["schema_version"] == 3
+    assert rewritten["bundle"] == "selected"
+    assert "cluster" not in rewritten
 
 
 def test_ssh_remote_project_identity_matches_workshop_convention(

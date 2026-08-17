@@ -21,6 +21,19 @@ from urllib.parse import urlsplit
 
 import tomllib
 
+try:
+    from .materialization_metadata import (
+        SEPARATE_BASELINE_SCHEMA_VERSIONS,
+        lock_bundle,
+        lock_schema_version,
+    )
+except ImportError:  # Direct execution: python scripts/skill_status.py
+    from materialization_metadata import (
+        SEPARATE_BASELINE_SCHEMA_VERSIONS,
+        lock_bundle,
+        lock_schema_version,
+    )
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 MATERIALIZATIONS = REPOSITORY / "materializations"
 PLAN_POLICIES = ("abort", "record", "back-propagate", "overwrite")
@@ -244,7 +257,7 @@ def _safe_skill_name(name: object) -> str:
 
 
 def skill_identity(name: str, source: str) -> str:
-    """Return the durable identity used by schema-v2 materialization locks."""
+    """Return the durable identity used by materialization locks since v2."""
 
     return f"{source}#{name}"
 
@@ -258,15 +271,9 @@ def load_lock(path: Path) -> tuple[dict[str, Any], list[LockEntry]]:
         raise ValueError(f"cannot read materialization lock {path}: {error}") from error
     if not isinstance(data, dict) or not isinstance(data.get("skills"), list):
         raise TypeError(f"invalid materialization lock: {path}")
-    schema_version = data.get("schema_version", 1)
-    if schema_version not in {1, 2}:
-        raise ValueError(
-            f"unsupported materialization schema in {path}: "
-            f"{data.get('schema_version')!r}"
-        )
-    bundle = data.get("bundle")
-    if not isinstance(bundle, str) or not bundle:
-        raise ValueError(f"materialization lock has no bundle: {path}")
+    context = f"materialization lock {path}"
+    schema_version = lock_schema_version(data, context=context)
+    bundle = lock_bundle(data, context=context)
 
     entries: list[LockEntry] = []
     for item in data["skills"]:
@@ -277,15 +284,21 @@ def load_lock(path: Path) -> tuple[dict[str, Any], list[LockEntry]]:
         if not isinstance(source, str) or not source:
             raise ValueError(f"skill {name!r} has no source in {path}")
         identity = skill_identity(name, source)
-        if schema_version == 2 and item.get("identity") != identity:
+        if (
+            schema_version in SEPARATE_BASELINE_SCHEMA_VERSIONS
+            and item.get("identity") != identity
+        ):
             raise ValueError(
-                f"skill {name!r} has invalid identity in schema-v2 lock {path}"
+                f"skill {name!r} has invalid identity in schema-v{schema_version} "
+                f"lock {path}"
             )
         source_sha256 = item.get("source_sha256", item.get("sha256"))
         project_sha256 = item.get(
             "project_sha256", item.get("sha256") if schema_version == 1 else None
         )
-        if schema_version == 2 and not isinstance(source_sha256, str):
+        if schema_version in SEPARATE_BASELINE_SCHEMA_VERSIONS and not isinstance(
+            source_sha256, str
+        ):
             raise TypeError(f"skill {name!r} has no source digest in {path}")
         if source_sha256 is not None and not isinstance(source_sha256, str):
             raise TypeError(f"skill {name!r} has an invalid source digest in {path}")
@@ -332,7 +345,7 @@ def discover_locks(
         lock_remote = (
             lock_project.get("remote") if isinstance(lock_project, dict) else None
         )
-        bundle = data.get("bundle")
+        bundle = lock_bundle(data, context=f"materialization lock {path}")
         identity_matches = bool(explicit) or lock_id == identity
         if not identity_matches and remote:
             identity_matches = normalize_remote(lock_remote) == normalize_remote(remote)
@@ -923,7 +936,9 @@ def inspect_project(
         all_lock_paths = []
     for path in all_lock_paths:
         data, _ = load_lock(path)
-        materialized_bundles.add(data["bundle"])
+        materialized_bundles.add(
+            lock_bundle(data, context=f"materialization lock {path}")
+        )
     active_memberships = current_bundle_memberships(repository, materialized_bundles)
     skills: list[SkillStatus] = []
     for (name, source), entries in sorted(grouped.items()):

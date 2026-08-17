@@ -98,6 +98,7 @@ def test_apply_bundle_copies_skills_and_writes_workshop_lock(
     assert skill_text(destination) == skill_text(source)
     lock_path = workshop / "materializations" / "project--core.lock.json"
     lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    assert lock["schema_version"] == 3
     assert lock["bundle"] == "core"
     assert lock["project"] == {"id": "project", "remote": None}
     assert lock["skills"][0]["status"] == "synced"
@@ -207,7 +208,7 @@ def test_prune_rejects_traversal_from_tampered_lock(
     lock_path.write_text(
         json.dumps(
             {
-                "schema_version": 2,
+                "schema_version": 3,
                 "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
@@ -229,6 +230,28 @@ def test_prune_rejects_traversal_from_tampered_lock(
         manage_skills.apply_bundle("core", project, "overwrite", None, prune=True)
 
     assert (victim / "SKILL.md").is_file()
+
+
+def test_apply_bundle_reads_v2_cluster_lock_and_rewrites_v3(
+    workshop: Path, make_skill, write_bundle
+) -> None:
+    make_skill(workshop / "skills" / "alpha", "alpha")
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
+    project = workshop.parent / "project"
+    project.mkdir()
+    manage_skills.apply_bundle("core", project, None, None)
+    lock_path = workshop / "materializations" / "project--core.lock.json"
+    legacy = json.loads(lock_path.read_text(encoding="utf-8"))
+    legacy["schema_version"] = 2
+    legacy["cluster"] = legacy.pop("bundle")
+    lock_path.write_text(json.dumps(legacy), encoding="utf-8")
+
+    manage_skills.apply_bundle("core", project, None, None)
+
+    rewritten = json.loads(lock_path.read_text(encoding="utf-8"))
+    assert rewritten["schema_version"] == 3
+    assert rewritten["bundle"] == "core"
+    assert "cluster" not in rewritten
 
 
 @pytest.mark.parametrize("replacement", ["file", "symlink"])

@@ -9,6 +9,11 @@ from pathlib import Path
 
 import tomllib
 
+try:
+    from .materialization_metadata import CURRENT_LOCK_SCHEMA_VERSION
+except ImportError:  # Direct execution: python scripts/validate_metadata.py
+    from materialization_metadata import CURRENT_LOCK_SCHEMA_VERSION
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 SAFE_NAME = re.compile(r"[a-z0-9][a-z0-9-]{0,63}")
 PROJECT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
@@ -150,13 +155,12 @@ def validate_lock(path: Path) -> list[str]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         return [f"{path}: lock must be an object"]
+    version = data.get("schema_version", 1)
+    if version != CURRENT_LOCK_SCHEMA_VERSION:
+        return [f"{path}: schema_version {version}; run migrate-metadata --apply"]
     unexpected = set(data) - LOCK_KEYS
     if unexpected:
         errors.append(f"{path}: unexpected fields: {', '.join(sorted(unexpected))}")
-    version = data.get("schema_version", 1)
-    if version != 2:
-        errors.append(f"{path}: schema_version {version}; run migrate-metadata --apply")
-        return errors
     bundle = data.get("bundle")
     if not isinstance(bundle, str) or not SAFE_NAME.fullmatch(bundle):
         errors.append(f"{path}: invalid bundle {bundle!r}")

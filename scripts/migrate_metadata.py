@@ -7,42 +7,62 @@ import argparse
 import json
 from pathlib import Path
 
+try:
+    from .materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+        lock_schema_version,
+    )
+except ImportError:  # Direct execution: python scripts/migrate_metadata.py
+    from materialization_metadata import (
+        CURRENT_LOCK_SCHEMA_VERSION,
+        lock_bundle,
+        lock_schema_version,
+    )
+
 REPOSITORY = Path(__file__).resolve().parents[1]
 
 
 def migrate_lock(data: dict[str, object]) -> tuple[dict[str, object], bool]:
-    version = data.get("schema_version", 1)
-    if version == 2:
+    context = "materialization lock"
+    version = lock_schema_version(data, context=context)
+    bundle = lock_bundle(data, context=context)
+    if version == CURRENT_LOCK_SCHEMA_VERSION:
         return data, False
-    if version != 1:
-        raise ValueError(f"unsupported materialization schema version: {version}")
-    skills = data.get("skills")
-    if not isinstance(skills, list):
-        raise TypeError("materialization lock skills must be an array")
-    for skill in skills:
-        if not isinstance(skill, dict):
-            raise TypeError("materialization lock skill entries must be objects")
-        if not isinstance(skill.get("name"), str) or not isinstance(
-            skill.get("source"), str
-        ):
-            raise TypeError("v1 skill entries require string name and source fields")
-        skill["identity"] = f"{skill['source']}#{skill['name']}"
-        if "source_sha256" not in skill and "sha256" in skill:
-            skill["source_sha256"] = skill.pop("sha256")
-        if not isinstance(skill.get("source_sha256"), str):
-            raise TypeError(f"v1 skill {skill['name']!r} has no usable source digest")
-        skill.setdefault("project_sha256", skill.get("source_sha256"))
-        skill.setdefault(
-            "status",
-            "synced"
-            if skill.get("source_sha256") == skill.get("project_sha256")
-            else "diverged",
-        )
-        skill.setdefault("revision", None)
-        skill.setdefault("origin_url", skill.pop("url", None))
-        skill.setdefault("upstream_url", None)
-        skill.setdefault("source_dirty", False)
-    data["schema_version"] = 2
+    if version == 1:
+        skills = data.get("skills")
+        if not isinstance(skills, list):
+            raise TypeError("materialization lock skills must be an array")
+        for skill in skills:
+            if not isinstance(skill, dict):
+                raise TypeError("materialization lock skill entries must be objects")
+            if not isinstance(skill.get("name"), str) or not isinstance(
+                skill.get("source"), str
+            ):
+                raise TypeError(
+                    "v1 skill entries require string name and source fields"
+                )
+            skill["identity"] = f"{skill['source']}#{skill['name']}"
+            if "source_sha256" not in skill and "sha256" in skill:
+                skill["source_sha256"] = skill.pop("sha256")
+            if not isinstance(skill.get("source_sha256"), str):
+                raise TypeError(
+                    f"v1 skill {skill['name']!r} has no usable source digest"
+                )
+            skill.setdefault("project_sha256", skill.get("source_sha256"))
+            skill.setdefault(
+                "status",
+                "synced"
+                if skill.get("source_sha256") == skill.get("project_sha256")
+                else "diverged",
+            )
+            skill.setdefault("revision", None)
+            skill.setdefault("origin_url", skill.pop("url", None))
+            skill.setdefault("upstream_url", None)
+            skill.setdefault("source_dirty", False)
+    data.pop("cluster", None)
+    data["bundle"] = bundle
+    data["schema_version"] = CURRENT_LOCK_SCHEMA_VERSION
     return data, True
 
 

@@ -140,7 +140,7 @@ def test_v1_lock_without_explicit_schema_uses_legacy_digest(
     lock_path.write_text(
         json.dumps(
             {
-                "bundle": "core",
+                "cluster": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {
@@ -158,6 +158,35 @@ def test_v1_lock_without_explicit_schema_uses_legacy_digest(
 
     assert entries[0].source_sha256 == digest
     assert entries[0].project_sha256 == digest
+
+
+def test_v2_cluster_lock_is_read_as_bundle(workshop: Path, make_skill) -> None:
+    source = make_skill(workshop / "skills" / "alpha", "alpha")
+    digest = skill_status.digest_tree(source)
+    lock_path = workshop / "materializations" / "project--core.lock.json"
+    lock_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "cluster": "core",
+                "project": {"id": "project", "remote": None},
+                "skills": [
+                    {
+                        "name": "alpha",
+                        "source": "skills/alpha",
+                        "identity": "skills/alpha#alpha",
+                        "source_sha256": digest,
+                        "project_sha256": digest,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    _, entries = skill_status.load_lock(lock_path)
+
+    assert entries[0].bundle == "core"
 
 
 def test_inspection_builds_read_only_reconciliation_and_prune_plan(
@@ -193,7 +222,7 @@ def test_inspection_builds_read_only_reconciliation_and_prune_plan(
     lock_path.write_text(
         json.dumps(
             {
-                "schema_version": 2,
+                "schema_version": 3,
                 "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
