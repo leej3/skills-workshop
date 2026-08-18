@@ -1,6 +1,22 @@
 {
   "aliases": [],
-  "artifacts": [],
+  "artifacts": [
+    {
+      "digests": [
+        {
+          "algorithm": "sha1",
+          "scheme": "git-tree",
+          "scope": "skill-tree",
+          "value": "d333cf527e67f9e8a8d03b61e87ac9ac2aaca54a"
+        }
+      ],
+      "id": "urn:uuid:b521bb43-49a4-47ff-abec-265eb3eb2986",
+      "observed_at": "2026-08-18T20:35:33Z",
+      "resolved_revision": "a8c43e090cb69ffeae63785f1a621975a04baf6b",
+      "source_id": "urn:uuid:22b82c0a-e5bb-4e8c-95a5-0e5601082280",
+      "version_label": null
+    }
+  ],
   "created_at": "2026-08-18T20:20:46Z",
   "extensions": {},
   "id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
@@ -23,5 +39,5 @@
   ],
   "summary": "Guide Orinoco Lite engineering and source-adapter design using live local pins, verified upstream evidence, static curation, provenance, mappings, and durable human decision memory.",
   "tag_ids": [],
-  "updated_at": "2026-08-18T20:20:46Z"
+  "updated_at": "2026-08-18T20:35:33Z"
 }

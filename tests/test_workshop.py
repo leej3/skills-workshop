@@ -651,6 +651,90 @@ dependencies:
     assert workshop_cli.validate_memory(memory_root) == []
 
 
+def test_project_scan_expands_selected_skills_from_an_apm_package(
+    memory_root: Path,
+    invoke: Callable[..., int],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    remember(invoke, "develop-orinoco-lite")
+    remember(invoke, "operate-orinoco-metadata-adapters")
+    remember(invoke, "skills-workshop")
+    assert invoke("project", "add", "orinoco-lite-dev") == 0
+    project = records(memory_root, "projects")[0]
+    downstream = memory_root / "downstream"
+    downstream.mkdir()
+    lock_path = downstream / "apm.lock.yaml"
+    lock_path.write_text(
+        """\
+lockfile_version: '1'
+apm_version: 0.28.0
+dependencies:
+  - name: skills-workshop
+    repo_url: leej3/skills-workshop
+    resolved_commit: abc123
+    skill_subset:
+      - operate-orinoco-metadata-adapters
+      - develop-orinoco-lite
+""",
+        encoding="utf-8",
+    )
+
+    def fake_project_evidence(
+        root: Path, project_record: dict[str, Any], project_path: Path
+    ) -> dict[str, Any]:
+        assert root == memory_root
+        assert project_record["id"] == project["id"]
+        assert project_path == downstream
+        return {
+            "project_id": project["id"],
+            "repository_commit": "def456",
+            "dirty": False,
+            "manifest_path": "apm.yml",
+            "lock_path": "apm.lock.yaml",
+            "lock_digest": "sha256:"
+            + hashlib.sha256(lock_path.read_bytes()).hexdigest(),
+            "dependency_selector": None,
+            "command": ["apm", "deps", "list"],
+            "apm_version": "0.28.0",
+        }
+
+    monkeypatch.setattr(workshop_cli, "project_evidence", fake_project_evidence)
+    capsys.readouterr()
+
+    assert (
+        invoke(
+            "project",
+            "scan",
+            "orinoco-lite-dev",
+            "--project-path",
+            str(downstream),
+        )
+        == 0
+    )
+    output = capsys.readouterr().out
+    assert "Recorded 2 APM membership event(s)" in output
+    assert "skills-workshop" not in output
+
+    skills = {record["name"]: record for record in records(memory_root, "skills")}
+    membership = records(memory_root, "events")
+    assert {event["skill_id"] for event in membership} == {
+        skills["develop-orinoco-lite"]["id"],
+        skills["operate-orinoco-metadata-adapters"]["id"],
+    }
+    assert {event["payload"]["skill_name"] for event in membership} == {
+        "develop-orinoco-lite",
+        "operate-orinoco-metadata-adapters",
+    }
+    assert {
+        event["project_evidence"]["dependency_selector"] for event in membership
+    } == {
+        "leej3/skills-workshop#skill=develop-orinoco-lite",
+        "leej3/skills-workshop#skill=operate-orinoco-metadata-adapters",
+    }
+    assert workshop_cli.validate_memory(memory_root) == []
+
+
 def test_project_scan_keys_membership_to_the_dependency_resolution(
     memory_root: Path,
     invoke: Callable[..., int],
