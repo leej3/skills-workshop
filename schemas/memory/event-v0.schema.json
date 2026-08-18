@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "title": "Skills Workshop Evidence Event v0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "type",
+    "skill_id",
+    "occurred_at",
+    "asserted_by",
+    "recorded_by",
+    "review",
+    "payload",
+    "evidence",
+    "extensions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json"
+    },
+    "id": {"$ref": "#/$defs/urn_uuid"},
+    "type": {
+      "enum": [
+        "consideration",
+        "project-membership",
+        "use",
+        "assessment",
+        "contribution",
+        "evaluation"
+      ]
+    },
+    "skill_id": {"$ref": "#/$defs/urn_uuid"},
+    "artifact_id": {"$ref": "#/$defs/urn_uuid"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "project_evidence": {"$ref": "#/$defs/project_evidence"},
+    "asserted_by": {"$ref": "#/$defs/actor"},
+    "recorded_by": {
+      "type": "object",
+      "required": ["tool", "version"],
+      "properties": {
+        "tool": {"type": "string", "minLength": 1, "maxLength": 128},
+        "version": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["unreviewed", "reviewed", "rejected"]},
+        "reviewer": {"type": "string", "minLength": 1, "maxLength": 256},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "notes": {"type": "string", "maxLength": 4096}
+      },
+      "additionalProperties": false
+    },
+    "payload": {"type": "object"},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"type": {"const": "consideration"}}},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/consideration"}}}
+    },
+    {
+      "if": {"properties": {"type": {"const": "project-membership"}}},
+      "then": {
+        "required": ["project_evidence"],
+        "properties": {"payload": {"$ref": "#/$defs/project_membership"}}
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "use"}}},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/use"}}}
+    },
+    {
+      "if": {"properties": {"type": {"const": "assessment"}}},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/assessment"}}}
+    },
+    {
+      "if": {"properties": {"type": {"const": "contribution"}}},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/contribution"}}}
+    },
+    {
+      "if": {"properties": {"type": {"const": "evaluation"}}},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/evaluation_pointer"}}}
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "urn_uuid": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*\\\\).+$"
+    },
+    "actor": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {"enum": ["human", "agent", "tool"]},
+        "id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "model": {"type": "string", "maxLength": 256},
+        "runtime": {"type": "string", "maxLength": 256},
+        "runtime_version": {"type": "string", "maxLength": 128},
+        "reasoning_effort": {"type": "string", "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
+    "project_evidence": {
+      "type": "object",
+      "required": ["project_id", "manifest_path", "lock_path", "dirty"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/urn_uuid"},
+        "repository_commit": {"type": ["string", "null"], "maxLength": 128},
+        "dirty": {"type": "boolean"},
+        "manifest_path": {"$ref": "#/$defs/relative_path"},
+        "lock_path": {"$ref": "#/$defs/relative_path"},
+        "lock_digest": {"type": ["string", "null"], "maxLength": 256},
+        "dependency_selector": {"type": ["string", "null"], "maxLength": 1024},
+        "command": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        },
+        "apm_version": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["kind", "locator"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "url",
+            "path",
+            "git-commit",
+            "issue",
+            "pull-request",
+            "apm-lock",
+            "transcript",
+            "other"
+          ]
+        },
+        "locator": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "digest": {"type": "string", "maxLength": 512},
+        "notes": {"type": "string", "maxLength": 4096}
+      },
+      "additionalProperties": false
+    },
+    "consideration": {
+      "type": "object",
+      "required": ["decision", "reason"],
+      "properties": {
+        "decision": {
+          "enum": ["considering", "adopted", "deferred", "rejected", "retired"]
+        },
+        "reason": {"type": "string", "minLength": 1, "maxLength": 10000}
+      },
+      "additionalProperties": false
+    },
+    "project_membership": {
+      "type": "object",
+      "required": ["state", "skill_name", "resolution_digest"],
+      "properties": {
+        "state": {"enum": ["declared", "resolved", "removed"]},
+        "skill_name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "resolution_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "use": {
+      "type": "object",
+      "required": ["task_summary", "invocation", "outcome", "rationale"],
+      "properties": {
+        "task_summary": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "invocation": {"enum": ["explicit", "automatic", "unknown"]},
+        "outcome": {"enum": ["success", "partial", "failure", "abandoned", "unknown"]},
+        "rating": {"type": "integer", "minimum": 1, "maximum": 5},
+        "scale_id": {"const": "workshop-overall-v1"},
+        "rationale": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "duration_seconds": {"type": "number", "minimum": 0},
+        "cost_usd": {"type": "number", "minimum": 0},
+        "listing_state": {"enum": ["full-description", "name-only", "manual-only", "off", "unknown"]}
+      },
+      "dependentRequired": {"rating": ["scale_id"]},
+      "additionalProperties": false
+    },
+    "assessment": {
+      "type": "object",
+      "required": ["category", "check_id", "result", "method", "notes"],
+      "properties": {
+        "category": {
+          "enum": ["compatibility", "trust", "license", "security", "quality", "portability"]
+        },
+        "check_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "result": {"enum": ["pass", "fail", "warn", "unknown", "not-applicable"]},
+        "value": {},
+        "method": {
+          "type": "object",
+          "required": ["tool", "version", "command"],
+          "properties": {
+            "tool": {"type": "string", "minLength": 1},
+            "version": {"type": "string", "minLength": 1},
+            "command": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+          },
+          "additionalProperties": false
+        },
+        "environment": {"type": "object"},
+        "notes": {"type": "string", "maxLength": 4096}
+      },
+      "additionalProperties": false
+    },
+    "contribution": {
+      "type": "object",
+      "required": ["kind", "direction", "url", "state", "summary"],
+      "properties": {
+        "kind": {"enum": ["issue", "pull-request", "commit", "release", "publication", "discussion"]},
+        "direction": {"enum": ["upstream", "downstream", "peer"]},
+        "url": {"type": "string", "format": "uri"},
+        "state": {"enum": ["draft", "submitted", "open", "merged", "closed", "released"]},
+        "summary": {"type": "string", "minLength": 1, "maxLength": 4096}
+      },
+      "additionalProperties": false
+    },
+    "evaluation_pointer": {
+      "type": "object",
+      "required": ["evaluation_id", "conclusion"],
+      "properties": {
+        "evaluation_id": {"$ref": "#/$defs/urn_uuid"},
+        "conclusion": {"enum": ["better", "neutral", "worse", "inconclusive", "planned"]}
+      },
+      "additionalProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9][a-z0-9.-]*/[a-z0-9][a-z0-9._-]*$": {}
+      },
+      "additionalProperties": false
+    }
+  }
+}

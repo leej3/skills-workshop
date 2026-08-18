@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "title": "Skills Workshop Logical Skill Memory v0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "name",
+    "aliases",
+    "summary",
+    "sources",
+    "artifacts",
+    "tag_ids",
+    "relations",
+    "created_at",
+    "updated_at",
+    "notes",
+    "extensions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json"
+    },
+    "id": {"$ref": "#/$defs/urn_uuid"},
+    "name": {"$ref": "#/$defs/skill_name"},
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 128},
+      "uniqueItems": true
+    },
+    "summary": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "preferred_source_id": {"$ref": "#/$defs/urn_uuid"},
+    "artifacts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "tag_ids": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/urn_uuid"},
+      "uniqueItems": true
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "skill_id"],
+        "properties": {
+          "kind": {
+            "enum": ["derived-from", "alternative-to", "supersedes", "related-to"]
+          },
+          "skill_id": {"$ref": "#/$defs/urn_uuid"},
+          "notes": {"type": "string", "maxLength": 2048}
+        },
+        "additionalProperties": false
+      }
+    },
+    "merged_into": {"$ref": "#/$defs/urn_uuid"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "notes": {"type": "string", "maxLength": 10000},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "urn_uuid": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "skill_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "digest": {
+      "type": "object",
+      "required": ["scheme", "algorithm", "scope", "value"],
+      "properties": {
+        "scheme": {"type": "string", "minLength": 1, "maxLength": 128},
+        "algorithm": {"type": "string", "minLength": 1, "maxLength": 32},
+        "scope": {"type": "string", "minLength": 1, "maxLength": 128},
+        "value": {"type": "string", "minLength": 1, "maxLength": 512}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "locator",
+        "role",
+        "first_seen_at",
+        "external_ids",
+        "notes"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/urn_uuid"},
+        "kind": {
+          "enum": ["git", "registry", "well-known", "http", "local", "unknown"]
+        },
+        "locator": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "subpath": {"type": ["string", "null"], "maxLength": 1024},
+        "role": {
+          "enum": ["canonical", "fork", "mirror", "discovery", "deprecated"]
+        },
+        "first_seen_at": {"type": "string", "format": "date-time"},
+        "last_checked_at": {"type": "string", "format": "date-time"},
+        "external_ids": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9][a-z0-9._-]*$": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "notes": {"type": "string", "maxLength": 4096}
+      },
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_id",
+        "version_label",
+        "resolved_revision",
+        "digests",
+        "observed_at"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/urn_uuid"},
+        "source_id": {"$ref": "#/$defs/urn_uuid"},
+        "version_label": {"type": ["string", "null"], "maxLength": 256},
+        "resolved_revision": {"type": ["string", "null"], "maxLength": 512},
+        "digests": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/digest"}
+        },
+        "observed_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9][a-z0-9.-]*/[a-z0-9][a-z0-9._-]*$": {}
+      },
+      "additionalProperties": false
+    }
+  }
+}
