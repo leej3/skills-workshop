@@ -13,7 +13,7 @@ def test_validator_rejects_destructive_lock_fields(workshop: Path, monkeypatch) 
         json.dumps(
             {
                 "schema_version": 2,
-                "cluster": "core",
+                "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {
@@ -41,7 +41,7 @@ def test_v1_migration_adds_stable_identity_and_separate_baselines() -> None:
     digest = "a" * 64
     migrated, changed = migrate_metadata.migrate_lock(
         {
-            "cluster": "core",
+            "bundle": "core",
             "project": {"id": "project", "remote": None},
             "skills": [
                 {
@@ -63,11 +63,11 @@ def test_v1_migration_adds_stable_identity_and_separate_baselines() -> None:
 
 
 def test_manifest_validator_rejects_source_declared_name_mismatch(
-    workshop: Path, make_skill, write_cluster, monkeypatch
+    workshop: Path, make_skill, write_bundle, monkeypatch
 ) -> None:
     monkeypatch.setattr(validate_metadata, "REPOSITORY", workshop)
     make_skill(workshop / "skills" / "alpha", "alpha")
-    manifest = write_cluster(workshop, "wrong-name", [("beta", "skills/alpha")])
+    manifest = write_bundle(workshop, "wrong-name", [("beta", "skills/alpha")])
 
     errors = "\n".join(validate_metadata.validate_manifest(manifest))
 
@@ -75,14 +75,14 @@ def test_manifest_validator_rejects_source_declared_name_mismatch(
 
 
 def test_manifest_validator_rejects_nested_skill_symlinks(
-    workshop: Path, make_skill, write_cluster, monkeypatch
+    workshop: Path, make_skill, write_bundle, monkeypatch
 ) -> None:
     monkeypatch.setattr(validate_metadata, "REPOSITORY", workshop)
     source = make_skill(workshop / "skills" / "alpha", "alpha")
     secret = workshop.parent / "secret.txt"
     secret.write_text("do not expose\n", encoding="utf-8")
     (source / "secret.txt").symlink_to(secret)
-    manifest = write_cluster(workshop, "linked", [("alpha", "skills/alpha")])
+    manifest = write_bundle(workshop, "linked", [("alpha", "skills/alpha")])
 
     errors = "\n".join(validate_metadata.validate_manifest(manifest))
 

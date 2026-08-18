@@ -17,6 +17,7 @@ pytest-asyncio = ">=1,<2"
 nodejs = "22.*"
 jsonschema = "4.*"
 pyyaml = "6.*"
+pre-commit = ">=4.6,<5"
 
 [tasks]
 workshop = "python scripts/workshop.py"
@@ -29,7 +30,7 @@ inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }
 configure-upstreams = "python scripts/manage_skills.py configure-upstreams"
 link-core = "python scripts/manage_skills.py link-core"
-apply-cluster = "python scripts/manage_skills.py apply-cluster"
+apply-bundle = "python scripts/manage_skills.py apply-bundle"
 cleanup-backups = "python scripts/manage_skills.py cleanup-backups"
 cleanup-backups-apply = "python scripts/manage_skills.py cleanup-backups --apply"
 import-project = "python scripts/import_skills.py"
@@ -48,6 +49,7 @@ lint = "ruff check scripts tests"
 check-format = "ruff format --check scripts tests"
 compile = "python -m compileall -q scripts tests"
 test = "pytest -q tests"
+hooks-install = "pre-commit install"
 validate = { depends-on = ["lint", "check-format", "compile", "test", "validate-metadata", "memory-validate"] }
 
 [pypi-dependencies]

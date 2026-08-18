@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Link the global core profile or copy a skill cluster into a project."""
+"""Link the global core profile or copy a skill bundle into a project."""
 
 from __future__ import annotations
 
@@ -163,7 +163,7 @@ def load_manifest(path: Path) -> dict[str, object]:
 
 
 def load_previous_lock(
-    path: Path, *, cluster: str, project_id: str
+    path: Path, *, bundle: str, project_id: str
 ) -> dict[str, object]:
     if not path.exists():
         return {}
@@ -177,10 +177,8 @@ def load_previous_lock(
         raise TypeError(f"invalid previous coordination lock: {path}")
     if data.get("schema_version", 1) not in {1, 2}:
         raise ValueError(f"unsupported coordination lock schema: {path}")
-    if data.get("cluster") != cluster:
-        raise ValueError(
-            f"coordination lock cluster does not match {cluster!r}: {path}"
-        )
+    if data.get("bundle") != bundle:
+        raise ValueError(f"coordination lock bundle does not match {bundle!r}: {path}")
     project = data.get("project")
     if not isinstance(project, dict) or project.get("id") != project_id:
         raise ValueError(
@@ -337,14 +335,14 @@ def skill_identity(name: str, source: str) -> str:
 
 
 def backup_tree(
-    path: Path, project_id: str, cluster: str, side: str, name: str
+    path: Path, project_id: str, bundle: str, side: str, name: str
 ) -> Path | None:
     if not path.is_dir() or path.is_symlink():
         return None
     return store_snapshot(
         path,
         BACKUPS,
-        (f"{project_id}--{cluster}", side, name),
+        (f"{project_id}--{bundle}", side, name),
         expected_name=name,
     )
 
@@ -521,11 +519,11 @@ def _scan_backup_layout(
 
 
 def _materialization_collection(name: str) -> bool:
-    project_id, separator, cluster = name.rpartition("--")
+    project_id, separator, bundle = name.rpartition("--")
     return bool(
         separator
         and SAFE_PROJECT_ID.fullmatch(project_id)
-        and SAFE_NAME.fullmatch(cluster)
+        and SAFE_NAME.fullmatch(bundle)
     )
 
 
@@ -805,7 +803,7 @@ def choose_conflict_policy(
         print("Enter 1, 2, 3, or 4.")
 
 
-def apply_cluster(
+def apply_bundle(
     name: str,
     project: Path,
     conflict: str | None,
@@ -814,14 +812,14 @@ def apply_cluster(
     prune: bool = False,
     show_diff: bool = False,
 ) -> None:
-    safe_name(name, context="cluster name")
-    manifest_path = REPOSITORY / "clusters" / f"{name}.toml"
+    safe_name(name, context="bundle name")
+    manifest_path = REPOSITORY / "bundles" / f"{name}.toml"
     if not manifest_path.is_file():
-        raise FileNotFoundError(f"unknown cluster: {name}")
+        raise FileNotFoundError(f"unknown bundle: {name}")
     manifest = load_manifest(manifest_path)
     if manifest["name"] != name:
         raise ValueError(
-            f"cluster filename/name mismatch: requested {name!r}, "
+            f"bundle filename/name mismatch: requested {name!r}, "
             f"manifest declares {manifest['name']!r}"
         )
     project = project.resolve()
@@ -831,7 +829,7 @@ def apply_cluster(
     destination_root = validate_project_skills_root(project)
     lock_path = MATERIALIZATIONS / f"{project_id}--{manifest['name']}.lock.json"
     previous_lock = load_previous_lock(
-        lock_path, cluster=manifest["name"], project_id=project_id
+        lock_path, bundle=manifest["name"], project_id=project_id
     )
     previous_by_name = {item["name"]: item for item in previous_lock.get("skills", [])}
     planned: list[dict[str, object]] = []
@@ -1013,7 +1011,7 @@ def apply_cluster(
 
     lock = {
         "schema_version": 2,
-        "cluster": manifest["name"],
+        "bundle": manifest["name"],
         "project": {"id": project_id, "remote": project_remote},
         "skills": locked,
     }
@@ -1021,7 +1019,7 @@ def apply_cluster(
     temporary = lock_path.with_suffix(lock_path.suffix + ".tmp")
     temporary.write_text(json.dumps(lock, indent=2) + "\n")
     temporary.replace(lock_path)
-    print(f"Cluster {name}: {len(locked)} copied skills into {destination_root}")
+    print(f"Bundle {name}: {len(locked)} copied skills into {destination_root}")
     print(f"Coordination record: {lock_path}")
 
 
@@ -1061,26 +1059,26 @@ def main() -> None:
         default=Path("~/.agents/skills").expanduser(),
         help="user skill directory (default: ~/.agents/skills)",
     )
-    cluster = commands.add_parser("apply-cluster", help="copy a cluster into a project")
-    cluster.add_argument("name")
-    cluster.add_argument("project", type=Path)
-    cluster.add_argument(
+    bundle = commands.add_parser("apply-bundle", help="copy a bundle into a project")
+    bundle.add_argument("name")
+    bundle.add_argument("project", type=Path)
+    bundle.add_argument(
         "--conflict",
         choices=("abort", "record", "back-propagate", "overwrite"),
         help="conflict policy; omit to choose from a menu in an interactive terminal",
     )
-    cluster.add_argument(
+    bundle.add_argument(
         "--dry-run", action="store_true", help="show the plan and diffs without changes"
     )
-    cluster.add_argument(
+    bundle.add_argument(
         "--show-diff", action="store_true", help="show file-level conflict diffs"
     )
-    cluster.add_argument(
+    bundle.add_argument(
         "--prune",
         action="store_true",
-        help="remove previously managed skills no longer present in the cluster",
+        help="remove previously managed skills no longer present in the bundle",
     )
-    cluster.add_argument(
+    bundle.add_argument(
         "--project-id",
         help="stable lock name; defaults to the project's origin remote or directory name",
     )
@@ -1107,8 +1105,8 @@ def main() -> None:
 
     if args.command == "link-core":
         link_core(args.target)
-    elif args.command == "apply-cluster":
-        apply_cluster(
+    elif args.command == "apply-bundle":
+        apply_bundle(
             args.name,
             args.project,
             args.conflict,

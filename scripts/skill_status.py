@@ -36,7 +36,7 @@ class LockEntry:
     identity: str
     source_sha256: str | None
     project_sha256: str | None
-    cluster: str
+    bundle: str
     lock_path: Path
     revision: str | None = None
     upstream_url: str | None = None
@@ -74,7 +74,7 @@ class SkillStatus:
     name: str
     source: str
     identity: str
-    clusters: list[str]
+    bundles: list[str]
     locks: list[str]
     workshop_path: str
     project_path: str
@@ -264,9 +264,9 @@ def load_lock(path: Path) -> tuple[dict[str, Any], list[LockEntry]]:
             f"unsupported materialization schema in {path}: "
             f"{data.get('schema_version')!r}"
         )
-    cluster = data.get("cluster")
-    if not isinstance(cluster, str) or not cluster:
-        raise ValueError(f"materialization lock has no cluster: {path}")
+    bundle = data.get("bundle")
+    if not isinstance(bundle, str) or not bundle:
+        raise ValueError(f"materialization lock has no bundle: {path}")
 
     entries: list[LockEntry] = []
     for item in data["skills"]:
@@ -298,7 +298,7 @@ def load_lock(path: Path) -> tuple[dict[str, Any], list[LockEntry]]:
                 identity=identity,
                 source_sha256=source_sha256,
                 project_sha256=project_sha256,
-                cluster=cluster,
+                bundle=bundle,
                 lock_path=path.resolve(),
                 revision=item.get("revision"),
                 upstream_url=item.get("upstream_url"),
@@ -313,10 +313,10 @@ def discover_locks(
     materializations: Path = MATERIALIZATIONS,
     *,
     project_id: str | None = None,
-    clusters: set[str] | None = None,
+    bundles: set[str] | None = None,
     explicit: Sequence[Path] = (),
 ) -> tuple[str, str | None, list[Path]]:
-    """Find locks belonging to a project, with optional cluster filtering."""
+    """Find locks belonging to a project, with optional bundle filtering."""
 
     identity, remote = project_identity(project, project_id)
     candidates = (
@@ -332,14 +332,14 @@ def discover_locks(
         lock_remote = (
             lock_project.get("remote") if isinstance(lock_project, dict) else None
         )
-        cluster = data.get("cluster")
+        bundle = data.get("bundle")
         identity_matches = bool(explicit) or lock_id == identity
         if not identity_matches and remote:
             identity_matches = normalize_remote(lock_remote) == normalize_remote(remote)
-        if identity_matches and (not clusters or cluster in clusters):
+        if identity_matches and (not bundles or bundle in bundles):
             matches.append(path.resolve())
     if not matches:
-        detail = f" for clusters {', '.join(sorted(clusters))}" if clusters else ""
+        detail = f" for bundles {', '.join(sorted(bundles))}" if bundles else ""
         raise FileNotFoundError(
             f"no materialization locks found for project {identity!r}{detail}"
         )
@@ -642,7 +642,7 @@ def classify_skill(
         name=name,
         source=source,
         identity=skill_identity(name, source),
-        clusters=sorted({entry.cluster for entry in entries}),
+        bundles=sorted({entry.bundle for entry in entries}),
         locks=sorted({str(entry.lock_path) for entry in entries}),
         workshop_path=str(workshop_path),
         project_path=str(project_path),
@@ -668,20 +668,20 @@ def classify_skill(
     )
 
 
-def current_cluster_memberships(
+def current_bundle_memberships(
     repository: Path = REPOSITORY,
-    clusters: set[str] | None = None,
+    bundles: set[str] | None = None,
 ) -> set[tuple[str, str]]:
-    """Return skill identities selected by the relevant current clusters."""
+    """Return skill identities selected by the relevant current bundles."""
 
     memberships: set[tuple[str, str]] = set()
-    for path in sorted((repository / "clusters").glob("*.toml")):
+    for path in sorted((repository / "bundles").glob("*.toml")):
         try:
             with path.open("rb") as stream:
                 manifest = tomllib.load(stream)
         except (OSError, tomllib.TOMLDecodeError) as error:
-            raise ValueError(f"cannot read cluster manifest {path}: {error}") from error
-        if clusters is not None and manifest.get("name") not in clusters:
+            raise ValueError(f"cannot read bundle manifest {path}: {error}") from error
+        if bundles is not None and manifest.get("name") not in bundles:
             continue
         for item in manifest.get("skills", []):
             if isinstance(item, dict) and item.get("name") and item.get("source"):
@@ -817,7 +817,7 @@ def build_plan(
                     PlanAction(
                         skill=status.name,
                         action="retire-lock-entry",
-                        reason="skill is no longer selected by a cluster and is absent",
+                        reason="skill is no longer selected by a bundle and is absent",
                         identity=status.identity,
                         destination=", ".join(status.locks),
                     )
@@ -854,7 +854,7 @@ def build_plan(
                         skill=status.name,
                         action="remove-project-skill",
                         reason=(
-                            "skill is no longer selected by any current cluster; "
+                            "skill is no longer selected by any current bundle; "
                             "retire its lock entry after removal"
                         ),
                         identity=status.identity,
@@ -877,7 +877,7 @@ def inspect_project(
     repository: Path = REPOSITORY,
     materializations: Path | None = None,
     project_id: str | None = None,
-    clusters: set[str] | None = None,
+    bundles: set[str] | None = None,
     explicit_locks: Sequence[Path] = (),
     include_patches: bool = False,
     diff_context: int = 3,
@@ -897,7 +897,7 @@ def inspect_project(
         project,
         materializations or repository / "materializations",
         project_id=project_id,
-        clusters=clusters,
+        bundles=bundles,
         explicit=explicit_locks,
     )
     grouped: dict[tuple[str, str], list[LockEntry]] = defaultdict(list)
@@ -910,8 +910,8 @@ def inspect_project(
     sources_by_name: dict[str, set[str]] = defaultdict(set)
     for name, source in grouped:
         sources_by_name[name].add(source)
-    materialized_clusters = {
-        entry.cluster for entries in grouped.values() for entry in entries
+    materialized_bundles = {
+        entry.bundle for entries in grouped.values() for entry in entries
     }
     try:
         _, _, all_lock_paths = discover_locks(
@@ -923,8 +923,8 @@ def inspect_project(
         all_lock_paths = []
     for path in all_lock_paths:
         data, _ = load_lock(path)
-        materialized_clusters.add(data["cluster"])
-    active_memberships = current_cluster_memberships(repository, materialized_clusters)
+        materialized_bundles.add(data["bundle"])
+    active_memberships = current_bundle_memberships(repository, materialized_bundles)
     skills: list[SkillStatus] = []
     for (name, source), entries in sorted(grouped.items()):
         status = classify_skill(
@@ -1002,7 +1002,7 @@ def render_human(report: ProjectReport, *, show_diffs: bool = False) -> str:
             (
                 status.name,
                 status.source,
-                ",".join(status.clusters),
+                ",".join(status.bundles),
                 status.state,
                 upstream,
                 str(len(status.differences)),
@@ -1011,7 +1011,7 @@ def render_human(report: ProjectReport, *, show_diffs: bool = False) -> str:
     lines.append(
         _table(
             rows,
-            ("SKILL", "SOURCE", "CLUSTERS", "STATE", "UPSTREAM", "FILES"),
+            ("SKILL", "SOURCE", "BUNDLES", "STATE", "UPSTREAM", "FILES"),
         )
         if rows
         else "No locked skills."
@@ -1025,7 +1025,7 @@ def render_human(report: ProjectReport, *, show_diffs: bool = False) -> str:
     )
     obsolete = [status.name for status in report.skills if status.obsolete]
     if obsolete:
-        lines.append("Obsolete cluster selections: " + ", ".join(obsolete))
+        lines.append("Obsolete bundle selections: " + ", ".join(obsolete))
     if report.unmanaged_project_skills:
         lines.append(
             "Unmanaged project skills: " + ", ".join(report.unmanaged_project_skills)
@@ -1068,10 +1068,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--format", choices=("human", "json"), default="human", dest="output_format"
     )
     parser.add_argument(
-        "--cluster",
+        "--bundle",
         action="append",
         default=[],
-        help="inspect only this cluster (repeatable)",
+        help="inspect only this bundle (repeatable)",
     )
     parser.add_argument(
         "--lock",
@@ -1132,7 +1132,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         report = inspect_project(
             args.project,
             project_id=args.project_id,
-            clusters=set(args.cluster),
+            bundles=set(args.bundle),
             explicit_locks=args.lock,
             include_patches=args.diff,
             diff_context=args.diff_context,

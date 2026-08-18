@@ -14,11 +14,11 @@ def skill_text(path: Path) -> str:
 
 
 def test_manifest_rejects_duplicate_skill_names(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop / "skills" / "one", "one")
     make_skill(workshop / "skills" / "two", "two")
-    manifest = write_cluster(
+    manifest = write_bundle(
         workshop,
         "duplicates",
         [("same", "skills/one"), ("same", "skills/two")],
@@ -30,20 +30,20 @@ def test_manifest_rejects_duplicate_skill_names(
 
 @pytest.mark.parametrize("name", ["../escape", "nested/name", "/absolute"])
 def test_manifest_rejects_unsafe_destination_names(
-    workshop: Path, make_skill, write_cluster, name: str
+    workshop: Path, make_skill, write_bundle, name: str
 ) -> None:
     make_skill(workshop / "skills" / "safe", "safe")
-    manifest = write_cluster(workshop, "unsafe", [(name, "skills/safe")])
+    manifest = write_bundle(workshop, "unsafe", [(name, "skills/safe")])
 
     with pytest.raises(ValueError, match="skill name"):
         manage_skills.load_manifest(manifest)
 
 
 def test_manifest_rejects_source_path_traversal(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop.parent / "outside", "outside")
-    manifest = write_cluster(
+    manifest = write_bundle(
         workshop,
         "traversal",
         [("outside", "../outside")],
@@ -54,60 +54,60 @@ def test_manifest_rejects_source_path_traversal(
 
 
 def test_manifest_rejects_symlinks_inside_skill(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     source = make_skill(workshop / "skills" / "linked", "linked")
     secret = workshop.parent / "secret.txt"
     secret.write_text("do not import\n", encoding="utf-8")
     (source / "secret.txt").symlink_to(secret)
-    manifest = write_cluster(workshop, "linked", [("linked", "skills/linked")])
+    manifest = write_bundle(workshop, "linked", [("linked", "skills/linked")])
 
     with pytest.raises(ValueError, match="contains symlinks"):
         manage_skills.load_manifest(manifest)
 
 
 def test_manifest_rejects_source_declared_name_mismatch(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop / "skills" / "alpha", "alpha")
-    manifest = write_cluster(workshop, "wrong-name", [("beta", "skills/alpha")])
+    manifest = write_bundle(workshop, "wrong-name", [("beta", "skills/alpha")])
 
     with pytest.raises(ValueError, match="declares 'alpha', expected 'beta'"):
         manage_skills.load_manifest(manifest)
 
 
-def test_cluster_name_cannot_escape_manifest_directory(workshop: Path) -> None:
+def test_bundle_name_cannot_escape_manifest_directory(workshop: Path) -> None:
     project = workshop.parent / "project"
     project.mkdir()
 
-    with pytest.raises(ValueError, match="cluster name"):
-        manage_skills.apply_cluster("../outside", project, None, None)
+    with pytest.raises(ValueError, match="bundle name"):
+        manage_skills.apply_bundle("../outside", project, None, None)
 
 
-def test_apply_cluster_copies_skills_and_writes_workshop_lock(
-    workshop: Path, make_skill, write_cluster
+def test_apply_bundle_copies_skills_and_writes_workshop_lock(
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     source = make_skill(workshop / "skills" / "alpha", "alpha")
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
     project = workshop.parent / "project"
     project.mkdir()
 
-    manage_skills.apply_cluster("core", project, None, None)
+    manage_skills.apply_bundle("core", project, None, None)
 
     destination = project / ".agents" / "skills" / "alpha"
     assert skill_text(destination) == skill_text(source)
     lock_path = workshop / "materializations" / "project--core.lock.json"
     lock = json.loads(lock_path.read_text(encoding="utf-8"))
-    assert lock["cluster"] == "core"
+    assert lock["bundle"] == "core"
     assert lock["project"] == {"id": "project", "remote": None}
     assert lock["skills"][0]["status"] == "synced"
     assert lock["skills"][0]["source_sha256"] == lock["skills"][0]["project_sha256"]
 
 
-def test_abort_preflight_is_atomic(workshop: Path, make_skill, write_cluster) -> None:
+def test_abort_preflight_is_atomic(workshop: Path, make_skill, write_bundle) -> None:
     make_skill(workshop / "skills" / "new", "new")
     source = make_skill(workshop / "skills" / "changed", "changed", "Workshop.\n")
-    write_cluster(
+    write_bundle(
         workshop,
         "core",
         [("new", "skills/new"), ("changed", "skills/changed")],
@@ -120,7 +120,7 @@ def test_abort_preflight_is_atomic(workshop: Path, make_skill, write_cluster) ->
     before_project = skill_text(destination)
 
     with pytest.raises(SystemExit, match="No changes made"):
-        manage_skills.apply_cluster("core", project, "abort", None)
+        manage_skills.apply_bundle("core", project, "abort", None)
 
     assert not (skills_root / "new").exists()
     assert skill_text(source) == before_source
@@ -128,15 +128,15 @@ def test_abort_preflight_is_atomic(workshop: Path, make_skill, write_cluster) ->
     assert not list((workshop / "materializations").glob("*.lock.json"))
 
 
-def test_apply_cluster_dry_run_changes_no_project_or_lock(
-    workshop: Path, make_skill, write_cluster, capsys: pytest.CaptureFixture[str]
+def test_apply_bundle_dry_run_changes_no_project_or_lock(
+    workshop: Path, make_skill, write_bundle, capsys: pytest.CaptureFixture[str]
 ) -> None:
     make_skill(workshop / "skills" / "alpha", "alpha")
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
     project = workshop.parent / "project"
     project.mkdir()
 
-    manage_skills.apply_cluster("core", project, None, None, dry_run=True)
+    manage_skills.apply_bundle("core", project, None, None, dry_run=True)
 
     assert not (project / ".agents").exists()
     assert not list((workshop / "materializations").glob("*.lock.json"))
@@ -144,23 +144,23 @@ def test_apply_cluster_dry_run_changes_no_project_or_lock(
 
 
 def test_prune_removes_only_previously_managed_unchanged_skill(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop / "skills" / "alpha", "alpha")
     make_skill(workshop / "skills" / "old", "old")
-    write_cluster(
+    write_bundle(
         workshop,
         "core",
         [("alpha", "skills/alpha"), ("old", "skills/old")],
     )
     project = workshop.parent / "project"
     project.mkdir()
-    manage_skills.apply_cluster("core", project, None, None)
+    manage_skills.apply_bundle("core", project, None, None)
     old_project = project / ".agents" / "skills" / "old"
     old_digest = manage_skills.digest_tree(old_project)
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
 
-    manage_skills.apply_cluster("core", project, None, None, prune=True)
+    manage_skills.apply_bundle("core", project, None, None, prune=True)
 
     assert not old_project.exists()
     backup = (
@@ -176,30 +176,30 @@ def test_prune_removes_only_previously_managed_unchanged_skill(
 
 
 def test_prune_refuses_changed_skill_before_copying_additions(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop / "skills" / "old", "old", "Baseline.\n")
-    write_cluster(workshop, "core", [("old", "skills/old")])
+    write_bundle(workshop, "core", [("old", "skills/old")])
     project = workshop.parent / "project"
     project.mkdir()
-    manage_skills.apply_cluster("core", project, None, None)
+    manage_skills.apply_bundle("core", project, None, None)
     old_project = project / ".agents" / "skills" / "old"
     make_skill(old_project, "old", "Locally changed.\n")
     make_skill(workshop / "skills" / "new", "new")
-    write_cluster(workshop, "core", [("new", "skills/new")])
+    write_bundle(workshop, "core", [("new", "skills/new")])
 
     with pytest.raises(SystemExit, match="refusing to prune locally changed"):
-        manage_skills.apply_cluster("core", project, None, None, prune=True)
+        manage_skills.apply_bundle("core", project, None, None, prune=True)
 
     assert skill_text(old_project).endswith("Locally changed.\n")
     assert not (project / ".agents" / "skills" / "new").exists()
 
 
 def test_prune_rejects_traversal_from_tampered_lock(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     make_skill(workshop / "skills" / "alpha", "alpha")
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
     project = workshop.parent / "project"
     project.mkdir()
     victim = make_skill(project / "victim", "victim")
@@ -208,7 +208,7 @@ def test_prune_rejects_traversal_from_tampered_lock(
         json.dumps(
             {
                 "schema_version": 2,
-                "cluster": "core",
+                "bundle": "core",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {
@@ -226,20 +226,20 @@ def test_prune_rejects_traversal_from_tampered_lock(
     )
 
     with pytest.raises(ValueError, match="locked skill name"):
-        manage_skills.apply_cluster("core", project, "overwrite", None, prune=True)
+        manage_skills.apply_bundle("core", project, "overwrite", None, prune=True)
 
     assert (victim / "SKILL.md").is_file()
 
 
 @pytest.mark.parametrize("replacement", ["file", "symlink"])
 def test_prune_refuses_non_directory_managed_path(
-    workshop: Path, make_skill, write_cluster, replacement: str
+    workshop: Path, make_skill, write_bundle, replacement: str
 ) -> None:
     make_skill(workshop / "skills" / "old", "old")
-    manifest = write_cluster(workshop, "core", [("old", "skills/old")])
+    manifest = write_bundle(workshop, "core", [("old", "skills/old")])
     project = workshop.parent / "project"
     project.mkdir()
-    manage_skills.apply_cluster("core", project, None, None)
+    manage_skills.apply_bundle("core", project, None, None)
     managed = project / ".agents" / "skills" / "old"
     shutil.rmtree(managed)
     if replacement == "file":
@@ -249,13 +249,12 @@ def test_prune_refuses_non_directory_managed_path(
         target.write_text("local data\n", encoding="utf-8")
         managed.symlink_to(target)
     manifest.write_text(
-        'schema_version = 1\nname = "core"\n'
-        'description = "Test cluster"\nskills = []\n',
+        'schema_version = 1\nname = "core"\ndescription = "Test bundle"\nskills = []\n',
         encoding="utf-8",
     )
 
     with pytest.raises(SystemExit, match="refusing to prune locally changed skills"):
-        manage_skills.apply_cluster("core", project, None, None, prune=True)
+        manage_skills.apply_bundle("core", project, None, None, prune=True)
 
     assert managed.exists() or managed.is_symlink()
 
@@ -271,14 +270,14 @@ def test_prune_refuses_non_directory_managed_path(
 def test_explicit_conflict_policies(
     workshop: Path,
     make_skill,
-    write_cluster,
+    write_bundle,
     policy: str,
     expected_source: str,
     expected_project: str,
     status: str,
 ) -> None:
     source = make_skill(workshop / "skills" / "alpha", "alpha", "Workshop.\n")
-    write_cluster(workshop, "core", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "core", [("alpha", "skills/alpha")])
     project = workshop.parent / "project"
     destination = make_skill(
         project / ".agents" / "skills" / "alpha",
@@ -286,7 +285,7 @@ def test_explicit_conflict_policies(
         "Project.\n",
     )
 
-    manage_skills.apply_cluster("core", project, policy, None)
+    manage_skills.apply_bundle("core", project, policy, None)
 
     assert skill_text(source).endswith(expected_source)
     assert skill_text(destination).endswith(expected_project)

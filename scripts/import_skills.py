@@ -51,7 +51,7 @@ class SkillMapping:
     name: str
     project_path: Path
     source: str
-    clusters: set[str] = field(default_factory=set)
+    bundles: set[str] = field(default_factory=set)
     original_source: str | None = field(default=None, compare=False)
 
 
@@ -224,9 +224,9 @@ def read_skill_name(skill_file: Path) -> str:
     return declared_skill_name(skill_file) or skill_file.parent.name
 
 
-def load_clusters() -> dict[str, dict[str, object]]:
-    clusters: dict[str, dict[str, object]] = {}
-    for path in sorted((REPOSITORY / "clusters").glob("*.toml")):
+def load_bundles() -> dict[str, dict[str, object]]:
+    bundles: dict[str, dict[str, object]] = {}
+    for path in sorted((REPOSITORY / "bundles").glob("*.toml")):
         with path.open("rb") as stream:
             manifest = tomllib.load(stream)
         name = manifest.get("name")
@@ -237,7 +237,7 @@ def load_clusters() -> dict[str, dict[str, object]]:
             or path.stem != name
             or not isinstance(manifest.get("skills"), list)
         ):
-            raise ValueError(f"invalid cluster manifest: {path}")
+            raise ValueError(f"invalid bundle manifest: {path}")
         seen: set[str] = set()
         for item in manifest["skills"]:
             if not isinstance(item, dict):
@@ -255,11 +255,11 @@ def load_clusters() -> dict[str, dict[str, object]]:
             if source_path.exists() or source_path.is_symlink():
                 validate_skill_tree(
                     source_path,
-                    context=f"cluster skill source {source!r}",
+                    context=f"bundle skill source {source!r}",
                     expected_name=skill_name,
                 )
-        clusters[name] = manifest
-    return clusters
+        bundles[name] = manifest
+    return bundles
 
 
 def previous_sources(project: Path, project_id: str | None = None) -> dict[str, str]:
@@ -310,13 +310,13 @@ def scan_project(project: Path, project_id: str | None = None) -> list[SkillMapp
     root = validate_project_skills_root(project)
     if not root.is_dir():
         raise FileNotFoundError(f"project has no .agents/skills directory: {project}")
-    clusters = load_clusters()
+    bundles = load_bundles()
     known_sources = previous_sources(project, project_id)
     memberships: dict[tuple[str, str], set[str]] = {}
-    for cluster_name, manifest in clusters.items():
+    for bundle_name, manifest in bundles.items():
         for skill in manifest.get("skills", []):
             memberships.setdefault((skill["name"], skill["source"]), set()).add(
-                cluster_name
+                bundle_name
             )
 
     mappings: list[SkillMapping] = []
@@ -342,7 +342,7 @@ def scan_project(project: Path, project_id: str | None = None) -> list[SkillMapp
                 name=name,
                 project_path=skill_file.parent,
                 source=source,
-                clusters=memberships.get((name, source), set()).copy(),
+                bundles=memberships.get((name, source), set()).copy(),
                 original_source=source,
             )
         )
@@ -380,7 +380,7 @@ def quote(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
-def render_cluster(manifest: dict[str, object]) -> str:
+def render_bundle(manifest: dict[str, object]) -> str:
     lines = [
         f"schema_version = {manifest.get('schema_version', 1)}",
         f"name = {quote(manifest['name'])}",
@@ -403,7 +403,7 @@ def render_cluster(manifest: dict[str, object]) -> str:
 
 def import_mappings(
     mappings: list[SkillMapping],
-    new_clusters: set[str] | None = None,
+    new_bundles: set[str] | None = None,
     conflict: str = "abort",
     project: Path | None = None,
     project_id: str | None = None,
@@ -414,11 +414,11 @@ def import_mappings(
         raise FileNotFoundError(f"project does not exist: {project}")
     if project is not None:
         validate_existing_materialization_locks(project, project_id)
-    requested_clusters = set(new_clusters or set())
-    for cluster_name in requested_clusters:
-        if not SAFE_NAME.fullmatch(cluster_name):
-            raise ValueError(f"invalid cluster name: {cluster_name}")
-    available_clusters = set(load_clusters()) | requested_clusters
+    requested_bundles = set(new_bundles or set())
+    for bundle_name in requested_bundles:
+        if not SAFE_NAME.fullmatch(bundle_name):
+            raise ValueError(f"invalid bundle name: {bundle_name}")
+    available_bundles = set(load_bundles()) | requested_bundles
     planned: list[tuple[SkillMapping, Path, str | None]] = []
     conflicts: list[tuple[SkillMapping, Path]] = []
     source_targets: list[tuple[SkillMapping, Path]] = []
@@ -453,11 +453,11 @@ def import_mappings(
             raise ValueError(
                 f"project skill directory and declared name must match {mapping.name!r}"
             )
-        unknown_clusters = mapping.clusters - available_clusters
-        if unknown_clusters:
+        unknown_bundles = mapping.bundles - available_bundles
+        if unknown_bundles:
             raise ValueError(
-                f"unknown clusters for {mapping.name!r}: "
-                + ", ".join(sorted(unknown_clusters))
+                f"unknown bundles for {mapping.name!r}: "
+                + ", ".join(sorted(unknown_bundles))
             )
         source = validate_source(mapping.source)
         for other_mapping, other_source in source_targets:
@@ -507,16 +507,16 @@ def import_mappings(
                 backup_source(source, mapping.name)
                 replace_tree(mapping.project_path, source)
 
-    for cluster_name in sorted(requested_clusters):
-        path = REPOSITORY / "clusters" / f"{cluster_name}.toml"
+    for bundle_name in sorted(requested_bundles):
+        path = REPOSITORY / "bundles" / f"{bundle_name}.toml"
         if not path.exists():
             temporary = path.with_suffix(path.suffix + ".tmp")
             temporary.write_text(
-                render_cluster(
+                render_bundle(
                     {
-                        "name": cluster_name,
+                        "name": bundle_name,
                         "schema_version": 1,
-                        "description": "Project-imported skill cluster",
+                        "description": "Project-imported skill bundle",
                         "skills": [],
                     }
                 ),
@@ -524,13 +524,13 @@ def import_mappings(
             )
             temporary.replace(path)
 
-    clusters = load_clusters()
-    changed_clusters = 0
-    for cluster_name, manifest in clusters.items():
+    bundles = load_bundles()
+    changed_bundles = 0
+    for bundle_name, manifest in bundles.items():
         old_skills = {item["name"]: item for item in manifest.get("skills", [])}
         new_skills = dict(old_skills)
         for mapping in mappings:
-            if cluster_name in mapping.clusters:
+            if bundle_name in mapping.bundles:
                 new_skills[mapping.name] = {
                     "name": mapping.name,
                     "source": mapping.source,
@@ -541,16 +541,16 @@ def import_mappings(
                 if existing and existing.get("source") == controlled_source:
                     new_skills.pop(mapping.name)
         manifest["skills"] = list(new_skills.values())
-        rendered = render_cluster(manifest)
-        path = REPOSITORY / "clusters" / f"{cluster_name}.toml"
+        rendered = render_bundle(manifest)
+        path = REPOSITORY / "bundles" / f"{bundle_name}.toml"
         if path.read_text(encoding="utf-8") != rendered:
             temporary = path.with_suffix(path.suffix + ".tmp")
             temporary.write_text(rendered, encoding="utf-8")
             temporary.replace(path)
-            changed_clusters += 1
+            changed_bundles += 1
     if project is not None:
         write_materialization_locks(project, mappings, project_id)
-    return copied, changed_clusters
+    return copied, changed_bundles
 
 
 def normalize_lock_entry(item: object, path: Path) -> dict[str, object]:
@@ -592,7 +592,7 @@ def normalize_lock_entry(item: object, path: Path) -> dict[str, object]:
 
 
 def load_existing_lock(
-    path: Path, *, project_id: str, cluster: str
+    path: Path, *, project_id: str, bundle: str
 ) -> tuple[dict[str, object], list[dict[str, object]]]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -606,7 +606,7 @@ def load_existing_lock(
     if (
         not isinstance(lock_project, dict)
         or lock_project.get("id") != project_id
-        or data.get("cluster") != cluster
+        or data.get("bundle") != bundle
     ):
         raise ValueError(f"materialization lock identity mismatch: {path}")
     entries = [normalize_lock_entry(item, path) for item in data["skills"]]
@@ -621,10 +621,10 @@ def validate_existing_materialization_locks(
 ) -> None:
     project_id, _ = project_identity(project.resolve(), requested_project_id)
     for path in sorted(MATERIALIZATIONS.glob(f"{project_id}--*.lock.json")):
-        cluster = path.name.removeprefix(f"{project_id}--").removesuffix(".lock.json")
-        if not SAFE_NAME.fullmatch(cluster):
-            raise ValueError(f"invalid cluster name in lock filename: {cluster!r}")
-        load_existing_lock(path, project_id=project_id, cluster=cluster)
+        bundle = path.name.removeprefix(f"{project_id}--").removesuffix(".lock.json")
+        if not SAFE_NAME.fullmatch(bundle):
+            raise ValueError(f"invalid bundle name in lock filename: {bundle!r}")
+        load_existing_lock(path, project_id=project_id, bundle=bundle)
 
 
 def write_materialization_locks(
@@ -635,24 +635,24 @@ def write_materialization_locks(
         raise FileNotFoundError(f"project does not exist: {project}")
     project_id, remote = project_identity(project, requested_project_id)
     MATERIALIZATIONS.mkdir(parents=True, exist_ok=True)
-    selected_clusters = {item for mapping in mappings for item in mapping.clusters}
-    previous_clusters = {
+    selected_bundles = {item for mapping in mappings for item in mapping.bundles}
+    previous_bundles = {
         path.name.removeprefix(f"{project_id}--").removesuffix(".lock.json")
         for path in MATERIALIZATIONS.glob(f"{project_id}--*.lock.json")
     }
-    for cluster in sorted(selected_clusters | previous_clusters):
-        if not SAFE_NAME.fullmatch(cluster):
-            raise ValueError(f"invalid cluster name in lock filename: {cluster!r}")
-        path = MATERIALIZATIONS / f"{project_id}--{cluster}.lock.json"
+    for bundle in sorted(selected_bundles | previous_bundles):
+        if not SAFE_NAME.fullmatch(bundle):
+            raise ValueError(f"invalid bundle name in lock filename: {bundle!r}")
+        path = MATERIALIZATIONS / f"{project_id}--{bundle}.lock.json"
         if path.exists():
             _, normalized = load_existing_lock(
-                path, project_id=project_id, cluster=cluster
+                path, project_id=project_id, bundle=bundle
             )
         else:
             normalized = []
         entries = {item["name"]: item for item in normalized}
         for mapping in mappings:
-            if cluster not in mapping.clusters:
+            if bundle not in mapping.bundles:
                 controlled_source = mapping.original_source or mapping.source
                 existing = entries.get(mapping.name)
                 if existing and existing.get("source") == controlled_source:
@@ -672,7 +672,7 @@ def write_materialization_locks(
             }
         lock = {
             "schema_version": 2,
-            "cluster": cluster,
+            "bundle": bundle,
             "project": {"id": project_id, "remote": remote},
             "skills": sorted(entries.values(), key=lambda item: item["name"]),
         }
@@ -688,10 +688,10 @@ class ImportSkillsApp(App[None]):
     #skills-pane { width: 25%; border: round $accent; }
     #mapping-pane { width: 34%; border: round $accent; padding: 0 1; }
     #preview-pane { width: 41%; border: round $accent; }
-    #skill-list, #cluster-list, #preview { height: 1fr; }
-    #search, #source, #new-cluster { margin-bottom: 1; }
+    #skill-list, #bundle-list, #preview { height: 1fr; }
+    #search, #source, #new-bundle { margin-bottom: 1; }
     #source-info { height: 3; color: $text-muted; }
-    #cluster-actions { height: 3; }
+    #bundle-actions { height: 3; }
     #status { height: 3; padding: 1; }
     #actions { height: 3; align: right middle; }
     Button { margin-left: 1; }
@@ -706,8 +706,8 @@ class ImportSkillsApp(App[None]):
         self.project = project.resolve()
         self.project_id = project_id
         self.mappings = scan_project(self.project, project_id)
-        self.cluster_names = sorted(load_clusters())
-        self.new_clusters: set[str] = set()
+        self.bundle_names = sorted(load_bundles())
+        self.new_bundles: set[str] = set()
         self.source_candidates = known_source_paths()
         self.visible_indices = list(range(len(self.mappings)))
         self.current_index = 0
@@ -740,13 +740,13 @@ class ImportSkillsApp(App[None]):
                     value="abort",
                     id="import-policy",
                 )
-                yield Label("Clusters (space toggles)")
+                yield Label("Bundles (space toggles)")
                 yield SelectionList[str](
-                    *((name, name) for name in self.cluster_names), id="cluster-list"
+                    *((name, name) for name in self.bundle_names), id="bundle-list"
                 )
-                with Horizontal(id="cluster-actions"):
-                    yield Input(placeholder="new-cluster", id="new-cluster")
-                    yield Button("Add", id="add-cluster")
+                with Horizontal(id="bundle-actions"):
+                    yield Input(placeholder="new-bundle", id="new-bundle")
+                    yield Button("Add", id="add-bundle")
                 with Horizontal(id="actions"):
                     yield Button("Import", variant="primary", id="import")
                     yield Button("Quit", id="quit")
@@ -766,7 +766,7 @@ class ImportSkillsApp(App[None]):
     def save_mapping(self) -> None:
         mapping = self.mappings[self.current_index]
         mapping.source = self.query_one("#source", Input).value.strip()
-        mapping.clusters = set(self.query_one("#cluster-list", SelectionList).selected)
+        mapping.bundles = set(self.query_one("#bundle-list", SelectionList).selected)
 
     def update_source_info(self, source: str) -> None:
         try:
@@ -794,10 +794,10 @@ class ImportSkillsApp(App[None]):
         mapping = self.mappings[index]
         self.query_one("#source", Input).value = mapping.source
         self.update_source_info(mapping.source)
-        cluster_list = self.query_one("#cluster-list", SelectionList)
-        cluster_list.deselect_all()
-        for cluster in mapping.clusters:
-            cluster_list.select(cluster)
+        bundle_list = self.query_one("#bundle-list", SelectionList)
+        bundle_list.deselect_all()
+        for bundle in mapping.bundles:
+            bundle_list.select(bundle)
         try:
             source = validate_source(mapping.source)
             preview = (
@@ -842,26 +842,26 @@ class ImportSkillsApp(App[None]):
         if self.visible_indices:
             options.highlighted = 0
 
-    def add_cluster(self) -> None:
-        field = self.query_one("#new-cluster", Input)
+    def add_bundle(self) -> None:
+        field = self.query_one("#new-bundle", Input)
         name = field.value.strip()
         if not SAFE_NAME.fullmatch(name):
-            self.notify("Use a lowercase hyphenated cluster name", severity="error")
+            self.notify("Use a lowercase hyphenated bundle name", severity="error")
             return
-        cluster_list = self.query_one("#cluster-list", SelectionList)
-        if name not in self.cluster_names:
-            self.cluster_names.append(name)
-            self.cluster_names.sort()
-            self.new_clusters.add(name)
-            cluster_list.add_option((name, name))
-        cluster_list.select(name)
+        bundle_list = self.query_one("#bundle-list", SelectionList)
+        if name not in self.bundle_names:
+            self.bundle_names.append(name)
+            self.bundle_names.sort()
+            self.new_bundles.add(name)
+            bundle_list.add_option((name, name))
+        bundle_list.select(name)
         field.value = ""
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "quit":
             self.exit()
-        elif event.button.id == "add-cluster":
-            self.add_cluster()
+        elif event.button.id == "add-bundle":
+            self.add_bundle()
         elif event.button.id == "toggle-preview":
             self.save_mapping()
             self.preview_diff = not self.preview_diff
@@ -873,9 +873,9 @@ class ImportSkillsApp(App[None]):
         self.save_mapping()
         try:
             policy = self.query_one("#import-policy", Select).value
-            copied, clusters = import_mappings(
+            copied, bundles = import_mappings(
                 self.mappings,
-                self.new_clusters,
+                self.new_bundles,
                 str(policy),
                 self.project,
                 self.project_id,
@@ -884,7 +884,7 @@ class ImportSkillsApp(App[None]):
             self.notify(str(error), severity="error", timeout=8)
             return
         self.notify(
-            f"Imported {copied} new skills; updated {clusters} clusters",
+            f"Imported {copied} new skills; updated {bundles} bundles",
             severity="information",
             timeout=6,
         )

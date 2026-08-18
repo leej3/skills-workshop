@@ -14,7 +14,7 @@ SAFE_NAME = re.compile(r"[a-z0-9][a-z0-9-]{0,63}")
 PROJECT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
 DIGEST = re.compile(r"[0-9a-f]{64}")
 MANIFEST_KEYS = {"schema_version", "name", "description", "skills"}
-LOCK_KEYS = {"schema_version", "cluster", "project", "skills"}
+LOCK_KEYS = {"schema_version", "bundle", "project", "skills"}
 LOCK_SKILL_KEYS = {
     "name",
     "source",
@@ -90,8 +90,8 @@ def validate_manifest(path: Path) -> list[str]:
         errors.append(f"{path}: invalid name {name!r}")
     if not isinstance(manifest.get("description"), str):
         errors.append(f"{path}: description must be a string")
-    if path.parent.name == "clusters" and isinstance(name, str) and path.stem != name:
-        errors.append(f"{path}: filename must match cluster name")
+    if path.parent.name == "bundles" and isinstance(name, str) and path.stem != name:
+        errors.append(f"{path}: filename must match bundle name")
     skills = manifest.get("skills")
     if not isinstance(skills, list):
         errors.append(f"{path}: skills must be an array")
@@ -157,9 +157,9 @@ def validate_lock(path: Path) -> list[str]:
     if version != 2:
         errors.append(f"{path}: schema_version {version}; run migrate-metadata --apply")
         return errors
-    cluster = data.get("cluster")
-    if not isinstance(cluster, str) or not SAFE_NAME.fullmatch(cluster):
-        errors.append(f"{path}: invalid cluster {cluster!r}")
+    bundle = data.get("bundle")
+    if not isinstance(bundle, str) or not SAFE_NAME.fullmatch(bundle):
+        errors.append(f"{path}: invalid bundle {bundle!r}")
     project = data.get("project")
     if not isinstance(project, dict):
         errors.append(f"{path}: project must be an object")
@@ -305,7 +305,7 @@ def validate_trust_registry(path: Path) -> list[str]:
 
 def main() -> None:
     errors: list[str] = []
-    for path in sorted((REPOSITORY / "clusters").glob("*.toml")):
+    for path in sorted((REPOSITORY / "bundles").glob("*.toml")):
         errors.extend(validate_manifest(path))
     errors.extend(validate_manifest(REPOSITORY / "profiles" / "core.toml"))
     for path in sorted((REPOSITORY / "materializations").glob("*.lock.json")):

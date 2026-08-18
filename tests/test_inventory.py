@@ -8,7 +8,7 @@ from scripts import inventory
 
 
 def test_inventory_json_and_tsv_relationship_join(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     workshop_skill = make_skill(workshop / "skills" / "alpha", "alpha")
     upstream_skill = make_skill(
@@ -37,12 +37,12 @@ def test_inventory_json_and_tsv_relationship_join(
         + "\n",
         encoding="utf-8",
     )
-    write_cluster(workshop, "research", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "research", [("alpha", "skills/alpha")])
     (workshop / "materializations" / "example--research.lock.json").write_text(
         json.dumps(
             {
                 "schema_version": 1,
-                "cluster": "research",
+                "bundle": "research",
                 "project": {"id": "example", "remote": None},
                 "skills": [
                     {
@@ -90,7 +90,7 @@ def test_inventory_json_and_tsv_relationship_join(
     alpha = next(row for row in rows if row["skill"] == "alpha")
     assert alpha["scope"] == "workshop"
     assert alpha["source"] == "skills/alpha"
-    assert alpha["clusters"] == "research"
+    assert alpha["bundles"] == "research"
     assert alpha["projects"] == "example"
     assert alpha["status"] == "diverged"
     beta = next(row for row in rows if row["skill"] == "beta")

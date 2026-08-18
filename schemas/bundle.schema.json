@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/leej3/skills-workshop/schemas/cluster.schema.json",
-  "title": "Skills Workshop Cluster",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/bundle.schema.json",
+  "title": "Skills Workshop Bundle",
   "type": "object",
   "required": ["schema_version", "name", "description", "skills"],
   "properties": {
