@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/memory/bundle-v0.schema.json",
+  "title": "Skills Workshop Recommendation Bundle v0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "slug",
+    "description",
+    "members",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://github.com/leej3/skills-workshop/schemas/memory/bundle-v0.schema.json"
+    },
+    "id": {"$ref": "#/$defs/urn_uuid"},
+    "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "description": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["skill_id", "rationale"],
+        "properties": {
+          "skill_id": {"$ref": "#/$defs/urn_uuid"},
+          "rationale": {"type": "string", "minLength": 1, "maxLength": 2048}
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "urn_uuid": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    }
+  }
+}

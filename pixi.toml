@@ -1,7 +1,7 @@
 [workspace]
 name = "skills-workshop"
 version = "0.1.0"
-description = "Curate, develop, and materialize reusable agent skills"
+description = "Track cross-project skill evidence and compose existing skill tools"
 channels = ["conda-forge"]
 platforms = ["osx-arm64", "osx-64", "linux-64"]
 
@@ -14,8 +14,16 @@ textual = ">=6,<7"
 visidata = ">=3.3,<4"
 pytest = ">=8.4,<9"
 pytest-asyncio = ">=1,<2"
+nodejs = "22.*"
+jsonschema = "4.*"
+pyyaml = "6.*"
 
 [tasks]
+workshop = "python scripts/workshop.py"
+memory-validate = "python scripts/workshop.py validate"
+apm-install = "apm install"
+apm-install-frozen = "apm install --frozen"
+apm-audit = "apm audit"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }
@@ -40,4 +48,7 @@ lint = "ruff check scripts tests"
 check-format = "ruff format --check scripts tests"
 compile = "python -m compileall -q scripts tests"
 test = "pytest -q tests"
-validate = { depends-on = ["lint", "check-format", "compile", "test", "validate-metadata"] }
+validate = { depends-on = ["lint", "check-format", "compile", "test", "validate-metadata", "memory-validate"] }
+
+[pypi-dependencies]
+apm-cli = "==0.28.0"

@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:ffff30f0-e83d-43cc-ae60-9526a85da00c",
+  "occurred_at": "2026-08-17T20:33:14Z",
+  "payload": {
+    "resolution_digest": "sha256:3c4e84d09159ea9bf62ea0b3f4e1c8a54c443f81fb4e531844bf86731ebc03d3",
+    "skill_name": "skills-workshop",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/skills-workshop",
+    "dirty": true,
+    "lock_digest": "sha256:e0f903ef98996aa282f6a9854285d0a12402f626bad8bc881c6c1bfe55d7a5c7",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "ae66f92ab94a67e895f3ed47d23022e3ac49a023"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "project-membership"
+}

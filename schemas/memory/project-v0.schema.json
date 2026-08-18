@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/schemas/memory/project-v0.schema.json",
+  "title": "Skills Workshop Project Memory v0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "name",
+    "aliases",
+    "repository",
+    "managers",
+    "created_at",
+    "updated_at",
+    "notes",
+    "extensions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://github.com/leej3/skills-workshop/schemas/memory/project-v0.schema.json"
+    },
+    "id": {"$ref": "#/$defs/urn_uuid"},
+    "name": {"type": "string", "minLength": 1, "maxLength": 128},
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 128},
+      "uniqueItems": true
+    },
+    "repository": {
+      "type": ["object", "null"],
+      "properties": {
+        "url": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "subpath": {"type": ["string", "null"], "maxLength": 1024}
+      },
+      "required": ["url", "subpath"],
+      "additionalProperties": false
+    },
+    "managers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["kind", "manifest_path", "lock_path"],
+        "properties": {
+          "kind": {"const": "apm"},
+          "manifest_path": {"$ref": "#/$defs/relative_path"},
+          "lock_path": {"$ref": "#/$defs/relative_path"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "notes": {"type": "string", "maxLength": 10000},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "urn_uuid": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*\\\\).+$"
+    },
+    "extensions": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9][a-z0-9.-]*/[a-z0-9][a-z0-9._-]*$": {}
+      },
+      "additionalProperties": false
+    }
+  }
+}

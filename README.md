@@ -1,250 +1,273 @@
 # Skills workshop
 
-This repository is the control plane for discovering, reviewing, organizing,
-developing, and contributing agent skills. Upstream code stays pinned and
-traceable here; downstream projects receive ordinary skill directories and do
-not need this workshop's tooling or metadata.
+This repository is a Git-backed, source-agnostic memory of skills encountered
+across projects. It remembers where a skill came from, why it was considered,
+where it was declared or actually used, how it worked, and whether it was
+evaluated or improved upstream.
 
-## Organization model
+It is not another package manager or public registry. Downstream projects use
+[Microsoft APM](https://microsoft.github.io/apm/) for their own reproducible
+manifest, lock, installation, update, and audit. Public discovery is delegated
+to [ASM](https://github.com/luongnv89/asm),
+[`gh skill`](https://cli.github.com/manual/gh_skill), and
+[Vercel `skills`](https://github.com/vercel-labs/skills). The workshop provides
+one concise human/agent interface and retains only information those tools do
+not know across projects.
 
-| Layer | Purpose | Tracked where |
-| --- | --- | --- |
-| Upstream collection | Search and contribute to existing work | `upstreams/` submodules plus `registry.toml` |
-| Workshop skill | Author or substantially adapt a skill | `skills/` |
-| Core profile | Small host-wide set linked into `~/.agents/skills` | `profiles/core.toml` |
-| Cluster | Reusable, topic-oriented selection | `clusters/*.toml` |
-| Project copy | Independently editable standard skills | `<project>/.agents/skills/` |
-| Coordination lock | Separate workshop/project baselines and provenance | `materializations/*.lock.json` |
+The current architecture and tool decisions are in
+[the current direction](docs/current-direction.md). Earlier reconciliation
+work remains in the repository as a frozen prototype, not the default project
+lifecycle.
 
-The important boundary is the last one: locks remain in this repository.
-Projects can commit their copied skills, use them without the workshop, and
-develop them independently. The workshop uses its own locks to recognize and
-reconcile later changes.
+## Responsibility model
 
-These locations follow
-[Codex's documented discovery scopes](https://developers.openai.com/codex/skills):
-user skills live under `$HOME/.agents/skills`, while repository skills live
-in `.agents/skills` from the working directory up to the repository root.
+| Concern | Authority |
+| --- | --- |
+| Portable skill contents | [Agent Skills](https://agentskills.io/specification) |
+| Project dependencies, exact resolution, deployment, lock, update, and audit | APM in that project |
+| GitHub discovery, preview, source provenance, and publication | `gh skill` |
+| Cross-provider catalog discovery | ASM |
+| skills.sh and `.well-known` discovery | Vercel `skills` |
+| Skill content and contribution history | Ordinary Git source and forks |
+| Cross-project recall, decisions, use, ratings, evaluations, and contribution links | This workshop |
 
-## Set up the workshop
+The boundary is testable:
 
-Clone the repository and its pinned upstreams:
+- deleting this workshop must leave an APM-managed project reproducible;
+- deleting a project's APM files must leave the workshop unable to recreate
+  its dependency state.
+
+## Set up
 
 ```console
 git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
 cd skills-workshop
 pixi install --locked
-pixi run configure-upstreams
+pixi run workshop doctor
+pixi run memory-validate
+pixi run apm-install-frozen
+pixi run apm-audit
+```
+
+Pixi pins Python, Node, APM, and the helper dependencies. The workshop CLI pins
+the npm discovery commands it delegates and prints every external command,
+working directory, and mutation class before execution.
+
+This repository's project-owned canonical skill sources are under
+`.apm/skills/`. APM's `includes: auto` deploys ordinary copies to
+`.agents/skills/`, records them in `apm.lock.yaml`, and uses `apm_modules/` only
+as an ignored cache. Edit the canonical source and rerun APM; do not edit the
+deployed copy.
+
+Start a project-specific experimental skill in `.apm/skills/<name>`. Do not
+also declare it as a local dependency. Promote it to an independent Git/APM
+package only after another project needs it or it acquires its own release
+lifecycle.
+
+## Find and remember skills
+
+Search the local memory first. It includes aliases, source locations, prior
+task summaries, outcomes, and rationales, so vague recall can find a skill even
+after its source moves:
+
+```console
+pixi run workshop find "something I used to verify commit trailers"
+```
+
+Explicitly fan out to the pinned discovery tools when local memory is not
+enough:
+
+```console
+pixi run workshop find "neuroimaging dataset review" --provider all
+pixi run workshop find "neuroimaging dataset review" --provider all --dry-run
+```
+
+Preview a GitHub candidate's full tree without installing it:
+
+```console
+pixi run workshop preview owner/repository skill-name@commit-sha
+```
+
+Search results are not mirrored wholesale. Promote only a skill that was
+actually considered:
+
+```console
+pixi run workshop remember example-skill \
+  --summary "When and why this is useful" \
+  --source https://github.com/example/skills.git \
+  --source-kind git --source-role canonical \
+  --subpath skills/example-skill
+
+pixi run workshop consider example-skill \
+  --decision adopted --reason "Why this candidate was selected" \
+  --asserted-kind human --asserted-by john
+```
+
+A logical skill has a stable UUID independent of any source. Add a mirror,
+fork, moved origin, or remembered local location without changing that ID:
+
+```console
+pixi run workshop source add example-skill \
+  --source https://github.com/me/example-skills.git \
+  --source-kind git --source-role fork
+```
+
+## Install and observe a project
+
+Installation is an APM operation. The workshop defaults to an APM preview and
+requires `--apply` before mutation:
+
+```console
+pixi run workshop install owner/repository --project ../project
+pixi run workshop install owner/repository --project ../project --apply
+pixi run workshop audit ../project
+```
+
+APM 0.28.0 currently emits contradictory output for some positional-package
+dry runs: it announces a package addition, omits the candidate from the plan,
+then says nothing would change. The wrapper detects and warns about that
+specific contradiction. Defer the apply when it appears; the preview is not a
+sound approval artifact.
+
+APM may discover organization policy from the repository remote and therefore
+perform a network/authentication check. The workshop exposes `--no-policy` as
+an explicit personal-project choice; it never silently adds the bypass.
+
+Remember a project by its durable repository identity, not a host path, and
+record APM-resolved membership without pretending it proves actual use:
+
+```console
+pixi run workshop project add my-project \
+  --repo-url https://github.com/example/my-project.git
+pixi run workshop project scan my-project --project-path ../my-project
+```
+
+After a skill participates in a real task, record a sanitized observation:
+
+```console
+pixi run workshop use example-skill \
+  --task "Reviewed a dataset release" \
+  --invocation explicit --outcome success --rating 4 \
+  --rationale "Found two missing release checks; one correction was needed" \
+  --project my-project --project-path ../my-project \
+  --asserted-kind agent --asserted-by codex
+```
+
+Ratings use `workshop-overall-v1`: 1 harmful, 2 unhelpful, 3 mixed, 4 useful,
+and 5 decisive. They are contextual observations, not controlled efficacy
+evidence. Agent assertions remain visibly distinct from human review.
+
+```console
+pixi run workshop show example-skill
+pixi run workshop history example-skill
+pixi run workshop where-used example-skill
+```
+
+When work produces an upstream issue, pull request, commit, release, or
+discussion, keep the durable link with the same logical skill:
+
+```console
+pixi run workshop contribution add example-skill \
+  --kind pull-request --direction upstream --state open \
+  --url https://github.com/example/skills/pull/123 \
+  --summary "Generalized the release check" \
+  --asserted-kind human --asserted-by john
+```
+
+## Evaluate an important skill
+
+For a repeated or consequential claim, create an explicit with-skill versus
+without-skill scaffold:
+
+```console
+pixi run workshop eval init example-skill \
+  --hypothesis "The skill improves release-review completeness" \
+  --fixture fixtures/release-review-v1 \
+  --prompt "Review this release" \
+  --expected "Identify every seeded defect" \
+  --metric "Defects found without false positives"
+```
+
+One stochastic pair is exploratory. Controlled evidence additionally requires
+an exact treatment artifact, identical fixture/runtime/tools/permissions,
+isolation, and explicit grading; replicated evidence requires repeated trials.
+Record the exact source revision and a named, scoped digest with `workshop
+artifact add` before creating a controlled evaluation:
+
+```console
+pixi run workshop artifact add example-skill \
+  --revision <immutable-revision> \
+  --digest-scheme <producer-scheme> --digest-algorithm sha256 \
+  --digest-scope skill-tree --digest-value <digest>
+```
+
+The v0 CLI creates and validates the evidence scaffold; it does not execute or
+grade agents. A record cannot validate as complete without assigned grading,
+runtime and budget controls, complete condition/case coverage, declared
+metrics, and retained evidence.
+See [the evaluation protocol](docs/evaluation-protocol.md).
+
+## Canonical memory
+
+The initial schema is intentionally `v0`:
+
+```text
+memory/
+  skills/<uuid>.json
+  projects/<uuid>.json
+  events/YYYY/MM/<timestamp>-<uuid>.json
+  evaluations/<uuid>.json
+  tags/<uuid>.json
+  bundles/<uuid>.json
+schemas/memory/
+```
+
+Records are strict JSON Schema 2020-12 objects. Events are append-only. SQLite,
+Markdown, and search indexes may later be generated views, never canonical
+state. The schema will become `v1` only after this repository and another real
+project have generated enough evidence to expose poor assumptions; there is no
+reason to maintain compatibility among abandoned `v0` experiments.
+
+Tags and bundles are source-agnostic recommendations. They never contain
+versions, install paths, hashes, dependency graphs, or target state—those are
+APM concerns.
+
+## Tracked skills
+
+- `skills-workshop`: this workflow, backed by the same tested CLI used by
+  humans.
+- `commit-provenance`: the existing co-commit trailer skill, promoted from the
+  host into ordinary Git and installed in this project through APM.
+
+The project-local and user-global `commit-provenance` copies currently have the
+same name. Codex can show both rather than merging them. Remove the old global
+copy only after confirming the project deployment serves the desired scope.
+
+## Development
+
+```console
 pixi run validate
-```
-
-For an existing checkout, initialize any missing submodules first:
-
-```console
-git submodule update --init --recursive
-```
-
-The scientific collection is large, so its first checkout can take longer.
-Pixi owns the helper dependencies, and the committed `pixi.lock` keeps them
-reproducible on macOS and Linux.
-
-## Discover and review skills
-
-Build the inventory, create a flattened table, or explore it in VisiData:
-
-```console
-pixi run inventory
-pixi run inventory-table
-pixi run inventory-vd
-```
-
-The table connects each skill to its collection, source, revision, clusters,
-materialized projects, and synchronization state. Generated inventory files
-are host-specific and intentionally ignored.
-
-Before selecting a third-party skill, inspect its trust and licensing signals:
-
-```console
-pixi run trust-inventory
-pixi run trust-inventory --format tsv --output inventory/trust.tsv
-pixi run trust-vd
-pixi run review-skill <source> <name> --state reviewed --reviewer <reviewer>
-```
-
-`policy/trust.toml` keys reviews by the stable identity `<source>#<name>` and
-binds a completed review to the skill tree hash. A later content change makes
-that review stale. License, executable, network, and credential results are
-review cues, not security findings or compliance conclusions.
-
-## Organize a core profile and clusters
-
-Keep `profiles/core.toml` intentionally small: it is for skills useful in
-nearly every project. Reconcile its links with:
-
-```console
-pixi run link-core
-```
-
-Clusters are reusable selections, not installations. They let the inventory
-grow by topic while each project chooses only what it needs. Applying a cluster
-copies complete skill directories into a project:
-
-```console
-pixi run apply-cluster project-maintenance ../my-project
-pixi run apply-cluster datalad-core ../my-dataset
-```
-
-Materialization refuses skill trees containing symlinks. This prevents a link
-from silently copying or exposing content outside the selected skill tree.
-Codex supports the top-level skill-folder links made by `link-core`; the
-restriction applies to links nested inside a copied skill tree.
-
-## Import and organize project work
-
-Use the terminal UI to bring independently developed project skills under
-workshop coordination:
-
-```console
-pixi run import-project ../my-project
-pixi run import-project ../my-project --project-id stable-project-name
-```
-
-The UI supports filtering, source-path suggestions, zero or more clusters per
-skill, creation of a new cluster, and a scrollable project/diff preview. It
-tracks mappings by source and name, so an unrelated skill with the same install
-name is not silently removed from another cluster. On differing workshop and
-project content, the import policy can stop, record both baselines, or
-back-propagate the project copy.
-
-The project ID normally derives from its `origin` remote. Use `--project-id`
-when there is no remote or when the same stable identity must be retained after
-a move.
-
-## Inspect and reconcile changes
-
-Inspect all workshop and project copies represented by the project's locks:
-
-```console
-pixi run skill-status ../my-project
-pixi run skill-status ../my-project --diff
-pixi run skill-status ../my-project --format json
-pixi run skill-status ../my-project --plan overwrite --prune
-```
-
-Status distinguishes synchronized content, project-only changes,
-workshop-only changes, changes on both sides, recorded divergence, missing
-copies, lock collisions, obsolete selections, and fetched upstream updates.
-Plans and diffs are always read-only.
-
-Applying a cluster offers four explicit conflict policies:
-
-- `abort`: do not proceed;
-- `record`: preserve both copies and update the workshop metadata;
-- `back-propagate`: replace the workshop source from the project copy;
-- `overwrite`: force-update the project copy from the workshop.
-
-For example:
-
-```console
-pixi run apply-cluster datalad-core ../my-dataset --dry-run --prune
-pixi run apply-cluster datalad-core ../my-dataset \
-  --conflict back-propagate --show-diff --prune
-```
-
-Omit `--conflict` for the interactive menu. Non-interactive use stops rather
-than guessing. Normal reapplication never overwrites changed downstream
-skills. Pruning only removes a previously managed skill that is no longer in
-the cluster and still matches its recorded project baseline; changed, symlink,
-and non-directory paths are refused.
-
-Before replacement or pruning, the workshop makes a content-addressed local
-backup under `.backups/`. Backups are ignored by Git and are an emergency
-recovery aid rather than durable project history; review and commit intended
-skill changes in their owning repository. The retention period is 30 days.
-Preview expired backups, then explicitly remove them:
-
-```console
-pixi run cleanup-backups
-pixi run cleanup-backups-apply
-```
-
-The cleanup includes backups that are at least 30 days old. It only considers
-strictly recognized backup layouts whose contents are a real, symlink-free
-skill tree matching the directory's content digest. Unrelated or corrupt
-trees are preserved. Discovery and deletion remain anchored to the originally
-opened `.backups/` directory and never follow symlinks outside it.
-
-## Track forks and canonical upstreams
-
-Each collection uses the same contribution layout:
-
-- `origin` is the `leej3` fork used for development branches;
-- `upstream` is the canonical community repository;
-- `.gitmodules` points to the fork for reproducible clones;
-- `registry.toml` records both URLs and the collection's role.
-
-Inspect fork, canonical, and pinned revisions:
-
-```console
-pixi run upstream-status
-pixi run upstream-status --fetch
-```
-
-Plan an update from the canonical upstream, then apply it only after review:
-
-```console
-pixi run upstream-update nipreps-skills-comm --fetch
-pixi run upstream-update nipreps-skills-comm --apply
-```
-
-Updates are dry runs by default. Applying requires verified remotes, a clean
-submodule, matching checkout/index/pin, an unchanged selected remote ref, and a
-fast-forward target. It moves only the submodule checkout; the resulting
-superproject gitlink still needs explicit review and commit.
-
-Develop broadly useful changes on a branch inside the relevant submodule, push
-that branch to its `origin`, and propose it to the canonical `upstream`. After
-merge, advance this workshop's submodule pin to the canonical commit.
-
-## Metadata and development
-
-Cluster manifests use schema version 1. Materialization locks use version 2,
-with separate source and project hashes and a `<source>#<name>` identity.
-Schemas live under `schemas/`; runtime validation also protects every path and
-field used by destructive operations.
-
-```console
-pixi run migrate-metadata          # report legacy locks
-pixi run migrate-metadata-apply    # rewrite v1 locks to v2
-pixi run validate-metadata
-pixi run validate                  # lint, format check, compile, tests, metadata
 pixi run format
+python /Users/johnlee/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
+  .apm/skills/skills-workshop
 ```
 
-GitHub Actions runs the same locked Pixi validation. When a helper gains a
-dependency, use `pixi add <package>` and commit both `pixi.toml` and
-`pixi.lock`.
+`pixi run validate` runs lint, formatting checks, compilation, tests, legacy
+prototype metadata checks, and the new memory validator. APM 0.28.0 frozen
+replay and `apm audit --ci` both pass the project-owned `.apm/skills` layout.
+Two independently reproduced APM limitations have been reported upstream:
+local raw-skill dependencies fail the CI configuration check, and
+positional-package dry runs omit their prospective install plan. Neither
+changes the workshop's ownership boundary.
 
-## STAMPED work
+The workshop code is available under the [MIT License](LICENSE). Imported or
+upstream skills retain their own terms.
 
-[The STAMPED use-case map](docs/stamped-use-cases.md) turns
-[stamped-agent-skills issue #2](https://github.com/stamped-principles/stamped-agent-skills/issues/2)
-into bounded software-review, dataset-review, refactoring, dispatch, and skill-
-evaluation candidates. This workshop supplies the discovery, composition,
-provenance, trust, and forward-testing workflow around those skills without
-making that coordination pattern a downstream requirement.
+## Design and research
 
-## License
-
-The workshop code is available under the [MIT License](LICENSE). Upstream
-submodules and imported skills retain their own licenses; review each source's
-terms before using or redistributing it.
-
-## Working agreement
-
-1. Search the upstream collections before starting a new skill.
-2. Review provenance, licensing, scripts, and external access before selection.
-3. Prefer contributing generally useful behavior to its original project.
-4. Keep personal or cross-upstream experiments in `skills/`.
-5. Keep the core profile small and organize project needs into clusters.
-6. Forward-test on realistic tasks before proposing a skill upstream.
+- [Current direction and tool choices](docs/current-direction.md)
+- [Three-intent discovery experiment](docs/discovery-experiment-2026-08-17.md)
+- [Alternative to CON skills issue #5](docs/con-issue-5-alternative.md)
+- [Landscape and standards research ledger](docs/skill-management-landscape.md)
+- [Executive summary](docs/skill-management-executive-summary.md)
+- [STAMPED use cases](docs/stamped-use-cases.md)
