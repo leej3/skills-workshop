@@ -10,12 +10,12 @@ from textual.widgets import Input, SelectionList, TextArea
 from scripts import import_skills
 
 
-def test_scan_project_maps_known_sources_and_cluster_memberships(
-    workshop: Path, make_skill, write_cluster
+def test_scan_project_maps_known_sources_and_bundle_memberships(
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
     skill = make_skill(project / ".agents" / "skills" / "alpha", "alpha")
-    write_cluster(
+    write_bundle(
         workshop,
         "research",
         [("alpha", "upstreams/example/alpha")],
@@ -42,7 +42,7 @@ def test_scan_project_maps_known_sources_and_cluster_memberships(
             name="alpha",
             project_path=skill,
             source="upstreams/example/alpha",
-            clusters={"research"},
+            bundles={"research"},
         )
     ]
 
@@ -68,19 +68,19 @@ def test_validate_source_rejects_paths_outside_workshop(
 
 
 def test_import_model_updates_selected_and_preserves_other_identity(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project_skill = make_skill(
         workshop.parent / "project" / ".agents" / "skills" / "alpha",
         "alpha",
     )
-    write_cluster(workshop, "selected", [])
-    write_cluster(workshop, "unselected", [("alpha", "skills/old-alpha")])
+    write_bundle(workshop, "selected", [])
+    write_bundle(workshop, "unselected", [("alpha", "skills/old-alpha")])
     mapping = import_skills.SkillMapping(
         name="alpha",
         project_path=project_skill,
         source="skills/alpha",
-        clusters={"selected"},
+        bundles={"selected"},
     )
 
     copied, changed = import_skills.import_mappings([mapping])
@@ -89,21 +89,21 @@ def test_import_model_updates_selected_and_preserves_other_identity(
     assert import_skills.digest_tree(workshop / "skills" / "alpha") == (
         import_skills.digest_tree(project_skill)
     )
-    selected = import_skills.load_clusters()["selected"]
-    unselected = import_skills.load_clusters()["unselected"]
+    selected = import_skills.load_bundles()["selected"]
+    unselected = import_skills.load_bundles()["unselected"]
     assert selected["skills"] == [{"name": "alpha", "source": "skills/alpha"}]
     assert unselected["skills"] == [{"name": "alpha", "source": "skills/old-alpha"}]
 
 
 def test_import_removes_only_the_original_unselected_identity(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project_skill = make_skill(
         workshop.parent / "project" / ".agents" / "skills" / "alpha",
         "alpha",
     )
-    write_cluster(workshop, "old", [("alpha", "skills/old-alpha")])
-    write_cluster(workshop, "other", [("alpha", "skills/other-alpha")])
+    write_bundle(workshop, "old", [("alpha", "skills/old-alpha")])
+    write_bundle(workshop, "other", [("alpha", "skills/other-alpha")])
     mapping = import_skills.SkillMapping(
         name="alpha",
         project_path=project_skill,
@@ -113,16 +113,16 @@ def test_import_removes_only_the_original_unselected_identity(
 
     _, changed = import_skills.import_mappings([mapping])
 
-    clusters = import_skills.load_clusters()
+    bundles = import_skills.load_bundles()
     assert changed == 1
-    assert clusters["old"]["skills"] == []
-    assert clusters["other"]["skills"] == [
+    assert bundles["old"]["skills"] == []
+    assert bundles["other"]["skills"] == [
         {"name": "alpha", "source": "skills/other-alpha"}
     ]
 
 
 def test_import_rejects_symlinks_inside_project_skill(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project_skill = make_skill(
         workshop.parent / "project" / ".agents" / "skills" / "alpha",
@@ -131,12 +131,12 @@ def test_import_rejects_symlinks_inside_project_skill(
     secret = workshop.parent / "secret.txt"
     secret.write_text("do not import\n", encoding="utf-8")
     (project_skill / "secret.txt").symlink_to(secret)
-    write_cluster(workshop, "selected", [])
+    write_bundle(workshop, "selected", [])
     mapping = import_skills.SkillMapping(
         name="alpha",
         project_path=project_skill,
         source="skills/alpha",
-        clusters={"selected"},
+        bundles={"selected"},
     )
 
     with pytest.raises(ValueError, match="contains symlinks"):
@@ -179,20 +179,20 @@ def test_import_rejects_workshop_source_declared_name_mismatch(
 
 
 def test_import_preflights_existing_locks_before_copying(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
     project_skill = make_skill(
         project / ".agents" / "skills" / "alpha",
         "alpha",
     )
-    cluster_path = write_cluster(workshop, "selected", [])
-    before_cluster = cluster_path.read_bytes()
+    bundle_path = write_bundle(workshop, "selected", [])
+    before_bundle = bundle_path.read_bytes()
     (workshop / "materializations" / "project--selected.lock.json").write_text(
         json.dumps(
             {
                 "schema_version": 2,
-                "cluster": "selected",
+                "bundle": "selected",
                 "project": {"id": "project", "remote": None},
                 "skills": [
                     {
@@ -212,30 +212,30 @@ def test_import_preflights_existing_locks_before_copying(
         name="alpha",
         project_path=project_skill,
         source="skills/alpha",
-        clusters={"selected"},
+        bundles={"selected"},
     )
 
     with pytest.raises(ValueError, match="source digest"):
         import_skills.import_mappings([mapping], project=project)
 
     assert not (workshop / "skills" / "alpha").exists()
-    assert cluster_path.read_bytes() == before_cluster
+    assert bundle_path.read_bytes() == before_bundle
 
 
 def test_import_writes_v2_workshop_coordination_lock(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
     project_skill = make_skill(
         project / ".agents" / "skills" / "alpha",
         "alpha",
     )
-    write_cluster(workshop, "selected", [])
+    write_bundle(workshop, "selected", [])
     mapping = import_skills.SkillMapping(
         name="alpha",
         project_path=project_skill,
         source="skills/alpha",
-        clusters={"selected"},
+        bundles={"selected"},
     )
 
     import_skills.import_mappings([mapping], project=project)
@@ -278,7 +278,7 @@ def test_ssh_remote_project_identity_matches_workshop_convention(
 
 @pytest.mark.asyncio
 async def test_import_tui_mounts_with_preview_and_mapping_controls(
-    workshop: Path, make_skill, write_cluster
+    workshop: Path, make_skill, write_bundle
 ) -> None:
     project = workshop.parent / "project"
     make_skill(
@@ -286,11 +286,11 @@ async def test_import_tui_mounts_with_preview_and_mapping_controls(
         "alpha",
         "Preview content.\n",
     )
-    write_cluster(workshop, "research", [("alpha", "skills/alpha")])
+    write_bundle(workshop, "research", [("alpha", "skills/alpha")])
     app = import_skills.ImportSkillsApp(project)
 
     async with app.run_test(size=(120, 40)) as pilot:
         await pilot.pause()
         assert app.query_one("#source", Input).value == "skills/alpha"
-        assert app.query_one("#cluster-list", SelectionList).selected == ["research"]
+        assert app.query_one("#bundle-list", SelectionList).selected == ["research"]
         assert "Preview content." in app.query_one("#preview", TextArea).text

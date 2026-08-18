@@ -110,12 +110,12 @@ def relative_workshop_path(path: str) -> str | None:
 
 
 def relationships() -> tuple[dict[str, set[str]], dict[str, dict[str, set[str]]]]:
-    clusters: dict[str, set[str]] = {}
-    for path in sorted((REPOSITORY / "clusters").glob("*.toml")):
+    bundles: dict[str, set[str]] = {}
+    for path in sorted((REPOSITORY / "bundles").glob("*.toml")):
         with path.open("rb") as stream:
             manifest = tomllib.load(stream)
         for skill in manifest.get("skills", []):
-            clusters.setdefault(skill["source"], set()).add(manifest["name"])
+            bundles.setdefault(skill["source"], set()).add(manifest["name"])
 
     projects: dict[str, dict[str, set[str]]] = {}
     for path in sorted((REPOSITORY / "materializations").glob("*.lock.json")):
@@ -127,11 +127,11 @@ def relationships() -> tuple[dict[str, set[str]], dict[str, dict[str, set[str]]]
             )
             record["projects"].add(project_id)
             record["statuses"].add(skill.get("status", "unknown"))
-    return clusters, projects
+    return bundles, projects
 
 
 def tabular_rows(inventory: dict[str, object]) -> list[dict[str, str]]:
-    clusters, projects = relationships()
+    bundles, projects = relationships()
     rows: list[dict[str, str]] = []
 
     def append(
@@ -153,7 +153,7 @@ def tabular_rows(inventory: dict[str, object]) -> list[dict[str, str]]:
                 "path": item["path"],
                 "upstream": upstream_url,
                 "revision": revision,
-                "clusters": ",".join(sorted(clusters.get(relation_key, set()))),
+                "bundles": ",".join(sorted(bundles.get(relation_key, set()))),
                 "projects": ",".join(sorted(relation["projects"])),
                 "status": ",".join(sorted(relation["statuses"])),
             }
@@ -184,7 +184,7 @@ def write_tsv(inventory: dict[str, object], output: Path) -> None:
         "path",
         "upstream",
         "revision",
-        "clusters",
+        "bundles",
         "projects",
         "status",
     ]

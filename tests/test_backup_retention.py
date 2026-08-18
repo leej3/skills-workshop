@@ -36,7 +36,7 @@ def test_cleanup_is_dry_run_by_default_and_expires_at_age_boundary(
     cutoff = now - 30 * DAY_SECONDS
     expired = make_backup(
         root,
-        Path("project--cluster") / "project" / "old",
+        Path("project--bundle") / "project" / "old",
         cutoff,
     )
     retained = make_backup(
@@ -78,7 +78,7 @@ def test_cleanup_refuses_symlinked_backup_paths_without_following_them(
 
     nested = make_backup(
         root,
-        Path("project--cluster") / "project" / "nested-link",
+        Path("project--bundle") / "project" / "nested-link",
         1.0,
     )
     (nested / "outside").symlink_to(outside, target_is_directory=True)
@@ -120,7 +120,7 @@ def test_reused_content_addressed_backups_refresh_their_retention_age(
     materialized = manage_skills.backup_tree(
         source,
         "project",
-        "cluster",
+        "bundle",
         "project",
         "alpha",
     )
@@ -130,7 +130,7 @@ def test_reused_content_addressed_backups_refresh_their_retention_age(
     reused = manage_skills.backup_tree(
         source,
         "project",
-        "cluster",
+        "bundle",
         "project",
         "alpha",
     )
@@ -160,25 +160,25 @@ def test_cleanup_preserves_unrecognized_layouts_and_corrupt_backups(
     old = 1.0
     valid = make_backup(
         root,
-        Path("project--cluster") / "project" / "valid",
+        Path("project--bundle") / "project" / "valid",
         old,
     )
     unrelated = make_backup(root, Path("notes") / "other" / "keep", old)
     corrupt = make_backup(
         root,
-        Path("project--cluster") / "workshop" / "corrupt",
+        Path("project--bundle") / "workshop" / "corrupt",
         old,
     )
     corrupt_digest = corrupt.with_name("b" * 64)
     corrupt.rename(corrupt_digest)
     unknown_side = make_backup(
         root,
-        Path("project--cluster") / "other" / "unknown-side",
+        Path("project--bundle") / "other" / "unknown-side",
         old,
     )
     unsafe_name = make_backup(
         root,
-        Path("project--cluster") / "project" / "NotSafe",
+        Path("project--bundle") / "project" / "NotSafe",
         old,
     )
 
@@ -191,8 +191,8 @@ def test_cleanup_preserves_unrecognized_layouts_and_corrupt_backups(
     assert result["removed"] == (valid.relative_to(root).as_posix(),)
     assert set(result["unsafe"]) == {
         "notes",
-        "project--cluster/other",
-        "project--cluster/project/NotSafe",
+        "project--bundle/other",
+        "project--bundle/project/NotSafe",
         corrupt_digest.relative_to(root).as_posix(),
     }
     assert unrelated.is_dir()
@@ -291,7 +291,7 @@ def test_materialization_backup_rejects_corrupt_reused_digest_directory(
     destination = manage_skills.backup_tree(
         source,
         "project",
-        "cluster",
+        "bundle",
         "project",
         "alpha",
     )
@@ -306,7 +306,7 @@ def test_materialization_backup_rejects_corrupt_reused_digest_directory(
         manage_skills.backup_tree(
             source,
             "project",
-            "cluster",
+            "bundle",
             "project",
             "alpha",
         )
@@ -356,7 +356,7 @@ def test_new_backup_is_not_published_when_source_changes_during_copy(
     monkeypatch.setattr(backup_store, "_copy_tree", copy_then_change_source)
 
     if producer == "materialization":
-        parent = workshop / ".backups" / "project--cluster" / "project" / "alpha"
+        parent = workshop / ".backups" / "project--bundle" / "project" / "alpha"
     else:
         parent = workshop / ".backups" / "project-import" / "alpha"
 
@@ -365,7 +365,7 @@ def test_new_backup_is_not_published_when_source_changes_during_copy(
             manage_skills.backup_tree(
                 source,
                 "project",
-                "cluster",
+                "bundle",
                 "project",
                 "alpha",
             )
@@ -427,7 +427,7 @@ def test_backup_producer_rejects_symlinked_backup_root(
             manage_skills.backup_tree(
                 source,
                 "project",
-                "cluster",
+                "bundle",
                 "project",
                 "alpha",
             )
@@ -440,7 +440,7 @@ def test_backup_producer_rejects_symlinked_backup_root(
 @pytest.mark.parametrize(
     ("producer", "linked_component"),
     [
-        ("materialization", "project--cluster"),
+        ("materialization", "project--bundle"),
         ("import", "project-import"),
     ],
 )
@@ -464,7 +464,7 @@ def test_backup_producer_rejects_symlinked_layout_component(
             manage_skills.backup_tree(
                 source,
                 "project",
-                "cluster",
+                "bundle",
                 "project",
                 "alpha",
             )

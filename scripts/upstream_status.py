@@ -246,16 +246,16 @@ def fetch_remote(path: Path, remote: str, expected: str) -> None:
 
 
 def relationships() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Read cluster entries and materialization skill records."""
-    clusters: list[dict[str, Any]] = []
-    cluster_dir = REPOSITORY / "clusters"
-    if cluster_dir.is_dir():
-        for path in sorted(cluster_dir.glob("*.toml")):
+    """Read bundle entries and materialization skill records."""
+    bundles: list[dict[str, Any]] = []
+    bundle_dir = REPOSITORY / "bundles"
+    if bundle_dir.is_dir():
+        for path in sorted(bundle_dir.glob("*.toml")):
             manifest = load_toml(path)
             for skill in manifest.get("skills", []):
-                clusters.append(
+                bundles.append(
                     {
-                        "cluster": manifest.get("name", path.stem),
+                        "bundle": manifest.get("name", path.stem),
                         "manifest": path.relative_to(REPOSITORY).as_posix(),
                         "name": skill.get("name"),
                         "source": skill.get("source"),
@@ -283,20 +283,20 @@ def relationships() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                     {
                         "lock": path.relative_to(REPOSITORY).as_posix(),
                         "project": project.get("id"),
-                        "cluster": lock.get("cluster"),
+                        "bundle": lock.get("bundle"),
                         "name": skill.get("name"),
                         "source": skill.get("source"),
                         "status": skill.get("status"),
                     }
                 )
-    return clusters, materializations
+    return bundles, materializations
 
 
 def affected_relationships(
     prefix: str, changed_sources: set[str] | None = None
 ) -> dict[str, list[dict[str, Any]]]:
-    """Return cluster and project relationships below a source prefix."""
-    clusters, materializations = relationships()
+    """Return bundle and project relationships below a source prefix."""
+    bundles, materializations = relationships()
 
     def relevant(item: dict[str, Any]) -> bool:
         source = item.get("source")
@@ -306,10 +306,10 @@ def affected_relationships(
             return False
         return changed_sources is None or source in changed_sources
 
-    cluster_rows = [item for item in clusters if relevant(item)]
+    bundle_rows = [item for item in bundles if relevant(item)]
     materialization_rows = [item for item in materializations if relevant(item)]
     return {
-        "clusters": cluster_rows,
+        "bundles": bundle_rows,
         "materializations": materialization_rows,
     }
 
@@ -953,7 +953,7 @@ def human_status(rows: Iterable[dict[str, Any]]) -> None:
                 "upstream"
             )
         print(
-            f"  affected: {len(row['affected']['clusters'])} cluster mappings, "
+            f"  affected: {len(row['affected']['bundles'])} bundle mappings, "
             f"{len(row['affected']['materializations'])} materializations"
         )
         if row["dirty"]:
@@ -968,7 +968,7 @@ def human_update(plan: dict[str, Any]) -> None:
     print(f"  changed files: {len(plan['changed_files'])}")
     print(f"  changed skills: {len(plan['changed_skill_sources'])}")
     print(
-        f"  affected: {len(plan['affected']['clusters'])} cluster mappings, "
+        f"  affected: {len(plan['affected']['bundles'])} bundle mappings, "
         f"{len(plan['affected']['materializations'])} materializations"
     )
     failed = [name for name, ok in plan["checks"].items() if not ok]
