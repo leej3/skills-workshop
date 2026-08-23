@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:adfe98db-119d-42f5-bae2-6485393eb61c",
+  "occurred_at": "2026-08-23T14:35:58Z",
+  "payload": {
+    "resolution_digest": "sha256:6583ae9e39367800469c9931e7ccd45a0d1a12b3065488c0f1b12110fb154092",
+    "skill_name": "commit-provenance",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/commit-provenance",
+    "dirty": true,
+    "lock_digest": "sha256:463c9d9fadedb1cc8000801b0d7705bcc4a8748cc4f7a60d19704ba78b89decd",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "c168aef2f1a0d3d6954af73f452b134936a21b53"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:b772464b-dc4c-49bb-b3c1-903e1b87c29a",
+  "type": "project-membership"
+}

@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:c701f694-f66d-437e-8818-a49ce4b7f614",
+  "occurred_at": "2026-08-23T14:35:57Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested a reusable skill separating human, agent, milestone, decision, and scratch documentation."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "consideration"
+}

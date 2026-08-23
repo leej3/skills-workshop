@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-08-23T14:35:57Z",
+  "extensions": {},
+  "id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "name": "organize-project-docs",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:b322e2a4-75c7-403c-8eb1-928f620b475e",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-23T14:35:57Z",
+      "id": "urn:uuid:b322e2a4-75c7-403c-8eb1-928f620b475e",
+      "kind": "git",
+      "locator": "git@github.com:leej3/skills-workshop.git",
+      "notes": "Project-owned experimental source managed by the root APM package.",
+      "role": "canonical",
+      "subpath": ".apm/skills/organize-project-docs"
+    }
+  ],
+  "summary": "Classify and organize repository documentation by audience, authority, and lifecycle.",
+  "tag_ids": [],
+  "updated_at": "2026-08-23T14:35:57Z"
+}
