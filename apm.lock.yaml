@@ -19,7 +19,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:31a56d2306a52ec5027b05c8fd70e57acd6d56f80c9548354d114e9de5c752ff
+  content_hash: sha256:7044773fdfbf2bb4f970355e4e53f1ba9bca59cfffd14053c720bf739397772d
 - kind: project-relative
   target: agents
   value: .agents/skills/commit-provenance/agents/openai.yaml
@@ -144,7 +144,7 @@ local_deployed_files:
 - .agents/skills/skills-workshop/agents/openai.yaml
 - .agents/skills/skills-workshop/references/workflow.md
 local_deployed_file_hashes:
-  .agents/skills/commit-provenance/SKILL.md: sha256:31a56d2306a52ec5027b05c8fd70e57acd6d56f80c9548354d114e9de5c752ff
+  .agents/skills/commit-provenance/SKILL.md: sha256:7044773fdfbf2bb4f970355e4e53f1ba9bca59cfffd14053c720bf739397772d
   .agents/skills/commit-provenance/agents/openai.yaml: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
   .agents/skills/commit-provenance/scripts/resolve.sh: sha256:7182c993ab1095b3f398acef7a94a89d862ea8d683dd32b1da25e6026493ddec
   .agents/skills/develop-orinoco-lite/SKILL.md: sha256:9c5ccb9b8a0409740356cb828b917637bdc6be3fbe2d204246da90cdbb81dfa9
