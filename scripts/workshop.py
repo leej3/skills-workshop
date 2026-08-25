@@ -1071,15 +1071,31 @@ def apm_lock_memberships(lock: dict[str, Any]) -> list[dict[str, Any]]:
             dependency.get("name"), str
         ):
             continue
-        observations.append(
-            {
-                "name": dependency["name"],
-                "selector": dependency.get("local_path")
-                or dependency.get("repo_url")
-                or dependency["name"],
-                "resolution": dependency,
-            }
+        selector = (
+            dependency.get("local_path")
+            or dependency.get("repo_url")
+            or dependency["name"]
         )
+        subset = dependency.get("skill_subset")
+        if isinstance(subset, list):
+            names = sorted({name for name in subset if isinstance(name, str)})
+        else:
+            names = [dependency["name"]]
+        for name in names:
+            observations.append(
+                {
+                    "name": name,
+                    "selector": f"{selector}#skill={name}"
+                    if isinstance(subset, list)
+                    else selector,
+                    "resolution": {
+                        "dependency": dependency,
+                        "selected_skill": name,
+                    }
+                    if isinstance(subset, list)
+                    else dependency,
+                }
+            )
 
     deployments = lock.get("deployments", [])
     local_files = lock.get("local_deployed_files", [])

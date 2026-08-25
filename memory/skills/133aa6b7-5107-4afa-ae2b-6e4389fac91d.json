@@ -1,0 +1,43 @@
+{
+  "aliases": [],
+  "artifacts": [
+    {
+      "digests": [
+        {
+          "algorithm": "sha1",
+          "scheme": "git-tree",
+          "scope": "skill-tree",
+          "value": "773d36d8303a37566a65de2b9b1802a1e4998517"
+        }
+      ],
+      "id": "urn:uuid:74ee8073-4dd3-4e97-9e21-3e3352e35579",
+      "observed_at": "2026-08-18T20:27:05Z",
+      "resolved_revision": "0413b3c3c4575a9fdb550dcc0ffeb7f4eeb33449",
+      "source_id": "urn:uuid:299820eb-0858-44c1-a3cc-97b904ac5d69",
+      "version_label": null
+    }
+  ],
+  "created_at": "2026-08-18T20:20:53Z",
+  "extensions": {},
+  "id": "urn:uuid:133aa6b7-5107-4afa-ae2b-6e4389fac91d",
+  "name": "operate-orinoco-metadata-adapters",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:299820eb-0858-44c1-a3cc-97b904ac5d69",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-18T20:20:53Z",
+      "id": "urn:uuid:299820eb-0858-44c1-a3cc-97b904ac5d69",
+      "kind": "git",
+      "locator": "https://github.com/con/orinoco-lite-template.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": "copier-template/.agents/skills/operate-orinoco-metadata-adapters"
+    }
+  ],
+  "summary": "Guide downstream adapter runs, explicit human review, durable decision memory, provenance, and focused pull requests against the locked site contract.",
+  "tag_ids": [],
+  "updated_at": "2026-08-18T20:27:05Z"
+}

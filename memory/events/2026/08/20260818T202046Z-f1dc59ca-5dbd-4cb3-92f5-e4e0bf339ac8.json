@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:f1dc59ca-5dbd-4cb3-92f5-e4e0bf339ac8",
+  "occurred_at": "2026-08-18T20:20:46Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested a tracked skill for Orinoco Lite development and upstream-aligned static metadata adapters."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "consideration"
+}

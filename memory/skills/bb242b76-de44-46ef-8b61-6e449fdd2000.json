@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-08-25T15:20:01Z",
+  "extensions": {},
+  "id": "urn:uuid:bb242b76-de44-46ef-8b61-6e449fdd2000",
+  "name": "build-github-app",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:717d4769-6817-4b11-affb-b67eaaa0f828",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-25T15:20:01Z",
+      "id": "urn:uuid:717d4769-6817-4b11-affb-b67eaaa0f828",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".apm/skills/build-github-app"
+    }
+  ],
+  "summary": "Build, deploy, debug, rotate credentials for, and verify GitHub Apps with OAuth, repository installations, Actions artifacts, and stateless hosted services",
+  "tag_ids": [],
+  "updated_at": "2026-08-25T15:20:01Z"
+}

@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:afe0a99a-87db-4892-a3d0-4c2e8b308026",
+  "occurred_at": "2026-08-18T20:20:53Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested distinct template-owned guidance for downstream adapter work, pull requests, and human decisions."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:133aa6b7-5107-4afa-ae2b-6e4389fac91d",
+  "type": "consideration"
+}

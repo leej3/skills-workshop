@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:01f4ef37-8c63-45bb-9650-e2bcf33995e4",
+  "occurred_at": "2026-08-23T14:35:58Z",
+  "payload": {
+    "resolution_digest": "sha256:fc9f2866a9eeae6f4b2d7d0988761735f19dfba37268b491fadef1b839407bfe",
+    "skill_name": "develop-orinoco-lite",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/develop-orinoco-lite",
+    "dirty": true,
+    "lock_digest": "sha256:463c9d9fadedb1cc8000801b0d7705bcc4a8748cc4f7a60d19704ba78b89decd",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "c168aef2f1a0d3d6954af73f452b134936a21b53"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "project-membership"
+}

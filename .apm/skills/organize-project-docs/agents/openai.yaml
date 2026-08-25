@@ -1,0 +1,4 @@
+interface:
+  display_name: "Organize Project Docs"
+  short_description: "Separate durable, agent, milestone, and scratch docs"
+  default_prompt: "Use $organize-project-docs to place or reorganize project documentation by audience and lifecycle."
