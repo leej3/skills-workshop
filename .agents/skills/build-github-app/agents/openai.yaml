@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build GitHub App"
+  short_description: "Build and verify GitHub Apps safely"
+  default_prompt: "Use $build-github-app to design, deploy, debug, and verify this GitHub App end to end."

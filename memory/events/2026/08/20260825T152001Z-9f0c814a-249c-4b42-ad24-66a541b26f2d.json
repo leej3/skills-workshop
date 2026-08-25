@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:9f0c814a-249c-4b42-ad24-66a541b26f2d",
+  "occurred_at": "2026-08-25T15:20:01Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested a generic reusable skill after an end-to-end GitHub App deployment exposed recurring OAuth, permission, artifact, edge-runtime, asset-routing, and credential-rotation gotchas"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:bb242b76-de44-46ef-8b61-6e449fdd2000",
+  "type": "consideration"
+}

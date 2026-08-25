@@ -4,6 +4,51 @@ dependencies: []
 deployments:
 - kind: project-relative
   target: agents
+  value: .agents/skills/build-github-app
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: agents
+  value: .agents/skills/build-github-app/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6a88de3df26bc8a7428df8ca8ce19ddf9944a2d323bb41415b989bf9233fec09
+- kind: project-relative
+  target: agents
+  value: .agents/skills/build-github-app/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
+- kind: project-relative
+  target: agents
+  value: .agents/skills/build-github-app/references/artifacts-deployment.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1edf0bfe94e494490726e74305f4e598fc4fe90c6eded7fc38e96d3b59ffa70b
+- kind: project-relative
+  target: agents
+  value: .agents/skills/build-github-app/references/oauth-permissions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:20a7f5775bd665ed553e27b6a8573fdcfa88983765ea2c7035149974ba41e7cf
+- kind: project-relative
+  target: agents
   value: .agents/skills/commit-provenance
   runtime: null
   scope: project
@@ -156,6 +201,11 @@ deployments:
   active_owner: .
   content_hash: sha256:15311cc984a5502710f935c2e20f416f32162abe3e5a9bcab5e61ce99c6378de
 local_deployed_files:
+- .agents/skills/build-github-app
+- .agents/skills/build-github-app/SKILL.md
+- .agents/skills/build-github-app/agents/openai.yaml
+- .agents/skills/build-github-app/references/artifacts-deployment.md
+- .agents/skills/build-github-app/references/oauth-permissions.md
 - .agents/skills/commit-provenance
 - .agents/skills/commit-provenance/SKILL.md
 - .agents/skills/commit-provenance/agents/openai.yaml
@@ -174,6 +224,10 @@ local_deployed_files:
 - .agents/skills/skills-workshop/agents/openai.yaml
 - .agents/skills/skills-workshop/references/workflow.md
 local_deployed_file_hashes:
+  .agents/skills/build-github-app/SKILL.md: sha256:6a88de3df26bc8a7428df8ca8ce19ddf9944a2d323bb41415b989bf9233fec09
+  .agents/skills/build-github-app/agents/openai.yaml: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
+  .agents/skills/build-github-app/references/artifacts-deployment.md: sha256:1edf0bfe94e494490726e74305f4e598fc4fe90c6eded7fc38e96d3b59ffa70b
+  .agents/skills/build-github-app/references/oauth-permissions.md: sha256:20a7f5775bd665ed553e27b6a8573fdcfa88983765ea2c7035149974ba41e7cf
   .agents/skills/commit-provenance/SKILL.md: sha256:7044773fdfbf2bb4f970355e4e53f1ba9bca59cfffd14053c720bf739397772d
   .agents/skills/commit-provenance/agents/openai.yaml: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
   .agents/skills/commit-provenance/scripts/resolve.sh: sha256:7182c993ab1095b3f398acef7a94a89d862ea8d683dd32b1da25e6026493ddec
