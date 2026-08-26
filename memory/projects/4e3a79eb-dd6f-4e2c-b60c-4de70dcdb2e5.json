@@ -14,8 +14,8 @@
   "notes": "Engineering workspace with APM-pinned project skills.",
   "repository": {
     "subpath": null,
-    "url": "https://github.com/con/orinoco-lite-dev.git"
+    "url": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git"
   },
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/project-v0.schema.json",
-  "updated_at": "2026-08-18T20:35:33Z"
+  "updated_at": "2026-08-26T22:43:17Z"
 }

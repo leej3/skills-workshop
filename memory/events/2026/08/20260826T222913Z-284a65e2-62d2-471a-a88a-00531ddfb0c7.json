@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John Lee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:284a65e2-62d2-471a-a88a-00531ddfb0c7",
+  "occurred_at": "2026-08-26T22:29:13Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John explicitly chose project installation after the skill guided the upstream convergence and release closeout."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:4b26acc4-a5e0-4225-8749-9e5b7b00bc74",
+  "type": "consideration"
+}
