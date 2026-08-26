@@ -1,0 +1,37 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-08-26T22:29:13Z",
+  "extensions": {},
+  "id": "urn:uuid:4b26acc4-a5e0-4225-8749-9e5b7b00bc74",
+  "name": "upstream-convergence",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:0a0daa44-8681-45ba-8fb5-912651a1821f",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-26T22:29:13Z",
+      "id": "urn:uuid:f0f1e448-0d0f-4946-8462-4a83375e9d62",
+      "kind": "git",
+      "locator": "https://github.com/con/orinoco-lite-dev.git",
+      "notes": "Redirected repository identity before the approved custody transfer.",
+      "role": "deprecated",
+      "subpath": ".apm/skills/upstream-convergence"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-26T22:43:17Z",
+      "id": "urn:uuid:0a0daa44-8681-45ba-8fb5-912651a1821f",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "Project-owned canonical skill after the approved custody transfer.",
+      "role": "canonical",
+      "subpath": ".apm/skills/upstream-convergence"
+    }
+  ],
+  "summary": "Converge mirrored Git repositories and thin integration layers on authoritative upstream heads while preserving linear history, exact pins, clean-clone reproducibility, and durable release evidence.",
+  "tag_ids": [],
+  "updated_at": "2026-08-26T22:43:17Z"
+}

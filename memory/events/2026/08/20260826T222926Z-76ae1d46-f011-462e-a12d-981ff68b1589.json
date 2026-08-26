@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:76ae1d46-f011-462e-a12d-981ff68b1589",
+  "occurred_at": "2026-08-26T22:29:26Z",
+  "payload": {
+    "resolution_digest": "sha256:66631e12f25fe1c77d7dcd18574e1325d5dc2c1a6e21da48f43401ee2d3a6e08",
+    "skill_name": "upstream-convergence",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/upstream-convergence",
+    "dirty": true,
+    "lock_digest": "sha256:bc1c660cae0bb5725ce12e96d327455c22a57f4c06e59e8f357ace77d265a7fe",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "e63527a5ac1f1bea35a28f93c07af38cf8b361b5"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:4b26acc4-a5e0-4225-8749-9e5b7b00bc74",
+  "type": "project-membership"
+}
