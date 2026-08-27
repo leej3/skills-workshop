@@ -1,0 +1,49 @@
+{
+  "artifact_id": "urn:uuid:e85b14ad-6004-4a18-97dd-cca115527eb4",
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "ultra",
+    "runtime": "Codex Desktop",
+    "runtime_version": "26.820.60940 (codex-cli 0.150.0-alpha.8)"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:107e9f58-356c-44e3-a5cf-ff548ee8dad5",
+  "occurred_at": "2026-08-27T00:07:01Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "full-description",
+    "outcome": "partial",
+    "rating": 4,
+    "rationale": "The skill exposed and corrected OAuth-on-install, middleware, cookie, visibility, callback, and adapter gotchas; the final selected-repository installation remains intentionally unsubmitted pending confirmation.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Forward-test the provider-neutral deployment contract and verify the transferred App configuration while preparing its selected-repository organization installation."
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:254b36cf3ef2f7fe8ddc7183988c875c5c77ed1944ac813e77f2339cedc88965",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "09e44426580a5e60048bd6bf73cfccabc8e1e99f"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a18fe693-6a01-481c-ad7f-cd5496880e0f",
+  "type": "use"
+}
