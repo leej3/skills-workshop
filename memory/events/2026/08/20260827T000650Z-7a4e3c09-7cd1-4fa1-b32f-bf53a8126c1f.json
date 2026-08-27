@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John Lee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:7a4e3c09-7cd1-4fa1-b32f-bf53a8126c1f",
+  "occurred_at": "2026-08-27T00:06:50Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John explicitly requested a project-installed Skill Workshop workflow for efficient provider-neutral deployment of the GitHub App backend."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a18fe693-6a01-481c-ad7f-cd5496880e0f",
+  "type": "consideration"
+}

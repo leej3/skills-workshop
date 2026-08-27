@@ -1,0 +1,43 @@
+{
+  "aliases": [],
+  "artifacts": [
+    {
+      "digests": [
+        {
+          "algorithm": "sha1",
+          "scheme": "git-tree",
+          "scope": ".apm/skills/orinoco-github-app-deployment",
+          "value": "63c37caa18a3d08ba4e0d6786d237b68d9fae716"
+        }
+      ],
+      "id": "urn:uuid:e85b14ad-6004-4a18-97dd-cca115527eb4",
+      "observed_at": "2026-08-27T00:06:50Z",
+      "resolved_revision": "09e44426580a5e60048bd6bf73cfccabc8e1e99f",
+      "source_id": "urn:uuid:2198a173-80c4-4674-9a02-bae4e29eba24",
+      "version_label": "commit-09e4442"
+    }
+  ],
+  "created_at": "2026-08-27T00:06:50Z",
+  "extensions": {},
+  "id": "urn:uuid:a18fe693-6a01-481c-ad7f-cd5496880e0f",
+  "name": "orinoco-github-app-deployment",
+  "notes": "The project manifest and lock remain installation authority; Workshop records discovery, adoption, artifact, and use evidence.",
+  "preferred_source_id": "urn:uuid:2198a173-80c4-4674-9a02-bae4e29eba24",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-27T00:06:50Z",
+      "id": "urn:uuid:2198a173-80c4-4674-9a02-bae4e29eba24",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "Project-owned canonical APM skill.",
+      "role": "canonical",
+      "subpath": ".apm/skills/orinoco-github-app-deployment"
+    }
+  ],
+  "summary": "Deploy, migrate, verify, rotate, and roll back the stateless Orinoco Lite curation-review GitHub App backend against a provider-neutral hosting contract.",
+  "tag_ids": [],
+  "updated_at": "2026-08-27T00:06:50Z"
+}
