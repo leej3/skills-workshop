@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:035577b7-8f7a-46ca-9d42-78d13cf521d1",
+  "occurred_at": "2026-08-29T19:40:19Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "Exact Lessig-method discovery returned no relevant skill; generic slide skills lacked beat-level speech synchronization, varied rhythm, and a version-control-first format."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:02ab5753-bae4-4d79-8e04-985f3553ba8d",
+  "type": "consideration"
+}
