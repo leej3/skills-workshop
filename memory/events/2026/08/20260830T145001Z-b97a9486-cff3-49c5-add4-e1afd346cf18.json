@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:b97a9486-cff3-49c5-add4-e1afd346cf18",
+  "occurred_at": "2026-08-30T14:50:01Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "commit",
+    "state": "merged",
+    "summary": "Stopped recording unreviewed search and preview candidates as Workshop memory.",
+    "url": "https://github.com/leej3/skills-workshop/commit/9d5b098"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "contribution"
+}
