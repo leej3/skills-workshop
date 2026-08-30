@@ -55,6 +55,25 @@ pixi run workshop find "capability"
 
 Use `--provider` only to narrow or compose a specialized search.
 
+### Human decision gate
+
+When the user asks for a skill to provide a capability, discovery is a separate decision phase.
+Do not create, install, adopt, or record a candidate in the same turn unless the user already selected an exact skill or explicitly asked to skip discovery.
+
+After searching:
+
+1. Present a concise shortlist of plausible matches.
+   For each, state its name, relevant capability, important limitation or difference, and a link to its canonical source.
+   Use a clickable local path when the canonical source is local and a canonical web URL when it is remote.
+2. If no candidate is a good fit, say which sources were searched and propose creating a new project-owned skill.
+   If partial matches exist, explain why a new skill or adaptation may still be preferable.
+3. Ask the user to choose among adopting a candidate, adapting one, creating a new skill, or stopping.
+   End the turn and wait for that human decision.
+
+Do not treat the original capability request as approval of the agent's later selection or creation proposal.
+Do not scaffold files, change APM state, or record an adoption decision while waiting.
+A later user choice supplies the authority to proceed with the selected path.
+
 Inspect a GitHub candidate's complete tree without installing it:
 
 ```console
