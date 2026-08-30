@@ -3,6 +3,10 @@
 This repository is a Git-backed, source-agnostic memory of skills encountered across projects.
 It remembers where a skill came from, why it was considered, where it was declared or actually used, how it worked, and whether it was evaluated or improved upstream.
 
+`skills-workshop` itself may be installed once as a user-level agent control skill.
+That installation routes skill-lifecycle requests through this repository; it does not make the skills it discovers user-global.
+Each selected skill is installed into the active project's APM manifest, lock, and agent-skill target, while the workshop retains cross-project memory.
+
 It is not another package manager or public registry.
 Downstream projects use [Microsoft APM](https://microsoft.github.io/apm/) for their own reproducible manifest, lock, installation, update, and audit.
 Public discovery is delegated to [ASM](https://github.com/luongnv89/asm), [`gh skill`](https://cli.github.com/manual/gh_skill), and [Vercel `skills`](https://github.com/vercel-labs/skills).

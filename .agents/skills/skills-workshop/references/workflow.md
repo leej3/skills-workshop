@@ -11,6 +11,15 @@
 | skills.sh and `.well-known` discovery | Vercel `skills` |
 | Skill content and development history | Ordinary Git source or fork |
 
+## User-level control skill
+
+`skills-workshop` may be installed once in an agent's user-level skill directory so agents can invoke the Workshop whenever a request concerns the skill lifecycle.
+It is a control-plane exception, not a model for installing other skills globally.
+
+Every discovered or created working skill belongs to the active project: APM records its manifest and lock state and deploys it to that project's agent-skill target.
+The Workshop records cross-project recall, consideration, membership, and actual-use evidence, but never substitutes for the project's dependency state.
+This keeps a project reproducible without the Workshop and keeps the Workshop from pretending it can recreate a project's dependencies.
+
 ## Project-owned versus reusable skills
 
 Start a project-specific experimental skill under `.apm/skills/<name>/SKILL.md`.

@@ -8,6 +8,13 @@ description: Coordinate systematic agent-skill discovery, self-contained project
 Use the workshop as a source-agnostic memory and a transparent interface to existing tools.
 Do not turn it into another installer, registry, or project lock.
 
+## Scope and bootstrap
+
+This is the one user-level control skill for the skill lifecycle.
+When an agent is asked to find, create, install, audit, record, or evaluate a skill, it should invoke this skill first.
+That does not make discovered skills user-global: install every selected skill into the active project through its APM state, then record the relationship and any later real use in workshop memory.
+A project's reproducible skill set must remain usable if this user-level control skill or the workshop checkout is unavailable.
+
 ## Start here
 
 Run commands from the workshop checkout:
