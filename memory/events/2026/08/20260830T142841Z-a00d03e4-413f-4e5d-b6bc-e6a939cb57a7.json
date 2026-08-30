@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a00d03e4-413f-4e5d-b6bc-e6a939cb57a7",
+  "occurred_at": "2026-08-30T14:28:41Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "commit",
+    "state": "merged",
+    "summary": "Added default local-upstream skill search with pinned revisions and documented explicit freshness checks.",
+    "url": "https://github.com/leej3/skills-workshop/commit/b1a6f77"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "contribution"
+}
