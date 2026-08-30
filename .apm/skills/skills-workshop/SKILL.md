@@ -29,14 +29,24 @@ Every delegated command is printed before execution.
 
 ## Find and consider a skill
 
-Search remembered skills first.
-This includes prior task summaries, outcomes, aliases, and old sources, so it supports vague recall:
+Search remembered skills and the locally tracked upstream inventory first.
+The local phase searches every source registered in `registry.toml` (including K-Dense `scientific-agent-skills` and `con/skills`) and reports its pinned revision, so it covers new registered sources without a workflow change:
 
 ```console
 pixi run workshop find "capability or remembered task"
 ```
 
-If memory does not resolve the need, query the existing discovery providers:
+For a freshness-sensitive choice, first refresh the registered upstream status and review the update plan.
+Updating a source is explicit; it never happens as a side effect of search:
+
+```console
+pixi run upstream-status --fetch
+pixi run upstream-update <registered-source>
+```
+
+Apply a reviewed update only with `pixi run upstream-update <registered-source> --apply`, then commit the resulting Workshop gitlink change before relying on that revision.
+
+If the local phase does not resolve the need, query the existing discovery providers:
 
 ```console
 pixi run workshop find "capability" --provider all

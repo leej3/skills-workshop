@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
+import tomllib
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -616,6 +617,102 @@ def memory_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
     return sorted(results, key=lambda item: (-item["score"], item["name"]))[:limit]
 
 
+def local_skill_metadata(path: Path) -> dict[str, Any]:
+    """Read the frontmatter needed for local candidate search."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    if not text.startswith("---\n"):
+        return {}
+    frontmatter, marker, _ = text[4:].partition("\n---\n")
+    if not marker:
+        return {}
+    try:
+        metadata = yaml.safe_load(frontmatter)
+    except yaml.YAMLError:
+        return {}
+    return metadata if isinstance(metadata, dict) else {}
+
+
+def git_head(path: Path) -> str | None:
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(path), "rev-parse", "HEAD"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return completed.stdout.strip() if completed.returncode == 0 else None
+
+
+def local_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
+    """Search registered, checked-out upstream skill sources without network I/O."""
+    terms = WORD.findall(query.casefold())
+    if not terms:
+        raise WorkshopError("search query must contain a letter or number")
+    registry = root / "registry.toml"
+    if not registry.is_file():
+        return []
+    try:
+        with registry.open("rb") as stream:
+            configuration = tomllib.load(stream)
+    except (OSError, tomllib.TOMLDecodeError) as error:
+        raise WorkshopError(f"cannot read {registry}: {error}") from error
+
+    root_resolved = root.resolve()
+    results: list[dict[str, Any]] = []
+    for upstream in configuration.get("upstreams", []):
+        if not isinstance(upstream, dict):
+            continue
+        name = str(upstream.get("name", ""))
+        relative_path = upstream.get("path")
+        if not name or not isinstance(relative_path, str):
+            continue
+        source_root = (root / relative_path).resolve()
+        if root_resolved not in source_root.parents or not source_root.is_dir():
+            continue
+        revision = git_head(source_root)
+        for skill_file in sorted(source_root.rglob("SKILL.md")):
+            metadata = local_skill_metadata(skill_file)
+            skill_name = str(metadata.get("name") or skill_file.parent.name)
+            description = str(metadata.get("description") or "")
+            haystack = " ".join(
+                (
+                    skill_name.casefold(),
+                    description.casefold(),
+                    name.casefold(),
+                    str(upstream.get("role", "")).casefold(),
+                )
+            )
+            if not all(term in haystack for term in terms):
+                continue
+            score = sum(
+                10 * skill_name.casefold().count(term)
+                + 4 * description.casefold().count(term)
+                + name.casefold().count(term)
+                for term in terms
+            )
+            results.append(
+                {
+                    "provider": "local",
+                    "name": skill_name,
+                    "description": description,
+                    "collection": name,
+                    "source": upstream.get("url"),
+                    "path": skill_file.parent.relative_to(root_resolved).as_posix(),
+                    "revision": revision,
+                    "score": score,
+                }
+            )
+    return sorted(
+        results, key=lambda item: (-item["score"], item["name"], item["path"])
+    )[:limit]
+
+
 def provider_commands(query: str, limit: int) -> dict[str, list[str]]:
     return {
         "asm": [
@@ -799,9 +896,9 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 
 
 def selected_providers(values: list[str] | None) -> list[str]:
-    requested = values or ["memory"]
+    requested = values or ["memory", "local"]
     if "all" in requested:
-        return ["memory", "asm", "github", "vercel"]
+        return ["memory", "local", "asm", "github", "vercel"]
     output: list[str] = []
     for provider in requested:
         if provider not in output:
@@ -815,7 +912,9 @@ def cmd_find(args: argparse.Namespace) -> int:
     failures = 0
     if "memory" in providers:
         output["memory"] = memory_search(args.root, args.query, args.limit)
-    for provider in [item for item in providers if item != "memory"]:
+    if "local" in providers:
+        output["local"] = local_search(args.root, args.query, args.limit)
+    for provider in [item for item in providers if item not in {"memory", "local"}]:
         command = provider_commands(args.query, args.limit)[provider]
         completed = run_external(
             provider,
@@ -847,6 +946,16 @@ def cmd_find(args: argparse.Namespace) -> int:
                     print(f"  {skill['summary']}")
                     for source in skill["sources"]:
                         print(f"  source: {source}")
+            elif provider == "local":
+                if not result:
+                    print("No tracked local skill candidates matched.")
+                for skill in result:
+                    print(f"{skill['name']} ({skill['collection']})")
+                    if skill["description"]:
+                        print(f"  {compact_text(skill['description'])}")
+                    print(f"  source: {skill['source']} :: {skill['path']}")
+                    if skill["revision"]:
+                        print(f"  pinned revision: {skill['revision']}")
             elif args.dry_run:
                 print("Dry run; command not executed.")
             else:
@@ -1617,14 +1726,14 @@ def build_parser() -> argparse.ArgumentParser:
     doctor.set_defaults(handler=cmd_doctor)
 
     find = commands.add_parser(
-        "find", help="search local memory and selected external providers"
+        "find", help="search memory, tracked upstreams, and selected external providers"
     )
     find.add_argument("query")
     find.add_argument(
         "--provider",
         action="append",
-        choices=["memory", "asm", "github", "vercel", "all"],
-        help="repeat to combine; defaults to memory",
+        choices=["memory", "local", "asm", "github", "vercel", "all"],
+        help="repeat to combine; defaults to memory and registered local upstreams",
     )
     find.add_argument("--limit", type=int, default=10)
     find.add_argument("--dry-run", action="store_true")

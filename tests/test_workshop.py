@@ -1197,6 +1197,61 @@ def test_memory_find_recalls_skills_from_event_text_and_source_locator(
     assert [result["name"] for result in source_match] == ["annex-helper"]
 
 
+def test_local_find_searches_every_registered_upstream(
+    memory_root: Path,
+    invoke: Callable[..., int],
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    scientific = memory_root / "upstreams" / "scientific"
+    maintenance = memory_root / "upstreams" / "maintenance"
+    for directory, name, description in (
+        (scientific / "skills" / "genomics", "genomics", "Analyze genomic data."),
+        (maintenance / "triage", "issue-triage", "Triage repository issues."),
+    ):
+        directory.mkdir(parents=True)
+        (directory / "SKILL.md").write_text(
+            f"---\nname: {name}\ndescription: {description}\n---\n",
+            encoding="utf-8",
+        )
+    (memory_root / "registry.toml").write_text(
+        """schema_version = 1
+
+[[upstreams]]
+name = "k-dense"
+url = "https://example.test/k-dense.git"
+path = "upstreams/scientific"
+role = "Scientific skills"
+
+[[upstreams]]
+name = "con-skills"
+url = "https://example.test/con-skills.git"
+path = "upstreams/maintenance"
+role = "Maintenance skills"
+""",
+        encoding="utf-8",
+    )
+
+    assert invoke("find", "genomic", "--json") == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["memory"] == []
+    assert output["local"] == [
+        {
+            "provider": "local",
+            "name": "genomics",
+            "description": "Analyze genomic data.",
+            "collection": "k-dense",
+            "source": "https://example.test/k-dense.git",
+            "path": "upstreams/scientific/skills/genomics",
+            "revision": None,
+            "score": 14,
+        }
+    ]
+
+    assert invoke("find", "triage", "--provider", "local", "--json") == 0
+    output = json.loads(capsys.readouterr().out)
+    assert [result["collection"] for result in output["local"]] == ["con-skills"]
+
+
 def test_where_used_resolves_project_evidence(
     memory_root: Path,
     invoke: Callable[..., int],

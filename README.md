@@ -58,11 +58,20 @@ Promote it to an independent Git/APM package only after another project needs it
 
 ## Find and remember skills
 
-Search the local memory first.
-It includes aliases, source locations, prior task summaries, outcomes, and rationales, so vague recall can find a skill even after its source moves:
+Search local memory and every registered, checked-out upstream source first.
+This includes aliases, source locations, prior task summaries, outcomes, and rationales, plus the K-Dense and `con/skills` source trees declared in `registry.toml`.
+Results show each local source's pinned revision; newly added registered sources automatically participate in the same search:
 
 ```console
 pixi run workshop find "something I used to verify commit trailers"
+```
+
+For a candidate where freshness matters, inspect the latest verified remote state before choosing it.
+The status command fetches only when requested; updating a checkout always begins with a plan and requires an explicit apply:
+
+```console
+pixi run upstream-status --fetch
+pixi run upstream-update scientific-agent-skills
 ```
 
 Explicitly fan out to the pinned discovery tools when local memory is not enough:
