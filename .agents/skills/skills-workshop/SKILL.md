@@ -62,7 +62,9 @@ pixi run workshop preview <owner/repository> <skill-or-path@commit>
 ```
 
 Do not install with ASM, `gh skill`, or Vercel `skills` when APM manages the project.
-Remember only a candidate that was deliberately considered:
+Searching or previewing a candidate is not consideration evidence.
+Record a candidate only after the user has directed a decision about it (for example, adopt, defer, or reject), or after it is installed or used.
+Do not create unreviewed memory merely from an agent recommendation:
 
 ```console
 pixi run workshop remember <name> --summary "..." \

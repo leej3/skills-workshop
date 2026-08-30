@@ -88,7 +88,7 @@ pixi run workshop preview owner/repository skill-name@commit-sha
 ```
 
 Search results are not mirrored wholesale.
-Promote only a skill that was actually considered:
+Record a skill only after the user has directed consideration, or after it is installed or used; an agent search or preview alone is not durable evidence:
 
 ```console
 pixi run workshop remember example-skill \

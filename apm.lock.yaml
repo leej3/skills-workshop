@@ -181,7 +181,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f5c9bcedccb94bc257220c7fe53a5378def329beabe951e44a4be07b5e8918ab
+  content_hash: sha256:61051893703468271c414eca6a048ed40f70d528050871458f3d14c74e288d6f
 - kind: project-relative
   target: agents
   value: .agents/skills/skills-workshop/agents/openai.yaml
@@ -238,6 +238,6 @@ local_deployed_file_hashes:
   .agents/skills/develop-orinoco-lite/references/version-and-authority.md: sha256:ae0cba5b68bf4458d85e31c525f267f2649090b358e6cbc5dcabe3ffc86d323e
   .agents/skills/organize-project-docs/SKILL.md: sha256:06347ddab592318396171f9b351fcc3dfcdf6a7c46c06579b48d9453aeb5e778
   .agents/skills/organize-project-docs/agents/openai.yaml: sha256:dcce649d7bb6f22b35b713d73857ca954ecb67a5f5946d706e7c799f45eeef32
-  .agents/skills/skills-workshop/SKILL.md: sha256:f5c9bcedccb94bc257220c7fe53a5378def329beabe951e44a4be07b5e8918ab
+  .agents/skills/skills-workshop/SKILL.md: sha256:61051893703468271c414eca6a048ed40f70d528050871458f3d14c74e288d6f
   .agents/skills/skills-workshop/agents/openai.yaml: sha256:dd9e354a78322173231f545fa49bbbcb0027a9fb58b1edda9649cf89d5852b5b
   .agents/skills/skills-workshop/references/workflow.md: sha256:201a30e6254d666855b5dd9034ddbe24413ae8e9dbc39c9525cbb7a421a75cad
