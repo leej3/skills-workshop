@@ -896,7 +896,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 
 
 def selected_providers(values: list[str] | None) -> list[str]:
-    requested = values or ["memory", "local"]
+    requested = values or ["all"]
     if "all" in requested:
         return ["memory", "local", "asm", "github", "vercel"]
     output: list[str] = []
@@ -1733,7 +1733,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--provider",
         action="append",
         choices=["memory", "local", "asm", "github", "vercel", "all"],
-        help="repeat to combine; defaults to memory and registered local upstreams",
+        help="repeat to narrow or combine; defaults to memory, local upstreams, then public providers",
     )
     find.add_argument("--limit", type=int, default=10)
     find.add_argument("--dry-run", action="store_true")

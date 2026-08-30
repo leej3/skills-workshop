@@ -1231,7 +1231,18 @@ role = "Maintenance skills"
         encoding="utf-8",
     )
 
-    assert invoke("find", "genomic", "--json") == 0
+    assert (
+        invoke(
+            "find",
+            "genomic",
+            "--provider",
+            "memory",
+            "--provider",
+            "local",
+            "--json",
+        )
+        == 0
+    )
     output = json.loads(capsys.readouterr().out)
     assert output["memory"] == []
     assert output["local"] == [
@@ -1250,6 +1261,16 @@ role = "Maintenance skills"
     assert invoke("find", "triage", "--provider", "local", "--json") == 0
     output = json.loads(capsys.readouterr().out)
     assert [result["collection"] for result in output["local"]] == ["con-skills"]
+
+
+def test_default_find_orders_local_sources_before_public_providers() -> None:
+    assert workshop_cli.selected_providers(None) == [
+        "memory",
+        "local",
+        "asm",
+        "github",
+        "vercel",
+    ]
 
 
 def test_where_used_resolves_project_evidence(

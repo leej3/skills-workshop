@@ -74,11 +74,11 @@ pixi run upstream-status --fetch
 pixi run upstream-update scientific-agent-skills
 ```
 
-Explicitly fan out to the pinned discovery tools when local memory is not enough:
+The same default search then queries the pinned public discovery tools, after the local results.
+Use `--provider` only when a narrower or specially composed search is useful:
 
 ```console
-pixi run workshop find "neuroimaging dataset review" --provider all
-pixi run workshop find "neuroimaging dataset review" --provider all --dry-run
+pixi run workshop find "neuroimaging dataset review" --dry-run
 ```
 
 Preview a GitHub candidate's full tree without installing it:

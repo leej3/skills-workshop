@@ -46,11 +46,14 @@ pixi run upstream-update <registered-source>
 
 Apply a reviewed update only with `pixi run upstream-update <registered-source> --apply`, then commit the resulting Workshop gitlink change before relying on that revision.
 
-If the local phase does not resolve the need, query the existing discovery providers:
+Then query the existing discovery providers.
+The default order keeps remembered and local community sources first, but still returns public candidates that may be worth considering or improving upstream:
 
 ```console
-pixi run workshop find "capability" --provider all
+pixi run workshop find "capability"
 ```
+
+Use `--provider` only to narrow or compose a specialized search.
 
 Inspect a GitHub candidate's complete tree without installing it:
 
