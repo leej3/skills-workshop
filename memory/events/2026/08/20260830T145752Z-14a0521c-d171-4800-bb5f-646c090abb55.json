@@ -1,0 +1,31 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli",
+    "runtime_version": "0.151.0-alpha.7.2"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:14a0521c-d171-4800-bb5f-646c090abb55",
+  "occurred_at": "2026-08-30T14:57:52Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "commit",
+    "state": "merged",
+    "summary": "Required linked skill discovery results and an explicit human choice before creation, installation, or adoption.",
+    "url": "https://github.com/leej3/skills-workshop/commit/ceb0c01"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "contribution"
+}
