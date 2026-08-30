@@ -170,7 +170,8 @@ When a change is generally useful, work in the skill's ordinary Git source and o
 Use a durable fork only for contribution or intentional divergence.
 Keep project-local adaptations in the project unless repeated use justifies a reusable upstream skill.
 
-After opening an issue, pull request, discussion, commit, or release, attach it to the logical skill with `workshop contribution add`.
+After opening an externally useful issue, pull request, discussion, or release, attach it to the logical skill with `workshop contribution add`.
+Do not add self-referential records for routine Workshop commits or memory bookkeeping.
 Record a new event when its observed state changes; do not rewrite the earlier event.
 
 Read [references/workflow.md](references/workflow.md) when choosing between tools or deciding what evidence to record.
