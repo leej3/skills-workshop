@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:07abb359-225b-4349-9510-b36039650334",
+  "occurred_at": "2026-08-30T14:37:03Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "commit",
+    "state": "merged",
+    "summary": "Restored public discovery to the default search after memory and registered local upstreams.",
+    "url": "https://github.com/leej3/skills-workshop/commit/6120fd5"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "contribution"
+}
