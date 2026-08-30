@@ -3,6 +3,10 @@
 This repository is a Git-backed, source-agnostic memory of skills encountered across projects.
 It remembers where a skill came from, why it was considered, where it was declared or actually used, how it worked, and whether it was evaluated or improved upstream.
 
+`skills-workshop` itself may be installed once as a user-level agent control skill.
+That installation routes skill-lifecycle requests through this repository; it does not make the skills it discovers user-global.
+Each selected skill is installed into the active project's APM manifest, lock, and agent-skill target, while the workshop retains cross-project memory.
+
 It is not another package manager or public registry.
 Downstream projects use [Microsoft APM](https://microsoft.github.io/apm/) for their own reproducible manifest, lock, installation, update, and audit.
 Public discovery is delegated to [ASM](https://github.com/luongnv89/asm), [`gh skill`](https://cli.github.com/manual/gh_skill), and [Vercel `skills`](https://github.com/vercel-labs/skills).
@@ -54,18 +58,27 @@ Promote it to an independent Git/APM package only after another project needs it
 
 ## Find and remember skills
 
-Search the local memory first.
-It includes aliases, source locations, prior task summaries, outcomes, and rationales, so vague recall can find a skill even after its source moves:
+Search local memory and every registered, checked-out upstream source first.
+This includes aliases, source locations, prior task summaries, outcomes, and rationales, plus the K-Dense and `con/skills` source trees declared in `registry.toml`.
+Results show each local source's pinned revision; newly added registered sources automatically participate in the same search:
 
 ```console
 pixi run workshop find "something I used to verify commit trailers"
 ```
 
-Explicitly fan out to the pinned discovery tools when local memory is not enough:
+For a candidate where freshness matters, inspect the latest verified remote state before choosing it.
+The status command fetches only when requested; updating a checkout always begins with a plan and requires an explicit apply:
 
 ```console
-pixi run workshop find "neuroimaging dataset review" --provider all
-pixi run workshop find "neuroimaging dataset review" --provider all --dry-run
+pixi run upstream-status --fetch
+pixi run upstream-update scientific-agent-skills
+```
+
+The same default search then queries the pinned public discovery tools, after the local results.
+Use `--provider` only when a narrower or specially composed search is useful:
+
+```console
+pixi run workshop find "neuroimaging dataset review" --dry-run
 ```
 
 Preview a GitHub candidate's full tree without installing it:
@@ -75,7 +88,7 @@ pixi run workshop preview owner/repository skill-name@commit-sha
 ```
 
 Search results are not mirrored wholesale.
-Promote only a skill that was actually considered:
+Record a skill only after the user has directed consideration, or after it is installed or used; an agent search or preview alone is not durable evidence:
 
 ```console
 pixi run workshop remember example-skill \

@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-08-29T19:40:11Z",
+  "extensions": {},
+  "id": "urn:uuid:02ab5753-bae4-4d79-8e04-985f3553ba8d",
+  "name": "lessig-presentations",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:0f031cb2-8f0f-487e-994d-ed45606bc064",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-29T19:40:11Z",
+      "id": "urn:uuid:0f031cb2-8f0f-487e-994d-ed45606bc064",
+      "kind": "git",
+      "locator": "https://github.com/leej3/research-object-with-ai.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".apm/skills/lessig-presentations"
+    }
+  ],
+  "summary": "Create and review rapid visual talks whose speech and slides form synchronized rhetoric",
+  "tag_ids": [],
+  "updated_at": "2026-08-29T19:40:11Z"
+}
