@@ -27,6 +27,11 @@ pixi run workshop validate
 The doctor names each external tool, its pinned version, and its authority.
 Every delegated command is printed before execution.
 
+For any request to find, create, choose, or install a skill, the first outcome is a discovery consultation, not a filesystem or dependency change.
+The user must make a separate choice after seeing the current alternatives.
+A request such as "install X" or "I want a skill for Y" does not waive this consultation merely because it names a known skill.
+Proceed immediately only when the user explicitly says to skip comparison or confirms a choice from a consultation.
+
 ## Find and consider a skill
 
 Search remembered skills and the locally tracked upstream inventory first.
@@ -36,7 +41,10 @@ The local phase searches every source registered in `registry.toml` (including K
 pixi run workshop find "capability or remembered task"
 ```
 
-For a freshness-sensitive choice, first refresh the registered upstream status and review the update plan.
+At the start of each new consultation, inspect the registered-source status.
+When network access is available, fetch status so newly published candidates or changes can be reported.
+This is a read-only freshness check: never update a registered checkout as a side effect of discovery.
+
 Updating a source is explicit; it never happens as a side effect of search:
 
 ```console
@@ -46,28 +54,32 @@ pixi run upstream-update <registered-source>
 
 Apply a reviewed update only with `pixi run upstream-update <registered-source> --apply`, then commit the resulting Workshop gitlink change before relying on that revision.
 
-Then query the existing discovery providers.
+Then query all configured discovery providers unless the user explicitly narrows the sources.
 The default order keeps remembered and local community sources first, but still returns public candidates that may be worth considering or improving upstream:
 
 ```console
 pixi run workshop find "capability"
 ```
 
-Use `--provider` only to narrow or compose a specialized search.
+Use `--provider` only when the user requests a narrower search or the default command cannot query a configured source.
+Do not let a previously remembered or named skill short-circuit the broader search: newer alternatives are part of the consultation.
 
 ### Human decision gate
 
-When the user asks for a skill to provide a capability, discovery is a separate decision phase.
-Do not create, install, adopt, or record a candidate in the same turn unless the user already selected an exact skill or explicitly asked to skip discovery.
+When the user asks about, requests, names, creates, or proposes installing a skill, discovery is a separate decision phase.
+Do not create, scaffold, adapt, install, adopt, or record a candidate in that turn unless the user explicitly asked to skip consultation or is confirming a choice from an earlier consultation.
+Naming an exact skill is not by itself confirmation because newer alternatives may now be available.
 
 After searching:
 
-1. Present a concise shortlist of plausible matches.
-   For each, state its name, relevant capability, important limitation or difference, and a link to its canonical source.
+1. Summarize which configured sources were searched, their freshness or pinned state, and any source that was unavailable.
+2. Present a concise shortlist of plausible matches across those sources.
+   For each, state its name, source, relevant capability, important limitation or difference, and a link to its canonical source.
    Use a clickable local path when the canonical source is local and a canonical web URL when it is remote.
-2. If no candidate is a good fit, say which sources were searched and propose creating a new project-owned skill.
-   If partial matches exist, explain why a new skill or adaptation may still be preferable.
-3. Ask the user to choose among adopting a candidate, adapting one, creating a new skill, or stopping.
+3. Always include creating a new project-owned skill as an explicit option, even when matches exist.
+   Explain when adapting a candidate may be preferable to either installing it unchanged or starting over.
+4. Give a recommendation with its tradeoffs, while keeping the choice with the user.
+5. Ask the user to choose among adopting a candidate, adapting one, creating a new skill, broadening or refreshing the search, or stopping.
    End the turn and wait for that human decision.
 
 Do not treat the original capability request as approval of the agent's later selection or creation proposal.
