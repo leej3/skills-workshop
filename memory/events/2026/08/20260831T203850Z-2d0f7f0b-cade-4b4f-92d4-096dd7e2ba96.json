@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:2d0f7f0b-cade-4b4f-92d4-096dd7e2ba96",
+  "occurred_at": "2026-08-31T20:38:50Z",
+  "payload": {
+    "resolution_digest": "sha256:663a730bf9b67fb2646d96d589bfa1417c2ca5f0139108616654ecc7b17a57c2",
+    "skill_name": "commit-provenance",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/commit-provenance",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "cccf7e7f00b954136918d2a04042b9460f7ebe51"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:b772464b-dc4c-49bb-b3c1-903e1b87c29a",
+  "type": "project-membership"
+}

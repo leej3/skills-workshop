@@ -8,7 +8,7 @@
   "id": "urn:uuid:b772464b-dc4c-49bb-b3c1-903e1b87c29a",
   "name": "commit-provenance",
   "notes": "",
-  "preferred_source_id": "urn:uuid:f73313e9-b690-48b9-9573-e7c62e236ab4",
+  "preferred_source_id": "urn:uuid:6d52f3ed-fc61-4543-aa17-94519ca361a6",
   "relations": [],
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
   "sources": [
@@ -18,8 +18,8 @@
       "id": "urn:uuid:f73313e9-b690-48b9-9573-e7c62e236ab4",
       "kind": "git",
       "locator": "https://github.com/leej3/skills-workshop.git",
-      "notes": "Promoted from an untracked personal Codex skill into this repository.",
-      "role": "canonical",
+      "notes": "Retired APM source path; replaced by the native project-owned source.",
+      "role": "deprecated",
       "subpath": ".apm/skills/commit-provenance"
     },
     {
@@ -31,9 +31,29 @@
       "notes": "Original untracked host copy; retained only as import provenance.",
       "role": "deprecated",
       "subpath": null
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-31T20:38:33Z",
+      "id": "urn:uuid:6d52f3ed-fc61-4543-aa17-94519ca361a6",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "Native project-owned source; replaces the retired APM path.",
+      "role": "canonical",
+      "subpath": ".agents/skills/commit-provenance"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-31T20:39:13Z",
+      "id": "urn:uuid:f3f93674-91f3-4b56-a079-684d75d2ec6c",
+      "kind": "local",
+      "locator": "~/.agents/skills/commit-provenance",
+      "notes": "User-level symlink to the native Workshop source.",
+      "role": "mirror",
+      "subpath": null
     }
   ],
   "summary": "Resolve exact Codex runtime, model, and reasoning-effort trailers immediately before an agent-authored commit.",
   "tag_ids": [],
-  "updated_at": "2026-08-17T19:47:17Z"
+  "updated_at": "2026-08-31T20:39:13Z"
 }
