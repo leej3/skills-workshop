@@ -22,7 +22,7 @@
   "id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
   "name": "develop-orinoco-lite",
   "notes": "",
-  "preferred_source_id": "urn:uuid:22b82c0a-e5bb-4e8c-95a5-0e5601082280",
+  "preferred_source_id": "urn:uuid:9871d9cc-cf1b-40dd-8cca-8a3d5b7a6fcf",
   "relations": [],
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
   "sources": [
@@ -32,12 +32,22 @@
       "id": "urn:uuid:22b82c0a-e5bb-4e8c-95a5-0e5601082280",
       "kind": "git",
       "locator": "https://github.com/leej3/skills-workshop.git",
-      "notes": "",
-      "role": "canonical",
+      "notes": "Superseded when project-owned skills moved to their owning repository.",
+      "role": "deprecated",
       "subpath": ".apm/skills/develop-orinoco-lite"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-08-31T19:54:15Z",
+      "id": "urn:uuid:9871d9cc-cf1b-40dd-8cca-8a3d5b7a6fcf",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "Project-owned native source.",
+      "role": "canonical",
+      "subpath": ".agents/skills/develop-orinoco-lite"
     }
   ],
   "summary": "Guide Orinoco Lite engineering and source-adapter design using live local pins, verified upstream evidence, static curation, provenance, mappings, and durable human decision memory.",
   "tag_ids": [],
-  "updated_at": "2026-08-18T20:35:33Z"
+  "updated_at": "2026-08-31T19:54:15Z"
 }

@@ -5,7 +5,8 @@ It remembers where a skill came from, why it was considered, where it was declar
 
 `skills-workshop` itself may be installed once as a user-level agent control skill.
 That installation routes skill-lifecycle requests through this repository; it does not make the skills it discovers user-global.
-Each selected skill is installed into the active project's APM manifest, lock, and agent-skill target, while the workshop retains cross-project memory.
+Each project-owned experimental skill lives directly in that project's `.agents/skills/` tree.
+Independently maintained reusable skills are installed through the active project's APM manifest and lock, while the workshop retains cross-project memory for both kinds.
 
 It is not another package manager or public registry.
 Downstream projects use [Microsoft APM](https://microsoft.github.io/apm/) for their own reproducible manifest, lock, installation, update, and audit.
@@ -21,7 +22,8 @@ Earlier reconciliation code remains as a frozen prototype, not the default proje
 | Concern | Authority |
 | --- | --- |
 | Portable skill contents | [Agent Skills](https://agentskills.io/specification) |
-| Project dependencies, exact resolution, deployment, lock, update, and audit | APM in that project |
+| Project-owned experimental skill source | That project's tracked `.agents/skills/` tree |
+| External dependencies, exact resolution, deployment, lock, update, and audit | APM in that project |
 | GitHub discovery, preview, source provenance, and publication | `gh skill` |
 | Cross-provider catalog discovery | ASM |
 | skills.sh and `.well-known` discovery | Vercel `skills` |
@@ -30,8 +32,8 @@ Earlier reconciliation code remains as a frozen prototype, not the default proje
 
 The boundary is testable:
 
-- deleting this workshop must leave an APM-managed project reproducible;
-- deleting a project's APM files must leave the workshop unable to recreate its dependency state.
+- deleting this workshop must leave native project skills usable and APM dependencies reproducible;
+- deleting a project's native skills and APM files must leave the workshop unable to recreate its skill state.
 
 ## Set up
 
@@ -41,20 +43,21 @@ cd skills-workshop
 pixi install --locked
 pixi run workshop doctor
 pixi run memory-validate
-pixi run apm-install-frozen
-pixi run apm-audit
+pixi run agent-deps-bootstrap
+pixi run agent-deps-check
 ```
 
 Pixi pins Python, Node, APM, and the helper dependencies.
 The workshop CLI pins the npm discovery commands it delegates and prints every external command, working directory, and mutation class before execution.
 
-This repository's project-owned canonical skill sources are under `.apm/skills/`.
-APM's `includes: auto` deploys ordinary copies to `.agents/skills/`, records them in `apm.lock.yaml`, and uses `apm_modules/` only as an ignored cache.
-Edit the canonical source and rerun APM; do not edit the deployed copy.
+This repository's project-owned canonical skill sources are ordinary tracked trees under `.agents/skills/`.
+Edit them there directly; they need no APM installation or startup hook.
+APM is reserved for external dependencies and uses `apm_modules/` only as an ignored cache.
 
-Start a project-specific experimental skill in `.apm/skills/<name>`.
-Do not also declare it as a local dependency.
+Start a project-specific experimental skill in `.agents/skills/<name>`.
+Do not duplicate it under `.apm/skills` or declare it as a local dependency.
 Promote it to an independent Git/APM package only after another project needs it or it acquires its own release lifecycle.
+Projects may expose an agent-agnostic bootstrap task for external dependencies and call it from their preferred workspace or agent hook; native project skills remain available before that bootstrap.
 
 ## Find and remember skills
 
@@ -129,7 +132,7 @@ Defer the apply when it appears; the preview is not a sound approval artifact.
 APM may discover organization policy from the repository remote and therefore perform a network/authentication check.
 The workshop exposes `--no-policy` as an explicit personal-project choice; it never silently adds the bypass.
 
-Remember a project by its durable repository identity, not a host path, and record APM-resolved membership without pretending it proves actual use:
+Remember a project by its durable repository identity, not a host path, and record native and APM-resolved membership without pretending either proves actual use:
 
 ```console
 pixi run workshop project add my-project \
@@ -221,7 +224,7 @@ They never contain versions, install paths, hashes, dependency graphs, or target
 ## Tracked skills
 
 - `skills-workshop`: this workflow, backed by the same tested CLI used by humans.
-- `commit-provenance`: the existing co-commit trailer skill, promoted from the host into ordinary Git and installed in this project through APM.
+- `commit-provenance` and `build-github-app`: currently project-owned native skills; promote either to an independent source when another project needs its versioned lifecycle.
 
 The project-local and user-global `commit-provenance` copies currently have the same name.
 Codex can show both rather than merging them.
@@ -233,11 +236,11 @@ Remove the old global copy only after confirming the project deployment serves t
 pixi run validate
 pixi run format
 python /Users/johnlee/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
-  .apm/skills/skills-workshop
+  .agents/skills/skills-workshop
 ```
 
 `pixi run validate` runs lint, formatting checks, compilation, tests, legacy prototype metadata checks, and the new memory validator.
-APM 0.28.0 frozen replay and `apm audit --ci` both pass the project-owned `.apm/skills` layout.
+The agent-dependency check uses APM's frozen install and lock checks while excluding whole-directory drift replay, because native project skills intentionally share `.agents/skills/` with any APM-managed dependencies.
 Two independently reproduced APM limitations have been reported upstream: local raw-skill dependencies fail the CI configuration check, and positional-package dry runs omit their prospective install plan.
 Neither changes the workshop's ownership boundary.
 

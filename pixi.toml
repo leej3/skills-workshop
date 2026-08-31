@@ -25,6 +25,8 @@ memory-validate = "python scripts/workshop.py validate"
 apm-install = "apm install"
 apm-install-frozen = "apm install --frozen"
 apm-audit = "apm audit"
+agent-deps-bootstrap = "apm install --frozen"
+agent-deps-check = "apm install --frozen && apm audit --ci --no-drift"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }

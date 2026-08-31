@@ -574,8 +574,10 @@ dependencies:
         == 0
     )
     first_output = capsys.readouterr().out
-    assert "Recorded 2 APM membership event(s)" in first_output
-    assert "Not remembered; left only in APM: unremembered-skill" in first_output
+    assert "Recorded 2 project membership event(s)" in first_output
+    assert (
+        "Not remembered; left only in project state: unremembered-skill" in first_output
+    )
 
     skills = {record["name"]: record for record in records(memory_root, "skills")}
     assert set(skills) == {"commit-provenance", "skills-workshop"}
@@ -620,8 +622,11 @@ dependencies:
         == 0
     )
     second_output = capsys.readouterr().out
-    assert "Recorded 0 APM membership event(s)" in second_output
-    assert "Not remembered; left only in APM: unremembered-skill" in second_output
+    assert "Recorded 0 project membership event(s)" in second_output
+    assert (
+        "Not remembered; left only in project state: unremembered-skill"
+        in second_output
+    )
     assert {event["id"] for event in records(memory_root, "events")} == first_ids
 
     assert invoke("where-used", "commit-provenance", "--json") == 0
@@ -713,7 +718,7 @@ dependencies:
         == 0
     )
     output = capsys.readouterr().out
-    assert "Recorded 2 APM membership event(s)" in output
+    assert "Recorded 2 project membership event(s)" in output
     assert "skills-workshop" not in output
 
     skills = {record["name"]: record for record in records(memory_root, "skills")}
@@ -794,7 +799,7 @@ dependencies:
         )
         == 0
     )
-    assert "Recorded 1 APM membership event(s)" in capsys.readouterr().out
+    assert "Recorded 1 project membership event(s)" in capsys.readouterr().out
     first_event = records(memory_root, "events")[0]
 
     write_lock(generated_at="2026-08-18T00:00:00Z")
@@ -808,7 +813,7 @@ dependencies:
         )
         == 0
     )
-    assert "Recorded 0 APM membership event(s)" in capsys.readouterr().out
+    assert "Recorded 0 project membership event(s)" in capsys.readouterr().out
     assert [event["id"] for event in records(memory_root, "events")] == [
         first_event["id"]
     ]
@@ -824,12 +829,78 @@ dependencies:
         )
         == 0
     )
-    assert "Recorded 1 APM membership event(s)" in capsys.readouterr().out
+    assert "Recorded 1 project membership event(s)" in capsys.readouterr().out
     events = records(memory_root, "events")
     assert len(events) == 2
     assert len({event["project_evidence"]["lock_digest"] for event in events}) == 2
     assert len({event["payload"]["resolution_digest"] for event in events}) == 2
     assert workshop_cli.validate_memory(memory_root) == []
+
+
+def test_project_scan_records_native_skills_outside_apm(
+    memory_root: Path,
+    invoke: Callable[..., int],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    remember(invoke, "skills-workshop")
+    assert invoke("project", "add", "workshop-project") == 0
+    project = records(memory_root, "projects")[0]
+    downstream = memory_root / "downstream"
+    skill_dir = downstream / ".agents" / "skills" / "skills-workshop"
+    skill_dir.mkdir(parents=True)
+    (skill_dir / "SKILL.md").write_text("# Native skill\n", encoding="utf-8")
+    lock_path = downstream / "apm.lock.yaml"
+    lock_path.write_text(
+        "lockfile_version: '1'\ndependencies: []\ndeployments: []\n",
+        encoding="utf-8",
+    )
+    (downstream / "apm.yml").write_text(
+        "name: downstream\ndependencies:\n  apm: []\n  mcp: []\n",
+        encoding="utf-8",
+    )
+
+    def fake_project_evidence(
+        root: Path, project_record: dict[str, Any], project_path: Path
+    ) -> dict[str, Any]:
+        assert root == memory_root
+        assert project_record["id"] == project["id"]
+        assert project_path == downstream
+        return {
+            "project_id": project["id"],
+            "repository_commit": "abc123",
+            "dirty": False,
+            "manifest_path": "apm.yml",
+            "lock_path": "apm.lock.yaml",
+            "lock_digest": "sha256:" + "b" * 64,
+            "dependency_selector": None,
+            "command": ["apm", "deps", "list"],
+            "apm_version": "0.28.0",
+        }
+
+    monkeypatch.setattr(workshop_cli, "project_evidence", fake_project_evidence)
+    capsys.readouterr()
+
+    assert (
+        invoke(
+            "project",
+            "scan",
+            "workshop-project",
+            "--project-path",
+            str(downstream),
+        )
+        == 0
+    )
+    assert "Recorded 1 project membership event(s)" in capsys.readouterr().out
+    event = records(memory_root, "events")[0]
+    assert event["project_evidence"]["dependency_selector"] == (
+        ".agents/skills/skills-workshop"
+    )
+    assert event["asserted_by"] == {
+        "kind": "tool",
+        "id": "project-tree",
+        "runtime": "agent-skills",
+    }
 
 
 def test_project_scan_records_root_local_apm_skills(
@@ -914,8 +985,8 @@ local_deployed_file_hashes:
         == 0
     )
     output = capsys.readouterr().out
-    assert "Recorded 2 APM membership event(s)" in output
-    assert "Not remembered; left only in APM: unremembered-skill" in output
+    assert "Recorded 2 project membership event(s)" in output
+    assert "Not remembered; left only in project state: unremembered-skill" in output
     events = records(memory_root, "events")
     assert {event["project_evidence"]["dependency_selector"] for event in events} == {
         ".apm/skills/commit-provenance",
@@ -932,7 +1003,7 @@ local_deployed_file_hashes:
         )
         == 0
     )
-    assert "Recorded 0 APM membership event(s)" in capsys.readouterr().out
+    assert "Recorded 0 project membership event(s)" in capsys.readouterr().out
 
     write_lock(workshop_hash="d" * 64)
     assert (
@@ -945,7 +1016,7 @@ local_deployed_file_hashes:
         )
         == 0
     )
-    assert "Recorded 1 APM membership event(s)" in capsys.readouterr().out
+    assert "Recorded 1 project membership event(s)" in capsys.readouterr().out
     assert len(records(memory_root, "events")) == 3
     assert workshop_cli.validate_memory(memory_root) == []
 
@@ -1928,7 +1999,7 @@ def test_doctor_json_explains_versions_and_authority_boundaries(
         "workshop",
         "node",
     }
-    assert report["apm"]["authority"] == "project state"
+    assert report["apm"]["authority"] == "external dependency state"
     assert report["gh-skill"]["authority"] == "discovery only in this workflow"
     assert report["workshop"]["authority"] == "cross-project memory only"
     assert report["asm"]["version"].endswith(workshop_cli.ASM_VERSION)
