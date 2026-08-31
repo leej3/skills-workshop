@@ -19,6 +19,7 @@ It is a control-plane exception, not a model for installing other skills globall
 
 Every discovered or created working skill belongs to the active project.
 A project-owned experiment lives directly in that project's `.agents/skills/`; an independently maintained reusable dependency is declared, locked, and deployed by APM.
+Do not create empty APM state in anticipation of a future promotion.
 The Workshop records cross-project recall, consideration, membership, and actual-use evidence, but never substitutes for the project's dependency state.
 This keeps a project reproducible without the Workshop and keeps the Workshop from pretending it can recreate a project's dependencies.
 
@@ -51,7 +52,8 @@ Promote the skill to an independent Git/APM dependency when another project need
 After promotion, the source repository owns the skill and each downstream project pins it through APM.
 
 When converting an APM self-deployed project skill, first reconcile the canonical and deployed trees.
-Choose the reviewed content, make `.agents/skills/<name>` canonical, remove the `.apm/skills` source and its local deployment ledger, and preserve only external dependencies in the APM lock.
+Choose the reviewed content, make `.agents/skills/<name>` canonical, and remove the `.apm/skills` source and its local deployment ledger.
+If no promoted dependencies remain, remove the APM manifest, lock, bootstrap, and runtime dependency as well.
 Do not use `--force` to paper over mixed old/new owners.
 
 Discovery providers never install into APM-managed paths.

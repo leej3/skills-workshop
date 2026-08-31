@@ -9,7 +9,8 @@ Each project-owned experimental skill lives directly in that project's `.agents/
 Independently maintained reusable skills are installed through the active project's APM manifest and lock, while the workshop retains cross-project memory for both kinds.
 
 It is not another package manager or public registry.
-Downstream projects use [Microsoft APM](https://microsoft.github.io/apm/) for their own reproducible manifest, lock, installation, update, and audit.
+Projects need no package manager while all their skills are project-owned.
+When a project first consumes an independently maintained promoted skill, it may introduce [Microsoft APM](https://microsoft.github.io/apm/) for reproducible installation, update, and audit.
 Public discovery is delegated to [ASM](https://github.com/luongnv89/asm), [`gh skill`](https://cli.github.com/manual/gh_skill), and [Vercel `skills`](https://github.com/vercel-labs/skills).
 The workshop provides one concise human/agent interface and retains only information those tools do not know across projects.
 
@@ -43,8 +44,6 @@ cd skills-workshop
 pixi install --locked
 pixi run workshop doctor
 pixi run memory-validate
-pixi run agent-deps-bootstrap
-pixi run agent-deps-check
 ```
 
 Pixi pins Python, Node, APM, and the helper dependencies.
@@ -52,12 +51,12 @@ The workshop CLI pins the npm discovery commands it delegates and prints every e
 
 This repository's project-owned canonical skill sources are ordinary tracked trees under `.agents/skills/`.
 Edit them there directly; they need no APM installation or startup hook.
-APM is reserved for external dependencies and uses `apm_modules/` only as an ignored cache.
+This repository has no APM manifest, lock, deployment, or bootstrap because all of its current skills are project-owned.
 
 Start a project-specific experimental skill in `.agents/skills/<name>`.
 Do not duplicate it under `.apm/skills` or declare it as a local dependency.
 Promote it to an independent Git/APM package only after another project needs it or it acquires its own release lifecycle.
-Projects may expose an agent-agnostic bootstrap task for external dependencies and call it from their preferred workspace or agent hook; native project skills remain available before that bootstrap.
+Only after consuming a promoted external skill should a project choose dependency infrastructure and, if useful, expose an agent-agnostic bootstrap through Pixi or its preferred setup hook.
 
 ## Find and remember skills
 
@@ -240,8 +239,7 @@ python /Users/johnlee/.codex/skills/.system/skill-creator/scripts/quick_validate
 ```
 
 `pixi run validate` runs lint, formatting checks, compilation, tests, legacy prototype metadata checks, and the new memory validator.
-The agent-dependency check uses APM's frozen install and lock checks while excluding whole-directory drift replay, because native project skills intentionally share `.agents/skills/` with any APM-managed dependencies.
-Two independently reproduced APM limitations have been reported upstream: local raw-skill dependencies fail the CI configuration check, and positional-package dry runs omit their prospective install plan.
+APM remains available to the Workshop as a delegated tool for projects that have actual promoted dependencies; it is not initialized speculatively in this repository.
 Neither changes the workshop's ownership boundary.
 
 The workshop code is available under the [MIT License](LICENSE).

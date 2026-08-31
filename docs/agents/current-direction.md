@@ -13,7 +13,7 @@ The workshop is now:
 > invokes the existing tools.
 
 It is not the downstream package manager.
-Every project should keep its own reproducible skill intent and resolution in APM.
+Projects with only project-owned skills need no APM state.
 It is not a public catalog; ASM, `gh skill`, Vercel `skills`, and emerging discovery formats already serve that role.
 It is not the canonical skill editor or runtime; skill content stays in ordinary Git.
 
@@ -73,7 +73,7 @@ Use APM for every accepted external downstream dependency.
 This preserves ASM's strong human and agent search experience while giving collaborators one project-local `apm.yml` and `apm.lock.yaml`.
 
 This repository now dogfoods that model.
-It tracks project-owned skills once under `.agents/skills`, pins APM 0.28.0 in Pixi for external dependencies, and exposes agent-agnostic dependency bootstrap and check tasks.
+It tracks project-owned skills once under `.agents/skills` and carries no speculative APM manifest, lock, deployment, or bootstrap.
 The workshop memory records project membership and real use without copying either native source or APM state.
 
 A native skill graduates to an independent Git/APM dependency when another project needs it or it gains an independent versioned lifecycle.

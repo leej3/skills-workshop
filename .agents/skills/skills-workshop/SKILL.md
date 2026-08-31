@@ -126,7 +126,8 @@ If organization-policy discovery would cause an unwanted login or network lookup
 
 For a project-owned experimental skill, author the canonical tree directly at `.agents/skills/<name>`.
 Do not copy it into `.apm/skills` or declare it as a local APM dependency.
-The project may expose an agent-agnostic bootstrap such as `pixi run agent-deps-bootstrap` for external dependencies; project-owned skills must remain available before that bootstrap runs.
+Do not initialize APM, a lock, or a bootstrap while every skill remains project-owned.
+When the first promoted external dependency is adopted, let the project choose its dependency and agent-agnostic setup mechanism at that time.
 Promote it to an independently sourced dependency only after another project needs it or it requires its own versioned lifecycle.
 
 Before installation, verify that the skill is self-contained.

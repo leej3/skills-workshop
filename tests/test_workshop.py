@@ -520,7 +520,18 @@ def test_project_scan_records_only_known_membership_and_is_idempotent(
 ) -> None:
     remember(invoke, "commit-provenance")
     remember(invoke, "skills-workshop")
-    assert invoke("project", "add", "workshop-project") == 0
+    assert (
+        invoke(
+            "project",
+            "add",
+            "workshop-project",
+            "--manifest",
+            "apm.yml",
+            "--lock",
+            "apm.lock.yaml",
+        )
+        == 0
+    )
     project = records(memory_root, "projects")[0]
     downstream = memory_root / "downstream"
     downstream.mkdir()
@@ -665,7 +676,18 @@ def test_project_scan_expands_selected_skills_from_an_apm_package(
     remember(invoke, "develop-orinoco-lite")
     remember(invoke, "operate-orinoco-metadata-adapters")
     remember(invoke, "skills-workshop")
-    assert invoke("project", "add", "orinoco-lite-dev") == 0
+    assert (
+        invoke(
+            "project",
+            "add",
+            "orinoco-lite-dev",
+            "--manifest",
+            "apm.yml",
+            "--lock",
+            "apm.lock.yaml",
+        )
+        == 0
+    )
     project = records(memory_root, "projects")[0]
     downstream = memory_root / "downstream"
     downstream.mkdir()
@@ -747,7 +769,18 @@ def test_project_scan_keys_membership_to_the_dependency_resolution(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     remember(invoke, "commit-provenance")
-    assert invoke("project", "add", "workshop-project") == 0
+    assert (
+        invoke(
+            "project",
+            "add",
+            "workshop-project",
+            "--manifest",
+            "apm.yml",
+            "--lock",
+            "apm.lock.yaml",
+        )
+        == 0
+    )
     project = records(memory_root, "projects")[0]
     downstream = memory_root / "downstream"
     downstream.mkdir()
@@ -850,15 +883,6 @@ def test_project_scan_records_native_skills_outside_apm(
     skill_dir = downstream / ".agents" / "skills" / "skills-workshop"
     skill_dir.mkdir(parents=True)
     (skill_dir / "SKILL.md").write_text("# Native skill\n", encoding="utf-8")
-    lock_path = downstream / "apm.lock.yaml"
-    lock_path.write_text(
-        "lockfile_version: '1'\ndependencies: []\ndeployments: []\n",
-        encoding="utf-8",
-    )
-    (downstream / "apm.yml").write_text(
-        "name: downstream\ndependencies:\n  apm: []\n  mcp: []\n",
-        encoding="utf-8",
-    )
 
     def fake_project_evidence(
         root: Path, project_record: dict[str, Any], project_path: Path
@@ -870,12 +894,12 @@ def test_project_scan_records_native_skills_outside_apm(
             "project_id": project["id"],
             "repository_commit": "abc123",
             "dirty": False,
-            "manifest_path": "apm.yml",
-            "lock_path": "apm.lock.yaml",
-            "lock_digest": "sha256:" + "b" * 64,
+            "manifest_path": None,
+            "lock_path": None,
+            "lock_digest": None,
             "dependency_selector": None,
-            "command": ["apm", "deps", "list"],
-            "apm_version": "0.28.0",
+            "command": ["scan", ".agents/skills"],
+            "apm_version": None,
         }
 
     monkeypatch.setattr(workshop_cli, "project_evidence", fake_project_evidence)
@@ -911,7 +935,18 @@ def test_project_scan_records_root_local_apm_skills(
 ) -> None:
     remember(invoke, "commit-provenance")
     remember(invoke, "skills-workshop")
-    assert invoke("project", "add", "workshop-project") == 0
+    assert (
+        invoke(
+            "project",
+            "add",
+            "workshop-project",
+            "--manifest",
+            "apm.yml",
+            "--lock",
+            "apm.lock.yaml",
+        )
+        == 0
+    )
     project = records(memory_root, "projects")[0]
     downstream = memory_root / "downstream"
     downstream.mkdir()
