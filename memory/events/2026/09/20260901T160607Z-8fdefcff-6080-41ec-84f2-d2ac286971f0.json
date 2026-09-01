@@ -1,0 +1,31 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "light",
+    "runtime": "Codex Desktop",
+    "runtime_version": "26.825.51511"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:8fdefcff-6080-41ec-84f2-d2ac286971f0",
+  "occurred_at": "2026-09-01T16:06:07Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "open",
+    "summary": "Add a generic Git Annex linked-worktree skill and publish it through a source-owned APM package",
+    "url": "https://github.com/con/skills/pull/6"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:01e5a50e-c744-443e-a995-9850079c18da",
+  "type": "contribution"
+}
