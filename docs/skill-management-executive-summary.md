@@ -17,7 +17,8 @@ Prefer replaceable integrations, and reduce workshop-owned code whenever an exte
 | GitHub discovery and publication | [`gh skill`](https://cli.github.com/manual/gh_skill) | Use for search, whole-tree preview, pinned revisions, and publication. |
 | Cross-provider discovery | [ASM](https://github.com/luongnv89/asm) | Use its catalog and machine-readable search; do not duplicate the catalog. |
 | Broad source and `.well-known` discovery | [Vercel `skills`](https://github.com/vercel-labs/skills) | Use for discovery and trials; let APM own accepted project dependencies. |
-| Project reproducibility | [Microsoft APM](https://microsoft.github.io/apm/) | Keep each project's manifest, lock, deployment, update, and audit in that project. |
+| Project-owned skill source | Tracked `.agents/skills/` | Keep experiments directly usable and singly authored in their owning project. |
+| External dependency reproducibility | [Microsoft APM](https://microsoft.github.io/apm/) | Keep each project's external manifest, lock, deployment, update, and audit in that project. |
 | Cross-project experience | Workshop memory | Retain only source-agnostic context and evidence missing from the other layers. |
 | Human and agent workflow | Workshop CLI and skill | Explain and delegate exact operations through one stable interface. |
 
@@ -45,7 +46,7 @@ See [durable metadata and replaceable components](agents/skill-management-landsc
 
 1. Search workshop memory first, then query external discovery providers.
 2. Preview and validate a complete candidate before adopting it.
-3. Put project-owned experimental skills under `.apm/skills/`.
+3. Put project-owned experimental skills directly under `.agents/skills/`.
 4. Put reusable skills in ordinary Git sources and declare them through the downstream project's APM manifest.
 5. Record membership separately from actual use, and treat ratings as contextual observations rather than efficacy claims.
 6. Use controlled with-skill/without-skill evaluations only for consequential or disputed claims.

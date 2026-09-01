@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:3f5061d0-afdd-4c96-bcc1-07304c77e09a",
+  "occurred_at": "2026-08-31T20:38:33Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John confirmed native installation in orinoco-lite-dev and restoration of the user-level link."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:b772464b-dc4c-49bb-b3c1-903e1b87c29a",
+  "type": "consideration"
+}

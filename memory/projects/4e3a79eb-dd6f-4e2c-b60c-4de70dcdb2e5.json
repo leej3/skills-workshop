@@ -3,15 +3,9 @@
   "created_at": "2026-08-18T20:35:33Z",
   "extensions": {},
   "id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
-  "managers": [
-    {
-      "kind": "apm",
-      "lock_path": "apm.lock.yaml",
-      "manifest_path": "apm.yml"
-    }
-  ],
+  "managers": [],
   "name": "orinoco-lite-dev",
-  "notes": "Engineering workspace with APM-pinned project skills.",
+  "notes": "Engineering workspace with native project-owned skills under .agents/skills.",
   "repository": {
     "subpath": null,
     "url": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git"

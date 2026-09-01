@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:9436e34e-6765-49ca-b2e0-57b6c324c472",
+  "occurred_at": "2026-08-31T20:38:50Z",
+  "payload": {
+    "resolution_digest": "sha256:0a037f62ae5176cde6374bd0a3f7fe6c13e539032ae77e422ccc7dbfea1cb67d",
+    "skill_name": "upstream-convergence",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/upstream-convergence",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "cccf7e7f00b954136918d2a04042b9460f7ebe51"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:4b26acc4-a5e0-4225-8749-9e5b7b00bc74",
+  "type": "project-membership"
+}

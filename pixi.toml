@@ -22,9 +22,6 @@ pre-commit = ">=4.6,<5"
 [tasks]
 workshop = "python scripts/workshop.py"
 memory-validate = "python scripts/workshop.py validate"
-apm-install = "apm install"
-apm-install-frozen = "apm install --frozen"
-apm-audit = "apm audit"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }

@@ -852,9 +852,9 @@ def apm_version() -> str:
 def cmd_doctor(args: argparse.Namespace) -> int:
     tools = {
         "apm": {
-            "role": "project manifest, lock, dependency resolution, deployment, and audit",
+            "role": "external project dependency manifest, lock, resolution, deployment, and audit",
             "version": apm_version(),
-            "authority": "project state",
+            "authority": "external dependency state",
         },
         "gh-skill": {
             "role": "GitHub search, preview, source provenance, and publication",
@@ -890,7 +890,9 @@ def cmd_doctor(args: argparse.Namespace) -> int:
             version = detail["version"] or "not found"
             print(f"- {name}: {detail['role']}")
             print(f"  authority: {detail['authority']}; {version}")
-        print("\nDiscovery tools never install into APM-managed project paths.")
+        print(
+            "\nDiscovery tools never install into native or APM-managed project paths."
+        )
         print("Every delegated command is printed before it runs.")
     return 0
 
@@ -1141,6 +1143,19 @@ def cmd_project_add(args: argparse.Namespace) -> int:
         raise WorkshopError(f"project already remembered: {args.name}")
     timestamp = now()
     project_id = new_id()
+    if bool(args.manifest) != bool(args.lock):
+        raise WorkshopError("--manifest and --lock must be provided together")
+    managers = (
+        [
+            {
+                "kind": "apm",
+                "manifest_path": args.manifest,
+                "lock_path": args.lock,
+            }
+        ]
+        if args.manifest
+        else []
+    )
     record = {
         "schema": schema_uri("projects"),
         "id": project_id,
@@ -1149,13 +1164,7 @@ def cmd_project_add(args: argparse.Namespace) -> int:
         "repository": {"url": args.repo_url, "subpath": args.subpath}
         if args.repo_url
         else None,
-        "managers": [
-            {
-                "kind": "apm",
-                "manifest_path": args.manifest,
-                "lock_path": args.lock,
-            }
-        ],
+        "managers": managers,
         "created_at": timestamp,
         "updated_at": timestamp,
         "notes": args.notes,
@@ -1169,7 +1178,7 @@ def cmd_project_add(args: argparse.Namespace) -> int:
 
 
 def apm_lock_memberships(lock: dict[str, Any]) -> list[dict[str, Any]]:
-    """Return dependency and root-local skill observations from an APM lock."""
+    """Return dependency and legacy root-local observations from an APM lock."""
     dependencies = lock.get("dependencies")
     if not isinstance(dependencies, list):
         raise WorkshopError("APM lock has no dependencies array")
@@ -1253,20 +1262,67 @@ def apm_lock_memberships(lock: dict[str, Any]) -> list[dict[str, Any]]:
     return observations
 
 
+def native_skill_memberships(
+    project_path: Path, lock: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Return project-owned skills not managed by the project's APM lock."""
+    managed_roots = {
+        deployment.get("value")
+        for deployment in lock.get("deployments", [])
+        if isinstance(deployment, dict)
+        and deployment.get("content_hash") is None
+        and isinstance(deployment.get("value"), str)
+    }
+    skills_root = project_path.resolve() / ".agents" / "skills"
+    if not skills_root.is_dir():
+        return []
+
+    observations: list[dict[str, Any]] = []
+    for skill_dir in sorted(path for path in skills_root.iterdir() if path.is_dir()):
+        source_path = f".agents/skills/{skill_dir.name}"
+        if source_path in managed_roots or not (skill_dir / "SKILL.md").is_file():
+            continue
+        files = {
+            path.relative_to(project_path.resolve()).as_posix(): "sha256:"
+            + hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(skill_dir.rglob("*"))
+            if path.is_file() and not path.is_symlink()
+        }
+        observations.append(
+            {
+                "name": skill_dir.name,
+                "selector": source_path,
+                "resolution": {
+                    "source": "project-native",
+                    "source_path": source_path,
+                    "file_hashes": files,
+                },
+                "asserted_by": "project-tree",
+                "runtime": "agent-skills",
+            }
+        )
+    return observations
+
+
 def cmd_project_scan(args: argparse.Namespace) -> int:
     project = resolve_record(args.root, "projects", args.project)
     assert project is not None
-    manager = project["managers"][0]
-    lock_path = args.project_path.resolve() / manager["lock_path"]
-    if not lock_path.is_file():
-        raise WorkshopError(f"APM lock not found: {lock_path}")
-    try:
-        lock = yaml.safe_load(lock_path.read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as error:
-        raise WorkshopError(f"cannot read APM lock: {error}") from error
-    if not isinstance(lock, dict):
-        raise WorkshopError("APM lock root must be an object")
+    manager = next(
+        (item for item in project["managers"] if item["kind"] == "apm"), None
+    )
+    lock: dict[str, Any] = {"dependencies": [], "deployments": []}
+    if manager is not None:
+        lock_path = args.project_path.resolve() / manager["lock_path"]
+        if lock_path.is_file():
+            try:
+                loaded = yaml.safe_load(lock_path.read_text(encoding="utf-8"))
+            except (OSError, yaml.YAMLError) as error:
+                raise WorkshopError(f"cannot read APM lock: {error}") from error
+            if not isinstance(loaded, dict):
+                raise WorkshopError("APM lock root must be an object")
+            lock = loaded
     observations = apm_lock_memberships(lock)
+    observations.extend(native_skill_memberships(args.project_path, lock))
 
     known = {record["name"]: record for _, record in load_records(args.root, "skills")}
     existing = [event for _, event in load_records(args.root, "events")]
@@ -1274,12 +1330,14 @@ def cmd_project_scan(args: argparse.Namespace) -> int:
     added = 0
     skipped: set[str] = set()
     args.asserted_kind = "tool"
-    args.asserted_by = "apm-lock"
     args.model = None
-    args.runtime = "apm"
-    args.runtime_version = base_evidence["apm_version"]
     args.reasoning_effort = None
     for observation in observations:
+        args.asserted_by = observation.get("asserted_by", "apm-lock")
+        args.runtime = observation.get("runtime", "apm")
+        args.runtime_version = (
+            base_evidence["apm_version"] if args.runtime == "apm" else None
+        )
         name = observation["name"]
         skill = known.get(name)
         if skill is None:
@@ -1322,9 +1380,11 @@ def cmd_project_scan(args: argparse.Namespace) -> int:
         atomic_write_validated(args.root, path, record)
         existing.append(record)
         added += 1
-    print(f"Recorded {added} APM membership event(s) for {project['name']}.")
+    print(f"Recorded {added} project membership event(s) for {project['name']}.")
     if skipped:
-        print("Not remembered; left only in APM: " + ", ".join(sorted(skipped)))
+        print(
+            "Not remembered; left only in project state: " + ", ".join(sorted(skipped))
+        )
     return 0
 
 
@@ -1434,13 +1494,11 @@ def project_evidence(
     root: Path, project: dict[str, Any], project_path: Path
 ) -> dict[str, Any]:
     project_path = project_path.resolve()
-    manager = project["managers"][0]
-    manifest = project_path / manager["manifest_path"]
-    lock = project_path / manager["lock_path"]
-    if not manifest.is_file() or not lock.is_file():
-        raise WorkshopError(
-            f"project evidence requires {manager['manifest_path']} and {manager['lock_path']}"
-        )
+    manager = next(
+        (item for item in project["managers"] if item["kind"] == "apm"), None
+    )
+    manifest = project_path / manager["manifest_path"] if manager else None
+    lock = project_path / manager["lock_path"] if manager else None
     revision = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=project_path,
@@ -1457,19 +1515,20 @@ def project_evidence(
     )
     import hashlib
 
-    lock_digest = hashlib.sha256(lock.read_bytes()).hexdigest()
+    has_apm = bool(manifest and manifest.is_file() and lock and lock.is_file())
+    lock_digest = hashlib.sha256(lock.read_bytes()).hexdigest() if has_apm else None
     return {
         "project_id": project["id"],
         "repository_commit": revision.stdout.strip()
         if revision.returncode == 0
         else None,
         "dirty": bool(status.stdout.strip()) if status.returncode == 0 else True,
-        "manifest_path": manager["manifest_path"],
-        "lock_path": manager["lock_path"],
-        "lock_digest": f"sha256:{lock_digest}",
+        "manifest_path": manager["manifest_path"] if has_apm else None,
+        "lock_path": manager["lock_path"] if has_apm else None,
+        "lock_digest": f"sha256:{lock_digest}" if lock_digest else None,
         "dependency_selector": None,
-        "command": ["apm", "deps", "list"],
-        "apm_version": apm_version(),
+        "command": ["apm", "deps", "list"] if has_apm else ["scan", ".agents/skills"],
+        "apm_version": apm_version() if has_apm else None,
     }
 
 
@@ -1910,19 +1969,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     project = commands.add_parser("project", help="manage project memory pointers")
     project_commands = project.add_subparsers(dest="project_command", required=True)
-    project_add = project_commands.add_parser(
-        "add", help="remember APM authority files for a project"
-    )
+    project_add = project_commands.add_parser("add", help="remember a project")
     project_add.add_argument("name")
     project_add.add_argument("--alias", action="append", default=[])
     project_add.add_argument("--repo-url")
     project_add.add_argument("--subpath")
-    project_add.add_argument("--manifest", default="apm.yml")
-    project_add.add_argument("--lock", default="apm.lock.yaml")
+    project_add.add_argument("--manifest")
+    project_add.add_argument("--lock")
     project_add.add_argument("--notes", default="")
     project_add.set_defaults(handler=cmd_project_add)
     project_scan = project_commands.add_parser(
-        "scan", help="record APM-resolved membership without claiming actual use"
+        "scan",
+        help="record native and APM-resolved membership without claiming actual use",
     )
     project_scan.add_argument("project")
     project_scan.add_argument("--project-path", type=Path, required=True)

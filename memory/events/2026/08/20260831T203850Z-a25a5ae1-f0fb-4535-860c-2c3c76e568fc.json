@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a25a5ae1-f0fb-4535-860c-2c3c76e568fc",
+  "occurred_at": "2026-08-31T20:38:50Z",
+  "payload": {
+    "resolution_digest": "sha256:00756c035f2a18abaafd1e5e5678a69496b42c9c34a69a027792a0d18579c90f",
+    "skill_name": "orinoco-github-app-deployment",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/orinoco-github-app-deployment",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "cccf7e7f00b954136918d2a04042b9460f7ebe51"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a18fe693-6a01-481c-ad7f-cd5496880e0f",
+  "type": "project-membership"
+}

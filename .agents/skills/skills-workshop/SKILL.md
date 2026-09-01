@@ -1,6 +1,6 @@
 ---
 name: skills-workshop
-description: Coordinate systematic agent-skill discovery, self-contained project skill creation, project installation, cross-project recall, use tracking, evaluation, and upstream contribution. Use when asked to find or compare skills, create or manage a project's skills, install or audit skills with APM, remember a skill or source, record outcomes or ratings, see where a skill was used, or test whether a skill helps. This skill keeps workshop memory separate from project-local APM state and delegates public discovery to ASM, GitHub gh skill, and Vercel skills.
+description: Coordinate systematic agent-skill discovery, native project skill creation, reusable dependency installation, cross-project recall, use tracking, evaluation, and upstream contribution. Use when asked to find or compare skills, create or manage a project's skills, install or audit reusable skills with APM, remember a skill or source, record outcomes or ratings, see where a skill was used, or test whether a skill helps. This skill keeps workshop memory separate from project-native and project-local APM state and delegates public discovery to ASM, GitHub gh skill, and Vercel skills.
 ---
 
 # Skills Workshop
@@ -12,7 +12,7 @@ Do not turn it into another installer, registry, or project lock.
 
 This is the one user-level control skill for the skill lifecycle.
 When an agent is asked to find, create, install, audit, record, or evaluate a skill, it should invoke this skill first.
-That does not make discovered skills user-global: install every selected skill into the active project through its APM state, then record the relationship and any later real use in workshop memory.
+That does not make discovered skills user-global: keep a new project-owned skill directly in the active project's `.agents/skills/`, or install an independently maintained reusable skill through the project's APM state, then record the relationship and any later real use in workshop memory.
 A project's reproducible skill set must remain usable if this user-level control skill or the workshop checkout is unavailable.
 
 ## Start here
@@ -92,7 +92,7 @@ Inspect a GitHub candidate's complete tree without installing it:
 pixi run workshop preview <owner/repository> <skill-or-path@commit>
 ```
 
-Do not install with ASM, `gh skill`, or Vercel `skills` when APM manages the project.
+Do not install reusable dependencies with ASM, `gh skill`, or Vercel `skills` when APM manages the project.
 Searching or previewing a candidate is not consideration evidence.
 Record a candidate only after the user has directed a decision about it (for example, adopt, defer, or reject), or after it is installed or used.
 Do not create unreviewed memory merely from an agent recommendation:
@@ -109,7 +109,8 @@ Never attribute an agent judgment to the user.
 
 ## Install and audit in a project
 
-APM alone owns the downstream manifest, lock, dependency graph, deployment, update, and drift state.
+APM alone owns the downstream manifest, lock, external dependency graph, deployment, update, and drift state.
+It does not own project-authored skills that live directly under `.agents/skills/`.
 The first command is a preview:
 
 ```console
@@ -120,18 +121,21 @@ pixi run workshop audit <project>
 
 Review the printed APM command and preview before applying.
 Never pass APM `--force` through the workshop.
-Edit canonical skill sources rather than deployed `.agents/skills` copies.
+Edit an external skill in its canonical Git source rather than its APM-deployed `.agents/skills` copy.
 If organization-policy discovery would cause an unwanted login or network lookup in a personal project, explicitly add `--no-policy`; do not make that bypass invisible.
 
-For a project-owned experimental skill, author the canonical tree at `.apm/skills/<name>` and let the root package's `includes: auto` deploy it.
-Do not declare that same tree as a local APM dependency.
+For a project-owned experimental skill, author the canonical tree directly at `.agents/skills/<name>`.
+Do not copy it into `.apm/skills` or declare it as a local APM dependency.
+Do not initialize APM, a lock, or a bootstrap while every skill remains project-owned.
+When the first promoted external dependency is adopted, let the project choose its dependency and agent-agnostic setup mechanism at that time.
 Promote it to an independently sourced dependency only after another project needs it or it requires its own versioned lifecycle.
 
 Before installation, verify that the skill is self-contained.
 Every operating instruction, reference, script, template, and asset needed to use the skill must live inside its skill directory, except for explicitly declared and available tool or package dependencies.
 Do not make `SKILL.md` depend on parent project documentation, absolute host paths, or undeclared sibling skills.
 Project files may be task inputs, but they are not a substitute for portable skill instructions.
-Check links from the canonical tree, deploy with APM, and verify the deployed tree works without reaching back into `.apm/` or elsewhere in the source repository.
+Check links from the canonical tree and verify it works without reaching outside its own skill directory for operating instructions or resources.
+For an external dependency, also verify its APM deployment.
 Read [references/workflow.md](references/workflow.md) for the boundary and verification checklist.
 
 ## Record evidence after real use

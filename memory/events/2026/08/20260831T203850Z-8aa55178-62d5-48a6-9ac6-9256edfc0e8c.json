@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:8aa55178-62d5-48a6-9ac6-9256edfc0e8c",
+  "occurred_at": "2026-08-31T20:38:50Z",
+  "payload": {
+    "resolution_digest": "sha256:8e81eafa4cf2b73bc72a4832e46e8430ba253ec56c76ec12fdb6b0531966a842",
+    "skill_name": "organize-project-docs",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/organize-project-docs",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "cccf7e7f00b954136918d2a04042b9460f7ebe51"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "project-membership"
+}

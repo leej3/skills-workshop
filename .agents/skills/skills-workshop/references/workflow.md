@@ -5,7 +5,8 @@
 | Concern | Authority |
 | --- | --- |
 | Cross-project recall, decisions, use, ratings, evaluations, contributions | Workshop memory |
-| Project dependencies, exact resolution, target deployment, lock, update, audit | APM |
+| Project-owned skill source and history | Project `.agents/skills/` and Git |
+| External dependencies, exact resolution, target deployment, lock, update, audit | APM |
 | GitHub search, preview, source provenance, publication | `gh skill` |
 | Cross-provider catalog search and inspection | ASM |
 | skills.sh and `.well-known` discovery | Vercel `skills` |
@@ -16,7 +17,9 @@
 `skills-workshop` may be installed once in an agent's user-level skill directory so agents can invoke the Workshop whenever a request concerns the skill lifecycle.
 It is a control-plane exception, not a model for installing other skills globally.
 
-Every discovered or created working skill belongs to the active project: APM records its manifest and lock state and deploys it to that project's agent-skill target.
+Every discovered or created working skill belongs to the active project.
+A project-owned experiment lives directly in that project's `.agents/skills/`; an independently maintained reusable dependency is declared, locked, and deployed by APM.
+Do not create empty APM state in anticipation of a future promotion.
 The Workshop records cross-project recall, consideration, membership, and actual-use evidence, but never substitutes for the project's dependency state.
 This keeps a project reproducible without the Workshop and keeps the Workshop from pretending it can recreate a project's dependencies.
 
@@ -41,20 +44,21 @@ A later selection from the presented choices authorizes only that selected path.
 
 ## Project-owned versus reusable skills
 
-Start a project-specific experimental skill under `.apm/skills/<name>/SKILL.md`.
-The root `apm.yml` and `includes: auto` make it a project-owned primitive; do not also list it as a local APM dependency.
-This keeps the experiment reproducible without prematurely making it an independent package.
+Start a project-specific experimental skill under `.agents/skills/<name>/SKILL.md`.
+That tracked tree is both canonical and directly visible to compatible agents; do not duplicate it under `.apm/skills` or list it as a local APM dependency.
+This keeps the experiment usable without a bootstrap and avoids pretending it already has an independent package lifecycle.
 
 Promote the skill to an independent Git/APM dependency when another project needs it or it gains an independently versioned lifecycle.
 After promotion, the source repository owns the skill and each downstream project pins it through APM.
 
-When converting an existing raw local dependency, treat the APM lock and deployed target as generated state with ownership history.
-Verify the canonical tree first, preserve the generated state for recovery, remove the old dependency declaration, move the source, and regenerate the lock and target from `.apm/skills`.
+When converting an APM self-deployed project skill, first reconcile the canonical and deployed trees.
+Choose the reviewed content, make `.agents/skills/<name>` canonical, and remove the `.apm/skills` source and its local deployment ledger.
+If no promoted dependencies remain, remove the APM manifest, lock, bootstrap, and runtime dependency as well.
 Do not use `--force` to paper over mixed old/new owners.
 
 Discovery providers never install into APM-managed paths.
 The workshop never copies APM's dependency graph or lock.
-Deleting the workshop must leave an APM project reproducible; deleting APM state must leave the workshop unable to reconstruct it.
+Deleting the workshop must leave native skills usable and APM dependencies reproducible; deleting project-native and APM state must leave the workshop unable to reconstruct the project.
 
 ## Self-contained skill boundary
 
@@ -75,15 +79,15 @@ In particular, avoid:
 - required guidance stored only beside, rather than inside, the skill;
 - undeclared dependencies on sibling skills or host-installed tools;
 - scripts, templates, or references present in the canonical project but absent from the deployed skill tree;
-- instructions that only work from the canonical `.apm/skills/` location.
+- instructions that only work from a particular repository-relative skill location.
 
 Before installation or promotion:
 
 1. Read the full canonical `SKILL.md` and every resource it requires.
 2. Resolve each local link from the skill directory and confirm the target remains inside that directory.
 3. Validate the canonical tree with the skill validator.
-4. Deploy through APM without editing the generated `.agents/skills/` copy.
-5. Compare the required canonical and deployed resources and run `apm audit`.
+4. For a native project skill, test the tracked `.agents/skills` tree directly.
+5. For an external dependency, deploy through APM, compare required resources, and run `apm audit`.
 6. Treat missing external context as a realistic portability test: the skill should still provide its method, constraints, and workflow.
 
 This boundary applies equally to project-owned experiments and reusable packages.
@@ -92,7 +96,7 @@ Project ownership changes where a skill is versioned, not whether it must be int
 ## Evidence levels
 
 1. **Consideration:** why a candidate was adopted, deferred, rejected, or retired.
-2. **Membership:** APM declared or resolved a skill for a project.
+2. **Membership:** a project tracked a native skill or APM declared or resolved a dependency.
    This does not prove that an agent used it.
 3. **Use:** a skill participated in a real task, with sanitized context, invocation mode, outcome, and optional rating.
 4. **Assessment:** a reproducible compatibility, trust, license, security, quality, or portability check bound to an exact artifact.

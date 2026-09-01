@@ -13,7 +13,7 @@ The workshop is now:
 > invokes the existing tools.
 
 It is not the downstream package manager.
-Every project should keep its own reproducible skill intent and resolution in APM.
+Projects with only project-owned skills need no APM state.
 It is not a public catalog; ASM, `gh skill`, Vercel `skills`, and emerging discovery formats already serve that role.
 It is not the canonical skill editor or runtime; skill content stays in ordinary Git.
 
@@ -48,7 +48,8 @@ Humans and agents use the CLI; Markdown, SQLite, embeddings, or a web interface 
 | Concern | Authority | Workshop behavior |
 | --- | --- | --- |
 | Skill directory format | [Agent Skills](https://agentskills.io/specification) | Preserve portable `SKILL.md` trees; do not add workshop runtime fields |
-| Project dependency intent, exact resolution, lock, targets, deployment, update, and drift | [APM](https://microsoft.github.io/apm/) | Invoke it transparently; store only evidence pointers |
+| Project-owned experimental skill source | Project `.agents/skills/` | Observe membership and use; do not copy the source |
+| External dependency intent, exact resolution, lock, targets, deployment, update, and drift | [APM](https://microsoft.github.io/apm/) | Invoke it transparently; store only evidence pointers |
 | GitHub search, preview, and publication | [`gh skill`](https://cli.github.com/manual/gh_skill) | Use as a discovery/publication provider |
 | Broad cross-provider catalog search | [ASM](https://github.com/luongnv89/asm) | Use machine-readable search; do not let it install into APM paths |
 | skills.sh and domain discovery | [Vercel `skills`](https://github.com/vercel-labs/skills) | Use search and its existing `.well-known` consumer |
@@ -57,8 +58,8 @@ Humans and agents use the CLI; Markdown, SQLite, embeddings, or a web interface 
 
 The invariants are:
 
-1. A project remains reproducible if the workshop disappears.
-2. The workshop cannot recreate a project after its APM manifest and lock are deleted.
+1. Native skills remain usable and external dependencies reproducible if the workshop disappears.
+2. The workshop cannot recreate a project after its native skills, APM manifest, and lock are deleted.
 3. Discovery providers never write into APM-managed target paths.
 4. Search results are not mirrored into a second public catalog; only deliberate consideration creates durable memory.
 5. Every external command, version, working directory, and mutation class is visible before execution.
@@ -68,21 +69,19 @@ The invariants are:
 APM and ASM overlap, so assigning both installation authority would create the very ambiguity this project is meant to prevent.
 
 Use ASM for broad catalog discovery, provider inspection, and optional advisory signals.
-Use APM for every accepted downstream dependency.
+Use APM for every accepted external downstream dependency.
 This preserves ASM's strong human and agent search experience while giving collaborators one project-local `apm.yml` and `apm.lock.yaml`.
 
 This repository now dogfoods that model.
-It pins APM 0.28.0 in Pixi, tracks the canonical `skills-workshop` and `commit-provenance` sources, and asks APM to deploy them to `.agents/skills`.
-The manifest, lock, and deployed ordinary files are project state; the workshop memory merely records that APM resolved the two skills here.
+It tracks project-owned skills once under `.agents/skills` and carries no speculative APM manifest, lock, deployment, or bootstrap.
+The workshop memory records project membership and real use without copying either native source or APM state.
 
-Both skills are project-owned primitives under `.apm/skills`.
-The root manifest's `includes: auto` deploys them without pretending that each experimental tree is already an independent package.
-A skill graduates to a Git/APM dependency when another project needs it or it gains an independent versioned lifecycle.
+A native skill graduates to an independent Git/APM dependency when another project needs it or it gains an independent versioned lifecycle.
 
 Three APM observations shape the current safeguards:
 
 - policy discovery attempted to inspect `leej3/.github-private`, producing an authentication/scope warning even for this personal repository; the human CLI exposes `--no-policy` only as an explicit choice; and
-- `audit --ci` reports a false configuration-consistency failure for the alternative raw local-dependency layout, because it expects a nested `apm.yml`; the adopted root `.apm/skills` layout passes all CI checks; and
+- APM whole-directory drift replay treats native `.agents/skills` files as orphaned because they are intentionally outside its deployment ledger; the project dependency check therefore disables only that replay while retaining lock, ownership, selected-skill, and content-integrity checks; and
 - a positional-package `install --dry-run` can say it would add a package, omit that candidate from the displayed plan, and then say it would install no changes.
   The workshop warns on that contradiction and treats the preview as insufficient approval to apply.
 

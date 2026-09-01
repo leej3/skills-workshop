@@ -123,8 +123,8 @@
         "project_id": {"$ref": "#/$defs/urn_uuid"},
         "repository_commit": {"type": ["string", "null"], "maxLength": 128},
         "dirty": {"type": "boolean"},
-        "manifest_path": {"$ref": "#/$defs/relative_path"},
-        "lock_path": {"$ref": "#/$defs/relative_path"},
+        "manifest_path": {"anyOf": [{"$ref": "#/$defs/relative_path"}, {"type": "null"}]},
+        "lock_path": {"anyOf": [{"$ref": "#/$defs/relative_path"}, {"type": "null"}]},
         "lock_digest": {"type": ["string", "null"], "maxLength": 256},
         "dependency_selector": {"type": ["string", "null"], "maxLength": 1024},
         "command": {
@@ -132,7 +132,7 @@
           "items": {"type": "string"},
           "minItems": 1
         },
-        "apm_version": {"type": "string", "minLength": 1, "maxLength": 128}
+        "apm_version": {"type": ["string", "null"], "minLength": 1, "maxLength": 128}
       },
       "additionalProperties": false
     },
