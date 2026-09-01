@@ -18,7 +18,7 @@
       "locator": "https://github.com/con/skills.git",
       "notes": "",
       "role": "canonical",
-      "subpath": "git-annex-worktrees"
+      "subpath": ".apm/skills/git-annex-worktrees"
     },
     {
       "external_ids": {},
@@ -28,10 +28,10 @@
       "locator": "https://github.com/leej3/skills.git",
       "notes": "Contribution branch codex/git-annex-worktrees",
       "role": "fork",
-      "subpath": "git-annex-worktrees"
+      "subpath": ".apm/skills/git-annex-worktrees"
     }
   ],
   "summary": "Run Git Annex reliably when linked worktree metadata causes incorrect working-tree resolution",
   "tag_ids": [],
-  "updated_at": "2026-09-01T15:54:35Z"
+  "updated_at": "2026-09-01T16:05:08Z"
 }
