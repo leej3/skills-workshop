@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:21b3d09b-09c0-4f08-803e-339ea0e5331b",
+  "occurred_at": "2026-08-30T15:01:41Z",
+  "payload": {
+    "resolution_digest": "sha256:ff47c921422fcc812af01295724adcbef3036b964c1ae9df321f870ed098a274",
+    "skill_name": "lessig-presentations",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/lessig-presentations",
+    "dirty": true,
+    "lock_digest": "sha256:6639b44aaf4662049ec926d9761fba90986405abf8af19dbfc83d062de269180",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ad51298c-d836-4192-9aad-773ca81d39fe",
+    "repository_commit": "69ee3257a68e7999e0f4645efb235b4c17468e8a"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:02ab5753-bae4-4d79-8e04-985f3553ba8d",
+  "type": "project-membership"
+}

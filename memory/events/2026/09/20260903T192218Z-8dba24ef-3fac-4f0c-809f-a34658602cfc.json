@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:8dba24ef-3fac-4f0c-809f-a34658602cfc",
+  "occurred_at": "2026-09-03T19:22:18Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John selected a task-specific blend of C4 abstraction discipline, Mermaid labeling guidance, and render verification for the ORINOCO Lite system diagram."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:833a787f-69bc-4b49-9949-db947ed3d76a",
+  "type": "consideration"
+}

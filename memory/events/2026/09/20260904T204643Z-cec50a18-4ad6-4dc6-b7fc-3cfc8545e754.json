@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:cec50a18-4ad6-4dc6-b7fc-3cfc8545e754",
+  "occurred_at": "2026-09-04T20:46:43Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "Pilot the upstream skill unchanged in orinoco-lite-dev before deciding whether to adapt it."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:42799b0e-d365-4e5f-af53-acb56d5cd460",
+  "type": "consideration"
+}

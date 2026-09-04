@@ -1,0 +1,31 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "xhigh"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:8dfb29ea-3aa2-4fb6-ac85-3be156f29ded",
+  "occurred_at": "2026-08-31T16:54:43Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "The skill kept clone-accurate browser verification local and moved scratch GitHub writes to gh, avoiding action-time browser confirmation while preserving end-to-end release evidence.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "repair and release SHACL popup transport against developer demo"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}

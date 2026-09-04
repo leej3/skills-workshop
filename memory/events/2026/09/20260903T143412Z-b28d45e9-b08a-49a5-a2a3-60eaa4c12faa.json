@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:b28d45e9-b08a-49a5-a2a3-60eaa4c12faa",
+  "occurred_at": "2026-09-03T14:34:12Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John selected adaptation of its density gate, claim inventory, restatement removal, ordering, and ambiguity checks into the existing project-owned organize-project-docs skill; symbolic compression and OMP-specific machinery are excluded."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:965a5ce7-6d52-413d-a3b3-6df3195e180e",
+  "type": "consideration"
+}

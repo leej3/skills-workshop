@@ -1,0 +1,29 @@
+{
+  "aliases": [
+    "asd-ste100-skill"
+  ],
+  "artifacts": [],
+  "created_at": "2026-09-04T20:46:37Z",
+  "extensions": {},
+  "id": "urn:uuid:42799b0e-d365-4e5f-af53-acb56d5cd460",
+  "name": "asd-ste100",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:4472fe4b-8aab-47b0-96fc-fe6ff9ee71d3",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-04T20:46:37Z",
+      "id": "urn:uuid:4472fe4b-8aab-47b0-96fc-fe6ff9ee71d3",
+      "kind": "git",
+      "locator": "https://github.com/danyuchn/asd-ste100-skill.git",
+      "notes": "Pilot source pinned by the project through APM.",
+      "role": "canonical",
+      "subpath": null
+    }
+  ],
+  "summary": "Rewrites ambiguous technical English with ASD-STE100-inspired structural rules while preserving meaning and uncertainty.",
+  "tag_ids": [],
+  "updated_at": "2026-09-04T20:46:37Z"
+}

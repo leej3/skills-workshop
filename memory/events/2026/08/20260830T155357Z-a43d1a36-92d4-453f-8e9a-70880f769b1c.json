@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a43d1a36-92d4-453f-8e9a-70880f769b1c",
+  "occurred_at": "2026-08-30T15:53:57Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John chose to consolidate Lessig narrative planning and source-controlled web deck development into one project skill, with a durable web-versus-PowerPoint format policy."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:02ab5753-bae4-4d79-8e04-985f3553ba8d",
+  "type": "consideration"
+}

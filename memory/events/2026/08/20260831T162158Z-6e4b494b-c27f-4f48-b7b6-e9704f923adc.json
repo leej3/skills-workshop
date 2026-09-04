@@ -1,0 +1,48 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "runtime": "Codex Desktop",
+    "runtime_version": "26.825.51511"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:6e4b494b-c27f-4f48-b7b6-e9704f923adc",
+  "occurred_at": "2026-08-31T16:21:58Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "The consultation identified the user-authored skill and the audit/install guidance kept its adaptation project-owned and reproducible through APM.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Select and apply a project documentation organization skill"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:5bc51f316530d9b3657195f64b8a35a90f0e94a859f230d39a623e868e3e4347",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "0dbc6a4afbc528236f2fac25372d3d31520b1e7d"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "use"
+}

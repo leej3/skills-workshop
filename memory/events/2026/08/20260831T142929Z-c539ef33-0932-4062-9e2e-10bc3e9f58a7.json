@@ -1,0 +1,48 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "runtime": "Codex Desktop",
+    "runtime_version": "26.825.51511"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:c539ef33-0932-4062-9e2e-10bc3e9f58a7",
+  "occurred_at": "2026-08-31T14:29:29Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 5,
+    "rationale": "The workshop audit verified the project skill deployment before canonical skill removal, and the rebuilt frozen APM audit verified the resulting single-skill installation.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Audit and remove provenance-heavy project skill instructions"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:11542c645aa3a640623f8e24f7dd557ec6fcc6333885deb58b63819173981200",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "12d0572ef1fc30c67db6b0f2999aadbb1e86d6a7"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "use"
+}
