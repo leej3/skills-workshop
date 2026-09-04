@@ -135,7 +135,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2c/1a/aff8bb287a4b1400f69e09a53bd65de96aa5cee5691925b38731c67fc695/click_default_group-1.2.4-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3b/87/48a56644104246d58612ee1fd0c7983d43331f5b889e60b75b4a1df02cfc/condense_json-1.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/3e/e0/a289f6256ddd77040bb37094ff78acc4f99a07c63dc1aca28eb72289b5a9/apm_cli-0.28.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/49/64/bbc2184b9a7503887e31eaac274a20485a0a5950604134d8ac720b5d84e3/openai-3.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
@@ -144,6 +143,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/7f/ef/c5345b69d38f84a172e531afb55ff172f90d05087f1d1736e53d6f97cb04/apm_cli-0.29.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8b/c6/979176efdaa3d239e36d503d5af63a0a773b36662ed8f52e5b6a6d9fd40e/propcache-0.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/95/81/314320aeffd88dadeac553ff9eb10f54507ab41deccd0c69f6221d254a0a/puremagic-2.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
@@ -274,7 +274,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/2c/1a/aff8bb287a4b1400f69e09a53bd65de96aa5cee5691925b38731c67fc695/click_default_group-1.2.4-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/30/ba/b0b3de23f40bc55a7057bd38434e25c34fa48e17f20ee273bbde5e0650f3/frozenlist-1.8.0-cp313-cp313-macosx_10_13_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/3b/87/48a56644104246d58612ee1fd0c7983d43331f5b889e60b75b4a1df02cfc/condense_json-1.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/3e/e0/a289f6256ddd77040bb37094ff78acc4f99a07c63dc1aca28eb72289b5a9/apm_cli-0.28.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/49/64/bbc2184b9a7503887e31eaac274a20485a0a5950604134d8ac720b5d84e3/openai-3.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
@@ -286,6 +285,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/6b/65/83d1d05655baf63113731bd5a1008435e14f8d1e5a06cbe4ec5b23ad7a31/propcache-0.5.2-cp313-cp313-macosx_10_13_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/7f/ef/c5345b69d38f84a172e531afb55ff172f90d05087f1d1736e53d6f97cb04/apm_cli-0.29.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/85/83/cdf13902c626b28eedef7ec4f10745c52aad8a8fe7eb04ed7b1f111ca20e/watchdog-6.0.0-cp313-cp313-macosx_10_13_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/91/c0/555fc60473d30d66894ba825e63615e3be7524fac23858356afa7a38906c/jiter-0.16.0-cp313-cp313-macosx_10_12_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/91/cd/41e131f13afd1e7b0172a9d9eda085ef90eb8439f41f0d279db81ed3ae60/aiohttp-3.14.3-cp313-cp313-macosx_10_13_x86_64.whl
@@ -417,7 +417,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/2c/1a/aff8bb287a4b1400f69e09a53bd65de96aa5cee5691925b38731c67fc695/click_default_group-1.2.4-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3b/87/48a56644104246d58612ee1fd0c7983d43331f5b889e60b75b4a1df02cfc/condense_json-1.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3d/86/0a70d3ae2f0f2256bb41302d9804dbca65d4360281e7feb3e1f94102ac46/websockets-16.1.1-cp313-cp313-macosx_11_0_arm64.whl
-      - pypi: https://files.pythonhosted.org/packages/3e/e0/a289f6256ddd77040bb37094ff78acc4f99a07c63dc1aca28eb72289b5a9/apm_cli-0.28.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/49/64/bbc2184b9a7503887e31eaac274a20485a0a5950604134d8ac720b5d84e3/openai-3.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
@@ -427,6 +426,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/79/76/55cd7186f498ed080a18440c9013011eb548f77ae1b297206d030eb1180a/multidict-6.7.1-cp313-cp313-macosx_11_0_arm64.whl
+      - pypi: https://files.pythonhosted.org/packages/7f/ef/c5345b69d38f84a172e531afb55ff172f90d05087f1d1736e53d6f97cb04/apm_cli-0.29.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/95/81/314320aeffd88dadeac553ff9eb10f54507ab41deccd0c69f6221d254a0a/puremagic-2.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl
@@ -3353,41 +3353,6 @@ packages:
   version: 16.1.1
   sha256: cd2ca96a082a36964aca83e992f72abeb61b7306c1a6cba4c7d06a7b93750cac
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/3e/e0/a289f6256ddd77040bb37094ff78acc4f99a07c63dc1aca28eb72289b5a9/apm_cli-0.28.0-py3-none-any.whl
-  name: apm-cli
-  version: 0.28.0
-  sha256: 28682028559dc3e03b4d9d2431eea906f58eacfaa39974657d29646136a4f716
-  requires_dist:
-  - click>=8.0.0
-  - colorama>=0.4.6
-  - pyyaml>=6.0.0
-  - requests>=2.31.0
-  - truststore>=0.10.0
-  - python-frontmatter>=1.0.0
-  - llm>=0.28
-  - llm-github-models>=0.18.0
-  - tomli>=1.2.0 ; python_full_version < '3.11'
-  - toml>=0.10.2
-  - tomlkit>=0.13
-  - rich>=13.0.0
-  - rich-click>=1.7.0
-  - watchdog>=3.0.0
-  - gitpython>=3.1.0
-  - ruamel-yaml>=0.18.0
-  - filelock>=3.12
-  - websockets>=12,<17
-  - pytest>=7.0.0 ; extra == 'dev'
-  - pytest-cov>=4.0.0 ; extra == 'dev'
-  - pytest-xdist>=3.0.0 ; extra == 'dev'
-  - pytest-split>=0.9.0 ; extra == 'dev'
-  - ruff>=0.11.0 ; extra == 'dev'
-  - mypy>=1.0.0 ; extra == 'dev'
-  - jsonschema>=4.0.0 ; extra == 'dev'
-  - pylint>=3.0.0 ; extra == 'dev'
-  - hypothesis>=6.0.0 ; extra == 'dev'
-  - mutmut==3.6.0 ; extra == 'dev'
-  - pyinstaller>=6.0.0 ; extra == 'build'
-  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl
   name: toml
   version: 0.10.2
@@ -3513,6 +3478,41 @@ packages:
   requires_dist:
   - typing-extensions>=4.1.0 ; python_full_version < '3.11'
   requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/7f/ef/c5345b69d38f84a172e531afb55ff172f90d05087f1d1736e53d6f97cb04/apm_cli-0.29.0-py3-none-any.whl
+  name: apm-cli
+  version: 0.29.0
+  sha256: 77160193efdddf64d733b5a70ec4f4ee6af075da89ad82c1fcab57186696c9f6
+  requires_dist:
+  - click>=8.0.0
+  - colorama>=0.4.6
+  - pyyaml>=6.0.0
+  - requests>=2.31.0
+  - truststore>=0.10.0
+  - python-frontmatter>=1.0.0
+  - llm>=0.28
+  - llm-github-models>=0.18.0
+  - tomli>=1.2.0 ; python_full_version < '3.11'
+  - toml>=0.10.2
+  - tomlkit>=0.13
+  - rich>=13.0.0
+  - rich-click>=1.7.0
+  - watchdog>=3.0.0
+  - gitpython>=3.1.0
+  - ruamel-yaml>=0.18.0
+  - filelock>=3.12
+  - websockets>=12,<17
+  - pytest>=7.0.0 ; extra == 'dev'
+  - pytest-cov>=4.0.0 ; extra == 'dev'
+  - pytest-xdist>=3.0.0 ; extra == 'dev'
+  - pytest-split>=0.9.0 ; extra == 'dev'
+  - ruff>=0.11.0 ; extra == 'dev'
+  - mypy>=1.0.0 ; extra == 'dev'
+  - jsonschema>=4.0.0 ; extra == 'dev'
+  - pylint>=3.0.0 ; extra == 'dev'
+  - hypothesis>=6.0.0 ; extra == 'dev'
+  - mutmut==3.6.0 ; extra == 'dev'
+  - pyinstaller>=6.0.0 ; extra == 'build'
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/85/83/cdf13902c626b28eedef7ec4f10745c52aad8a8fe7eb04ed7b1f111ca20e/watchdog-6.0.0-cp313-cp313-macosx_10_13_x86_64.whl
   name: watchdog
   version: 6.0.0

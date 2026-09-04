@@ -124,9 +124,10 @@ pixi run workshop install owner/repository --project ../project --apply
 pixi run workshop audit ../project
 ```
 
-APM 0.28.0 currently emits contradictory output for some positional-package dry runs: it announces a package addition, omits the candidate from the plan, then says nothing would change.
+APM 0.29.0 still emits contradictory output for some positional-package dry runs: it announces a package addition, omits the candidate from the plan, then says nothing would change.
 The wrapper detects and warns about that specific contradiction.
-Defer the apply when it appears; the preview is not a sound approval artifact.
+The upstream fix merged after 0.29.0 in [microsoft/apm#2664](https://github.com/microsoft/apm/pull/2664); retain the guard until a release containing it is pinned.
+Defer the apply when the warning appears; the preview is not a sound approval artifact.
 
 APM may discover organization policy from the repository remote and therefore perform a network/authentication check.
 The workshop exposes `--no-policy` as an explicit personal-project choice; it never silently adds the bypass.

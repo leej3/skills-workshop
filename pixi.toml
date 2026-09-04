@@ -50,4 +50,4 @@ hooks-install = "pre-commit install"
 validate = { depends-on = ["lint", "check-format", "compile", "test", "validate-metadata", "memory-validate"] }
 
 [pypi-dependencies]
-apm-cli = "==0.28.0"
+apm-cli = "==0.29.0"
