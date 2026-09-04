@@ -51,6 +51,23 @@ This keeps the experiment usable without a bootstrap and avoids pretending it al
 Promote the skill to an independent Git/APM dependency when another project needs it or it gains an independently versioned lifecycle.
 After promotion, the source repository owns the skill and each downstream project pins it through APM.
 
+### Upstream APM packaging gate
+
+A selected reusable source must publish the skill as a valid APM package before any downstream declares it.
+Packaging belongs with the reusable source, not as a compensating layer in each consumer.
+
+When a selected source lacks APM packaging:
+
+1. Stop before creating or editing downstream APM state.
+2. Add the smallest valid source-owned APM package that publishes the selected skill from its canonical tree.
+3. Validate that package by installing it into an isolated temporary consumer, checking the deployed skill, and running `apm audit`.
+4. Contribute the packaging to the canonical source.
+   Use a maintained fork only when the canonical repository cannot accept the change.
+5. Install downstream only from the reviewed APM-ready source and ref.
+
+Do not treat APM's ability to import an arbitrary raw skill subdirectory as a substitute for upstream packaging.
+A monorepo package subpath is acceptable only when that subpath is itself an intentional source-owned APM package.
+
 When converting an APM self-deployed project skill, first reconcile the canonical and deployed trees.
 Choose the reviewed content, make `.agents/skills/<name>` canonical, and remove the `.apm/skills` source and its local deployment ledger.
 If no promoted dependencies remain, remove the APM manifest, lock, bootstrap, and runtime dependency as well.

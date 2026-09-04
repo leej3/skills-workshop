@@ -111,6 +111,9 @@ Never attribute an agent judgment to the user.
 
 APM alone owns the downstream manifest, lock, external dependency graph, deployment, update, and drift state.
 It does not own project-authored skills that live directly under `.agents/skills/`.
+Before touching downstream APM state, require the selected reusable source at the intended ref to be a valid APM package that publishes the selected skill.
+Do not use a raw skill directory, virtual-subdirectory import, or downstream manifest workaround to compensate for missing upstream packaging.
+When the source is not APM-ready, improve the canonical repository first; if that is not possible, use a deliberate maintained fork and offer the packaging change upstream.
 The first command is a preview:
 
 ```console
@@ -135,7 +138,7 @@ Every operating instruction, reference, script, template, and asset needed to us
 Do not make `SKILL.md` depend on parent project documentation, absolute host paths, or undeclared sibling skills.
 Project files may be task inputs, but they are not a substitute for portable skill instructions.
 Check links from the canonical tree and verify it works without reaching outside its own skill directory for operating instructions or resources.
-For an external dependency, also verify its APM deployment.
+For an external dependency, install its package into an isolated temporary consumer, confirm the selected skill is deployed, and run `apm audit` before changing the real downstream.
 Read [references/workflow.md](references/workflow.md) for the boundary and verification checklist.
 
 ## Record evidence after real use

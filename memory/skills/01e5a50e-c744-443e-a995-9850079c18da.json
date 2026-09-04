@@ -1,0 +1,37 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-01T15:54:35Z",
+  "extensions": {},
+  "id": "urn:uuid:01e5a50e-c744-443e-a995-9850079c18da",
+  "name": "git-annex-worktrees",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:7986b871-d38d-4012-9857-43e6b13c57c3",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-01T15:54:35Z",
+      "id": "urn:uuid:7986b871-d38d-4012-9857-43e6b13c57c3",
+      "kind": "git",
+      "locator": "https://github.com/con/skills.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".apm/skills/git-annex-worktrees"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-01T15:54:35Z",
+      "id": "urn:uuid:f5a33295-cc49-4108-90cb-f95c15004b59",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills.git",
+      "notes": "Contribution branch codex/git-annex-worktrees",
+      "role": "fork",
+      "subpath": ".apm/skills/git-annex-worktrees"
+    }
+  ],
+  "summary": "Run Git Annex reliably when linked worktree metadata causes incorrect working-tree resolution",
+  "tag_ids": [],
+  "updated_at": "2026-09-01T16:05:08Z"
+}

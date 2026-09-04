@@ -1,0 +1,33 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "light",
+    "runtime": "Codex Desktop",
+    "runtime_version": "26.825.51511"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a1a1425b-8b4b-4704-b455-7e28c4511e3d",
+  "occurred_at": "2026-09-01T15:54:54Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "manual-only",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Canonical Git paths restored the Annex operation without persistent repository configuration changes",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Verified a scoped Git Annex workaround in a linked-worktree submodule"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:01e5a50e-c744-443e-a995-9850079c18da",
+  "type": "use"
+}
