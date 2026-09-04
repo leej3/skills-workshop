@@ -1,0 +1,43 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:28a08d26-f576-40aa-ab10-53ceef7c3c60",
+  "occurred_at": "2026-09-03T14:35:58Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "The density gate, load-bearing-claim inventory, canonical-placement rule, and ambiguity stop condition improved the project skill; symbolic prose and tool-specific machinery were intentionally excluded.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Adapt conservative semantic-compression principles into the Orinoco Lite project documentation lifecycle skill"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "b852d17236e1271840549babbad6a5512c1587c7"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:965a5ce7-6d52-413d-a3b3-6df3195e180e",
+  "type": "use"
+}

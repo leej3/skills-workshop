@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-03T14:34:12Z",
+  "extensions": {},
+  "id": "urn:uuid:965a5ce7-6d52-413d-a3b3-6df3195e180e",
+  "name": "semantic-compression-oh-my-pi",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:e31dccbe-ce3c-4a77-8b0a-61378ad0a2e9",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-03T14:34:12Z",
+      "id": "urn:uuid:e31dccbe-ce3c-4a77-8b0a-61378ad0a2e9",
+      "kind": "git",
+      "locator": "https://github.com/can1357/oh-my-pi.git",
+      "notes": "Consulted at 2478cb363dae02cffaded5e659da227276323d52; selected only as an adaptation source, not for installation.",
+      "role": "canonical",
+      "subpath": ".omp/skills/semantic-compression"
+    }
+  ],
+  "summary": "Re-encode dense instructions while preserving load-bearing claims; includes a density gate, payload inventory, terminology framing, and loss verification.",
+  "tag_ids": [],
+  "updated_at": "2026-09-03T14:34:12Z"
+}

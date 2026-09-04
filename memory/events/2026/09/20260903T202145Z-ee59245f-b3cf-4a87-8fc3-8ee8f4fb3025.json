@@ -1,0 +1,43 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:ee59245f-b3cf-4a87-8fc3-8ee8f4fb3025",
+  "occurred_at": "2026-09-03T20:21:45Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "full-description",
+    "outcome": "success",
+    "rating": 3,
+    "rationale": "Useful for document placement and deduplication, but repeated authority framing biased a conceptual design review toward operational and security boundaries. The project-owned skill was narrowed to favor the smallest accurate human mental model.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Refine a project design charter and audit documentation skill separation of concerns"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "d86c4c6e619e92745ae0632da5d62c6f073f83c0"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}

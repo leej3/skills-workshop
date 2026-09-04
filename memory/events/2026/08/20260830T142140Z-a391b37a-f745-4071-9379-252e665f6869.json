@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "root",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a391b37a-f745-4071-9379-252e665f6869",
+  "occurred_at": "2026-08-30T14:21:40Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 5,
+    "rationale": "The skill directly shaped the one-beat-per-screen structure, tempo variation, quiet technical definitions, recovery points, source-aware speaker notes, transcript, and complete 88-screen render audit.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Restructure the Research Objects with AI talk into a complete Lessig-style web deck, transcript, timing plan, and visual QA contact sheet"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:02ab5753-bae4-4d79-8e04-985f3553ba8d",
+  "type": "use"
+}

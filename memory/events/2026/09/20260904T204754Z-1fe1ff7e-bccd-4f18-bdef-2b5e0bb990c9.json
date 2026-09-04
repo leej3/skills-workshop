@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.28.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:1fe1ff7e-bccd-4f18-bdef-2b5e0bb990c9",
+  "occurred_at": "2026-09-04T20:47:54Z",
+  "payload": {
+    "resolution_digest": "sha256:ec06e79525d9af6b94609782c11fd7b1b8026bfdeb113705c893680fefef39bf",
+    "skill_name": "asd-ste100",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.28.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": "danyuchn/asd-ste100-skill#skill=asd-ste100",
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "8f9f53ef27a6bd095cb52d687ca190d2f7210c8d"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:42799b0e-d365-4e5f-af53-acb56d5cd460",
+  "type": "project-membership"
+}

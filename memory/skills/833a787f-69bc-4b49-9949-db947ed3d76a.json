@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-03T19:22:18Z",
+  "extensions": {},
+  "id": "urn:uuid:833a787f-69bc-4b49-9949-db947ed3d76a",
+  "name": "explain-orinoco-system",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:1aa23acf-6111-4427-b7aa-6e4e17837af6",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-03T19:22:18Z",
+      "id": "urn:uuid:1aa23acf-6111-4427-b7aa-6e4e17837af6",
+      "kind": "local",
+      "locator": "/Users/johnlee/code/CON/orinoco-lite-dev/.agents/skills/explain-orinoco-system",
+      "notes": "",
+      "role": "canonical",
+      "subpath": null
+    }
+  ],
+  "summary": "Create clear ORINOCO and Orinoco Lite system diagrams by separating abstraction levels, using grammatical component relationships, and verifying rendered Mermaid output.",
+  "tag_ids": [],
+  "updated_at": "2026-09-03T19:22:18Z"
+}
