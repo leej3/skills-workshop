@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T19:21:40Z",
+  "extensions": {},
+  "id": "urn:uuid:a86c449d-0a02-413f-967c-ee0780ee6594",
+  "name": "swiftui-expert-skill",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:b9c43f90-a8a2-4bd4-a23a-3c4e3ba607b3",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T19:21:40Z",
+      "id": "urn:uuid:b9c43f90-a8a2-4bd4-a23a-3c4e3ba607b3",
+      "kind": "git",
+      "locator": "https://github.com/AvdLee/SwiftUI-Agent-Skill.git",
+      "notes": "",
+      "role": "discovery",
+      "subpath": "skills/swiftui-expert-skill"
+    }
+  ],
+  "summary": "SwiftUI state, composition, accessibility, and native API guidance.",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T19:21:40Z"
+}

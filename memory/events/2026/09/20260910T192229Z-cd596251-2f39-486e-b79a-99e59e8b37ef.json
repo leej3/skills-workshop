@@ -1,0 +1,44 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:cd596251-2f39-486e-b79a-99e59e8b37ef",
+  "occurred_at": "2026-09-10T19:22:29Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 4,
+    "rationale": "Mac build succeeded and knowledge screen was inspected; iPhone build is deferred without Xcode.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Built shared native SwiftUI practice, knowledge, feedback, and progress screens."
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:aad45e62b6a6f0fb881d3488c926cf4e5138904762dce901961fd984348b1021",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ef19bac8-7124-49c5-8bb3-a3e609569579",
+    "repository_commit": null
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a86c449d-0a02-413f-967c-ee0780ee6594",
+  "type": "use"
+}

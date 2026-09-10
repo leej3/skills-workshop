@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T19:21:40Z",
+  "extensions": {},
+  "id": "urn:uuid:51b724be-af82-4537-a5c0-47cba360f146",
+  "name": "author-training-knowledge",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:60ea90fd-1f31-401b-b855-747ef998c28b",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T19:21:40Z",
+      "id": "urn:uuid:60ea90fd-1f31-401b-b855-747ef998c28b",
+      "kind": "local",
+      "locator": "/Users/johnlee/code/CON/cognition-trainer/.apm/skills/author-training-knowledge",
+      "notes": "",
+      "role": "discovery",
+      "subpath": null
+    }
+  ],
+  "summary": "Author sourced concepts and cross-category fictional scenarios for Cognition Trainer.",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T19:21:40Z"
+}

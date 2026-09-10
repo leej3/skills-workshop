@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.29.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:997547fe-c3d1-43f2-bc3c-afb645446b95",
+  "occurred_at": "2026-09-10T19:22:05Z",
+  "payload": {
+    "resolution_digest": "sha256:ce0388855d285e647e22a2c5eee348f76894a75d26d3a7b284de7fe770165330",
+    "skill_name": "organize-project-docs",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": "orinoco-lite/orinoco-lite-dev",
+    "dirty": true,
+    "lock_digest": "sha256:aad45e62b6a6f0fb881d3488c926cf4e5138904762dce901961fd984348b1021",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ef19bac8-7124-49c5-8bb3-a3e609569579",
+    "repository_commit": null
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "project-membership"
+}
