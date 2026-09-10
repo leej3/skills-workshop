@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:9d5a1776-4f97-42bd-bbb2-e1da21161f59",
+  "occurred_at": "2026-09-10T20:40:34Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Core lifecycle and persistence checks pass.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Implement depth changes and assisted practice records"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa01636f-0e83-4477-a434-98879673909e",
+  "type": "use"
+}

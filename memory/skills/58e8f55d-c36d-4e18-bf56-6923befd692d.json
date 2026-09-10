@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T20:38:41Z",
+  "extensions": {},
+  "id": "urn:uuid:58e8f55d-c36d-4e18-bf56-6923befd692d",
+  "name": "design-learning-ux",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:0fb11731-cb70-46fa-ad38-20c83d1cb558",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T20:38:41Z",
+      "id": "urn:uuid:0fb11731-cb70-46fa-ad38-20c83d1cb558",
+      "kind": "local",
+      "locator": "/Users/johnlee/code/CON/cognition-trainer/.apm/skills/design-learning-ux",
+      "notes": "",
+      "role": "canonical",
+      "subpath": null
+    }
+  ],
+  "summary": "Project learning UX guidance for autonomy, depth, narrative feedback and editorial reporting",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T20:38:41Z"
+}

@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:52398422-cf50-4f07-9242-4a042cebe169",
+  "occurred_at": "2026-09-10T20:40:34Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 4,
+    "rationale": "Mac build and native flow verified; iPhone validation deferred with Xcode.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Implement and inspect native navigation and review screens"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a86c449d-0a02-413f-967c-ee0780ee6594",
+  "type": "use"
+}

@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T20:36:33Z",
+  "extensions": {},
+  "id": "urn:uuid:321ef532-152b-4c54-acc7-5ac25a1afa24",
+  "name": "ui-ux-pro-max",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:aaf59e0e-2c0c-4f67-a54d-fa40f1fb6506",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T20:36:33Z",
+      "id": "urn:uuid:aaf59e0e-2c0c-4f67-a54d-fa40f1fb6506",
+      "kind": "git",
+      "locator": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".claude/skills/ui-ux-pro-max"
+    }
+  ],
+  "summary": "Searchable visual, interface and native accessibility guidance",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T20:36:33Z"
+}

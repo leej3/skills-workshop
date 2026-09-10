@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T20:38:41Z",
+  "extensions": {},
+  "id": "urn:uuid:1803a3ff-2beb-4b9e-81e5-e9fefbfeb55c",
+  "name": "ui-ux-designer",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:5a544ae5-df43-4e06-9d1e-dd794bb49c04",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T20:38:41Z",
+      "id": "urn:uuid:5a544ae5-df43-4e06-9d1e-dd794bb49c04",
+      "kind": "git",
+      "locator": "https://github.com/sickn33/antigravity-awesome-skills",
+      "notes": "",
+      "role": "canonical",
+      "subpath": "skills/ui-ux-designer"
+    }
+  ],
+  "summary": "UX structure, interaction and accessibility design guidance",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T20:38:41Z"
+}
