@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:fcab3af4-c18c-4d55-9122-459b4cca9a2e",
+  "occurred_at": "2026-09-17T14:47:11Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "open",
+    "summary": "Reference-based AMI benchmark workflow with DataLad storage and retained accuracy/performance baseline.",
+    "url": "https://github.com/leej3/video-transcriber/pull/2"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "contribution"
+}

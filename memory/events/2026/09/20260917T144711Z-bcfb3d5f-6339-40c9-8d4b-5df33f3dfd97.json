@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "John Lee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:bcfb3d5f-6339-40c9-8d4b-5df33f3dfd97",
+  "occurred_at": "2026-09-17T14:47:11Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "merged",
+    "summary": "John merged the portable transcription skill and CLI baseline.",
+    "url": "https://github.com/leej3/video-transcriber/pull/1"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "contribution"
+}
