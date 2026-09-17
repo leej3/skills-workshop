@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John Lee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:3108a097-9633-4268-ba1c-019edb5752db",
+  "occurred_at": "2026-09-17T13:51:34Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John selected CON REUSE after discovery consultation for MIT project licensing."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:54d36ad3-0fa2-4b93-97a1-dfb70ad53003",
+  "type": "consideration"
+}

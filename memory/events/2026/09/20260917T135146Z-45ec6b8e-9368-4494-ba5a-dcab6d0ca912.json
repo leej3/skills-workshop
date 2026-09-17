@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:45ec6b8e-9368-4494-ba5a-dcab6d0ca912",
+  "occurred_at": "2026-09-17T13:51:46Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Selective clone/get succeeded with project-local Pixi and the Apple Silicon PyPI git-annex wheel; source revisions and SHA256 recorded.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Inspect ReproTube metadata and retrieve one archived DataLad speech recording for a local inference smoke test."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "type": "use"
+}

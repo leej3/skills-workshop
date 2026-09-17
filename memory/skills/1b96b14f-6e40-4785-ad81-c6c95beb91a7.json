@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-17T13:51:34Z",
+  "extensions": {},
+  "id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "name": "datalad",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:0b98ad05-e4ce-43ce-8df6-6104dd002cc0",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-17T13:51:34Z",
+      "id": "urn:uuid:0b98ad05-e4ce-43ce-8df6-6104dd002cc0",
+      "kind": "git",
+      "locator": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "notes": "",
+      "role": "canonical",
+      "subpath": "skills/datalad"
+    }
+  ],
+  "summary": "Retrieve scientific datasets selectively and record provenance with DataLad and git-annex.",
+  "tag_ids": [],
+  "updated_at": "2026-09-17T13:51:34Z"
+}

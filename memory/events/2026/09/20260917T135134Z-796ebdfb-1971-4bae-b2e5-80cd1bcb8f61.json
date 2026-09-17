@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John Lee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:796ebdfb-1971-4bae-b2e5-80cd1bcb8f61",
+  "occurred_at": "2026-09-17T13:51:34Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John selected K-Dense DataLad as the final choice after comparing focused NiPreps alternatives."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "type": "consideration"
+}

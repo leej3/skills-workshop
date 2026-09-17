@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-09T14:09:16Z",
+  "extensions": {},
+  "id": "urn:uuid:54d36ad3-0fa2-4b93-97a1-dfb70ad53003",
+  "name": "introduce-reuse-compliance",
+  "notes": "The selected project candidate was discovered in the registered con-skills source.",
+  "preferred_source_id": "urn:uuid:b0eb1368-b067-4cd4-807c-f7510219e1e3",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-09T14:09:16Z",
+      "id": "urn:uuid:b0eb1368-b067-4cd4-807c-f7510219e1e3",
+      "kind": "git",
+      "locator": "https://github.com/con/skills.git",
+      "notes": "Adopted at pinned revision 512e58d193d22a29ba37df26a25321b695890384 from the registered fork checkout.",
+      "role": "canonical",
+      "subpath": "introduce-reuse-compliance"
+    }
+  ],
+  "summary": "Introduce REUSE specification compliance with LICENSES, REUSE.toml, SPDX annotations, validation, pre-commit, and CI integration.",
+  "tag_ids": [],
+  "updated_at": "2026-09-09T14:09:16Z"
+}
