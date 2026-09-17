@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:dbd322e3-61fb-4776-9d4f-8df2e620f077",
+  "occurred_at": "2026-09-17T14:36:04Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Public source URLs and SHA256 pins support retrieval; separate DataLad dataset preserves references and run evidence without source-repository media bloat.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Build pinned AMI reference fixtures and annex all raw sources, derived media, and benchmark outputs outside the source repository."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "type": "use"
+}

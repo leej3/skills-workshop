@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:2d45d8be-e7b0-4f6d-84e1-c50e45139222",
+  "occurred_at": "2026-09-17T14:36:22Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "open",
+    "summary": "Portable transcription skill and CLI with guided setup, MIT licensing, pinned DataLad tooling, and real inference evidence.",
+    "url": "https://github.com/leej3/video-transcriber/pull/1"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "contribution"
+}
