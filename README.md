@@ -94,6 +94,8 @@ Only after consuming a promoted external skill should a project choose dependenc
 
 Search local memory and every registered, checked-out upstream source first.
 Memory search includes aliases, source locations, prior task summaries, outcomes, and rationales.
+### Local catalogs
+
 The following catalogs are included as pinned Git submodules and searched locally:
 
 | Skill source | Focus |
@@ -107,6 +109,39 @@ The following catalogs are included as pinned Git submodules and searched locall
 [registry.toml](registry.toml) lists their checkout locations and upstream URLs.
 These are discovery sources; individual skills are installed only when selected for a project.
 For an existing checkout, run `git submodule update --init --recursive` after pulling to initialize newly added catalogs.
+
+### Public discovery tools
+
+A normal `workshop find` searches memory, the local catalogs above, and configured installed-skill directories, then queries all three public discovery tools:
+
+| Tool | How Workshop uses it | Select just this provider |
+| --- | --- | --- |
+| [ASM (Agent Skill Manager)](https://github.com/luongnv89/asm) | Cross-provider catalog search through `agent-skill-manager search --available --machine` | `--provider asm` |
+| [Vercel `skills`](https://github.com/vercel-labs/skills) | Public candidate discovery through `skills find` | `--provider vercel` |
+| [GitHub `gh skill`](https://cli.github.com/manual/gh_skill) | GitHub skill search; `workshop preview` also delegates whole-tree candidate preview | `--provider github` |
+
+These tools expand discovery beyond the five checked-out catalogs.
+ASM and Vercel run through version-pinned `npx` commands; GitHub discovery uses the Pixi-managed `gh` CLI.
+Workshop uses these integrations for discovery and preview, while accepted external project dependencies are installed through APM.
+GitHub publication and Vercel's broader source support are available in the underlying tools; the current Workshop CLI does not wrap publication or implement its own `.well-known` crawler.
+
+### Other tools in the skill workflow
+
+| Tool | Role in this project | Entry point |
+| --- | --- | --- |
+| [Microsoft APM](https://microsoft.github.io/apm/) | External project skill dependencies: installation preview/apply and audit; Workshop also reads manifests and locks for membership evidence | `workshop install`, `workshop audit`, `workshop project scan` |
+| Git | Pins catalog revisions as submodules, manages upstream/fork history, and versions skills and Workshop memory | `configure-upstreams`, `upstream-status`, `upstream-update` |
+| Pixi | Provides the reproducible runtime and commands for the skill workflow, including Python, Node, GitHub CLI, and APM | `pixi install --locked`, `pixi run workshop doctor` |
+| `fzf` (optional, separately installed) | Interactive filtering of exported skill candidates; selecting a result does not install it | Pipe `workshop find --offline --tsv` output into `fzf` |
+| VisiData | Interactive browsing of generated skill inventory and trust-signal tables | `pixi run inventory-vd`, `pixi run trust-vd` |
+| Textual | Terminal interface for the retained project-skill import/reconciliation prototype | `pixi run import-project --help` |
+| Workshop CLI and control skills | Cross-project recall, source identity, observations, contribution links, and evaluation scaffolds; `skills-workshop` guides discovery and `workshop-feedback` guides post-task recording | `workshop recall`, `feedback`, `insights`, `contribution`, `eval` |
+
+The retained prototype also provides `inventory`, `skill-status`, `link-core`, `apply-bundle`, `import-project`, backup cleanup, and legacy metadata migration/validation. Its copy/link/reconciliation operations are optional experiments, not the default APM dependency workflow.
+`trust-inventory` and `review-skill` expose source signals and recorded review state; they do not establish that a skill is safe or effective.
+Tools discussed only in the research notes, such as SkillNote and SkillPort, are not active integrations.
+
+### Search and recall examples
 
 Local discovery searches full `SKILL.md` contents and configured installed skill roots as well as names and descriptions.
 Ranking favors meaningful query coverage and specific matches, tolerates minor typos, and explains its matches.
