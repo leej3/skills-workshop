@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "7565d8d2be5b640e719ec92c3dbcaeb4d79d162a",
+      "scope": "SKILL.md only",
+      "sha256": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3"
+    },
+    "skills-workshop/session": "01a0b5e1-a027-76d2-b98a-c31f07eeafd9"
+  },
+  "id": "urn:uuid:8efec587-96da-4e2e-9880-82e7a7afa9e3",
+  "occurred_at": "2026-09-18T20:37:35Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Separated the concise reviewer model and diagrams from report contracts, decision matching, and delivery sequencing.",
+    "task_summary": "Split diff review description from build specification"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "7565d8d2be5b640e719ec92c3dbcaeb4d79d162a"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}
