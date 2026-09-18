@@ -1,0 +1,35 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "65f4a606b5ec8e564d6d9782254b34c2bb2ce0a573e9349fb46b1173449c72fa"
+    },
+    "skills-workshop/session": "01a084e8-00e9-78f0-bb1d-f96b09beb09b"
+  },
+  "id": "urn:uuid:11ffe167-84de-4985-9a1c-a2e0e2b0d351",
+  "occurred_at": "2026-09-18T17:09:37Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Rendering and visually inspecting every page complemented text extraction by confirming that the complete revised abstract fit without clipping or overflow.",
+    "task_summary": "Rebuild a revised conference abstract PDF"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:53fc2e6a-a413-48bc-81e9-fbe9fd9b019a",
+  "type": "use"
+}
