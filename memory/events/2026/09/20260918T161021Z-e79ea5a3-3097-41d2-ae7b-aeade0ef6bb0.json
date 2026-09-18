@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/leej3/skills-workshop-slides"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "e0d28835f8ada4ef5f41ab0425dd818d9c9ab9a66a8e47df2cee5add15cce32f"
+    },
+    "skills-workshop/session": "01a0b51f-dbb0-7d03-8516-f946ae68b5a3"
+  },
+  "id": "urn:uuid:e79ea5a3-3097-41d2-ae7b-aeade0ef6bb0",
+  "occurred_at": "2026-09-18T16:10:21Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "The presentation guidance kept claims attributed, source links visible, and the six-slide narrative focused on a real demo. Its PowerPoint-specific generation instructions did not apply to the requested web format.",
+    "task_summary": "Create a public browser presentation for Skills Workshop"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:ede375ce-27ef-4c5d-a17e-704322ca4dc7",
+  "type": "use"
+}
