@@ -1,0 +1,45 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/session": "01a0b644-c08d-7430-a23a-c78f753ec957"
+  },
+  "id": "urn:uuid:51fe07fa-e505-48ae-9d93-700356e55c35",
+  "occurred_at": "2026-09-18T21:07:35Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Anchored transformation and comparison arrows to proposed CLI commands while keeping human review actions conceptual and separating RDF diagnostics from website generation.",
+    "task_summary": "Restore CLI verbs to metadata flow diagrams"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "c2a95c55e3b3cb3e951a24a1bf9d11af682a51bd"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}
