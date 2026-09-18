@@ -93,7 +93,21 @@ Only after consuming a promoted external skill should a project choose dependenc
 ## Find and remember skills
 
 Search local memory and every registered, checked-out upstream source first.
-This includes aliases, source locations, prior task summaries, outcomes, and rationales, plus all registered source trees: K-Dense, NiPreps, `con/skills`, Anthropic, and OpenAI.
+Memory search includes aliases, source locations, prior task summaries, outcomes, and rationales.
+The following catalogs are included as pinned Git submodules and searched locally:
+
+| Skill source | Focus |
+| --- | --- |
+| [OpenAI skills](https://github.com/openai/skills) | Codex skill catalog, including curated and experimental workflows |
+| [Anthropic skills](https://github.com/anthropics/skills) | Creative, document, and developer workflow examples |
+| [K-Dense scientific skills](https://github.com/K-Dense-AI/scientific-agent-skills) | Scientific tools and research workflows |
+| [NiPreps skills](https://github.com/nipreps/skills-comm) | Neuroimaging workflows and operational guidance |
+| [CON skills](https://github.com/con/skills) | Software maintenance, triage, and automation |
+
+[registry.toml](registry.toml) lists their checkout locations and upstream URLs.
+These are discovery sources; individual skills are installed only when selected for a project.
+For an existing checkout, run `git submodule update --init --recursive` after pulling to initialize newly added catalogs.
+
 Local discovery searches full `SKILL.md` contents and configured installed skill roots as well as names and descriptions.
 Ranking favors meaningful query coverage and specific matches, tolerates minor typos, and explains its matches.
 Recall results include recent outcomes and caveats with their assertion and review status.
