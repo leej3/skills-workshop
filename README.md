@@ -3,6 +3,46 @@
 This repository is a Git-backed, source-agnostic memory of skills encountered across projects.
 It remembers where a skill came from, why it was considered, where it was declared or actually used, how it worked, and whether it was evaluated or improved upstream.
 
+## Quickstart (Codex, macOS or Linux)
+
+With Git and Pixi installed:
+
+```console
+git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
+cd skills-workshop
+pixi install --locked
+pixi run configure-upstreams
+pixi run setup-agent
+pixi run setup-agent --apply
+pixi run workshop doctor
+```
+
+`setup-agent` previews the changes; `--apply` installs the complete agent workflow:
+
+- **Discover and adopt:** links `skills-workshop` into your user-level skill directory.
+- **Learn from use:** links `workshop-feedback` and configures this checkout as its memory destination.
+- **Connect the two:** adds a small marked block to your global Codex `AGENTS.md` instructing the agent to use discovery and record feedback after meaningful skill use.
+
+The setup preserves unrelated instructions and configuration, reuses existing links, and refuses conflicting installations.
+Keep this checkout at its installed location: both skills link to its maintained sources.
+No runtime hooks, working skills, or uploads are enabled by setup.
+For your own ongoing history, use a fork or private copy; existing memory is the maintainer's recorded experience, not evidence of your own use.
+
+Start a new Codex task in the project you want to work on, then ask:
+
+> Use $skills-workshop to find a skill for reviewing this project's releases.
+
+After a skill participates in the work, the agent uses `workshop-feedback` to retain a short observation; you do not need to request a rating each time.
+To check that the two halves are working, ask:
+
+> Use $skills-workshop to recall which skills helped with release reviews.
+
+From this checkout, `pixi run workshop insights --since YYYY-MM-DD` shows recorded outcomes and proposed improvements.
+For other agents, install both control directories in that host's user-level skill location, configure the checkout as described under [feedback](#lightweight-feedback-across-projects), and add the equivalent post-task instruction to that host's global guidance.
+The automated setup currently targets Codex.
+
+## How it fits together
+
 `skills-workshop` and `workshop-feedback` may be installed as user-level agent control skills.
 That installation routes skill-lifecycle requests through this repository; it does not make the skills it discovers user-global.
 Each project-owned experimental skill lives directly in that project's `.agents/skills/` tree.
@@ -36,16 +76,7 @@ The boundary is testable:
 - deleting this workshop must leave native project skills usable and APM dependencies reproducible;
 - deleting a project's native skills and APM files must leave the workshop unable to recreate its skill state.
 
-## Set up
-
-```console
-git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
-cd skills-workshop
-pixi install --locked
-pixi run configure-upstreams
-pixi run workshop doctor
-pixi run memory-validate
-```
+## Project-owned skills and dependencies
 
 Pixi pins Python, Node, APM, and the helper dependencies.
 The workshop CLI pins the npm discovery commands it delegates and prints every external command, working directory, and mutation class before execution.
@@ -200,8 +231,9 @@ pixi run workshop contribution add example-skill \
 
 ## Lightweight feedback across projects
 
-The separate [`workshop-feedback`](.agents/skills/workshop-feedback/SKILL.md) skill records one short observation after actual skill use.
-Install its canonical directory into the user-level skill location (for Codex, `~/.agents/skills/workshop-feedback`), and configure the Workshop checkout in `~/.config/skills-workshop/config.json`:
+[`workshop-feedback`](.agents/skills/workshop-feedback/SKILL.md) is the feedback half of the standard Workshop workflow, installed alongside discovery by `pixi run setup-agent --apply`.
+It records one short observation after actual skill use.
+For manual installation or another host, install both control skill directories at user scope and configure the checkout in `~/.config/skills-workshop/config.json`:
 
 ```json
 {"workshop_root": "/absolute/path/to/skills-workshop"}
@@ -230,6 +262,21 @@ Evidence links and proposed improvements can be added without creating an evalua
 `insights` reports observed benefits, outcomes, review/evidence coverage, and proposed follow-ups over a chosen period.
 Use it over the next few weeks to assess discovery breadth, new capabilities, repeat usefulness, and recording effort.
 These observations do not establish causality.
+
+### Skill or hook?
+
+Use the skill for the feedback process and, when added, a host hook for the trigger.
+The agent must judge whether a skill materially participated and what changed; a file read or completed tool call does not establish that.
+The CLI validates and stores the resulting observation.
+
+Codex currently supports a `Stop` hook that can request another agent pass, with a `stop_hook_active` flag to identify a continuation.
+Its documented events do not include a dedicated skill-use event, and transcript format is not a stable hook interface; see the [official hook reference](https://learn.chatgpt.com/docs/hooks).
+A future adapter should prompt at most once per relevant task milestone, retain duplicate protection, and let the task finish if feedback fails.
+It should not assign ratings or infer successful use from tool calls.
+
+The current default is the global instruction plus the portable feedback skill.
+No lifecycle hook is shipped or installed yet.
+Measure missed feedback during the trial before choosing a host-specific trigger; an unconditional stop reminder can add cost and latency to every response.
 
 ## Evaluate an important skill
 

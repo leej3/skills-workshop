@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://learn.chatgpt.com/docs/hooks"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/session": "01a0b511-69f1-7fc1-b5f6-8f92e1a6cf67"
+  },
+  "id": "urn:uuid:34153a08-b2d5-465b-8ace-72354b28efdb",
+  "occurred_at": "2026-09-18T15:48:08Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "The official hook reference established Stop continuation behavior and unstable transcript format, supporting a separate trigger adapter while retaining agent judgment in the feedback skill.",
+    "task_summary": "Assess hook-assisted feedback for Workshop onboarding"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "77f3395e5456f0ca80487b2caacdaf5f2688ff9f"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:188af355-6da7-463e-afbb-1d0082f8e352",
+  "type": "use"
+}

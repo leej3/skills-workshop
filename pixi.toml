@@ -21,6 +21,7 @@ pre-commit = ">=4.6,<5"
 
 [tasks]
 workshop = "python scripts/workshop.py"
+setup-agent = "python scripts/setup_agent.py"
 memory-validate = "python scripts/workshop.py validate"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
