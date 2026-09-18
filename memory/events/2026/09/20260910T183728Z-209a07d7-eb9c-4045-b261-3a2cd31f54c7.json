@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.29.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:209a07d7-eb9c-4045-b261-3a2cd31f54c7",
+  "occurred_at": "2026-09-10T18:37:28Z",
+  "payload": {
+    "resolution_digest": "sha256:4d545bf6056079a9e74824dbc0f3cf0787c68d84dc2ba036831a53e2b9150e30",
+    "skill_name": "video-transcriber",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/video-transcriber",
+    "dirty": true,
+    "lock_digest": "sha256:f2b1ddb8616c52970f7d0b4da6e0d8ff31e322f7bbb14253e0efde229a42f5d4",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:b6d2f7b8-f650-4d99-ab83-32dd3fa066f3",
+    "repository_commit": "494af0cdd3034328b3dc9b41b744181a59b58161"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "project-membership"
+}

@@ -1,0 +1,44 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:c4139d3c-601f-4cd5-adc6-59a127fd233d",
+  "occurred_at": "2026-09-10T18:54:07Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 3,
+    "rationale": "Diagnostics exposed a PyAV source-build dependency; moved it to conda-forge, resolved the platform locks, and passed CLI regressions. Full speech-runtime validation is still pending package downloads; no transcription-quality claim.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Use the skill workflow to diagnose first-install binary dependencies and validate portable CLI behavior."
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:a866bd3ccfaca6c2f524d85ed9c313de79f52f1743ed1e30db1535bd4b1e5d81",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:b6d2f7b8-f650-4d99-ab83-32dd3fa066f3",
+    "repository_commit": "494af0cdd3034328b3dc9b41b744181a59b58161"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "use"
+}

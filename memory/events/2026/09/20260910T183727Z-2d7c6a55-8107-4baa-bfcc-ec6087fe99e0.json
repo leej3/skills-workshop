@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:2d7c6a55-8107-4baa-bfcc-ec6087fe99e0",
+  "occurred_at": "2026-09-10T18:37:27Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "User selected a project-owned skill with a co-evolving deterministic CLI after consultation."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "consideration"
+}

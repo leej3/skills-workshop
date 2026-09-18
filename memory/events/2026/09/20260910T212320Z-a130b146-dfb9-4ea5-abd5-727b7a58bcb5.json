@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a130b146-dfb9-4ea5-abd5-727b7a58bcb5",
+  "occurred_at": "2026-09-10T21:23:20Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 3,
+    "rationale": "Applied native form and accessibility guidance; local search returned web-focused results. Verified narrow Mac layout; iPhone and full accessibility checks remain deferred.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Review responsive native reporting and shared controls"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:321ef532-152b-4c54-acc7-5ac25a1afa24",
+  "type": "use"
+}

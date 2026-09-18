@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:14d551da-ac49-4cb4-9f05-6d64ecec8c78",
+  "occurred_at": "2026-09-10T21:23:20Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Applied and updated guidance for one report entry, explained multi-selection and concrete examples; verified native reading depth and tab reset.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Revise reporting, global reading depth, and standalone context"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:58e8f55d-c36d-4e18-bf56-6923befd692d",
+  "type": "use"
+}

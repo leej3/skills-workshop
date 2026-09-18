@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T18:37:26Z",
+  "extensions": {},
+  "id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "name": "video-transcriber",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:f20b6a67-e2ab-422f-8f24-6d887079d89a",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T18:37:26Z",
+      "id": "urn:uuid:f20b6a67-e2ab-422f-8f24-6d887079d89a",
+      "kind": "git",
+      "locator": "https://github.com/leej3/video-transcriber",
+      "notes": "",
+      "role": "discovery",
+      "subpath": ".apm/skills/video-transcriber"
+    }
+  ],
+  "summary": "Portable video transcription skill with a deterministic Pixi-managed CLI, diarization, and environment-aware recovery.",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T18:37:26Z"
+}

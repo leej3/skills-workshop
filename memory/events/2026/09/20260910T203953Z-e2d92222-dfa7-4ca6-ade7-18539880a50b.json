@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:e2d92222-dfa7-4ca6-ade7-18539880a50b",
+  "occurred_at": "2026-09-10T20:39:53Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 4,
+    "rationale": "Applied SwiftUI accessibility guidance and native pre-delivery review; rejected marketing layout matches. Mac flow inspected; iPhone verification awaits Xcode.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Refine native mind-training practice and feedback interface"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:321ef532-152b-4c54-acc7-5ac25a1afa24",
+  "type": "use"
+}

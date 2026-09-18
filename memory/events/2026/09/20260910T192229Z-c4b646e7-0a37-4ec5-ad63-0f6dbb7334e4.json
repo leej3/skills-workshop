@@ -1,0 +1,44 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:c4b646e7-0a37-4ec5-ad63-0f6dbb7334e4",
+  "occurred_at": "2026-09-10T19:22:29Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Kept durable design separate from exact behavior and avoided milestone diaries.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Organized a native prototype design, active contract, README, and agent routing."
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:aad45e62b6a6f0fb881d3488c926cf4e5138904762dce901961fd984348b1021",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ef19bac8-7124-49c5-8bb3-a3e609569579",
+    "repository_commit": null
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}

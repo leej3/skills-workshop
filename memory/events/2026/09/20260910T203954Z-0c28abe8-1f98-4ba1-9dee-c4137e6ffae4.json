@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:0c28abe8-1f98-4ba1-9dee-c4137e6ffae4",
+  "occurred_at": "2026-09-10T20:39:54Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Guidance shaped depth, feedback, review provenance and a corrected report-return flow.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Separate assisted practice from evidence and preserve narrative navigation"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:58e8f55d-c36d-4e18-bf56-6923befd692d",
+  "type": "use"
+}

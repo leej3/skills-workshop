@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.29.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:478dfef3-040d-4d21-a62d-326dcbba200c",
+  "occurred_at": "2026-09-10T19:22:05Z",
+  "payload": {
+    "resolution_digest": "sha256:1dfc3bdf01caa98d41a2231e09ad50118b898aaf24da92decdab2de3faf37805",
+    "skill_name": "swiftui-expert-skill",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": "avdlee/swiftui-agent-skill",
+    "dirty": true,
+    "lock_digest": "sha256:aad45e62b6a6f0fb881d3488c926cf4e5138904762dce901961fd984348b1021",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ef19bac8-7124-49c5-8bb3-a3e609569579",
+    "repository_commit": null
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a86c449d-0a02-413f-967c-ee0780ee6594",
+  "type": "project-membership"
+}

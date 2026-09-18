@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:f309fc50-8b2a-4f46-9f2e-35189d2060d6",
+  "occurred_at": "2026-09-17T13:57:04Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Complete 227-second local recording in 335 seconds after fixing initialization order. CPU diarization dominates; quality is not benchmarked and domain terms need improvement.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Run a real ReproTube speech fixture through ASR, alignment, and Community-1 on Apple M4; consolidate setup checks."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:aa170f09-daed-446e-a978-06e757dd15e2",
+  "type": "use"
+}

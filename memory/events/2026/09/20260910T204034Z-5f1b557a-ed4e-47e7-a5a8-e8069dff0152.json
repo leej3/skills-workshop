@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:5f1b557a-ed4e-47e7-a5a8-e8069dff0152",
+  "occurred_at": "2026-09-10T20:40:34Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "Kept product intent separate from executable schema and source attribution contract.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Consolidate ontology and learning interaction contracts"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}

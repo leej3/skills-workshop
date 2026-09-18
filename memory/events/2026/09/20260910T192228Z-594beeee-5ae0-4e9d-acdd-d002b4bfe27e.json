@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:594beeee-5ae0-4e9d-acdd-d002b4bfe27e",
+  "occurred_at": "2026-09-10T19:22:28Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John approved the proposed skill set for the local native cognition trainer."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:51b724be-af82-4537-a5c0-47cba360f146",
+  "type": "consideration"
+}

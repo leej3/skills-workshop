@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.29.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:b9eafdf1-c1a8-4a07-9116-5ea76476f485",
+  "occurred_at": "2026-09-10T20:38:42Z",
+  "payload": {
+    "resolution_digest": "sha256:a45816242131e2731fdb971a8df70c86b0ee1680edca9d6f8c6f93ad305818cc",
+    "skill_name": "ui-ux-pro-max",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": "nextlevelbuilder/ui-ux-pro-max-skill",
+    "dirty": true,
+    "lock_digest": "sha256:92c8d00f9375413ee7d85e4572e5616c03faba833108fa848df57e0bf907f696",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:ef19bac8-7124-49c5-8bb3-a3e609569579",
+    "repository_commit": "f63064fa6a7909738b2838fa123016d46fbb31bd"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:321ef532-152b-4c54-acc7-5ac25a1afa24",
+  "type": "project-membership"
+}

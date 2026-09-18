@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-10T19:21:40Z",
+  "extensions": {},
+  "id": "urn:uuid:aa01636f-0e83-4477-a434-98879673909e",
+  "name": "develop-training-games",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:db7dd629-8f98-4b85-bbcf-c3b5ece9a938",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-10T19:21:40Z",
+      "id": "urn:uuid:db7dd629-8f98-4b85-bbcf-c3b5ece9a938",
+      "kind": "local",
+      "locator": "/Users/johnlee/code/CON/cognition-trainer/.apm/skills/develop-training-games",
+      "notes": "",
+      "role": "discovery",
+      "subpath": null
+    }
+  ],
+  "summary": "Develop interchangeable training strategies, targeting, sessions, and versioned practice records.",
+  "tag_ids": [],
+  "updated_at": "2026-09-10T19:21:40Z"
+}

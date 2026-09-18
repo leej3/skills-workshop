@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:45c01754-b3a8-4548-8443-9a056785538f",
+  "occurred_at": "2026-09-10T20:39:54Z",
+  "payload": {
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rating": 3,
+    "rationale": "Used broad information architecture and form guidance; domain-specific decisions came from project learning UX.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Structure learning settings and editorial review"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1803a3ff-2beb-4b9e-81e5-e9fefbfeb55c",
+  "type": "use"
+}

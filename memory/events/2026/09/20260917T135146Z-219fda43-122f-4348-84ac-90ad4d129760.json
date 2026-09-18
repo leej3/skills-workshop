@@ -1,0 +1,29 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:219fda43-122f-4348-84ac-90ad4d129760",
+  "occurred_at": "2026-09-17T13:51:46Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "REUSE lint passed for all project files; external skills and datasets remain outside project license scope.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Add MIT license texts, SPDX annotations, and a Pixi-backed REUSE pre-commit check to video-transcriber."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:54d36ad3-0fa2-4b93-97a1-dfb70ad53003",
+  "type": "use"
+}
