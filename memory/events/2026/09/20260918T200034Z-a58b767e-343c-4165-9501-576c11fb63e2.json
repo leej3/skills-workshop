@@ -1,0 +1,44 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/session": "01a0b615-3479-79b1-b624-c444eabf11ff"
+  },
+  "id": "urn:uuid:a58b767e-343c-4165-9501-576c11fb63e2",
+  "occurred_at": "2026-09-18T20:00:34Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "The workflow distinguished installation checks from actual use and kept disposable smoke-test observations out of real Workshop memory.",
+    "task_summary": "Review setup in a fresh Linux container"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "625050720bbf85aa126b134fd20eaace3bfe2530"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "use"
+}

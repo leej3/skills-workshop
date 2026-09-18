@@ -16,6 +16,9 @@ Git history, rather than the active documentation tree, preserves old exploratio
 
 ## Current references
 
+- [Workshop CLI and workflow reference](workshop-reference.md)
+- [Clean installation check](clean-install.md)
+
 - [Current direction](current-direction.md)
 - [Skill-management landscape](skill-management-landscape.md)
 - [Evaluation protocol](evaluation-protocol.md)

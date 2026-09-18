@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
+    },
+    "skills-workshop/session": "01a0b615-3479-79b1-b624-c444eabf11ff"
+  },
+  "id": "urn:uuid:c3b29818-fbee-46af-8a65-c9287b87965f",
+  "occurred_at": "2026-09-18T20:00:35Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Guidance kept the fix to the demonstrated missing-system-Python failure: use the configured Pixi environment and validate the existing skill without adding a new launcher.",
+    "task_summary": "Correct feedback skill invocation after fresh-system testing"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "625050720bbf85aa126b134fd20eaace3bfe2530"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "type": "use"
+}

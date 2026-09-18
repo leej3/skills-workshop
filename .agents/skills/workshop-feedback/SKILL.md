@@ -7,7 +7,8 @@ description: Record lightweight Skills Workshop memory after an agent actually u
 
 Close the loop after real skill use without interrupting the main task.
 This is a user-level control skill; working skills stay in their owning projects.
-It requires Python 3, Pixi, and a Skills Workshop checkout with the `feedback` command.
+It requires Pixi and a Skills Workshop checkout with the `feedback` command.
+Use the checkout's Pixi environment for Python; a system Python installation is not required.
 Configure that checkout in `~/.config/skills-workshop/config.json` as `{"workshop_root": "/absolute/checkout"}`, or set `SKILLS_WORKSHOP_ROOT`.
 The bundled launcher locates and runs the CLI; it never installs software or publishes anything.
 
@@ -16,10 +17,12 @@ Capture failures, abandonment, and unclear benefit as readily as success.
 Merely loading instructions is insufficient.
 Do not record this feedback skill itself, repeated reads, routine commits, or bookkeeping.
 
-Use the bundled launcher from any project, replacing its path with the installed skill directory:
+Read the configured checkout path from the JSON file (or `SKILLS_WORKSHOP_ROOT`).
+Use the bundled launcher from any project, replacing the manifest path with that checkout's `pixi.toml` and the launcher path with the installed skill directory:
 
 ```console
-python /path/to/workshop-feedback/scripts/feedback.py <skill-name-or-uuid> \
+pixi run --manifest-path /absolute/checkout/pixi.toml \
+  python /path/to/workshop-feedback/scripts/feedback.py <skill-name-or-uuid> \
   --task "Short, sanitized account of the work" \
   --rationale "What this skill changed, missed, or made possible" \
   --outcome success --benefit new-capability \
