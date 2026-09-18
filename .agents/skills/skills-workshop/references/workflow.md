@@ -12,10 +12,11 @@
 | skills.sh and `.well-known` discovery | Vercel `skills` |
 | Skill content and development history | Ordinary Git source or fork |
 
-## User-level control skill
+## User-level control skills
 
 `skills-workshop` may be installed once in an agent's user-level skill directory so agents can invoke the Workshop whenever a request concerns the skill lifecycle.
-It is a control-plane exception, not a model for installing other skills globally.
+`workshop-feedback` is the separate global control skill for post-task observations.
+These are control-plane exceptions; working skills remain project-owned or project-local dependencies.
 
 Every discovered or created working skill belongs to the active project.
 A project-owned experiment lives directly in that project's `.agents/skills/`; an independently maintained reusable dependency is declared, locked, and deployed by APM.
@@ -23,24 +24,18 @@ Do not create empty APM state in anticipation of a future promotion.
 The Workshop records cross-project recall, consideration, membership, and actual-use evidence, but never substitutes for the project's dependency state.
 This keeps a project reproducible without the Workshop and keeps the Workshop from pretending it can recreate a project's dependencies.
 
-## Consultation before mutation
+## Fresh discovery alongside explicit choices
 
-A capability request, a request to create a skill, and a request to install a named skill all begin with current discovery.
-The initial request authorizes read-only searching and comparison, not creation or installation.
-Even a known candidate must be compared again because registered sources, upstream revisions, public catalogs, and local experience can change over time.
+Keep discovery current: inspect registered-source freshness and search memory, local trees, installed skill roots, and the public providers.
+Report worthwhile alternatives with source links and limitations, even when a user names a known skill.
 
-Each consultation should:
+An explicit named installation authorizes installing that choice after preview and compatibility checks.
+Alternatives are advisory and must not block it or silently replace it.
+For an open-ended request, compare plausible candidates and ask for a selection unless the user has delegated the choice or creation.
+Provider failures should be visible and isolated.
 
-1. inspect the current registered-source inventory and its freshness;
-2. search memory, every registered local source, and all configured public discovery providers unless the user narrows the scope;
-3. disclose unavailable or stale sources;
-4. compare the strongest candidates and include source links;
-5. include unchanged adoption, adaptation, new project-owned creation, broader search, and no action as relevant choices; and
-6. stop for the user's selection before writing skill files, changing APM state, or recording a decision.
-
-An explicit instruction to skip comparison may bypass consultation.
-Merely naming a package or saying "install" does not.
-A later selection from the presented choices authorizes only that selected path.
+Use `workshop recall` for memory-only retrieval and `workshop find --offline` for a local-only search.
+Full searches still query public providers, but never send remembered event text or installed file contents as part of their query.
 
 ## Project-owned versus reusable skills
 

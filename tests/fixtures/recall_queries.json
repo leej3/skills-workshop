@@ -1,0 +1,10 @@
+[
+  {"query": "something I used to verify commit trailers", "expected": "commit-provenance"},
+  {"query": "commit provennce", "expected": "commit-provenance"},
+  {"query": "how did I manage annexed datasets", "expected": "datalad"},
+  {"query": "what helped with lessig presentation slides", "expected": "lessig-presentations"},
+  {"query": "organizing project documentation", "expected": "organize-project-docs"},
+  {"query": "git annex worktrees", "expected": "git-annex-worktrees"},
+  {"query": "transcribe video diarization", "expected": "video-transcriber"},
+  {"query": "REUSE license SPDX", "expected": "introduce-reuse-compliance"}
+]

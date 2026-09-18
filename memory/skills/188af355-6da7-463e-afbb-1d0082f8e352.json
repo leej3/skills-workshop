@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-18T15:37:02Z",
+  "extensions": {},
+  "id": "urn:uuid:188af355-6da7-463e-afbb-1d0082f8e352",
+  "name": "openai-docs",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:3ad5d155-dbf5-44f8-a393-a7efc2e0a0d8",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-18T15:37:02Z",
+      "id": "urn:uuid:3ad5d155-dbf5-44f8-a393-a7efc2e0a0d8",
+      "kind": "local",
+      "locator": "/Users/johnlee/.codex/skills/.system/openai-docs",
+      "notes": "Observed during actual use; source is not an adoption or trust judgment.",
+      "role": "discovery",
+      "subpath": null
+    }
+  ],
+  "summary": "Use for Codex models/pricing, scheduled tasks, skills, settings, setup, troubleshooting, customization, automations, and self-knowledge—including 'you,' 'your,' 'this app,' or 'this coding agent' when they refer to Codex—and for OpenAI APIs/products and ChatGPT Work. Also use for model choice/migration, prompting, SDKs, Responses, Realtime, agents, evals, and Chat/Work/Codex comparisons. Do not use for generic app/software tasks that merely mention Codex.",
+  "tag_ids": [],
+  "updated_at": "2026-09-18T15:37:02Z"
+}

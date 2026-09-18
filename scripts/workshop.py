@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import uuid
+from collections import Counter
 from collections.abc import Iterable, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
@@ -23,6 +24,11 @@ from urllib.parse import urlsplit, urlunsplit
 import tomllib
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
+
+if __package__:
+    from .search import rank
+else:
+    from search import rank
 
 VERSION = "0.1.0"
 REPOSITORY = Path(__file__).resolve().parents[1]
@@ -569,59 +575,62 @@ def iter_text(value: object) -> Iterable[str]:
 
 
 def memory_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
-    terms = WORD.findall(query.casefold())
-    if not terms:
-        raise WorkshopError("search query must contain a letter or number")
     events_by_skill: dict[str, list[dict[str, Any]]] = {}
     for _, event in load_records(root, "events"):
         events_by_skill.setdefault(event.get("skill_id", ""), []).append(event)
-    results: list[dict[str, Any]] = []
+    documents = []
     for _, skill in load_records(root, "skills"):
-        name = skill.get("name", "").casefold()
-        summary = skill.get("summary", "").casefold()
-        aliases = " ".join(skill.get("aliases", [])).casefold()
-        history = " ".join(
-            iter_text(events_by_skill.get(skill.get("id", ""), []))
-        ).casefold()
-        sources = " ".join(iter_text(skill.get("sources", []))).casefold()
-        haystack = " ".join(
-            (
-                name,
-                summary,
-                aliases,
-                history,
-                sources,
-                skill.get("notes", "").casefold(),
-            )
+        events = events_by_skill.get(skill["id"], [])
+        uses = sorted(
+            (event for event in events if event["type"] == "use"),
+            key=lambda event: event["occurred_at"],
+            reverse=True,
         )
-        if not all(term in haystack for term in terms):
-            continue
-        score = sum(
-            10 * name.count(term)
-            + 6 * aliases.count(term)
-            + 4 * summary.count(term)
-            + 2 * history.count(term)
-            + sources.count(term)
-            for term in terms
-        )
-        results.append(
+        recent = [
             {
-                "provider": "memory",
-                "skill_id": skill["id"],
-                "name": skill["name"],
-                "summary": skill["summary"],
-                "sources": [source["locator"] for source in skill.get("sources", [])],
-                "score": score,
+                "event_id": event["id"],
+                "occurred_at": event["occurred_at"],
+                "asserted_by": event["asserted_by"],
+                "review": event["review"],
+                "payload": event["payload"],
+                "evidence": event["evidence"],
+            }
+            for event in uses[:3]
+        ]
+        documents.append(
+            {
+                "result": {
+                    "provider": "memory",
+                    "skill_id": skill["id"],
+                    "name": skill["name"],
+                    "summary": skill["summary"],
+                    "sources": [
+                        source["locator"] for source in skill.get("sources", [])
+                    ],
+                    "use_count": len(uses),
+                    "recent_uses": recent,
+                },
+                "fields": {
+                    "name": (10, skill["name"]),
+                    "aliases": (8, " ".join(skill.get("aliases", []))),
+                    "summary": (5, skill["summary"]),
+                    "history": (
+                        3,
+                        " ".join(iter_text([event["payload"] for event in events])),
+                    ),
+                    "sources": (1, " ".join(iter_text(skill.get("sources", [])))),
+                    "notes": (2, skill.get("notes", "")),
+                },
             }
         )
-    return sorted(results, key=lambda item: (-item["score"], item["name"]))[:limit]
+    return rank(query, documents, limit)
 
 
 def local_skill_metadata(path: Path) -> dict[str, Any]:
     """Read the frontmatter needed for local candidate search."""
     try:
         text = path.read_text(encoding="utf-8")
-    except OSError:
+    except (OSError, UnicodeError):
         return {}
     if not text.startswith("---\n"):
         return {}
@@ -649,68 +658,124 @@ def git_head(path: Path) -> str | None:
     return completed.stdout.strip() if completed.returncode == 0 else None
 
 
-def local_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
-    """Search registered, checked-out upstream skill sources without network I/O."""
-    terms = WORD.findall(query.casefold())
-    if not terms:
-        raise WorkshopError("search query must contain a letter or number")
+def search_configuration(root: Path) -> dict[str, Any]:
     registry = root / "registry.toml"
     if not registry.is_file():
-        return []
+        return {}
     try:
         with registry.open("rb") as stream:
-            configuration = tomllib.load(stream)
+            return tomllib.load(stream)
     except (OSError, tomllib.TOMLDecodeError) as error:
         raise WorkshopError(f"cannot read {registry}: {error}") from error
 
-    root_resolved = root.resolve()
-    results: list[dict[str, Any]] = []
-    for upstream in configuration.get("upstreams", []):
-        if not isinstance(upstream, dict):
+
+def tree_documents(
+    directory: Path,
+    *,
+    provider: str,
+    collection: str,
+    source: str | None,
+    revision: str | None,
+    relative_to: Path | None = None,
+) -> list[dict[str, Any]]:
+    documents = []
+    if not directory.is_dir():
+        return documents
+    candidates = set(directory.rglob("SKILL.md"))
+    # User skill installations commonly link their immediate skill directories.
+    if provider == "installed":
+        for child in directory.iterdir():
+            if child.is_symlink() and child.is_dir():
+                candidates.update(child.rglob("SKILL.md"))
+    for skill_file in sorted(candidates):
+        if provider != "installed" and not skill_file.resolve().is_relative_to(
+            directory.resolve()
+        ):
             continue
-        name = str(upstream.get("name", ""))
-        relative_path = upstream.get("path")
-        if not name or not isinstance(relative_path, str):
+        metadata = local_skill_metadata(skill_file)
+        if not metadata.get("name") or not metadata.get("description"):
             continue
-        source_root = (root / relative_path).resolve()
-        if root_resolved not in source_root.parents or not source_root.is_dir():
+        try:
+            body = skill_file.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
             continue
-        revision = git_head(source_root)
-        for skill_file in sorted(source_root.rglob("SKILL.md")):
-            metadata = local_skill_metadata(skill_file)
-            skill_name = str(metadata.get("name") or skill_file.parent.name)
-            description = str(metadata.get("description") or "")
-            haystack = " ".join(
-                (
-                    skill_name.casefold(),
-                    description.casefold(),
-                    name.casefold(),
-                    str(upstream.get("role", "")).casefold(),
-                )
-            )
-            if not all(term in haystack for term in terms):
-                continue
-            score = sum(
-                10 * skill_name.casefold().count(term)
-                + 4 * description.casefold().count(term)
-                + name.casefold().count(term)
-                for term in terms
-            )
-            results.append(
-                {
-                    "provider": "local",
-                    "name": skill_name,
+        name = str(metadata["name"])
+        description = str(metadata["description"])
+        path = (
+            skill_file.parent.relative_to(relative_to).as_posix()
+            if relative_to
+            else str(skill_file.parent)
+        )
+        documents.append(
+            {
+                "result": {
+                    "provider": provider,
+                    "name": name,
                     "description": description,
-                    "collection": name,
-                    "source": upstream.get("url"),
-                    "path": skill_file.parent.relative_to(root_resolved).as_posix(),
+                    "collection": collection,
+                    "source": source,
+                    "path": path,
                     "revision": revision,
-                    "score": score,
-                }
+                },
+                "fields": {
+                    "name": (10, name),
+                    "description": (5, description),
+                    "content": (1, body.split("---", 2)[-1]),
+                    "collection": (1, collection),
+                },
+            }
+        )
+    return documents
+
+
+def local_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
+    root = root.resolve()
+    documents = tree_documents(
+        root / ".agents" / "skills",
+        provider="local",
+        collection="workshop-native",
+        source=None,
+        revision=git_head(root),
+        relative_to=root,
+    )
+    for upstream in search_configuration(root).get("upstreams", []):
+        directory = (root / upstream["path"]).resolve()
+        if root not in directory.parents:
+            continue
+        documents.extend(
+            tree_documents(
+                directory,
+                provider="local",
+                collection=upstream["name"],
+                source=upstream.get("url"),
+                revision=git_head(directory),
+                relative_to=root,
             )
-    return sorted(
-        results, key=lambda item: (-item["score"], item["name"], item["path"])
-    )[:limit]
+        )
+    return rank(query, documents, limit)
+
+
+def installed_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
+    documents = []
+    seen: set[Path] = set()
+    for entry in search_configuration(root).get("skill_roots", []):
+        directory = Path(entry["path"]).expanduser()
+        if not directory.is_absolute():
+            directory = root / directory
+        if directory.resolve() in seen:
+            continue
+        seen.add(directory.resolve())
+        documents.extend(
+            tree_documents(
+                directory,
+                provider="installed",
+                collection=entry["name"],
+                source=None,
+                revision=None,
+            )
+        )
+    # These paths are local observations, never sent to a public search provider.
+    return rank(query, documents, limit)
 
 
 def provider_commands(query: str, limit: int) -> dict[str, list[str]]:
@@ -900,7 +965,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 def selected_providers(values: list[str] | None) -> list[str]:
     requested = values or ["all"]
     if "all" in requested:
-        return ["memory", "local", "asm", "github", "vercel"]
+        return ["memory", "local", "installed", "asm", "github", "vercel"]
     output: list[str] = []
     for provider in requested:
         if provider not in output:
@@ -908,73 +973,107 @@ def selected_providers(values: list[str] | None) -> list[str]:
     return output
 
 
+def print_search_result(provider: str, result: Any, *, tsv: bool = False) -> None:
+    rows = result if isinstance(result, list) else result["results"]
+    if not tsv:
+        print(f"\n== {provider} ==", flush=True)
+        if not rows:
+            print("No matches.")
+    for row in rows:
+        if tsv:
+            values = [
+                row.get("name") or row.get("candidate", ""),
+                provider,
+                row.get("path") or row.get("url") or ", ".join(row.get("sources", [])),
+                row.get("summary") or row.get("description", ""),
+            ]
+            print("\t".join(" ".join(str(value).split()) for value in values))
+        elif provider in {"memory", "local", "installed"}:
+            print(
+                f"{row['name']}: {compact_text(row.get('summary') or row.get('description', ''))}"
+            )
+            print(
+                "  matched: "
+                + ", ".join(row["matched_terms"])
+                + " in "
+                + ", ".join(row["matched_fields"])
+            )
+            for source in row.get("sources", []):
+                print(f"  source: {source}")
+            if row.get("path"):
+                print(
+                    f"  {row['collection']}: {row['path']} ({row.get('revision') or 'local/unpinned'})"
+                )
+            for event in row.get("recent_uses", [])[:2]:
+                payload = event["payload"]
+                print(
+                    f"  {payload['outcome']} [{event['asserted_by']['kind']}; {event['review']['state']}]: {compact_text(payload['rationale'])}"
+                )
+                if payload.get("next_step"):
+                    print(f"  follow-up: {compact_text(payload['next_step'])}")
+        else:
+            print_provider_result(row)
+    if isinstance(result, dict) and result.get("stderr"):
+        print(result["stderr"].rstrip(), file=sys.stderr)
+    sys.stdout.flush()
+
+
 def cmd_find(args: argparse.Namespace) -> int:
+    if args.limit < 1:
+        raise WorkshopError("--limit must be positive")
+    if args.command == "recall":
+        args.provider = args.provider or ["memory"]
+        args.offline = True
     providers = selected_providers(args.provider)
+    local = {
+        "memory": memory_search,
+        "local": local_search,
+        "installed": installed_search,
+    }
+    if args.offline:
+        providers = [provider for provider in providers if provider in local]
+        if not providers:
+            raise WorkshopError("--offline requires a local provider")
+    if not args.query.strip() and any(provider not in local for provider in providers):
+        raise WorkshopError("use --offline to browse with an empty query")
     output: dict[str, Any] = {}
     failures = 0
-    if "memory" in providers:
-        output["memory"] = memory_search(args.root, args.query, args.limit)
-    if "local" in providers:
-        output["local"] = local_search(args.root, args.query, args.limit)
-    for provider in [item for item in providers if item not in {"memory", "local"}]:
-        command = provider_commands(args.query, args.limit)[provider]
-        completed = run_external(
-            provider,
-            command,
-            args.root,
-            "read-only search: no project skill writes; may use network, auth, telemetry, and caches",
-            dry_run=args.dry_run,
-        )
-        output[provider] = {
-            "command": command,
-            "executed": not args.dry_run,
-            "exit_code": completed.returncode,
-            "results": parse_provider_results(provider, completed.stdout, args.limit),
-            "stderr": completed.stderr,
-        }
-        if completed.returncode:
+    for provider in providers:
+        try:
+            if provider in local:
+                output[provider] = local[provider](args.root, args.query, args.limit)
+            else:
+                command = provider_commands(args.query, args.limit)[provider]
+                completed = run_external(
+                    provider,
+                    command,
+                    args.root,
+                    "read-only search of public providers; local memory is never included in the query",
+                    dry_run=args.dry_run,
+                )
+                output[provider] = {
+                    "command": command,
+                    "executed": not args.dry_run,
+                    "exit_code": completed.returncode,
+                    "results": parse_provider_results(
+                        provider, completed.stdout, args.limit
+                    ),
+                    "stderr": completed.stderr,
+                }
+                failures += bool(completed.returncode)
+        except WorkshopError as error:
             failures += 1
+            output[provider] = {
+                "executed": False,
+                "exit_code": 1,
+                "results": [],
+                "stderr": str(error),
+            }
+        if not args.json:
+            print_search_result(provider, output[provider], tsv=args.tsv)
     if args.json:
         print(json.dumps(output, indent=2))
-    else:
-        for provider in providers:
-            print(f"\n== {provider} ==")
-            result = output[provider]
-            if provider == "memory":
-                if not result:
-                    print("No remembered skills matched.")
-                for skill in result:
-                    print(f"{skill['name']} [{skill['skill_id']}]")
-                    print(f"  {skill['summary']}")
-                    for source in skill["sources"]:
-                        print(f"  source: {source}")
-            elif provider == "local":
-                if not result:
-                    print("No tracked local skill candidates matched.")
-                for skill in result:
-                    print(f"{skill['name']} ({skill['collection']})")
-                    if skill["description"]:
-                        print(f"  {compact_text(skill['description'])}")
-                    print(f"  source: {skill['source']} :: {skill['path']}")
-                    if skill["revision"]:
-                        print(f"  pinned revision: {skill['revision']}")
-            elif args.dry_run:
-                print("Dry run; command not executed.")
-            else:
-                if not result["results"]:
-                    print("No candidates returned.")
-                for candidate in result["results"]:
-                    print_provider_result(candidate)
-                if result["stderr"]:
-                    print(result["stderr"].rstrip(), file=sys.stderr)
-                if result["exit_code"]:
-                    print(f"Provider exited {result['exit_code']}.")
-    return (
-        1
-        if failures == len([item for item in providers if item != "memory"])
-        and failures
-        else 0
-    )
+    return 1 if failures == len(providers) else 0
 
 
 def cmd_preview(args: argparse.Namespace) -> int:
@@ -1532,13 +1631,208 @@ def project_evidence(
     }
 
 
+def repository_identity(url: str) -> str:
+    """Match SSH and HTTPS remotes without retaining credentials."""
+    url = re.sub(r"^[^/@]+@([^:]+):", r"https://\1/", url)
+    parsed = urlsplit(url)
+    if not parsed.hostname:
+        return url.rstrip("/").removesuffix(".git")
+    return f"{parsed.hostname.casefold()}{parsed.path.rstrip('/').removesuffix('.git')}"
+
+
+def git_value(path: Path, *arguments: str) -> str | None:
+    completed = subprocess.run(
+        ["git", "-C", str(path), *arguments],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return completed.stdout.strip() if completed.returncode == 0 else None
+
+
+def infer_project(root: Path, path: Path) -> dict[str, Any] | None:
+    remote = git_value(path, "remote", "get-url", "origin")
+    if not remote:
+        return None
+    matches = []
+    for _, project in load_records(root, "projects"):
+        repository = project.get("repository") or {}
+        if repository.get("url") and repository_identity(
+            repository["url"]
+        ) == repository_identity(remote):
+            subpath = repository.get("subpath")
+            top = git_value(path, "rev-parse", "--show-toplevel")
+            if not subpath or (
+                top and path.resolve().is_relative_to(Path(top) / subpath)
+            ):
+                matches.append(project)
+    return matches[0] if len(matches) == 1 else None
+
+
+def cmd_feedback(args: argparse.Namespace) -> int:
+    # Defaults describe uncertainty; do not invent a rating, model or outcome.
+    if not args.task.strip() or not args.rationale.strip():
+        raise WorkshopError("task and rationale must contain an observation")
+    if args.project_path and not args.project_path.is_dir():
+        raise WorkshopError("--project-path must be an existing directory")
+    created_path = None
+    skill = resolve_record(args.root, "skills", args.skill, allow_missing=True)
+    if not skill:
+        if args.skill_path is None:
+            raise WorkshopError(
+                "unknown skill: provide --skill-path to remember the skill actually used"
+            )
+        skill_file = (
+            args.skill_path / "SKILL.md"
+            if args.skill_path.is_dir()
+            else args.skill_path
+        )
+        metadata = local_skill_metadata(skill_file)
+        if metadata.get("name") != args.skill:
+            raise WorkshopError(
+                "--skill-path must identify a SKILL.md whose name matches the new skill"
+            )
+        source_root = git_value(skill_file.parent, "rev-parse", "--show-toplevel")
+        remote = git_value(skill_file.parent, "remote", "get-url", "origin")
+        source = str(skill_file.parent.resolve())
+        subpath = None
+        kind = "local"
+        if (
+            source_root
+            and remote
+            and urlsplit("https://" + repository_identity(remote)).hostname
+        ):
+            identity = repository_identity(remote)
+            if "/" in identity and not identity.startswith("/"):
+                source = "https://" + identity + ".git"
+                subpath = (
+                    skill_file.parent.resolve()
+                    .relative_to(Path(source_root).resolve())
+                    .as_posix()
+                )
+                kind = "git"
+        cmd_remember(
+            argparse.Namespace(
+                root=args.root,
+                name=args.skill,
+                summary=str(metadata.get("description", args.skill)),
+                alias=[],
+                source=source,
+                source_kind=kind,
+                source_role="discovery",
+                subpath=subpath,
+                source_notes="Observed during actual use; source is not an adoption or trust judgment.",
+                notes="",
+            )
+        )
+        created = resolve_record(args.root, "skills", args.skill)
+        assert created is not None
+        created_path = (
+            memory_dir(args.root, "skills") / f"{bare_id(created['id'])}.json"
+        )
+    try:
+        return cmd_use(args)
+    except WorkshopError:
+        if created_path:
+            created_path.unlink()
+        raise
+
+
+def cmd_insights(args: argparse.Namespace) -> int:
+    try:
+        cutoff = (
+            datetime.fromisoformat(args.since.replace("Z", "+00:00"))
+            if args.since
+            else None
+        )
+        if cutoff and cutoff.tzinfo is None:
+            cutoff = cutoff.replace(tzinfo=UTC)
+    except ValueError as error:
+        raise WorkshopError("--since must be an ISO date or timestamp") from error
+    skills = {skill["id"]: skill for _, skill in load_records(args.root, "skills")}
+    uses = [
+        event
+        for _, event in load_records(args.root, "events")
+        if event["type"] == "use"
+        and (
+            cutoff is None
+            or datetime.fromisoformat(event["occurred_at"].replace("Z", "+00:00"))
+            >= cutoff
+        )
+    ]
+    rows = []
+    for skill_id in sorted({event["skill_id"] for event in uses}):
+        events = sorted(
+            (event for event in uses if event["skill_id"] == skill_id),
+            key=lambda event: event["occurred_at"],
+            reverse=True,
+        )
+        rows.append(
+            {
+                "name": skills[skill_id]["name"],
+                "uses": len(events),
+                "outcomes": dict(
+                    Counter(event["payload"]["outcome"] for event in events)
+                ),
+                "benefits": dict(
+                    Counter(
+                        event["payload"].get("benefit", "unknown") for event in events
+                    )
+                ),
+                "unreviewed": sum(
+                    event["review"]["state"] == "unreviewed" for event in events
+                ),
+                "with_project": sum(
+                    bool(event.get("project_evidence")) for event in events
+                ),
+                "with_evidence": sum(bool(event["evidence"]) for event in events),
+                "follow_ups": [
+                    {"event_id": event["id"], "note": event["payload"]["next_step"]}
+                    for event in events
+                    if event["payload"].get("next_step")
+                ],
+                "latest_observation": events[0]["payload"]["rationale"],
+            }
+        )
+    rows.sort(key=lambda row: (-row["uses"], row["name"]))
+    if args.json:
+        print(
+            json.dumps(
+                {"since": args.since, "uses": len(uses), "skills": rows}, indent=2
+            )
+        )
+    else:
+        print(
+            f"{len(uses)} use observations across {len(rows)} skills (observations, not causal evidence)"
+        )
+        for row in rows:
+            print(
+                f"- {row['name']}: {row['uses']} use(s); outcomes={row['outcomes']}; benefits={row['benefits']}; unreviewed={row['unreviewed']}"
+            )
+            print(f"  latest: {compact_text(row['latest_observation'])}")
+            for follow_up in row["follow_ups"]:
+                print(f"  proposed: {compact_text(follow_up['note'])}")
+    return 0
+
+
 def cmd_use(args: argparse.Namespace) -> int:
     skill = resolve_record(args.root, "skills", args.skill)
     assert skill is not None
+    session = getattr(args, "session", None)
     evidence = None
-    if args.project:
-        project = resolve_record(args.root, "projects", args.project)
-        assert project is not None
+    project = (
+        resolve_record(args.root, "projects", args.project) if args.project else None
+    )
+    if args.project_path and not args.project_path.is_dir():
+        raise WorkshopError("--project-path must be an existing directory")
+    if args.project_path and not project:
+        project = infer_project(args.root, args.project_path)
+        if not project:
+            print(
+                "Project not uniquely remembered; recorded without project membership. Use project add then --project for future observations.",
+                file=sys.stderr,
+            )
+    if project:
         if args.project_path is None:
             raise WorkshopError("--project-path is required when --project is used")
         evidence = project_evidence(args.root, project, args.project_path)
@@ -1562,6 +1856,47 @@ def cmd_use(args: argparse.Namespace) -> int:
         project_evidence=evidence,
         artifact_id=args.artifact,
     )
+    for key in ("benefit", "next_step"):
+        value = getattr(args, key, None)
+        if value:
+            record["payload"][key] = value
+    record["evidence"] = [
+        {"kind": "url", "locator": value} for value in getattr(args, "evidence", [])
+    ]
+    if session:
+        record["extensions"]["skills-workshop/session"] = session
+    skill_path = getattr(args, "skill_path", None)
+    if skill_path:
+        skill_file = skill_path / "SKILL.md" if skill_path.is_dir() else skill_path
+        if not skill_file.is_file() or skill_file.name != "SKILL.md":
+            raise WorkshopError("--skill-path must identify an existing SKILL.md")
+        metadata = local_skill_metadata(skill_file)
+        if metadata.get("name") not in {skill["name"], *skill.get("aliases", [])}:
+            raise WorkshopError(
+                "--skill-path name does not match the remembered skill or its aliases"
+            )
+        record["extensions"]["skills-workshop/entrypoint"] = {
+            "sha256": hashlib.sha256(skill_file.read_bytes()).hexdigest(),
+            "scope": "SKILL.md only",
+            "repository_revision": git_head(skill_file.parent),
+        }
+    if session:
+        for existing_path, event in load_records(args.root, "events"):
+            if (
+                event["type"] == "use"
+                and event["skill_id"] == skill["id"]
+                and event["extensions"].get("skills-workshop/session") == session
+                and event["payload"]["task_summary"] == args.task
+            ):
+                if any(
+                    event.get(key) != record.get(key)
+                    for key in ("payload", "evidence", "asserted_by", "artifact_id")
+                ):
+                    raise WorkshopError(
+                        "feedback already exists for this session/task; use a new task summary for a correction"
+                    )
+                print(f"Already recorded use of {skill['name']}: {existing_path}")
+                return 0
     atomic_write_validated(args.root, path, record)
     print(f"Recorded use of {skill['name']}")
     print(path)
@@ -1785,18 +2120,31 @@ def build_parser() -> argparse.ArgumentParser:
     doctor.set_defaults(handler=cmd_doctor)
 
     find = commands.add_parser(
-        "find", help="search memory, tracked upstreams, and selected external providers"
+        "find",
+        aliases=["recall"],
+        help="search memory, tracked upstreams, and selected external providers",
     )
     find.add_argument("query")
     find.add_argument(
         "--provider",
         action="append",
-        choices=["memory", "local", "asm", "github", "vercel", "all"],
+        choices=["memory", "local", "installed", "asm", "github", "vercel", "all"],
         help="repeat to narrow or combine; defaults to memory, local upstreams, then public providers",
     )
     find.add_argument("--limit", type=int, default=10)
     find.add_argument("--dry-run", action="store_true")
-    find.add_argument("--json", action="store_true")
+    find.add_argument(
+        "--offline",
+        action="store_true",
+        help="search memory and local trees without network",
+    )
+    output_format = find.add_mutually_exclusive_group()
+    output_format.add_argument("--json", action="store_true")
+    output_format.add_argument(
+        "--tsv",
+        action="store_true",
+        help="name, provider, location, description; suitable for fzf",
+    )
     find.set_defaults(handler=cmd_find)
 
     preview = commands.add_parser(
@@ -1933,32 +2281,75 @@ def build_parser() -> argparse.ArgumentParser:
     add_actor_options(contribution_add)
     contribution_add.set_defaults(handler=cmd_contribution_add)
 
-    use = commands.add_parser(
-        "use", help="record actual use and an optional lightweight rating"
+    for command_name in ("use", "feedback"):
+        use = commands.add_parser(
+            command_name, help="record a short observation after actual skill use"
+        )
+        use.add_argument("skill")
+        use.add_argument("--task", required=True)
+        use.add_argument(
+            "--invocation",
+            default="unknown",
+            choices=["explicit", "automatic", "unknown"],
+        )
+        use.add_argument(
+            "--outcome",
+            default="unknown",
+            choices=["success", "partial", "failure", "abandoned", "unknown"],
+        )
+        use.add_argument("--rating", type=int, choices=range(1, 6))
+        use.add_argument("--rationale", required=True)
+        use.add_argument("--duration-seconds", type=float)
+        use.add_argument(
+            "--listing-state",
+            default="unknown",
+            choices=["full-description", "name-only", "manual-only", "off", "unknown"],
+        )
+        use.add_argument("--project")
+        use.add_argument("--project-path", type=Path)
+        use.add_argument("--artifact")
+        add_actor_options(use)
+        use.add_argument(
+            "--skill-path",
+            type=Path,
+            help="entrypoint used; feedback can remember an unknown skill",
+        )
+        use.add_argument(
+            "--session", help="opaque task/session identifier for retry protection"
+        )
+        use.add_argument(
+            "--evidence",
+            action="append",
+            default=[],
+            help="sanitized durable evidence URL; repeatable",
+        )
+        use.add_argument(
+            "--benefit",
+            choices=[
+                "new-capability",
+                "saved-time",
+                "avoided-error",
+                "better-result",
+                "no-clear-benefit",
+                "harmful",
+                "unknown",
+            ],
+        )
+        use.add_argument(
+            "--next-step",
+            help="one concrete improvement to consider; does not publish anything",
+        )
+        use.set_defaults(
+            handler=cmd_feedback if command_name == "feedback" else cmd_use
+        )
+
+    insights = commands.add_parser(
+        "insights",
+        help="summarize use, benefits, evidence gaps, and proposed improvements",
     )
-    use.add_argument("skill")
-    use.add_argument("--task", required=True)
-    use.add_argument(
-        "--invocation", required=True, choices=["explicit", "automatic", "unknown"]
-    )
-    use.add_argument(
-        "--outcome",
-        required=True,
-        choices=["success", "partial", "failure", "abandoned", "unknown"],
-    )
-    use.add_argument("--rating", type=int, choices=range(1, 6))
-    use.add_argument("--rationale", required=True)
-    use.add_argument("--duration-seconds", type=float)
-    use.add_argument(
-        "--listing-state",
-        default="unknown",
-        choices=["full-description", "name-only", "manual-only", "off", "unknown"],
-    )
-    use.add_argument("--project")
-    use.add_argument("--project-path", type=Path)
-    use.add_argument("--artifact")
-    add_actor_options(use)
-    use.set_defaults(handler=cmd_use)
+    insights.add_argument("--since", help="ISO date or timestamp")
+    insights.add_argument("--json", action="store_true")
+    insights.set_defaults(handler=cmd_insights)
 
     where_used = commands.add_parser(
         "where-used", help="show declared and actual project use"

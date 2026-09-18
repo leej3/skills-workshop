@@ -1360,7 +1360,9 @@ role = "Maintenance skills"
             "source": "https://example.test/k-dense.git",
             "path": "upstreams/scientific/skills/genomics",
             "revision": None,
-            "score": 14,
+            "score": output["local"][0]["score"],
+            "matched_terms": ["genomic"],
+            "matched_fields": ["description"],
         }
     ]
 
@@ -1373,6 +1375,7 @@ def test_default_find_orders_local_sources_before_public_providers() -> None:
     assert workshop_cli.selected_providers(None) == [
         "memory",
         "local",
+        "installed",
         "asm",
         "github",
         "vercel",
@@ -1385,6 +1388,7 @@ def test_where_used_resolves_project_evidence(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
+    (memory_root / "downstream").mkdir()
     remember(invoke)
     assert invoke("project", "add", "analysis-project") == 0
     project = records(memory_root, "projects")[0]
@@ -2054,3 +2058,306 @@ def test_apm_version_extracts_semver_before_misleading_revision_suffix(
     )
 
     assert workshop_cli.apm_version() == "0.28.0"
+
+
+def test_recall_natural_language_typo_and_unrelated_query(invoke, memory_root, capsys):
+    remember(invoke, "commit-provenance", "--alias", "commit trailers")
+    remember(invoke, "brain-imaging")
+    capsys.readouterr()
+    for query in ("something I used to verify commit trailers", "commit provennce"):
+        assert invoke("recall", query, "--json") == 0
+        results = json.loads(capsys.readouterr().out)["memory"]
+        assert results[0]["name"] == "commit-provenance"
+    assert workshop_cli.memory_search(memory_root, "quasar spectroscopy", 10) == []
+    assert workshop_cli.memory_search(memory_root, "the and something", 10) == []
+
+
+def test_full_content_and_symlinked_installed_search(
+    memory_root, invoke, tmp_path, capsys
+):
+    skill = tmp_path / "original" / "buried-tool"
+    skill.mkdir(parents=True)
+    (skill / "SKILL.md").write_text(
+        "---\nname: buried-tool\ndescription: Process images\n---\nDetect hippocampal segmentation defects.\n"
+    )
+    installed = tmp_path / "installed"
+    installed.mkdir()
+    (installed / "buried-tool").symlink_to(skill, target_is_directory=True)
+    (memory_root / "registry.toml").write_text(
+        f'[[skill_roots]]\nname="test"\npath={json.dumps(str(installed))}\n'
+    )
+    assert invoke("find", "hippocampal", "--offline", "--json") == 0
+    rows = json.loads(capsys.readouterr().out)["installed"]
+    assert rows[0]["name"] == "buried-tool"
+    assert rows[0]["matched_fields"] == ["content"]
+    assert records(memory_root, "skills") == []
+
+
+def test_find_survives_provider_failure_and_emits_local_first(
+    memory_root, invoke, monkeypatch, capsys
+):
+    remember(invoke, "commit-provenance")
+    capsys.readouterr()
+    calls = []
+
+    def external(provider, command, cwd, mutation, **kwargs):
+        calls.append(provider)
+        if provider == "asm":
+            if len(calls) == 1:
+                assert "commit-provenance" in capsys.readouterr().out
+            raise workshop_cli.WorkshopError("provider unavailable")
+        return subprocess.CompletedProcess(command, 0, "[]", "")
+
+    monkeypatch.setattr(workshop_cli, "run_external", external)
+    assert invoke("find", "commit") == 0
+    assert calls == ["asm", "github", "vercel"]
+    assert "provider unavailable" in capsys.readouterr().err
+    assert invoke("find", "commit", "--provider", "asm") == 1
+
+
+def test_offline_browse_and_tsv_never_contact_providers(invoke, monkeypatch, capsys):
+    remember(invoke, "first-tool")
+    capsys.readouterr()
+    monkeypatch.setattr(
+        workshop_cli,
+        "run_external",
+        lambda *a, **k: pytest.fail("network in offline search"),
+    )
+    assert invoke("find", "", "--offline", "--tsv") == 0
+    line = capsys.readouterr().out.strip()
+    assert line.startswith("first-tool\tmemory\t")
+    assert len(line.split("\t")) == 4
+    assert invoke("find", "", "--json") == 2
+    assert invoke("find", "first", "--limit", "0") == 2
+
+
+def test_feedback_remembers_used_skill_and_deduplicates(
+    invoke, memory_root, tmp_path, capsys
+):
+    skill_path = tmp_path / "new-tool"
+    skill_path.mkdir()
+    (skill_path / "SKILL.md").write_text(
+        "---\nname: new-tool\ndescription: Verify releases\n---\nCheck the release.\n"
+    )
+    arguments = (
+        "feedback",
+        "new-tool",
+        "--skill-path",
+        str(skill_path),
+        "--task",
+        "Release review",
+        "--rationale",
+        "Enabled checking artifacts",
+        "--benefit",
+        "new-capability",
+        "--next-step",
+        "Handle unsigned artifacts",
+        "--evidence",
+        "https://example.org/result",
+        "--session",
+        "task-123",
+        "--asserted-kind",
+        "agent",
+        "--asserted-by",
+        "test-agent",
+    )
+    assert invoke(*arguments) == 0
+    assert invoke(*arguments) == 0
+    events = records(memory_root, "events")
+    assert len(events) == 1
+    event = events[0]
+    assert event["payload"]["outcome"] == "unknown"
+    assert "rating" not in event["payload"]
+    assert event["review"]["state"] == "unreviewed"
+    assert event["evidence"] == [
+        {"kind": "url", "locator": "https://example.org/result"}
+    ]
+    assert (
+        event["extensions"]["skills-workshop/entrypoint"]["sha256"]
+        == hashlib.sha256((skill_path / "SKILL.md").read_bytes()).hexdigest()
+    )
+    assert workshop_cli.validate_memory(memory_root) == []
+    capsys.readouterr()
+    assert invoke("insights", "--since", "2000-01-01", "--json") == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["skills"][0]["benefits"] == {"new-capability": 1}
+    assert report["skills"][0]["follow_ups"][0]["note"] == "Handle unsigned artifacts"
+    assert invoke(*arguments, "--outcome", "failure") == 2
+    assert len(records(memory_root, "events")) == 1
+
+
+def test_feedback_infers_existing_project_by_ssh_remote(invoke, memory_root, tmp_path):
+    project_path = tmp_path / "consumer"
+    project_path.mkdir()
+    subprocess.run(["git", "init", "-q", str(project_path)], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(project_path),
+            "remote",
+            "add",
+            "origin",
+            "git@example.org:team/consumer.git",
+        ],
+        check=True,
+    )
+    assert (
+        invoke(
+            "project",
+            "add",
+            "consumer",
+            "--repo-url",
+            "https://example.org/team/consumer.git",
+        )
+        == 0
+    )
+    remember(invoke)
+    assert (
+        invoke(
+            "feedback",
+            "example-skill",
+            "--task",
+            "Try workflow",
+            "--rationale",
+            "Did not help",
+            "--outcome",
+            "failure",
+            "--benefit",
+            "no-clear-benefit",
+            "--project-path",
+            str(project_path),
+            "--asserted-kind",
+            "agent",
+            "--asserted-by",
+            "test",
+        )
+        == 0
+    )
+    event = records(memory_root, "events")[0]
+    assert (
+        event["project_evidence"]["project_id"]
+        == records(memory_root, "projects")[0]["id"]
+    )
+    assert event["payload"]["outcome"] == "failure"
+
+
+def test_feedback_invalid_path_does_not_create_memory(invoke, memory_root, tmp_path):
+    assert (
+        invoke(
+            "feedback",
+            "missing",
+            "--skill-path",
+            str(tmp_path / "missing"),
+            "--task",
+            "Try workflow",
+            "--rationale",
+            "Did not help",
+            "--asserted-kind",
+            "agent",
+            "--asserted-by",
+            "test",
+        )
+        == 2
+    )
+    assert records(memory_root, "skills") == []
+    assert records(memory_root, "events") == []
+
+
+@pytest.mark.parametrize(
+    "case",
+    json.loads(
+        (Path(__file__).parent / "fixtures" / "recall_queries.json").read_text()
+    ),
+)
+def test_remembered_task_recall_regressions(case):
+    results = workshop_cli.memory_search(workshop_cli.REPOSITORY, case["query"], 3)
+    assert results[0]["name"] == case["expected"]
+
+
+def test_failed_feedback_rolls_back_new_skill(invoke, memory_root, tmp_path):
+    skill = tmp_path / "SKILL.md"
+    skill.write_text("---\nname: temporary-tool\ndescription: A test skill\n---\n")
+    assert (
+        invoke(
+            "feedback",
+            "temporary-tool",
+            "--skill-path",
+            str(skill),
+            "--task",
+            "Test invalid feedback",
+            "--rationale",
+            "x" * 4097,
+            "--asserted-kind",
+            "agent",
+            "--asserted-by",
+            "test",
+        )
+        == 2
+    )
+    assert records(memory_root, "skills") == []
+    assert records(memory_root, "events") == []
+
+
+def test_feedback_launcher_uses_configured_checkout(monkeypatch, memory_root):
+    import importlib.util
+
+    script = (
+        workshop_cli.REPOSITORY / ".agents/skills/workshop-feedback/scripts/feedback.py"
+    )
+    spec = importlib.util.spec_from_file_location("feedback_launcher", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    (memory_root / "scripts").mkdir()
+    (memory_root / "scripts/workshop.py").touch()
+    (memory_root / "pixi.toml").touch()
+    monkeypatch.setenv("SKILLS_WORKSHOP_ROOT", str(memory_root))
+    monkeypatch.setenv("CODEX_THREAD_ID", "test-session")
+    monkeypatch.setattr(
+        module.sys, "argv", [str(script), "example", "--task", "a task"]
+    )
+    calls = []
+
+    def run(command, **kwargs):
+        calls.append((command, kwargs))
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(module.subprocess, "run", run)
+    assert module.main() == 0
+    command, options = calls[0]
+    assert command[:6] == [
+        "pixi",
+        "run",
+        "--manifest-path",
+        str(memory_root / "pixi.toml"),
+        "workshop",
+        "feedback",
+    ]
+    assert command[-2:] == ["--session", "test-session"]
+    assert options["cwd"] == memory_root
+
+
+def test_feedback_rejects_wrong_skill_entrypoint(invoke, memory_root, tmp_path):
+    remember(invoke)
+    entrypoint = tmp_path / "SKILL.md"
+    entrypoint.write_text(
+        "---\nname: unrelated-skill\ndescription: Another tool\n---\n"
+    )
+    assert (
+        invoke(
+            "feedback",
+            "example-skill",
+            "--skill-path",
+            str(entrypoint),
+            "--task",
+            "Run task",
+            "--rationale",
+            "Used a tool",
+            "--asserted-kind",
+            "agent",
+            "--asserted-by",
+            "test",
+        )
+        == 2
+    )
+    assert records(memory_root, "events") == []

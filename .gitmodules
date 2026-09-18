@@ -7,3 +7,9 @@
 [submodule "upstreams/con-skills"]
 	path = upstreams/con-skills
 	url = https://github.com/leej3/skills.git
+[submodule "upstreams/anthropic-skills"]
+	path = upstreams/anthropic-skills
+	url = https://github.com/anthropics/skills.git
+[submodule "upstreams/openai-skills"]
+	path = upstreams/openai-skills
+	url = https://github.com/openai/skills.git

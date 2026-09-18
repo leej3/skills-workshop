@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
+    },
+    "skills-workshop/session": "01a0b511-69f1-7fc1-b5f6-8f92e1a6cf67"
+  },
+  "id": "urn:uuid:dacedcbe-b07d-4b00-b139-c517fd6c170d",
+  "occurred_at": "2026-09-18T15:37:02Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "The guidance kept the entrypoint concise, made the checkout an explicit configurable dependency, and prompted executable and frontmatter validation.",
+    "task_summary": "Create a globally available Workshop feedback control skill"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "2348c502ed59820feeb7111b44e03743624143a6"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "type": "use"
+}

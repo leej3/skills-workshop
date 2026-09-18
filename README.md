@@ -3,7 +3,7 @@
 This repository is a Git-backed, source-agnostic memory of skills encountered across projects.
 It remembers where a skill came from, why it was considered, where it was declared or actually used, how it worked, and whether it was evaluated or improved upstream.
 
-`skills-workshop` itself may be installed once as a user-level agent control skill.
+`skills-workshop` and `workshop-feedback` may be installed as user-level agent control skills.
 That installation routes skill-lifecycle requests through this repository; it does not make the skills it discovers user-global.
 Each project-owned experimental skill lives directly in that project's `.agents/skills/` tree.
 Independently maintained reusable skills are installed through the active project's APM manifest and lock, while the workshop retains cross-project memory for both kinds.
@@ -42,6 +42,7 @@ The boundary is testable:
 git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
 cd skills-workshop
 pixi install --locked
+pixi run configure-upstreams
 pixi run workshop doctor
 pixi run memory-validate
 ```
@@ -61,12 +62,34 @@ Only after consuming a promoted external skill should a project choose dependenc
 ## Find and remember skills
 
 Search local memory and every registered, checked-out upstream source first.
-This includes aliases, source locations, prior task summaries, outcomes, and rationales, plus the K-Dense and `con/skills` source trees declared in `registry.toml`.
+This includes aliases, source locations, prior task summaries, outcomes, and rationales, plus all registered source trees: K-Dense, NiPreps, `con/skills`, Anthropic, and OpenAI.
+Local discovery searches full `SKILL.md` contents and configured installed skill roots as well as names and descriptions.
+Ranking favors meaningful query coverage and specific matches, tolerates minor typos, and explains its matches.
+Recall results include recent outcomes and caveats with their assertion and review status.
 Results show each local source's pinned revision; newly added registered sources automatically participate in the same search:
 
 ```console
 pixi run workshop find "something I used to verify commit trailers"
 ```
+
+Use memory alone for a quick recollection, or keep all discovery local:
+
+```console
+pixi run workshop recall "something I used to verify commit trailers"
+pixi run workshop find "hippocampal segmentation" --offline
+```
+
+An empty offline query lists candidates.
+TSV output supports an optional `fzf` picker without executing or installing the selected result:
+
+```console
+pixi run workshop find "" --offline --limit 1000 --tsv | fzf
+```
+
+Public searches remain part of fresh discovery.
+Text output shows local results immediately, and a failed provider does not discard successful results.
+`--json` includes provider errors for agents.
+Only the supplied query goes to public providers; local memory and installed contents stay local.
 
 For a candidate where freshness matters, inspect the latest verified remote state before choosing it.
 The status command fetches only when requested; updating a checkout always begins with a plan and requires an explicit apply:
@@ -114,6 +137,10 @@ pixi run workshop source add example-skill \
 ```
 
 ## Install and observe a project
+
+A request to install a named skill authorizes that choice after the normal preview and compatibility checks.
+Search for fresh alternatives and offer useful ones alongside the result, without making another selection a prerequisite or silently substituting them.
+Open-ended requests still benefit from a shortlist before adoption.
 
 Installation is an APM operation.
 The workshop defaults to an APM preview and requires `--apply` before mutation:
@@ -171,6 +198,39 @@ pixi run workshop contribution add example-skill \
   --asserted-kind human --asserted-by john
 ```
 
+## Lightweight feedback across projects
+
+The separate [`workshop-feedback`](.agents/skills/workshop-feedback/SKILL.md) skill records one short observation after actual skill use.
+Install its canonical directory into the user-level skill location (for Codex, `~/.agents/skills/workshop-feedback`), and configure the Workshop checkout in `~/.config/skills-workshop/config.json`:
+
+```json
+{"workshop_root": "/absolute/path/to/skills-workshop"}
+```
+
+A global agent instruction to invoke it after meaningful skill use makes the process explicit; implicit skill selection alone is not a guaranteed hook.
+The skill and its launcher are portable, with Pixi and the configured Workshop CLI as declared dependencies.
+No external posting or push is automatic.
+
+```console
+pixi run workshop feedback example-skill \
+  --task "Reviewed a release" --rationale "Found a missing checksum" \
+  --outcome success --benefit avoided-error \
+  --next-step "Cover detached signatures" \
+  --project-path ../project --asserted-kind agent --asserted-by codex
+pixi run workshop insights --since 2026-09-18
+```
+
+Ratings are optional.
+Unknown outcomes remain unknown; failures and unclear benefit belong in memory too.
+`--skill-path` can remember a newly used skill and record an entrypoint digest.
+`--project-path` links an already remembered project by remote identity when unambiguous.
+`--session` makes retries idempotent for the same skill/task; later milestones or corrections use a distinct task summary.
+Evidence links and proposed improvements can be added without creating an evaluation or an upstream issue.
+
+`insights` reports observed benefits, outcomes, review/evidence coverage, and proposed follow-ups over a chosen period.
+Use it over the next few weeks to assess discovery breadth, new capabilities, repeat usefulness, and recording effort.
+These observations do not establish causality.
+
 ## Evaluate an important skill
 
 For a repeated or consequential claim, create an explicit with-skill versus without-skill scaffold:
@@ -223,7 +283,8 @@ They never contain versions, install paths, hashes, dependency graphs, or target
 
 ## Tracked skills
 
-- `skills-workshop`: this workflow, backed by the same tested CLI used by humans.
+- `skills-workshop`: discovery and adoption, backed by the same tested CLI used by humans.
+- `workshop-feedback`: lightweight post-task observations, installed globally as a second control skill.
 - `commit-provenance` and `build-github-app`: currently project-owned native skills; promote either to an independent source when another project needs its versioned lifecycle.
 
 The project-local and user-global `commit-provenance` copies currently have the same name.

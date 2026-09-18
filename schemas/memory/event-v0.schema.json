@@ -194,6 +194,8 @@
         "rationale": {"type": "string", "minLength": 1, "maxLength": 4096},
         "duration_seconds": {"type": "number", "minimum": 0},
         "cost_usd": {"type": "number", "minimum": 0},
+        "benefit": {"enum": ["new-capability", "saved-time", "avoided-error", "better-result", "no-clear-benefit", "harmful", "unknown"]},
+        "next_step": {"type": "string", "minLength": 1, "maxLength": 4096},
         "listing_state": {"enum": ["full-description", "name-only", "manual-only", "off", "unknown"]}
       },
       "dependentRequired": {"rating": ["scale_id"]},

@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-18T15:37:02Z",
+  "extensions": {},
+  "id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "name": "skill-creator",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:c2f7fcba-3112-4a82-bc3e-3890d42f28cd",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-18T15:37:02Z",
+      "id": "urn:uuid:c2f7fcba-3112-4a82-bc3e-3890d42f28cd",
+      "kind": "local",
+      "locator": "/Users/johnlee/.codex/skills/.system/skill-creator",
+      "notes": "Observed during actual use; source is not an adoption or trust judgment.",
+      "role": "discovery",
+      "subpath": null
+    }
+  ],
+  "summary": "Create or update a Codex skill with appropriately scoped instructions and any needed supporting resources.",
+  "tag_ids": [],
+  "updated_at": "2026-09-18T15:37:02Z"
+}

@@ -32,3 +32,17 @@ url = "https://github.com/con/skills.git"
 fork_url = "https://github.com/leej3/skills.git"
 path = "upstreams/con-skills"
 role = "Software maintenance, triage, and automation skills"
+
+[[upstreams]]
+name = "anthropic-skills"
+url = "https://github.com/anthropics/skills.git"
+fork_url = "https://github.com/anthropics/skills.git"
+path = "upstreams/anthropic-skills"
+role = "Official Anthropic examples for creative, document, and developer workflows; inspect each skill's license"
+
+[[upstreams]]
+name = "openai-skills"
+url = "https://github.com/openai/skills.git"
+fork_url = "https://github.com/openai/skills.git"
+path = "upstreams/openai-skills"
+role = "Official OpenAI skill catalog including curated and experimental developer workflows"

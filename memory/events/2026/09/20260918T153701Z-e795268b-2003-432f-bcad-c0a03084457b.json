@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:e795268b-2003-432f-bcad-c0a03084457b",
+  "occurred_at": "2026-09-18T15:37:01Z",
+  "payload": {
+    "resolution_digest": "sha256:da0979149ef3e45f0d09b7b1f452162fad86000483220c1190e2049a003c96ea",
+    "skill_name": "build-github-app",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/build-github-app",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "2348c502ed59820feeb7111b44e03743624143a6"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:bb242b76-de44-46ef-8b61-6e449fdd2000",
+  "type": "project-membership"
+}

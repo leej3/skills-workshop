@@ -10,7 +10,8 @@ Do not turn it into another installer, registry, or project lock.
 
 ## Scope and bootstrap
 
-This is the one user-level control skill for the skill lifecycle.
+This is the user-level control skill for discovery and adoption.
+The separate `workshop-feedback` control skill handles lightweight post-task observations across projects.
 When an agent is asked to find, create, install, audit, record, or evaluate a skill, it should invoke this skill first.
 That does not make discovered skills user-global: keep a new project-owned skill directly in the active project's `.agents/skills/`, or install an independently maintained reusable skill through the project's APM state, then record the relationship and any later real use in workshop memory.
 A project's reproducible skill set must remain usable if this user-level control skill or the workshop checkout is unavailable.
@@ -27,15 +28,16 @@ pixi run workshop validate
 The doctor names each external tool, its pinned version, and its authority.
 Every delegated command is printed before execution.
 
-For any request to find, create, choose, or install a skill, the first outcome is a discovery consultation, not a filesystem or dependency change.
-The user must make a separate choice after seeing the current alternatives.
-A request such as "install X" or "I want a skill for Y" does not waive this consultation merely because it names a known skill.
-Proceed immediately only when the user explicitly says to skip comparison or confirms a choice from a consultation.
+An explicit request to install a named skill authorizes that installation after the normal preview and compatibility checks.
+Continue a fresh alternative search and offer worthwhile alternatives alongside the result; do not make that search or a second selection gate block the named choice.
+Never substitute an alternative without the user's agreement.
+For an open-ended request, search and recommend a shortlist before adopting a candidate unless the user has authorized you to choose or create it.
 
 ## Find and consider a skill
 
 Search remembered skills and the locally tracked upstream inventory first.
-The local phase searches every source registered in `registry.toml` (including K-Dense `scientific-agent-skills` and `con/skills`) and reports its pinned revision, so it covers new registered sources without a workflow change:
+The local phase searches every registered upstream, the Workshop native skills, and configured installed skill roots, including full entrypoint contents.
+It reports pinned upstream revisions and distinguishes installed observations from remembered use:
 
 ```console
 pixi run workshop find "capability or remembered task"
@@ -62,29 +64,16 @@ pixi run workshop find "capability"
 ```
 
 Use `--provider` only when the user requests a narrower search or the default command cannot query a configured source.
-Do not let a previously remembered or named skill short-circuit the broader search: newer alternatives are part of the consultation.
+A named installation can proceed while the broader search supplies advisory alternatives.
 
-### Human decision gate
+### Present choices without blocking an explicit choice
 
-When the user asks about, requests, names, creates, or proposes installing a skill, discovery is a separate decision phase.
-Do not create, scaffold, adapt, install, adopt, or record a candidate in that turn unless the user explicitly asked to skip consultation or is confirming a choice from an earlier consultation.
-Naming an exact skill is not by itself confirmation because newer alternatives may now be available.
-
-After searching:
-
-1. Summarize which configured sources were searched, their freshness or pinned state, and any source that was unavailable.
-2. Present a concise shortlist of plausible matches across those sources.
-   For each, state its name, source, relevant capability, important limitation or difference, and a link to its canonical source.
-   Use a clickable local path when the canonical source is local and a canonical web URL when it is remote.
-3. Always include creating a new project-owned skill as an explicit option, even when matches exist.
-   Explain when adapting a candidate may be preferable to either installing it unchanged or starting over.
-4. Give a recommendation with its tradeoffs, while keeping the choice with the user.
-5. Ask the user to choose among adopting a candidate, adapting one, creating a new skill, broadening or refreshing the search, or stopping.
-   End the turn and wait for that human decision.
-
-Do not treat the original capability request as approval of the agent's later selection or creation proposal.
-Do not scaffold files, change APM state, or record an adoption decision while waiting.
-A later user choice supplies the authority to proceed with the selected path.
+Keep searching fresh sources even when a named skill is already known: newer alternatives can be valuable on the next project.
+Summarize worthwhile alternatives with source links, differences, and any freshness or provider limitations.
+An exact installation request supplies the choice; alternatives are advisory.
+For open-ended discovery, include adapting a candidate or creating a project-owned skill when appropriate, and ask for a choice only if the user has not delegated it.
+A failed provider should not block an otherwise verified named installation.
+Report the incomplete search and continue the authorized work.
 
 Inspect a GitHub candidate's complete tree without installing it:
 
@@ -142,6 +131,13 @@ For an external dependency, install its package into an isolated temporary consu
 Read [references/workflow.md](references/workflow.md) for the boundary and verification checklist.
 
 ## Record evidence after real use
+
+Use the separate global `workshop-feedback` skill after actual use; one short observation per skill and meaningful task is enough.
+`workshop feedback` accepts the same evidence options as `use`, can remember a newly used skill with `--skill-path`, and can infer an already registered project from `--project-path`.
+Ratings are optional.
+Capture a concrete benefit or improvement when observed, and use `workshop insights --since YYYY-MM-DD` to review patterns later.
+Do not create a feedback event about the feedback recorder itself or routine Workshop bookkeeping.
+
 
 Project membership is not usage.
 Record a `use` event only after the skill participated in a task:

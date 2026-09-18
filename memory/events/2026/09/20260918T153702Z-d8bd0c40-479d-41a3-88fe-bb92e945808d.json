@@ -1,0 +1,54 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://learn.chatgpt.com/docs/build-skills"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45"
+    },
+    "skills-workshop/session": "01a0b511-69f1-7fc1-b5f6-8f92e1a6cf67"
+  },
+  "id": "urn:uuid:d8bd0c40-479d-41a3-88fe-bb92e945808d",
+  "occurred_at": "2026-09-18T15:37:02Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Official skill documentation confirmed user-level placement and implicit selection settings; a global instruction was added because implicit selection is not deterministic post-task telemetry.",
+    "task_summary": "Verify user-level skill placement and feedback activation setup"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "2348c502ed59820feeb7111b44e03743624143a6"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:188af355-6da7-463e-afbb-1d0082f8e352",
+  "type": "use"
+}

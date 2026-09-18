@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-18T15:37:01Z",
+  "extensions": {},
+  "id": "urn:uuid:f31bc4bd-a452-47ca-9ddb-45ea6cf914b6",
+  "name": "workshop-feedback",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:c0061d9e-5a9d-49d2-89f5-8a62bc2bc01f",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-18T15:37:01Z",
+      "id": "urn:uuid:c0061d9e-5a9d-49d2-89f5-8a62bc2bc01f",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".agents/skills/workshop-feedback"
+    }
+  ],
+  "summary": "Record lightweight observations after actual skill use across projects; optional benefits, failures, evidence, and improvement proposals.",
+  "tag_ids": [],
+  "updated_at": "2026-09-18T15:37:01Z"
+}
