@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "johnlee",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:4e930f6c-9720-4013-9465-476d48b21190",
+  "occurred_at": "2026-09-09T14:09:20Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John Lee confirmed adoption after discovery consultation. The skill matches this repository REUSE, SPDX, and multi-license compliance work."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:54d36ad3-0fa2-4b93-97a1-dfb70ad53003",
+  "type": "consideration"
+}

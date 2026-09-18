@@ -157,6 +157,14 @@ Ratings are cheap contextual observations, not efficacy evidence.
 The scale is 1 harmful, 2 unhelpful, 3 mixed, 4 useful, and 5 decisive.
 Record enough task, runtime, and project context to interpret the observation without storing secrets or private task content.
 
+Workshop memory is Git-backed project data.
+Before completing a task that creates or updates memory, run `pixi run workshop validate`, inspect the records, and commit their explicit paths in the Workshop checkout using its commit conventions.
+Do this even when the main task takes place in another project; do not leave intentional memory untracked.
+When asked to sync the Workshop, also inspect and include relevant pending memory records rather than excluding them solely because they predate the task.
+Preserve append-only event history and keep agent assertions unreviewed; committing a record does not mark it human-reviewed.
+Exclude unrelated files and push when the task authorizes publication.
+Do not create additional events solely to record this routine memory bookkeeping.
+
 Recall the evidence later with:
 
 ```console

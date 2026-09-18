@@ -1,0 +1,44 @@
+{
+  "asserted_by": {
+    "id": "codex-desktop",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:b4c836e1-776d-4b61-b3b9-fdb44d09e68a",
+  "occurred_at": "2026-09-09T14:09:26Z",
+  "payload": {
+    "invocation": "explicit",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rating": 4,
+    "rationale": "The skill provided the licensing assessment, REUSE structure, validation, pre-commit and CI integration, and scope-isolated staging guidance. The official pre-commit hook needed a project-local uvx wrapper because its cached Python environment was incompatible.",
+    "scale_id": "workshop-overall-v1",
+    "task_summary": "Introduce REUSE compliance and prepare an isolated pull request for the Orinoco Lite engineering workspace"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:11a92b02eb9bd55d53300b85fa6089afc35d9d58e336a2f5b4f25f5ef59742c2",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "93d9a56f0f1ada2f70cb2acd5120fb6893c77e98"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:54d36ad3-0fa2-4b93-97a1-dfb70ad53003",
+  "type": "use"
+}
