@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
+    },
+    "skills-workshop/session": "01a0b5e1-a027-76d2-b98a-c31f07eeafd9"
+  },
+  "id": "urn:uuid:72845982-152f-4809-928c-5209a7cee475",
+  "occurred_at": "2026-09-18T20:03:51Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Guidance kept the procedure self-contained and scoped, avoiding an unimplemented workflow framework; structural validation passed, behavioral evaluation remains pending.",
+    "task_summary": "Create a project-owned provenance comparison procedure"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "f373fc4e141983000ae63a9e82853766e1ec2450"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "type": "use"
+}

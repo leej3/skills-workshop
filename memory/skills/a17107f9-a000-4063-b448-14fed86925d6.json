@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-18T20:03:22Z",
+  "extensions": {},
+  "id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "name": "compare-orinoco-provenance",
+  "notes": "Project-owned procedure created at user request; not yet behaviorally evaluated.",
+  "preferred_source_id": "urn:uuid:126cb28b-4fc3-47d0-98a5-e78da98d4b8c",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-18T20:03:22Z",
+      "id": "urn:uuid:126cb28b-4fc3-47d0-98a5-e78da98d4b8c",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".agents/skills/compare-orinoco-provenance"
+    }
+  ],
+  "summary": "Compare staged Orinoco semantic outputs, verify propagated effects through replay, and carry scoped human decisions forward.",
+  "tag_ids": [],
+  "updated_at": "2026-09-18T20:03:22Z"
+}

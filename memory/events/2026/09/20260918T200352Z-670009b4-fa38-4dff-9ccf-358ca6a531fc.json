@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "f373fc4e141983000ae63a9e82853766e1ec2450",
+      "scope": "SKILL.md only",
+      "sha256": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3"
+    },
+    "skills-workshop/session": "01a0b5e1-a027-76d2-b98a-c31f07eeafd9"
+  },
+  "id": "urn:uuid:670009b4-fa38-4dff-9ccf-358ca6a531fc",
+  "occurred_at": "2026-09-18T20:03:52Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Separated dated research and search limitations in active agent context from the reusable skill, with an explicit retirement condition and one link from the active plan.",
+    "task_summary": "Document provenance comparison research and skill discovery"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "f373fc4e141983000ae63a9e82853766e1ec2450"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}

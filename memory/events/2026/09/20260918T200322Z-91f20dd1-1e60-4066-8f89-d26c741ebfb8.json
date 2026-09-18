@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:91f20dd1-1e60-4066-8f89-d26c741ebfb8",
+  "occurred_at": "2026-09-18T20:03:22Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested a project-owned skill after reviewing the provenance-differencing exploration; this records adoption, not evidence of successful use."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "type": "consideration"
+}
