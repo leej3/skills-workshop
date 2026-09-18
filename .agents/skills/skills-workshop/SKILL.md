@@ -66,6 +66,11 @@ pixi run workshop find "capability"
 Use `--provider` only when the user requests a narrower search or the default command cannot query a configured source.
 A named installation can proceed while the broader search supplies advisory alternatives.
 
+If you skip or narrow a discovery step, omit the freshness check, or substitute a web search, disclose that decision when you make it.
+Name the affected sources or steps, explain the concrete constraint or reason, and identify the fallback.
+In the final results, distinguish sources actually searched through Workshop from separately searched sources and sources not queried; state any freshness limitation.
+Do not describe an unqueried provider as failed or claim it would miss a candidate without evidence from an actual search.
+
 ### Present choices without blocking an explicit choice
 
 Keep searching fresh sources even when a named skill is already known: newer alternatives can be valuable on the next project.
