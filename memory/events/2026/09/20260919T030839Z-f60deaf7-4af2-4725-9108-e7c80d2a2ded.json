@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/173"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "acad153c14de46844a70b8ddc931ee658a466ab6",
+      "scope": "SKILL.md only",
+      "sha256": "417d40b3adbdc811cbcc4ed75185c7a3423646e4a79a2e4d3b9e6539c6dca935"
+    },
+    "skills-workshop/session": "01a0b658-7e06-7283-8831-a8f069deda0a"
+  },
+  "id": "urn:uuid:f60deaf7-4af2-4725-9108-e7c80d2a2ded",
+  "occurred_at": "2026-09-19T03:08:39Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Reused disposable downstream evidence and isolated versus complete-path runs to exercise the browser with real stage outcomes; the exercise exposed a macOS temporary-path defect and prevented treating passing isolated stages as integration approval.",
+    "task_summary": "Complete the staged comparison web review in a separate stacked PR"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "acad153c14de46844a70b8ddc931ee658a466ab6"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}
