@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/171"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "617103d48812754ab85104c069d27f0c937e943f",
+      "scope": "SKILL.md only",
+      "sha256": "da92f6967ecf2e787bc71445f24cea88ef1697bcb5d6b1b543c650be59419ef0"
+    },
+    "skills-workshop/session": "01a0b658-7e06-7283-8831-a8f069deda0a"
+  },
+  "id": "urn:uuid:38a4d52c-a5c5-4a1a-857a-e11c39700458",
+  "occurred_at": "2026-09-19T02:09:51Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Same-input comparisons and selective record replay separated annotation representation changes from nine downstream page effects. Unpatched fixture replay showed that whole-capture agreement was insufficient to retire the issued-date adaptation.",
+    "task_summary": "Implement and exercise staged upstream comparison in a fresh downstream"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "617103d48812754ab85104c069d27f0c937e943f"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "type": "use"
+}

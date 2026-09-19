@@ -1,0 +1,51 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "56d1072c2a157a5bde2df3b1698bf545896e02d6f216cd4675bb7fe2b978d855"
+    },
+    "skills-workshop/session": "01a0b658-7e06-7283-8831-a8f069deda0a"
+  },
+  "id": "urn:uuid:f9356d39-4767-45a0-b2a2-f029d0ca3238",
+  "occurred_at": "2026-09-19T02:09:52Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "next_step": "Clarify native rerun handling for already prepared linked inputs in projects that forbid downstream Annex.",
+    "outcome": "success",
+    "rationale": "Locked DataLad recording preserved retained inputs through clone replay. Linked maintainer sources needed the native assume-ready inputs option to prevent retrieval from invoking Annex; that option must also be supplied to rerun because DataLad does not save it.",
+    "task_summary": "Verify Git-only capture conversion and maintainer import replay"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": false,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "617103d48812754ab85104c069d27f0c937e943f"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "type": "use"
+}
