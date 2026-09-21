@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "a32d69b05e2e53f8219cc9dbfb84ba85b1e7fbb3",
+      "scope": "SKILL.md only",
+      "sha256": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3"
+    },
+    "skills-workshop/session": "01a0c52c-c8b4-7253-afc9-10ecfcb4954f"
+  },
+  "id": "urn:uuid:bbdad26b-3a47-4d71-bf5a-ddfbe6ea95c0",
+  "occurred_at": "2026-09-21T18:41:34Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Kept the human purpose in the charter and concrete representation labels in the overview without repeating overlay mechanics.",
+    "task_summary": "Clarify record readability and preserve format labels in metadata diagrams"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "a32d69b05e2e53f8219cc9dbfb84ba85b1e7fbb3"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}
