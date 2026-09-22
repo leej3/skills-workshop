@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "e183ef35971f3926284bbb3ce82c79520e4979e1",
+      "scope": "SKILL.md only",
+      "sha256": "5daf5f5059a6fc0c0e5f9cce0df107114ed1de105a69585f19a0f133f748f9af"
+    },
+    "skills-workshop/session": "01a0ca39-43a1-7600-b72a-63c48f65977f"
+  },
+  "id": "urn:uuid:4bce5674-98dd-4882-abca-95364bd12cc5",
+  "occurred_at": "2026-09-22T21:53:22Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Disposable downstream validation exposed the distinction between editable source checks and installed Git candidate behavior; shared population commands also support comparison replay.",
+    "task_summary": "Exercise immutable downstream setup with one environment switch"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "e183ef35971f3926284bbb3ce82c79520e4979e1"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}
