@@ -1,0 +1,54 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/170"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "1401e85be8a2128fe023668169d700b23aa08e5b",
+      "scope": "SKILL.md only",
+      "sha256": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3"
+    }
+  },
+  "id": "urn:uuid:9c988db2-25a4-4722-823b-370b9d34a410",
+  "occurred_at": "2026-09-22T13:53:49Z",
+  "payload": {
+    "benefit": "no-clear-benefit",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "partial",
+    "rationale": "The earlier precision pass retained stale terminology and vague criteria despite skill guidance. User review required explicit input/output formats and testable outcomes; the follow-up replaced those passages and separated remaining implementation work.",
+    "task_summary": "Correct stale transformation terminology and specify RDF acceptance checks"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "1401e85be8a2128fe023668169d700b23aa08e5b"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}
