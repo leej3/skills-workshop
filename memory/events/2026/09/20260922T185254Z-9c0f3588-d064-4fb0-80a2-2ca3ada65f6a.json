@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "30ca9ad2cf8beb8036389980d0966b4602ba0f9b",
+      "scope": "SKILL.md only",
+      "sha256": "417d40b3adbdc811cbcc4ed75185c7a3423646e4a79a2e4d3b9e6539c6dca935"
+    },
+    "skills-workshop/session": "01a0ca72-e148-71c0-98af-0067f5317ab0"
+  },
+  "id": "urn:uuid:9c0f3588-d064-4fb0-80a2-2ca3ada65f6a",
+  "occurred_at": "2026-09-22T18:52:54Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Clarified that editable activation belongs to downstream websites; focused tests covered the package-only guard without a website build.",
+    "task_summary": "Prevent package checkout redirection by dev enable"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "30ca9ad2cf8beb8036389980d0966b4602ba0f9b"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}
