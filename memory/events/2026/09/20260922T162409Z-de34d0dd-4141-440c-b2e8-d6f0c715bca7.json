@@ -1,0 +1,54 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/170#issuecomment-5780070374"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "2e9dc0ba508300405ce11d39e7bb548f29191af2",
+      "scope": "SKILL.md only",
+      "sha256": "da92f6967ecf2e787bc71445f24cea88ef1697bcb5d6b1b543c650be59419ef0"
+    }
+  },
+  "id": "urn:uuid:de34d0dd-4141-440c-b2e8-d6f0c715bca7",
+  "occurred_at": "2026-09-22T16:24:09Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Preserved the retained capture and earlier evidence while verifying the entire storage conversion with jq and cmp independently of the project comparator.",
+    "task_summary": "Make JSONL storage preservation independently verifiable with ordinary byte comparison"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "2e9dc0ba508300405ce11d39e7bb548f29191af2"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "type": "use"
+}
