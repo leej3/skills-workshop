@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/psychoinformatics-site-specific/pull/2"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "cd787d70677c993f4c79079c6c4e5e8e728e1d16",
+      "scope": "SKILL.md only",
+      "sha256": "da92f6967ecf2e787bc71445f24cea88ef1697bcb5d6b1b543c650be59419ef0"
+    },
+    "skills-workshop/session": "01a0c5ec-e335-7eb3-bcfa-ee2357482bd4"
+  },
+  "id": "urn:uuid:3a5a7b12-5903-4583-86b2-b5bb382f54e1",
+  "occurred_at": "2026-09-22T14:56:56Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "automatic",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Retained-capture and boundary checks exposed a deliberately altered control capture and separated annotation representation changes from curated values. The final correction preserves all 5030 source records.",
+    "task_summary": "Complete the staged RDF comparison and preserve captured site inputs"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "cd787d70677c993f4c79079c6c4e5e8e728e1d16"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "type": "use"
+}
