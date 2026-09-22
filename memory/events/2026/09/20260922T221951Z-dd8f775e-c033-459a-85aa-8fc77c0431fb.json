@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "56d1072c2a157a5bde2df3b1698bf545896e02d6f216cd4675bb7fe2b978d855"
+    },
+    "skills-workshop/session": "01a0ca39-43a1-7600-b72a-63c48f65977f"
+  },
+  "id": "urn:uuid:dd8f775e-c033-459a-85aa-8fc77c0431fb",
+  "occurred_at": "2026-09-22T22:19:51Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Kept retrieval in Pixi-managed tooling and ordinary destination files. Clean-clone validation found that the GitHub mirror lacks some payloads, requiring the original upstream Annex host.",
+    "task_summary": "Retrieve upstream Annex media during recorded site preparation"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "e8b76c92df2e017ba658943bcd07ab88f22bbaed"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:1b96b14f-6e40-4785-ad81-c6c95beb91a7",
+  "type": "use"
+}
