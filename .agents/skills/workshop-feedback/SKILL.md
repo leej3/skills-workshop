@@ -10,7 +10,8 @@ This is a user-level control skill; working skills stay in their owning projects
 It requires Pixi and a Skills Workshop checkout with the `feedback` command.
 Use the checkout's Pixi environment for Python; a system Python installation is not required.
 Configure that checkout in `~/.config/skills-workshop/config.json` as `{"workshop_root": "/absolute/checkout"}`, or set `SKILLS_WORKSHOP_ROOT`.
-The bundled launcher locates and runs the CLI; it never installs software or publishes anything.
+The bundled launcher locates and runs the CLI; it never installs software or publishes anything itself.
+The agent completes the Git commit and push described below.
 
 At a meaningful milestone, record one short observation per skill that materially participated.
 Capture failures, abandonment, and unclear benefit as readily as success.
@@ -60,7 +61,10 @@ If uncertain, say so in the rationale.
 
 Batch memory bookkeeping at the end of the task: validate the Workshop memory, inspect changed records, and commit only the task's intentional paths under the checkout's commit conventions.
 Honor its provenance requirement.
-Do not push without publication authorization.
+By the user's standing authorization, commit and push completed Workshop feedback to the configured remote by default, including when the main task takes place in another project.
+Do not ask for confirmation again unless the user overrides this default or the push would publish unrelated changes.
+Inspect outgoing commits, use the configured SSH transport for GitHub, and verify that the push succeeds.
+Do not force-push; report authentication failures or divergent history as blockers.
 If the checkout, tools, or commit provenance are unavailable, finish the main task and briefly report the pending observation; do not invent a record or repeatedly retry.
 
 Later, `pixi run workshop recall "task I remember"` retrieves experience and `pixi run workshop insights --since YYYY-MM-DD` summarizes benefits, failures, evidence gaps, and proposed improvements.
