@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "fab56e0b5eca877c7939734eab4ec469d008a673",
+      "scope": "SKILL.md only",
+      "sha256": "238aee53511b3017fd6dccb74c73558b5c02691f738ac31543422f707747e420"
+    },
+    "skills-workshop/session": "01a0ced0-ef5c-7230-bfad-a7e25235b754"
+  },
+  "id": "urn:uuid:64ee4676-a3a5-4e41-b635-00cd9efabd5d",
+  "occurred_at": "2026-09-23T15:11:17Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Guided examination of the downstream package pin and execution of the existing build without changing imported metadata.",
+    "task_summary": "Diagnose datetime diagnostics in an instantiated local build"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "fab56e0b5eca877c7939734eab4ec469d008a673"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}
