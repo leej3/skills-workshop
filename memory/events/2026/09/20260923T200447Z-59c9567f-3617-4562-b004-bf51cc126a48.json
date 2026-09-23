@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "john",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:59c9567f-3617-4562-b004-bf51cc126a48",
+  "occurred_at": "2026-09-23T20:04:47Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "User requested a project skill requiring sub-agent exploration and recommendations to the parent."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:9ef5bc9b-ab86-4790-b0e2-8f64c5c31b5d",
+  "type": "consideration"
+}

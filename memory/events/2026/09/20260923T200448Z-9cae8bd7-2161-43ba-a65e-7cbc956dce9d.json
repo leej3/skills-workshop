@@ -1,0 +1,41 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:9cae8bd7-2161-43ba-a65e-7cbc956dce9d",
+  "occurred_at": "2026-09-23T20:04:48Z",
+  "payload": {
+    "resolution_digest": "sha256:dc2a61c91b6d7d6f3a0a9e64a3bfc19e2a9bf0e2895dc7c67fcd0c5097e23c2c",
+    "skill_name": "compare-orinoco-provenance",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".agents/skills/compare-orinoco-provenance",
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "d000d47d8980cca6762c3350a483004a2cef5135"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:a17107f9-a000-4063-b448-14fed86925d6",
+  "type": "project-membership"
+}

@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-23T20:04:47Z",
+  "extensions": {},
+  "id": "urn:uuid:9ef5bc9b-ab86-4790-b0e2-8f64c5c31b5d",
+  "name": "review-terminology",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:e8c5983b-facf-449a-baf6-55352806d5a0",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-23T20:04:47Z",
+      "id": "urn:uuid:e8c5983b-facf-449a-baf6-55352806d5a0",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".agents/skills/review-terminology"
+    }
+  ],
+  "summary": "Delegate shared terminology investigation to a sub-agent and return concise evidence-based naming recommendations.",
+  "tag_ids": [],
+  "updated_at": "2026-09-23T20:04:47Z"
+}

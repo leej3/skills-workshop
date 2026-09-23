@@ -1,0 +1,41 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:a18c494c-8894-425a-88e2-e033107ec691",
+  "occurred_at": "2026-09-23T20:04:48Z",
+  "payload": {
+    "resolution_digest": "sha256:9709ad502b4c31ac67db210fe7ffd938029e5759112fd855cd0e47e63072c4dc",
+    "skill_name": "datalad-provenance",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".agents/skills/datalad-provenance",
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "d000d47d8980cca6762c3350a483004a2cef5135"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:3e93f560-6e7f-45b4-a12f-6bcd68456bf1",
+  "type": "project-membership"
+}
