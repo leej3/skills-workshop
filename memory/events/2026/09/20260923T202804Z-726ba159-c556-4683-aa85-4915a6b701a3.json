@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "95e63e06163df83924ac334f405f9068747608b4",
+      "scope": "SKILL.md only",
+      "sha256": "b1b4cea32efa43d557ae79e0f51c18d051e7b2cd577543268a523e897c2b94ca"
+    },
+    "skills-workshop/session": "01a0cfc7-cb3c-7ae2-afc5-71fa24975ab6"
+  },
+  "id": "urn:uuid:726ba159-c556-4683-aa85-4915a6b701a3",
+  "occurred_at": "2026-09-23T20:28:04Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "The delegated reviewer clarified that explicit revision options do not depend on local-heads and identified the input-option relationships, informing grouped CLI help without renaming flags.",
+    "task_summary": "Coordinate retained package pins and template-led setup"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "95e63e06163df83924ac334f405f9068747608b4"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:9ef5bc9b-ab86-4790-b0e2-8f64c5c31b5d",
+  "type": "use"
+}

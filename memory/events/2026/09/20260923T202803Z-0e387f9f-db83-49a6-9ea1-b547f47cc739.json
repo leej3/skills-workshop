@@ -1,0 +1,50 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "95e63e06163df83924ac334f405f9068747608b4",
+      "scope": "SKILL.md only",
+      "sha256": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b"
+    },
+    "skills-workshop/session": "01a0cfc7-cb3c-7ae2-afc5-71fa24975ab6"
+  },
+  "id": "urn:uuid:0e387f9f-db83-49a6-9ea1-b547f47cc739",
+  "occurred_at": "2026-09-23T20:28:03Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Kept the generated package manifest and lock as the default source of truth; only explicit overrides create a recorded package-update run. Guidance now distinguishes immutable identity from retained reachability.",
+    "task_summary": "Coordinate retained package pins and template-led setup"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "95e63e06163df83924ac334f405f9068747608b4"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:3e93f560-6e7f-45b4-a12f-6bcd68456bf1",
+  "type": "use"
+}
