@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/177"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "8e1f8c9bc1fd619607da747cae0a49211b339129",
+      "scope": "SKILL.md only",
+      "sha256": "354242452b74d6b8f0c4f2245cbe031d844c091bb2d4d2adca05f1364fbe9d10"
+    },
+    "skills-workshop/session": "01a0cacd-2ce8-7563-8ed8-7448503b1111"
+  },
+  "id": "urn:uuid:c7516ca0-c427-40bf-ad01-a0daf47b6659",
+  "occurred_at": "2026-09-23T01:48:15Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Distinguished retained Pool capture from renewed site-media acquisition and identified the recovery gap in local-path site-specific subdatasets.",
+    "task_summary": "Joint review of downstream preparation simplicity"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "fab56e0b5eca877c7939734eab4ec469d008a673"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:3e93f560-6e7f-45b4-a12f-6bcd68456bf1",
+  "type": "use"
+}
