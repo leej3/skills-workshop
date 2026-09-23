@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-23T15:38:31Z",
+  "extensions": {},
+  "id": "urn:uuid:3880b58a-e184-4357-86af-1c56bb507161",
+  "name": "upstream-issue-reproducer",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:361dab00-ca1b-4768-bfc5-a2c09911bd72",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-23T15:38:31Z",
+      "id": "urn:uuid:361dab00-ca1b-4768-bfc5-a2c09911bd72",
+      "kind": "local",
+      "locator": "/Users/johnlee/.codex/skills/upstream-issue-reproducer",
+      "notes": "Observed during actual use; source is not an adoption or trust judgment.",
+      "role": "discovery",
+      "subpath": null
+    }
+  ],
+  "summary": "Create concise, self-contained upstream bug reports with reliable reproduction scripts, clear actual-versus-expected behavior, and useful source references. Use when turning investigation notes, verbose drafts, or a locally reproduced defect into an issue for GitHub or another public tracker.",
+  "tag_ids": [],
+  "updated_at": "2026-09-23T15:38:31Z"
+}

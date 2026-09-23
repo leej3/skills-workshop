@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/issues/180"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "56199b6c8abad263cbd934e79e5b54a558ba69b999e76ce1d15af4918685009d"
+    },
+    "skills-workshop/session": "01a0ced0-ef5c-7230-bfad-a7e25235b754"
+  },
+  "id": "urn:uuid:35f5a3be-7393-493f-94fd-bae67276d26d",
+  "occurred_at": "2026-09-23T15:38:31Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Separated captured source evidence from live state and verified a minimal upstream-versus-adapted round trip before filing the issue.",
+    "task_summary": "Report invalid datetime preservation across RDF conversion"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:3880b58a-e184-4357-86af-1c56bb507161",
+  "type": "use"
+}
