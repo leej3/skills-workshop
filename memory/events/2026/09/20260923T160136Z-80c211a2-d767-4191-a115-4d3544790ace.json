@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/issues/181"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "611f9c99410553375dded0de35602cc5a2ed7d25",
+      "scope": "SKILL.md only",
+      "sha256": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3"
+    },
+    "skills-workshop/session": "01a0ceef-a83f-7f31-a578-9d71524cecb4"
+  },
+  "id": "urn:uuid:80c211a2-d767-4191-a115-4d3544790ace",
+  "occurred_at": "2026-09-23T16:01:36Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Kept the issue as the sole active specification instead of duplicating the report in repository documentation.",
+    "task_summary": "Specify removal of downstream configuration in a GitHub issue"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "611f9c99410553375dded0de35602cc5a2ed7d25"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:f412043c-9336-435f-a135-b1f182cfee62",
+  "type": "use"
+}
