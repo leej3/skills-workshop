@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-23T00:10:18Z",
+  "extensions": {},
+  "id": "urn:uuid:3e93f560-6e7f-45b4-a12f-6bcd68456bf1",
+  "name": "datalad-provenance",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:e877f162-6f56-404c-8a4a-448bd5d579ff",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-23T00:10:18Z",
+      "id": "urn:uuid:e877f162-6f56-404c-8a4a-448bd5d579ff",
+      "kind": "git",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev.git",
+      "notes": "Observed during actual use; source is not an adoption or trust judgment.",
+      "role": "discovery",
+      "subpath": ".agents/skills/datalad-provenance"
+    }
+  ],
+  "summary": "Design or review DataLad capture, save, run, and rerun workflows in Orinoco Lite; assess their recoverability using STAMPED principles. Use for supplied snapshots, recorded transformations, historical replay, or recomputation with updated software or data. Not an installation guide or an automatic publication audit.",
+  "tag_ids": [],
+  "updated_at": "2026-09-23T00:10:18Z"
+}

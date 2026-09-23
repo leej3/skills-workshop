@@ -1,0 +1,55 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/ORINOCO-Lite/orinoco-lite-dev/pull/177"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "3242f088cd4cf052cf9cb6de99e8ebd3ebc4e54c",
+      "scope": "SKILL.md only",
+      "sha256": "238aee53511b3017fd6dccb74c73558b5c02691f738ac31543422f707747e420"
+    },
+    "skills-workshop/session": "01a0cacd-2ce8-7563-8ed8-7448503b1111"
+  },
+  "id": "urn:uuid:f9762f91-eec3-4bcf-a60b-454d9446381f",
+  "occurred_at": "2026-09-23T00:10:18Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Installed an immutable candidate in a fresh downstream, then denied access to original checkouts during replay to check portability.",
+    "task_summary": "Split downstream preparation from RDF review"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "fbf366dff5cb56c002d39e8c877dcf793f4f0389"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:630301e0-f003-4881-ac8f-409c57b81165",
+  "type": "use"
+}
