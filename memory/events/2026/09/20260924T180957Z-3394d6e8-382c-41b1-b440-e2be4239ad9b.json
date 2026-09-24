@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/stamped-principles/stamped-checklist/pull/134"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "8996ca7cc5c04d11e8ae171d56be024127eb70b8",
+      "scope": "SKILL.md only",
+      "sha256": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18"
+    },
+    "skills-workshop/session": "01a0d39b-887e-7732-8c1e-665e72e31604"
+  },
+  "id": "urn:uuid:3394d6e8-382c-41b1-b440-e2be4239ad9b",
+  "occurred_at": "2026-09-24T18:09:57Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Captured dependency installation, compatibility tests, build, and pre-commit output outside Git with command exit status.",
+    "task_summary": "Validate checklist migration with pinned data downloads"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "use"
+}
