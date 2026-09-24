@@ -1,6 +1,6 @@
 ---
 name: commit-provenance
-description: Resolve the exact active Codex Desktop and agent-runtime versions, model identifier, and reasoning effort for commit provenance. Use immediately before every Codex-authored git commit or whenever a commit trailer requires model, tool, or reasoning-effort attribution.
+description: Resolve the exact active Codex Desktop and agent-runtime versions, model identifier, and reasoning effort for commit provenance. Use immediately before every Codex-authored git commit or whenever a commit trailer requires model, tool, or reasoning-effort attribution. Also use when choosing the original repository or a fork for a GitHub push or pull request.
 ---
 
 # Commit Provenance
@@ -30,6 +30,13 @@ If the script cannot identify every required value, stop and ask the user; do no
 Preserve any stricter repository commit-message requirements.
 
 ## GitHub write transport
+
+Prefer a branch in the original repository for an authorized push or pull request, unless the user explicitly requests a fork.
+Identify that repository from the remote URLs and PR target; do not assume a remote named `origin` is the original repository.
+Attempt the authorized branch push there over SSH before creating or selecting a fork, unless current evidence already shows that the active credential lacks push access to that exact repository.
+Use a fork only after that repository's push permission is denied or a permission check confirms that push access is absent.
+An existing fork, or denied access to another repository in the same organization, is not evidence that a fork is required here.
+Do not treat network failures, branch protection, or non-fast-forward rejection as missing repository push access; address the actual cause instead.
 
 Use this provenance procedure together with the user-level Git transport instruction.
 For GitHub Git writes—publishing a branch, pushing a commit, or updating a ref—use the configured SSH credential and an SSH remote such as `git@github.com:OWNER/REPO.git` whenever available.
