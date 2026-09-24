@@ -58,6 +58,7 @@ validate = { depends-on = ["lint", "check-format", "compile", "test", "test-skil
 
 [pypi-dependencies]
 apm-cli = "==0.31.0"
+con-duct = "==0.22.0"
 
 [feature.security.dependencies]
 python = "3.12.*"

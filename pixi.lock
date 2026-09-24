@@ -152,6 +152,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/49/64/bbc2184b9a7503887e31eaac274a20485a0a5950604134d8ac720b5d84e3/openai-3.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/51/29/0096e8b1811aaa78cfb296996f621f41120c21c2f5cd448ae1d54979d9fc/sqlite_fts4-1.0.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/53/69/d51c309a838923e197b81573a0f98cdf2afa8490f35cae5b4ed34927b46d/con_duct-0.22.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/db/325c6d7312d2200251c52323878281045aaffcb5586612296484e4280eaa/azure_core-1.41.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl
@@ -292,6 +293,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/51/29/0096e8b1811aaa78cfb296996f621f41120c21c2f5cd448ae1d54979d9fc/sqlite_fts4-1.0.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/51/a2/5d30b469c5267a17b39dec53208222f76a8d351dfac4af661888c5aee77d/pydantic_core-2.46.4-cp313-cp313-macosx_10_12_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/53/69/d51c309a838923e197b81573a0f98cdf2afa8490f35cae5b4ed34927b46d/con_duct-0.22.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/db/325c6d7312d2200251c52323878281045aaffcb5586612296484e4280eaa/azure_core-1.41.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5f/d8/1d299d2dd34087db39831a34cc645ef8a6f89d78efada6983093513cd81c/websockets-16.1.1-cp313-cp313-macosx_10_13_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl
@@ -434,6 +436,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/49/64/bbc2184b9a7503887e31eaac274a20485a0a5950604134d8ac720b5d84e3/openai-3.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4f/0f/27520da74769db6e58327d96c98e7b9a07ce686dff582c9a5ec60b03f9dd/azure_ai_inference-1.0.0b9-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/51/29/0096e8b1811aaa78cfb296996f621f41120c21c2f5cd448ae1d54979d9fc/sqlite_fts4-1.0.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/53/69/d51c309a838923e197b81573a0f98cdf2afa8490f35cae5b4ed34927b46d/con_duct-0.22.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5b/db/325c6d7312d2200251c52323878281045aaffcb5586612296484e4280eaa/azure_core-1.41.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl
@@ -4906,6 +4909,17 @@ packages:
   name: jiter
   version: 0.17.0
   sha256: 8c21265b251d99bbb40080d178a8953e35601d3a1564e05c4de4c0d2ca616797
+  requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/53/69/d51c309a838923e197b81573a0f98cdf2afa8490f35cae5b4ed34927b46d/con_duct-0.22.0-py3-none-any.whl
+  name: con-duct
+  version: 0.22.0
+  sha256: 6f44116e0a011efefd33c3287c1ddaa3346890304686c779f415ef33a464503e
+  requires_dist:
+  - matplotlib>=3.5 ; extra == 'all'
+  - pyyaml>=6.0 ; extra == 'all'
+  - pyout>=0.8 ; extra == 'all'
+  - rpds-py<0.28.0 ; implementation_name == 'pypy' and extra == 'all'
+  - python-dotenv>=0.19 ; extra == 'all'
   requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/54/7d/16e5a096677b5e313ca80cd5e5170efa3ea44624a82bb111925522da64b1/cffi-2.1.1-cp312-cp312-macosx_11_0_arm64.whl
   name: cffi
