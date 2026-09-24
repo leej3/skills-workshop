@@ -23,8 +23,9 @@ offer fresh alternatives without blocking or substituting the requested skill.
 Keep working skills project-local; these two Workshop controls are user-level.
 After material use, follow $workshop-feedback for one minimal local baseline
 record per skill/task. Its policy owns exemptions and exceptional notes.
-Routine successes require no narrative, Git commit, or push.
-Keep observations private; separately review and authorize public lessons.
+Routine successes require no narrative or per-record Git commit.
+Batch shareable records; keep sensitive fields in the private overlay.
+Review the shareable batch before publishing under user authorization.
 Do not record reads, installations, the recorder itself, or bookkeeping.
 Collection failures must not block the main task.
 {END}"""

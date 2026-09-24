@@ -145,19 +145,20 @@ Read [references/workflow.md](references/workflow.md) for the boundary and verif
 
 ## Record evidence after real use
 
-Use `workshop-feedback` for one minimal local baseline record per skill/task after material use.
+Use `workshop-feedback` for one schema-validated baseline record per skill/task after material use.
 Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review.
-Routine successes require no narrative, memory registration, Git commit, or push.
+Routine successes require no narrative, memory registration, or per-record commit.
+Batch shareable records under user authorization; keep sensitive fields and classification reasons in the private overlay.
 Installation and project membership are not evidence of use.
 
-Local `feedback-local summary` reports observed outcomes and measured durations; `feedback-local insights` prioritizes grouped exceptional lessons.
+`feedback-local summary` reports observed outcomes and measured durations; `feedback-local insights` prioritizes grouped exceptional lessons.
 Keep raw observations separate from consolidated knowledge and active skill instructions.
 Consult relevant open lessons when revising a skill; record a proposed change and its validation before treating it as an improvement.
 Retain rejected findings so later work does not repeat an unsuccessful intervention.
 
 The existing `workshop feedback`, `use`, `insights`, `history`, and `recall` commands operate on Git-backed memory.
 They remain available for deliberately curated records after the feedback skill's publication review.
-Validate and commit intentional authorized memory changes under the checkout conventions, but never convert routine local collection into that workflow.
+Validate and commit intentional authorized memory changes under the checkout conventions, and batch routine shareable observations without generating extra prose reports.
 Agent observations remain unreviewed assertions; counts and ratings do not establish causal benefit.
 
 ## Evaluate important claims

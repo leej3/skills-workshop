@@ -1,78 +1,40 @@
 #!/usr/bin/env python3
-"""Private, append-only skill observations. Python standard library; no Git or network."""
+"""Record schema-validated skill observations with a private sensitivity overlay."""
 
 from __future__ import annotations
 
 import argparse
-import fcntl
 import hashlib
 import json
 import math
-import os
 import statistics
-import uuid
 from collections import Counter, defaultdict
-from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
-OUTCOMES = ("success", "partial", "failure", "unknown")
+from observation_store import SCHEMA, private_root, public_root, read, write
+
+OUTCOMES = ("success", "partial", "failure", "abandoned", "unknown")
 
 
-def default_store():
-    return (
-        Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
-        / "skills-workshop"
-        / "feedback"
-    )
-
-
-@contextmanager
-def journal(store):
-    store = store.expanduser().resolve()
-    if any((p / ".git").exists() for p in (store, *store.parents)):
-        raise ValueError(
-            "feedback storage must be outside Git; export curated lessons separately"
-        )
-    store.mkdir(parents=True, exist_ok=True, mode=0o700)
-    os.chmod(store, 0o700)
-    path = store / "observations.jsonl"
-    fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_APPEND, 0o600)
-    with os.fdopen(fd, "r+", encoding="utf-8") as stream:
-        os.fchmod(stream.fileno(), 0o600)
-        fcntl.flock(stream, fcntl.LOCK_EX)
-        rows = []
-        for line in stream:
-            row = json.loads(line)
-            if row.get("schema_version") != 1:
-                raise ValueError("unsupported observation schema")
-            rows.append(row)
-        yield stream, rows
-
-
-def append(store, payload, event_id=None):
-    event_id = event_id or str(uuid.uuid4())
-    with journal(store) as (stream, rows):
-        for row in rows:
-            if row["id"] == event_id:
-                original = {
-                    k: v
-                    for k, v in row.items()
-                    if k not in ("id", "recorded_at", "schema_version")
-                }
-                if original != payload:
-                    raise ValueError("event ID already exists with different content")
-                return {"id": event_id, "duplicate": True}
-        row = {
-            "schema_version": 1,
-            "id": event_id,
-            "recorded_at": datetime.now(timezone.utc).isoformat(),
-            **payload,
+def append(args, payload):
+    sensitivity = None
+    if args.private_fields or args.visibility == "private":
+        if not args.sensitivity_reason or not args.sensitivity_category:
+            raise ValueError(
+                "private content requires --sensitivity-category and --sensitivity-reason"
+            )
+        sensitivity = {
+            "fields": args.private_fields,
+            "category": args.sensitivity_category,
+            "reason": args.sensitivity_reason,
+            "classifier": args.classifier,
+            "confidence": args.classification_confidence,
+            "policy_version": "overlay-v1",
         }
-        stream.write(json.dumps(row, ensure_ascii=False, allow_nan=False) + "\n")
-        stream.flush()
-        os.fsync(stream.fileno())
-    return {"id": event_id, "duplicate": False}
+    return write(
+        args.store, args.overlay, payload, args.event_id, args.visibility, sensitivity
+    )
 
 
 def record(args):
@@ -89,32 +51,44 @@ def record(args):
         if path.is_dir():
             path = path / "SKILL.md"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-    return append(
-        args.store,
-        {
-            "kind": "usage",
-            "skill": args.skill,
-            "task": args.task,
-            "outcome": args.outcome,
-            "task_outcome": args.task_outcome,
-            "duration_seconds": args.duration_seconds,
-            "duration_scope": args.duration_scope,
-            "skill_digest": digest,
-            "model": args.model,
-            "measurement": "agent-reported",
-            "unit": "skill-task",
-        },
-        args.event_id,
-    )
+    payload = {
+        "kind": "usage",
+        "skill": args.skill,
+        "task": args.task,
+        "outcome": args.outcome,
+        "task_outcome": args.task_outcome,
+        "duration_seconds": args.duration_seconds,
+        "duration_scope": args.duration_scope,
+        "skill_digest": digest,
+        "model": args.model,
+        "measurement": args.measurement,
+        "unit": "skill-task",
+    }
+    if args.details:
+        details = json.loads(args.details.read_text())
+        allowed = {
+            "context",
+            "execution",
+            "resources",
+            "quality",
+            "evidence",
+            "evaluation",
+        }
+        if not isinstance(details, dict) or set(details) - allowed:
+            raise ValueError(
+                "details must contain only schema-defined optional reporting groups"
+            )
+        payload.update(details)
+    return append(args, payload)
 
 
 def note(args):
-    with journal(args.store) as (_, rows):
-        uses = {r["id"]: r for r in rows if r["kind"] == "usage"}
+    rows = read(args.store, args.overlay)
+    uses = {r["id"]: r for r in rows if r["kind"] == "usage"}
     if any(r not in uses or uses[r]["skill"] != args.skill for r in args.usage_id):
         raise ValueError("usage IDs must identify observations of this skill")
     return append(
-        args.store,
+        args,
         {
             "kind": "insight",
             "skill": args.skill,
@@ -126,7 +100,6 @@ def note(args):
             "action": args.action,
             "usage_ids": sorted(set(args.usage_id)),
         },
-        args.event_id,
     )
 
 
@@ -152,6 +125,34 @@ def summary(rows):
                 "n": len(values),
                 "median_seconds": statistics.median(values) if values else None,
             }
+        metrics = {}
+        for section, fields in {
+            "resources": (
+                "input_tokens",
+                "output_tokens",
+                "cached_input_tokens",
+                "cost_usd",
+                "peak_rss_bytes",
+                "cpu_seconds",
+            ),
+            "execution": ("attempts", "tool_calls", "errors", "retries"),
+            "quality": (
+                "tests_passed",
+                "tests_failed",
+                "human_interventions",
+                "rework_seconds",
+                "rating",
+            ),
+        }.items():
+            for field in fields:
+                values = [
+                    r[section][field] for r in group if field in r.get(section, {})
+                ]
+                if values:
+                    metrics[f"{section}.{field}"] = {
+                        "n": len(values),
+                        "median": statistics.median(values),
+                    }
         results.append(
             {
                 "skill": skill,
@@ -166,6 +167,8 @@ def summary(rows):
                 else None,
                 "task_outcomes": dict(Counter(r["task_outcome"] for r in group)),
                 "durations": durations,
+                "metrics": metrics,
+                "measurement_sources": dict(Counter(r["measurement"] for r in group)),
             }
         )
     return {
@@ -213,7 +216,15 @@ def short(value):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--store", type=Path, default=default_store())
+    parser.add_argument(
+        "--store", type=Path, default=public_root(), help="shareable record tree"
+    )
+    parser.add_argument(
+        "--overlay",
+        type=Path,
+        default=private_root(),
+        help="private overlay outside Git",
+    )
     commands = parser.add_subparsers(dest="command", required=True)
     use = commands.add_parser(
         "record", help="one outcome per skill/task; no narrative required"
@@ -230,6 +241,16 @@ def main(argv=None):
         required=True,
         choices=OUTCOMES,
         help="did the skill perform its intended role?",
+    )
+    use.add_argument(
+        "--details",
+        type=Path,
+        help="JSON object with optional schema-defined reporting groups",
+    )
+    use.add_argument(
+        "--measurement",
+        choices=("agent-reported", "host-measured", "human-reported", "mixed"),
+        default="agent-reported",
     )
     use.add_argument("--task-outcome", choices=OUTCOMES, default="unknown")
     use.add_argument("--duration-seconds", type=float)
@@ -257,36 +278,88 @@ def main(argv=None):
     notes.add_argument("--priority", type=int, choices=range(4), default=2)
     notes.add_argument("--confidence", choices=("low", "medium", "high"), default="low")
     notes.add_argument(
-        "--status", choices=("open", "resolved", "deferred"), default="open"
+        "--status", choices=("open", "resolved", "deferred", "rejected"), default="open"
     )
     notes.add_argument("--usage-id", action="append", default=[])
     notes.add_argument("--event-id", type=short)
-    for name in ("summary", "insights"):
-        read = commands.add_parser(name)
-        read.add_argument("--since", type=lambda s: datetime.fromisoformat(s).date())
+    for command in (use, notes):
+        command.add_argument(
+            "--visibility", choices=("shareable", "private"), default="shareable"
+        )
+        command.add_argument("--private-fields", nargs="+", default=[])
+        command.add_argument("--sensitivity-reason", type=short)
+        command.add_argument(
+            "--sensitivity-category",
+            choices=(
+                "personal",
+                "credentials",
+                "confidential-project",
+                "private-conversation",
+                "internal-location",
+                "uncertain",
+                "other",
+            ),
+        )
+        command.add_argument(
+            "--classifier", choices=("agent", "human", "tool"), default="agent"
+        )
+        command.add_argument(
+            "--classification-confidence",
+            choices=("low", "medium", "high"),
+            default="medium",
+        )
+    commands.add_parser("schema", help="print the formal JSON Schema")
+    for name in ("summary", "insights", "sensitivity", "validate"):
+        command = commands.add_parser(name)
+        command.add_argument("--since", type=lambda s: datetime.fromisoformat(s).date())
+        command.add_argument("--public-only", action="store_true")
     args = parser.parse_args(argv)
     try:
         if args.command == "record":
             result = record(args)
         elif args.command == "note":
             result = note(args)
+        elif args.command == "schema":
+            result = SCHEMA
         else:
-            with journal(args.store) as (_, rows):
-                # Insight state must include resolution notes; filter groups by recent activity below.
-                if args.since and args.command == "summary":
-                    rows = [
-                        r
-                        for r in rows
-                        if datetime.fromisoformat(r["recorded_at"]).date() >= args.since
-                    ]
-                result = summary(rows) if args.command == "summary" else insights(rows)
-                if args.since and args.command == "insights":
-                    recent = {
-                        r["id"]
-                        for r in rows
-                        if datetime.fromisoformat(r["recorded_at"]).date() >= args.since
+            rows = read(args.store, args.overlay, args.public_only)
+            if args.since:
+                rows = [
+                    r
+                    for r in rows
+                    if datetime.fromisoformat(r["recorded_at"]).date() >= args.since
+                ]
+            if args.command == "summary":
+                result = summary(rows)
+            elif args.command == "insights":
+                result = insights(rows)
+            elif args.command == "validate":
+                result = {
+                    "valid": True,
+                    "records": len(rows),
+                    "view": "shareable" if args.public_only else "merged",
+                }
+            else:
+                groups = defaultdict(list)
+                for row in rows:
+                    if row.get("sensitivity"):
+                        classification = row["sensitivity"]
+                        groups[
+                            (
+                                classification["category"],
+                                tuple(classification["fields"]),
+                            )
+                        ].append(classification)
+                result = [
+                    {
+                        "category": category,
+                        "fields": fields,
+                        "n": len(items),
+                        "reasons": sorted({i["reason"] for i in items}),
+                        "guidance": "Review recurring classifications; do not automatically weaken disclosure rules.",
                     }
-                    result = [r for r in result if r["latest_id"] in recent]
+                    for (category, fields), items in sorted(groups.items())
+                ]
         print(json.dumps(result, ensure_ascii=False, allow_nan=False))
         return 0
     except (ValueError, OSError) as error:

@@ -1,92 +1,88 @@
-# Local feedback and learning
+# Structured feedback and learning
 
-Routine skill use should yield cheap, consistent measurements without publishing a task history.
-The implementation separates three layers:
+Routine records are useful shared evidence.
+Sensitive details belong in a private overlay, rather than making all observations private.
 
-| Layer | Storage | Purpose |
-|---|---|---|
-| Baseline observations | Private append-only JSONL outside Git | Outcomes, task categories, optional measured durations and skill entrypoint hashes |
-| Consolidated lessons | Private grouped notes; selected lessons may enter reviewed Git memory | Recurring patterns, confidence, priority, proposed actions, resolution |
-| Active skills | Version-controlled skill files | Instructions changed deliberately and validated |
+## Recording is explicit
 
-## Completion hook
-
-One call records one skill/task observation:
+**The command does not trigger automatically.** An agent calls it under the user-level instructions, or a future host adapter can call it on completion.
+No runtime callback, completion listener, or timer is installed today.
 
 ```console
 pixi run feedback-local record duct --task build-validation --outcome success
 ```
 
-From another project, invoke the installed feedback skill's `scripts/usage.py` with Python and the same arguments.
-No registration, dependencies beyond the standard library, or network calls are needed.
-A host integration can call this CLI directly; there is no implied automatic subscription to Codex events.
-The current user instruction supplies the agent-driven completion convention.
+The command validates each written and read record against the bundled [JSON Schema draft 2020-12 contract](../../.agents/skills/workshop-feedback/schemas/observation-v2.schema.json).
+Run `pixi run feedback-local schema` to print the contract.
+Unknown fields and invalid types are rejected; dates, UUIDs, nonnegative costs and counts, and duration scope are checked.
+Python and jsonschema are provided by the existing Pixi environment; the installed skill includes its own schema and helpers.
 
-`--outcome` concerns the skill's intended role.
-`--task-outcome` independently describes the surrounding task.
-Use `unknown` where evidence is absent.
-For measured duration, specify both `--duration-seconds` and `--duration-scope task|skill`.
-Omit duration when unavailable; future host adapters can supply clock measurements without changing the schema.
-A task duration may appear on several skills' observations and must not be summed across them.
-It measures elapsed time with the skill, not time caused or saved by the skill.
+The three required arguments remain skill, task category, and skill outcome.
+Generated fields identify and date the observation.
+Optional groups cover context, execution, resources, quality, evidence, and evaluation; see [reporting examples](../../.agents/skills/workshop-feedback/references/reporting.md).
+Use `--details file.json` for richer concise reporting rather than a long list of flags.
+No environment details are guessed or automatically scanned.
 
-Optional `--skill-path` hashes the SKILL.md bytes without recording the path or content; this is an entrypoint digest, not a complete artifact identity.
-Optional `--model` preserves a known model identifier; missing values remain null.
-Use a random `--event-id` for safe retries.
-A repeated ID with identical content is a no-op; different content is rejected.
-Use one observation per task/skill, even if the skill wraps many commands.
+Record the skill's success separately from the surrounding task result.
+Measure elapsed duration with an explicit task/skill scope; an elapsed task duration shared across skills must not be summed. Missing metrics remain unknown, not zero. Cost or time saved requires a comparison, not just an elapsed duration. `summary` reports counts, known-outcome success fractions, and median durations/resources with sample sizes.
+Groups distinguish task categories, models, and skill entrypoint digests; full artifact digests and exact revisions can also be supplied for evaluations.
+These are observational statistics over reported uses, not evidence that a skill caused a result.
 
-The default store is `${XDG_STATE_HOME:-~/.local/state}/skills-workshop/feedback/observations.jsonl`.
-An explicit `--store` must also be outside a Git checkout.
-Directory/file permissions are 0700/0600; this is access control, not encryption or protection from an authorized local process.
-Writers take an advisory file lock and flush completed records to disk.
-Malformed or partial history produces an error without silently deleting or repairing evidence.
-The hook targets macOS and Linux, matching Workshop's supported platforms.
-Schema version 1 distinguishes `usage` and `insight` rows; existing Git memory and its history remain unchanged.
+## Two matching trees
 
-## Aggregate and prioritize
+```text
+<workshop>/memory/observations/
+  records/YYYY/MM/<uuid>.json       # shareable projection
 
-```console
-pixi run feedback-local summary --since 2026-09-01
-pixi run feedback-local note duct --group sampling-compatibility \
-  --summary "Resource sampling failed in a new runtime" \
-  --action "Check runtime support and add a regression case" \
-  --priority 1 --confidence medium
-pixi run feedback-local insights
+<local-state>/skills-workshop/feedback-overlay/
+  records/YYYY/MM/<uuid>.json       # full record + sensitivity decision
 ```
 
-Summaries group skill, task category, entrypoint digest, and model, reporting sample counts, outcomes, and separate task/skill duration medians with their sample sizes.
-Unknown outcomes are explicitly excluded from the known-outcome success denominator.
-Missing observations cannot be counted; these statistics are conditional on reported usage and cannot prove efficacy.
-Use stable categories such as `build-validation`, `document-editing`, or `release-review` to avoid fragmenting groups.
-Do not backfill invented observations or durations into the baseline from old prose reports.
+Each observation is one immutable JSON file, avoiding concurrent Git edits to one large JSONL file.
+The private overlay mirrors the path and ID, so local readers merge it with the shareable tree without double counting.
+Private-only records have no shareable projection.
+`--store` and `--overlay` override the roots; they must be disjoint, and the overlay is rejected inside a Git checkout.
+Without a configured Workshop checkout, the shareable tree falls back beside the private tree in local state.
+Private directories/files use restrictive permissions; no encryption or secret-vault claim is made.
 
-Qualitative notes are exceptional: a new failure, workaround, cost, ambiguity, improvement, or newly demonstrated capability.
-Reuse a stable skill/group name and link actual baseline IDs with `--usage-id`. Append a note with `--status resolved` or `deferred` to remove a group from the open queue; append `open` to reopen it. The latest note defines the current action, confidence, and priority; prior notes remain intact. Priority 0 is immediate harm/data loss, 1 is blocking or recurring material failure, 2 is a useful improvement, and 3 is a minor refinement.
-Within a priority, distinct linked uses determine ordering.
-Repeated notes about one use do not inflate that count.
-Frequency is evidence of recurrence, not confidence in a diagnosis.
+For sensitive optional fields, provide JSON pointers through `--private-fields` plus a category and reason.
+The public projection removes those fields and the sensitivity decision itself; the overlay retains the complete record, reason, classifier, confidence, and policy version.
+If a required field is sensitive, choose `--visibility private` for the entire observation.
+Fields are classified by the caller; the recorder enforces the split but does not infer sensitivity.
+Keep credentials out of both trees.
 
-Before revising a skill, inspect its relevant open groups and supporting observations.
-Make a bounded change, record how it was validated, and resolve or defer the group with the outcome.
-A proposed action is not an instruction to execute it or authorization to publish it.
-Routine collection and the recorder's own bookkeeping never trigger recursive qualitative reports.
+Writers use a file lock and atomic no-overwrite file creation.
+A UUID reused with identical content is idempotent and repairs a missing projection after an interrupted split write; different content is rejected.
+Malformed records are reported without silently rewriting them.
+Existing v1 JSONL files remain untouched outside Git; they are not silently migrated, reclassified, or published.
 
-## Public promotion
+## Read, consolidate, publish
 
-Collection, consolidation, and publication are separate decisions.
-Neither baseline observations nor grouped notes are auto-committed or pushed.
-Promote only necessary reusable knowledge after inspecting the exact record and all generated metadata, and confirming publication authorization.
-The [publication policy](../../.agents/skills/workshop-feedback/references/publication.md) defines exclusions and the existing curated-memory workflow.
-There is deliberately no automatic raw-log export or claim that a secret scanner certifies disclosure suitability.
+```console
+pixi run feedback-local validate
+pixi run feedback-local summary --since 2026-09-01
+pixi run feedback-local summary --public-only
+pixi run feedback-local insights
+pixi run feedback-local sensitivity
+```
 
-## Relationship to WikiSkill
+Default reads merge both trees locally.
+Use `--public-only` for a shareable view.
+`sensitivity` groups the private classification decisions by category and affected fields, retaining reasons for review.
+Repeated or uncertain decisions can motivate policy changes, but frequency alone does not justify weakening disclosure rules.
+Keep sensitive examples and corrections in the overlay while sharing generalized lessons.
 
-[WikiSkill, sections 3.1–3.2](https://arxiv.org/html/2608.27454) separates immutable execution traces, a persistent knowledge wiki, and active skill instructions.
-Its wiki consolidates successful strategies and failures; proposed skill changes are accepted only through validation, with failed skill changes rolled back while accumulated knowledge survives.
+Exceptional notes group novel failures, workarounds, ambiguities, costs, and improvement proposals.
+Use a stable group and link baseline IDs; priorities, confidence, and proposed actions let agents inspect relevant findings efficiently.
+Append notes with resolved, deferred, or rejected status to preserve what was tried.
+Do not generate a narrative about routine successful execution.
 
-Workshop adopts those boundaries and the importance of preserving proposal outcomes from the outset.
-Our baseline is intentionally much smaller than the paper's full execution traces: no reasoning, conversations, tool outputs, or raw logs are collected here.
-Existing evaluation scaffolds can support controlled comparisons, but this hook does not implement the paper's benchmark harness, automated wiki maintainer, skill proposer, or validation-driven rollback loop.
-Observational task outcomes are not substitutes for held-out evaluation scores.
-A future extension should link patterns to exact skill artifacts and evaluation results, retain rejected proposals, and introduce automated changes only with appropriate validation and rollback.
+Shareable records can be committed and pushed in batches under standing user authorization after inspecting the exact batch.
+No per-record commit, approval request, or external message is required.
+The recording command itself does not execute Git or network writes.
+Never publish the overlay or merged output without separately assessing the content.
+See the [classification and publication policy](../../.agents/skills/workshop-feedback/references/publication.md).
+
+## Autonomous optimization
+
+See [the WikiSkill implementation plan](skill-optimization-loop.md) for what can be reused and what remains to build.

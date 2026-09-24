@@ -1,0 +1,718 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leej3/skills-workshop/feedback/observation-v2.schema.json",
+  "title": "Routine skill observation and exceptional insight v2",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 2
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "kind": {
+          "const": "usage"
+        },
+        "skill": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "visibility": {
+          "enum": [
+            "shareable",
+            "private"
+          ]
+        },
+        "sensitivity": {
+          "type": "object",
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "uniqueItems": true
+            },
+            "category": {
+              "enum": [
+                "personal",
+                "credentials",
+                "confidential-project",
+                "private-conversation",
+                "internal-location",
+                "uncertain",
+                "other"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "rule_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "classifier": {
+              "enum": [
+                "agent",
+                "human",
+                "tool"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "policy_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          },
+          "required": [
+            "fields",
+            "category",
+            "reason",
+            "classifier",
+            "confidence"
+          ],
+          "additionalProperties": false
+        },
+        "task": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "outcome": {
+          "enum": [
+            "success",
+            "partial",
+            "failure",
+            "abandoned",
+            "unknown"
+          ]
+        },
+        "task_outcome": {
+          "enum": [
+            "success",
+            "partial",
+            "failure",
+            "abandoned",
+            "unknown"
+          ]
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duration_scope": {
+          "enum": [
+            "task",
+            "skill",
+            null
+          ]
+        },
+        "skill_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "measurement": {
+          "enum": [
+            "agent-reported",
+            "host-measured",
+            "human-reported",
+            "mixed"
+          ]
+        },
+        "unit": {
+          "const": "skill-task"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "project": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "project_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "task_summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "task_type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "complexity": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ]
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "uniqueItems": true
+            },
+            "related_skills": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "trigger": {
+              "enum": [
+                "user",
+                "agent",
+                "runtime",
+                "scheduled",
+                "unknown"
+              ]
+            },
+            "host": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "runtime": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "runtime_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "model_provider": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "reasoning_effort": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "os": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "architecture": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "skill_source": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "skill_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "artifact_digest": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "attempts": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "tool_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "errors": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "retries": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "exit_code": {
+              "type": "integer"
+            },
+            "started_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "ended_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_method": {
+              "enum": [
+                "clock",
+                "host",
+                "unknown"
+              ]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "input_tokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_tokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cached_input_tokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cost_usd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "peak_rss_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cpu_seconds": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "quality": {
+          "type": "object",
+          "properties": {
+            "verification": {
+              "enum": [
+                "tests",
+                "human-review",
+                "artifact-inspection",
+                "self-report",
+                "none",
+                "unknown"
+              ]
+            },
+            "tests_passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tests_failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "human_interventions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rework_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "rating": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "benefit": {
+              "enum": [
+                "new-capability",
+                "saved-time",
+                "avoided-error",
+                "better-result",
+                "no-clear-benefit",
+                "harmful",
+                "unknown"
+              ]
+            },
+            "failure_stage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "failure_code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "url",
+                  "path",
+                  "digest",
+                  "evaluation",
+                  "log",
+                  "other"
+                ]
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "digest": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "kind",
+              "locator"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "evaluation": {
+          "type": "object",
+          "properties": {
+            "experiment_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "case_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "condition": {
+              "enum": [
+                "with-skill",
+                "without-skill",
+                "candidate",
+                "baseline",
+                "observational"
+              ]
+            },
+            "split": {
+              "enum": [
+                "train",
+                "validation",
+                "test"
+              ]
+            },
+            "metric": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "score": {
+              "type": "number"
+            },
+            "budget_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "budget_tokens": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "id",
+        "recorded_at",
+        "kind",
+        "skill",
+        "visibility",
+        "task",
+        "outcome",
+        "task_outcome",
+        "duration_seconds",
+        "duration_scope",
+        "skill_digest",
+        "model",
+        "measurement",
+        "unit"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "duration_seconds": {
+                "type": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "duration_scope": {
+                "enum": [
+                  "task",
+                  "skill"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "duration_scope": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 2
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "kind": {
+          "const": "insight"
+        },
+        "skill": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "visibility": {
+          "enum": [
+            "shareable",
+            "private"
+          ]
+        },
+        "sensitivity": {
+          "type": "object",
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "uniqueItems": true
+            },
+            "category": {
+              "enum": [
+                "personal",
+                "credentials",
+                "confidential-project",
+                "private-conversation",
+                "internal-location",
+                "uncertain",
+                "other"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "rule_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "classifier": {
+              "enum": [
+                "agent",
+                "human",
+                "tool"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "policy_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          },
+          "required": [
+            "fields",
+            "category",
+            "reason",
+            "classifier",
+            "confidence"
+          ],
+          "additionalProperties": false
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "status": {
+          "enum": [
+            "open",
+            "resolved",
+            "deferred",
+            "rejected"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "usage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "id",
+        "recorded_at",
+        "kind",
+        "skill",
+        "visibility",
+        "group",
+        "priority",
+        "confidence",
+        "status",
+        "summary",
+        "action",
+        "usage_ids"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

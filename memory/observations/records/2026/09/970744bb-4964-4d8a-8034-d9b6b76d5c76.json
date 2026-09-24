@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "970744bb-4964-4d8a-8034-d9b6b76d5c76",
+  "recorded_at": "2026-09-24T20:46:03.206552+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "skill-maintenance",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

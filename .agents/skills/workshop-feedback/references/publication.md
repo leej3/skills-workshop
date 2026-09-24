@@ -1,26 +1,48 @@
-# Promote lessons, not activity histories
+# Shareable records with a private overlay
 
-Baseline records and exceptional notes are local by default, including aggregates.
-Publish only a reusable lesson whose necessary details are already public or explicitly authorized for disclosure.
-Authorization to collect feedback is not authorization to publish it.
+Ordinary concise observations can be versioned and shared; sensitivity is a property of particular fields or records, not of all telemetry.
+Classify while recording, then batch inspect and commit the shareable tree under the user's standing publication authorization.
+Avoid a separate approval exchange or commit for every routine record.
+Shared-thread posting still follows its own approval rules.
 
-Before creating a Git-backed record:
+## Classification
 
-1. Distill the lesson and proposed action.
-   Remove incidental task context.
-2. Exclude credentials, private conversations, participant or personal data, confidential work, raw logs, local paths, machine names, internal URLs, and conversation identifiers.
-3. Include a public project link only when necessary to support the lesson.
-   Public code does not make private discussions public.
-4. Inspect the full serialized record and staged diff, including generated source, project, actor, artifact, and extension fields.
-   A summary can be safe while its metadata is not.
-5. Confirm the intended destination and applicable publication authorization.
-   If uncertain, retain the local note; do not publish or create an automatic approval request.
+Consider whether a value exposes personal information, credentials, confidential project work, private conversations, internal locations, or uncertain disclosure rights.
+Project names, conversation IDs, paths, links, and failure details are contextual decisions rather than universally forbidden fields.
+Keep credentials out of both trees; the overlay is ordinary local storage, not a secret vault.
+Public code does not make a private discussion public.
 
-The legacy `feedback.py` launcher no longer injects a conversation ID.
-Explicit `--session`, `--project-path`, and `--skill-path` may still add metadata; omit them unless appropriate after inspection.
-Secret scanning can supplement this review but cannot establish that an unpublished plan or personal detail is suitable for publication.
+For optional sensitive fields, specify JSON pointers:
 
-For an authorized public record, use the configured Workshop CLI's `feedback` command, then validate memory, inspect all changed records, and commit only those reviewed paths under the repository conventions.
-No automatic commit or push follows baseline collection or exceptional local notes.
-Do not rewrite old Git history as part of this policy change.
-A suspected past disclosure needs separate assessment and appropriate remediation.
+```console
+pixi run feedback-local record example --task analysis --outcome partial \
+  --details details.json --private-fields /context/session_id /evidence \
+  --sensitivity-category private-conversation \
+  --sensitivity-reason "Links and session identify a private discussion"
+```
+
+The private overlay retains the full record, affected field pointers, category, reason, classifier (agent/human/tool), confidence, and policy version.
+The shareable projection contains none of the classification explanation, which may itself be sensitive.
+Redact an array as a whole.
+If identity or another required field is sensitive, record the whole observation with `--visibility private`.
+The two roots must be disjoint and the overlay must be outside Git.
+
+## Learn from decisions
+
+Use `sensitivity` locally to group recurring reasons and fields.
+Review uncertain and repeated classifications, record refinements as exceptional notes, and adjust guidance based on specific examples.
+Human corrections should inform policy; mere frequency must not automatically relax it.
+Store sensitive correction examples in the overlay too.
+Classification records are evidence for improving policy, not proof that a classifier was correct.
+
+## Batch publication
+
+Before committing a batch, inspect the exact shareable files and `summary --public-only`.
+Check text and metadata for accidental omissions in classification; schema validation guarantees structure, not disclosure suitability.
+Publish that tree only, never the merged view or overlay.
+Do not copy raw logs or transcripts merely because a record references them.
+If uncertain, keep the specific data in the overlay while sharing the remaining useful record.
+
+The recorder performs no Git writes or network calls.
+Batch commit/push follows normal user authorization and repository conventions.
+Already-published records cannot be made private by writing an overlay: suspected past disclosure requires a separate remediation decision, not silent history rewriting.

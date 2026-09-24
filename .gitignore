@@ -4,3 +4,7 @@ __pycache__/
 .pixi/
 .backups/
 apm_modules/
+
+# Locks and interrupted temporary writes for schema-validated observations.
+.feedback.lock
+.feedback-*.tmp

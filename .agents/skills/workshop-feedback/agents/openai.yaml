@@ -1,6 +1,6 @@
 interface:
   display_name: "Workshop Feedback"
-  short_description: "Collect private outcomes and exceptional lessons"
-  default_prompt: "Use $workshop-feedback for minimal local skill outcomes; group exceptional lessons and review publication separately."
+  short_description: "Collect structured outcomes with private overlays"
+  default_prompt: "Use $workshop-feedback for schema-validated skill outcomes; isolate sensitive fields, batch shareable records, and group exceptional lessons."
 policy:
   allow_implicit_invocation: true

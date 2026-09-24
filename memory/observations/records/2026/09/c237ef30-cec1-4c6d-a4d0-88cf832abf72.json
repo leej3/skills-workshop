@@ -1,0 +1,29 @@
+{
+  "schema_version": 2,
+  "id": "c237ef30-cec1-4c6d-a4d0-88cf832abf72",
+  "recorded_at": "2026-09-24T20:44:53.304006+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "skill-maintenance",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "context": {
+    "task_summary": "Expand skill feedback schema and sensitivity overlay"
+  },
+  "quality": {
+    "verification": "tests",
+    "tests_passed": 184,
+    "tests_failed": 0,
+    "confidence": "high"
+  },
+  "execution": {
+    "trigger": "agent"
+  },
+  "visibility": "shareable"
+}

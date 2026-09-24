@@ -225,8 +225,8 @@ pixi run workshop contribution add example-skill \
 ## Lightweight feedback across projects
 
 [`workshop-feedback`](../../.agents/skills/workshop-feedback/SKILL.md) is the feedback half of the standard Workshop workflow, installed alongside discovery by `pixi run setup-agent --apply`.
-It records minimal baseline outcomes in private JSONL outside Git, with grouped qualitative notes only for exceptional lessons.
-The bundled `scripts/usage.py` hook needs only Python on macOS or Linux; it can be called directly by an agent or a host completion adapter.
+It records schema-validated baseline outcomes in a shareable tree with a private sensitivity overlay, with grouped qualitative notes only for exceptional lessons.
+The bundled `scripts/usage.py` hook needs Python and jsonschema on macOS or Linux; it can be called directly by an agent or a host completion adapter.
 It does not automatically register a host callback.
 
 ```console
@@ -236,7 +236,7 @@ pixi run feedback-local insights
 ```
 
 The user-level instruction delegates collection exemptions and publication policy to that skill.
-Routine collection requires no registration, prose report, validation run, commit, or push.
+Routine collection requires no registration, prose report, or per-record commit; schema validation is automatic and shareable records are batched.
 Use the separate Git-backed `workshop feedback` interface only after reviewing the full record for publication and confirming authorization.
 The launcher no longer automatically inserts conversation IDs.
 See [local feedback and learning](local-feedback.md) for measurement semantics and the relationship to WikiSkill.
