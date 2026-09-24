@@ -1,6 +1,6 @@
 ---
 name: commit-provenance
-description: Resolve the exact active Codex Desktop and agent-runtime versions, model identifier, and reasoning effort for commit provenance. Use immediately before every Codex-authored git commit or whenever a commit trailer requires model, tool, or reasoning-effort attribution. Also use when choosing the original repository or a fork for a GitHub push or pull request.
+description: Resolve the exact active Codex Desktop and agent-runtime versions, model identifier, and reasoning effort for commit provenance. Use immediately before every Codex-authored git commit or whenever a commit trailer requires model, tool, or reasoning-effort attribution. Also use when choosing the original repository or a fork for a GitHub push, opening a pull request, or changing its draft status.
 ---
 
 # Commit Provenance
@@ -28,6 +28,14 @@ Codex-Reasoning-Effort: <effort>
 
 If the script cannot identify every required value, stop and ask the user; do not create the commit with guessed provenance.
 Preserve any stricter repository commit-message requirements.
+
+## Pull request draft status
+
+Always open pull requests as drafts, using `gh pr create --draft` or the equivalent API or UI setting.
+The user is responsible for deciding when a pull request is ready to merge or should no longer be a draft.
+Promote a draft only in response to an explicit human instruction for that pull request.
+Completed implementation, passing checks, favorable reviews, and general instructions to finish or publish work do not authorize promotion.
+Keep the pull request in draft status when reporting completion unless that explicit instruction has been given.
 
 ## GitHub write transport
 

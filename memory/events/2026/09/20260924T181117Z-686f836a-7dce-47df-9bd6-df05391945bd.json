@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
+    },
+    "skills-workshop/session": "01a0d49a-f57e-76a0-a7be-05b2be272483"
+  },
+  "id": "urn:uuid:686f836a-7dce-47df-9bd6-df05391945bd",
+  "occurred_at": "2026-09-24T18:11:17Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Kept the policy edit scoped and validated the updated skill entrypoint.",
+    "task_summary": "Add human-controlled draft PR policy to commit skill"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "60b707cabd357f83fdc06cab66f9245961c961d5"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "type": "use"
+}
