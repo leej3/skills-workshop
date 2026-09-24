@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/stamped-principles/stamped-checklist/issues/131"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": null,
+      "scope": "SKILL.md only",
+      "sha256": "56199b6c8abad263cbd934e79e5b54a558ba69b999e76ce1d15af4918685009d"
+    },
+    "skills-workshop/session": "01a0d39b-887e-7732-8c1e-665e72e31604"
+  },
+  "id": "urn:uuid:ce311f1b-0f33-4232-a4ab-c25bdf9fb504",
+  "occurred_at": "2026-09-24T13:45:21Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Pinned data revisions and a minimal reproducer confirmed the positional collision; distinguished mapping evidence from browser testing.",
+    "task_summary": "Scope saved checklist answer identity issue"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:3880b58a-e184-4357-86af-1c56bb507161",
+  "type": "use"
+}
