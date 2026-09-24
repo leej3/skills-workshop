@@ -1,0 +1,45 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/session": "01a0cfc7-cb3c-7ae2-afc5-71fa24975ab6"
+  },
+  "id": "urn:uuid:70372d64-b9b4-4190-a7d2-1413cbc8807f",
+  "occurred_at": "2026-09-24T15:47:05Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Decision-focused guidance kept pytest optional and reused existing issues and patches rather than adding a reporting framework.",
+    "task_summary": "Refine provenance comparison skill without prescribing a runner"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "31bf10e4fe68cd45e69b5cb50ddc1c6bcc987d96"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:0b59545e-61f9-4dca-ae22-03c57a6b4aca",
+  "type": "use"
+}

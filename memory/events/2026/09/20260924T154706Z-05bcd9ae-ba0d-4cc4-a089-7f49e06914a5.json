@@ -1,0 +1,45 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/session": "01a0cfc7-cb3c-7ae2-afc5-71fa24975ab6"
+  },
+  "id": "urn:uuid:05bcd9ae-ba0d-4cc4-a089-7f49e06914a5",
+  "occurred_at": "2026-09-24T15:47:06Z",
+  "payload": {
+    "benefit": "avoided-error",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Reviewer clarified PASS with visible adaptations, narrowly scoped XFAIL, and ERROR versus missing comparisons without requiring pytest.",
+    "task_summary": "Define comparison report outcomes separately from adaptations"
+  },
+  "project_evidence": {
+    "apm_version": "0.29.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": "sha256:9a92690155fb4debb3595cf1dbba0de19a5ad111d8a532ebeef8767317d225be",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "31bf10e4fe68cd45e69b5cb50ddc1c6bcc987d96"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:9ef5bc9b-ab86-4790-b0e2-8f64c5c31b5d",
+  "type": "use"
+}
