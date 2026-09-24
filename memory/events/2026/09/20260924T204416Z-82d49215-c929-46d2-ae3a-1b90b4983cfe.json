@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:82d49215-c929-46d2-ae3a-1b90b4983cfe",
+  "occurred_at": "2026-09-24T20:44:16Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "draft",
+    "summary": "APM collection packaging, metadata-only consumer and distribution skills, and secret-free security CI.",
+    "url": "https://github.com/con/skills/pull/11"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:2634a1bf-88a1-4d32-ba52-6b32b1f0f134",
+  "type": "contribution"
+}

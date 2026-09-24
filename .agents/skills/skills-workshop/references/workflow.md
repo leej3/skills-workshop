@@ -39,7 +39,18 @@ Full searches still query public providers, but never send remembered event text
 
 ## Project-owned versus reusable skills
 
-Start a project-specific experimental skill under `.agents/skills/<name>/SKILL.md`.
+Reusable skills are authored in a dedicated skill repository, normally `con/skills`.
+Use APM for any selected reusable skill it can manage.
+Consumers track `apm.yml`, `apm.lock.yaml`, the pinned APM environment dependency, setup task, targeted ignores, and concise AGENTS.md/README setup guidance.
+Ignore package caches and generated deployment paths; never ignore canonical source in its source repository.
+Run setup before starting the agent so discovery sees installed skills.
+Prove restoration and audit from tracked metadata without requiring a Workshop checkout.
+Normal downstream updates change pins, hashes, and deployment metadata, keeping skill-development history upstream.
+Use the separately distributed `install-apm-skills` workflow when available; explicit authoring for distribution uses `author-apm-skills`.
+A generic request to create a skill does not imply APM distribution.
+
+
+Only for a genuinely project-specific experiment with no intended reusable distribution, start a skill under `.agents/skills/<name>/SKILL.md`.
 That tracked tree is both canonical and directly visible to compatible agents; do not duplicate it under `.apm/skills` or list it as a local APM dependency.
 This keeps the experiment usable without a bootstrap and avoids pretending it already has an independent package lifecycle.
 

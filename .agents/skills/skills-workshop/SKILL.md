@@ -104,6 +104,13 @@ Never attribute an agent judgment to the user.
 ## Install and audit in a project
 
 APM alone owns the downstream manifest, lock, external dependency graph, deployment, update, and drift state.
+Use the metadata-only consumer workflow for every reusable skill APM can install.
+Develop reusable source in a dedicated skill repository, normally `con/skills`; never develop or commit its deployed copies in a consumer.
+Add a pinned APM setup/development dependency through the project's existing environment manager, a frozen-install setup task, targeted ignores for `apm_modules/` and APM-owned deployment paths, a concise additive root `AGENTS.md` instruction, and a README/development setup note.
+Track the manifest, generated lock, and setup metadata; validate a fresh metadata-only consumer with frozen restoration and audit.
+Use `install-apm-skills` when available for the full consumer workflow and `author-apm-skills` for explicit APM distribution or collection-maintenance requests; the latter must not take over generic skill creation.
+These workflows are maintained in `con/skills`; downstream setup must not require the Workshop or either skill to be preinstalled.
+
 It does not own project-authored skills that live directly under `.agents/skills/`.
 Before touching downstream APM state, require the selected reusable source at the intended ref to be a valid APM package that publishes the selected skill.
 Do not use a raw skill directory, virtual-subdirectory import, or downstream manifest workaround to compensate for missing upstream packaging.
@@ -121,11 +128,12 @@ Never pass APM `--force` through the workshop.
 Edit an external skill in its canonical Git source rather than its APM-deployed `.agents/skills` copy.
 If organization-policy discovery would cause an unwanted login or network lookup in a personal project, explicitly add `--no-policy`; do not make that bypass invisible.
 
-For a project-owned experimental skill, author the canonical tree directly at `.agents/skills/<name>`.
+For a genuinely project-specific experiment that is not intended as a reusable skill, author the canonical tree directly at `.agents/skills/<name>`.
 Do not copy it into `.apm/skills` or declare it as a local APM dependency.
 Do not initialize APM, a lock, or a bootstrap while every skill remains project-owned.
 When the first promoted external dependency is adopted, let the project choose its dependency and agent-agnostic setup mechanism at that time.
-Promote it to an independently sourced dependency only after another project needs it or it requires its own versioned lifecycle.
+When reuse or APM distribution is intended from the outset, start in the dedicated source repository instead.
+Promote a project-specific experiment there when it gains that scope.
 
 Before installation, verify that the skill is self-contained.
 Every operating instruction, reference, script, template, and asset needed to use the skill must live inside its skill directory, except for explicitly declared and available tool or package dependencies.

@@ -1,0 +1,37 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-09-24T20:43:51Z",
+  "extensions": {},
+  "id": "urn:uuid:2634a1bf-88a1-4d32-ba52-6b32b1f0f134",
+  "name": "install-apm-skills",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:22a20092-24db-4662-8506-053d674968e9",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-24T20:43:51Z",
+      "id": "urn:uuid:1bc762a2-b17e-4a0c-afa7-394da9482949",
+      "kind": "git",
+      "locator": "https://github.com/con/skills.git",
+      "notes": "Proposed in draft PR https://github.com/con/skills/pull/11; not yet merged.",
+      "role": "canonical",
+      "subpath": "skills/install-apm-skills"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-24T20:44:16Z",
+      "id": "urn:uuid:22a20092-24db-4662-8506-053d674968e9",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills.git",
+      "notes": "Validated distribution revision c6ab62f0e03ad1aae22893f06126558e82797761.",
+      "role": "fork",
+      "subpath": "skills/install-apm-skills"
+    }
+  ],
+  "summary": "Install reusable APM skills with metadata-only downstream history and reproducible setup.",
+  "tag_ids": [],
+  "updated_at": "2026-09-24T20:44:16Z"
+}
