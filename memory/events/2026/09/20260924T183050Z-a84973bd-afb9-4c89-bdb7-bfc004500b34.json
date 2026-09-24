@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/stamped-principles/stamped-checklist/pull/134"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "ad9666634b8bc044775ee3704bdc7b8a11127b8a",
+      "scope": "SKILL.md only",
+      "sha256": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18"
+    },
+    "skills-workshop/session": "01a0d39b-887e-7732-8c1e-665e72e31604"
+  },
+  "id": "urn:uuid:a84973bd-afb9-4c89-bdb7-bfc004500b34",
+  "occurred_at": "2026-09-24T18:30:50Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Captured unit tests, browser tests, build and repository checks outside Git while implementing version-specific saves.",
+    "task_summary": "Retain original checklist versions for saved assessments"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "use"
+}
