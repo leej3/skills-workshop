@@ -16,7 +16,7 @@
       "id": "urn:uuid:c0c87edd-dd08-4ce1-99d1-04674cc53371",
       "kind": "git",
       "locator": "https://github.com/con/skills.git",
-      "notes": "Proposed in draft PR https://github.com/con/skills/pull/11; not yet merged.",
+      "notes": "Proposed in draft PR https://github.com/con/skills/pull/13, depending on #12 and followed by #14; supersedes closed #11; not yet merged.",
       "role": "canonical",
       "subpath": "skills/author-apm-skills"
     },
@@ -26,12 +26,12 @@
       "id": "urn:uuid:9030565e-9ebf-406f-a30e-02cb413092cb",
       "kind": "git",
       "locator": "https://github.com/leej3/skills.git",
-      "notes": "Validated distribution revision c6ab62f0e03ad1aae22893f06126558e82797761.",
+      "notes": "Validated distribution revision 3028620b0f55b03d55a734249102dc182a5104a2 (codex/declaude-skills); upstream PR stack #12, #13, #14.",
       "role": "fork",
       "subpath": "skills/author-apm-skills"
     }
   ],
   "summary": "Author, package, and assess reusable skills specifically for APM distribution.",
   "tag_ids": [],
-  "updated_at": "2026-09-24T20:44:16Z"
+  "updated_at": "2026-09-24T21:06:34Z"
 }

@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:144ad5e1-9c6e-4fbf-b2ff-89c62878511b",
+  "occurred_at": "2026-09-24T21:06:04Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "draft",
+    "summary": "APM collection packaging and distribution authoring workflow; depends on security PR #12, followed by portability PR #14.",
+    "url": "https://github.com/con/skills/pull/13"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:dcb48733-b28f-4a33-bc42-c2498fb8f30a",
+  "type": "contribution"
+}

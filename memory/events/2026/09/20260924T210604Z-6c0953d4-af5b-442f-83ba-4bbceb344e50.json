@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:6c0953d4-af5b-442f-83ba-4bbceb344e50",
+  "occurred_at": "2026-09-24T21:06:04Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "closed",
+    "summary": "Superseded by security, APM, and portability PRs #12, #13, and #14.",
+    "url": "https://github.com/con/skills/pull/11"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:2634a1bf-88a1-4d32-ba52-6b32b1f0f134",
+  "type": "contribution"
+}
