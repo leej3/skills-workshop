@@ -1,0 +1,35 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "31bf10e4fe68cd45e69b5cb50ddc1c6bcc987d96",
+      "scope": "SKILL.md only",
+      "sha256": "8d017c4b2bd83aa94588ca9ac3a83dc9a05a47949102aab643eb972ce9efe659"
+    },
+    "skills-workshop/session": "01a0d3cc-3783-7df0-822a-568fc61a04cc"
+  },
+  "id": "urn:uuid:3d06810c-9ac0-49b4-bf6c-89ff37eb5563",
+  "occurred_at": "2026-09-24T16:40:33Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Used stable account and listing terminology and short explanations while retaining provisional status and distinctions between alternative counting rules.",
+    "task_summary": "Draft an untested research walkthrough around reader questions"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:42799b0e-d365-4e5f-af53-acb56d5cd460",
+  "type": "use"
+}
