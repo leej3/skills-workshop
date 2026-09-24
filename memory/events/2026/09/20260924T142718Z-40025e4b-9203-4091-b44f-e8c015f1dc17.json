@@ -1,0 +1,35 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [
+    {
+      "kind": "url",
+      "locator": "https://github.com/stamped-principles/stamped-checklist/pull/132"
+    }
+  ],
+  "extensions": {
+    "skills-workshop/session": "01a0d39b-887e-7732-8c1e-665e72e31604"
+  },
+  "id": "urn:uuid:40025e4b-9203-4091-b44f-e8c015f1dc17",
+  "occurred_at": "2026-09-24T14:27:18Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Replaced storage jargon with question IDs and concrete saved-answer behavior; explained format 2 as a version marker.",
+    "task_summary": "Simplify checklist migration PR description"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:42799b0e-d365-4e5f-af53-acb56d5cd460",
+  "type": "use"
+}
