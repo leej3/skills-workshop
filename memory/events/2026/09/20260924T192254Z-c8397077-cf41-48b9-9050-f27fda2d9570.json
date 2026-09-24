@@ -1,0 +1,30 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/session": "01a0d4d7-71f9-7512-b992-34aea1b6e64a"
+  },
+  "id": "urn:uuid:c8397077-cf41-48b9-9050-f27fda2d9570",
+  "occurred_at": "2026-09-24T19:22:54Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Captured the expected missing-tag pretest failure and successful formatting checks in external project logs.",
+    "task_summary": "Pin published and pending checklist releases"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "use"
+}
