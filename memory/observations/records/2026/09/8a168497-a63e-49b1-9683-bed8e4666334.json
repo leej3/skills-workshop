@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "8a168497-a63e-49b1-9683-bed8e4666334",
+  "recorded_at": "2026-09-24T22:26:47.720269+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "apm-source-migration",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

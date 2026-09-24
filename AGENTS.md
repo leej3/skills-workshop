@@ -11,3 +11,14 @@
   Stage explicit paths to avoid unrelated files, and push when publication is authorized by the task.
 - Record only durable, externally useful contributions (such as an upstream issue, pull request, or release).
   Do not create Workshop events solely to document routine Workshop commits or bookkeeping.
+
+## Reusable skill dependencies
+
+Run `pixi run --locked setup-skills` before starting work; it restores the versions in `apm.lock.yaml`.
+Start a new agent task after setup so native discovery sees the installed skills.
+APM-owned copies are generated and Git-ignored; do not edit or commit them.
+This repository publishes reusable source from `.apm/skills/`; edit that source here and run `pixi run apm install` to refresh the deployment lock.
+Other consumer projects must pin a published Workshop revision and never develop these skills in their deployed copies.
+The Workshop's native control-skill source remains tracked here.
+If setup fails, report it rather than claiming missing skills were loaded.
+Run `pixi run --locked audit-skills` to check integrity and drift.

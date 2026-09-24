@@ -6,7 +6,7 @@
   "id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
   "name": "duct",
   "notes": "",
-  "preferred_source_id": "urn:uuid:7947f9fb-e408-491e-bb08-5c8792df795c",
+  "preferred_source_id": "urn:uuid:73f06abb-081e-4d4b-b92a-21d548d4d76f",
   "relations": [],
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
   "sources": [
@@ -16,12 +16,22 @@
       "id": "urn:uuid:7947f9fb-e408-491e-bb08-5c8792df795c",
       "kind": "git",
       "locator": "https://github.com/leej3/skills-workshop.git",
-      "notes": "",
-      "role": "canonical",
+      "notes": "Former source location; now an ignored APM deployment from .apm/skills.",
+      "role": "deprecated",
       "subpath": ".agents/skills/duct"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-24T22:24:45Z",
+      "id": "urn:uuid:73f06abb-081e-4d4b-b92a-21d548d4d76f",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "APM-distributed canonical source; .agents copy is generated.",
+      "role": "canonical",
+      "subpath": ".apm/skills/duct"
     }
   ],
   "summary": "Capture substantive project commands with con/duct, central per-project logs, and explicit export",
   "tag_ids": [],
-  "updated_at": "2026-09-24T17:20:20Z"
+  "updated_at": "2026-09-24T22:25:34Z"
 }

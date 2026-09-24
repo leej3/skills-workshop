@@ -13,6 +13,7 @@ Native Linux ARM64 and Windows are not currently included.
 git clone --recurse-submodules https://github.com/leej3/skills-workshop.git
 cd skills-workshop
 pixi install --locked
+pixi run --locked setup-skills
 pixi run configure-upstreams
 pixi run setup-agent
 pixi run setup-agent --apply
@@ -83,6 +84,39 @@ Searching or installing a skill does not count as evidence that it helped.
 The catalogs cover [OpenAI](https://github.com/openai/skills), [Anthropic](https://github.com/anthropics/skills), [K-Dense](https://github.com/K-Dense-AI/scientific-agent-skills), [NiPreps](https://github.com/nipreps/skills-comm), and [CON](https://github.com/con/skills).
 They are discovery sources, not a set of skills automatically installed in your projects.
 
+## Reproducible project skills
+
+This checkout uses APM 0.31.0 through the locked Pixi environment.
+Run `pixi run --locked setup-skills` before opening an agent task, and `pixi run --locked audit-skills` to verify it.
+`setup-agent` also restores these project dependencies before configuring the user-level controls.
+First setup needs network access; private packages additionally need suitable Git credentials.
+
+Reusable source is tracked in `.apm/skills/`: `duct`, `commit-provenance`, and `build-github-app`.
+The root `apm.yml` publishes this collection and declares what APM may deploy.
+Workshop's own setup generates ignored copies under `.agents/skills/` and records their hashes in `apm.lock.yaml`.
+The two Workshop controls remain native under `.agents/skills/`; this remains the fallback for repo-specific skills that are not APM dependencies.
+Existing user-level links keep pointing to their established `.agents/skills/` locations.
+
+Other projects can select skills from this repository at an exact published commit:
+
+```console
+apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill duct --target agent-skills --dry-run
+apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill duct --target agent-skills
+```
+
+Replace `FULL_COMMIT_SHA` with a reviewed 40-character commit SHA and run APM through the consumer's pinned environment.
+Track its manifest, generated lock, environment/setup metadata, and instructions; ignore `apm_modules/` and the selected deployment directories.
+Restore with `apm install --frozen`, then check `apm audit --ci`.
+Bootstrap before opening an agent task; an AGENTS.md note cannot load missing skills automatically.
+
+Edit reusable source only in this Workshop repository's `.apm/skills/`, then run `pixi run apm install` to regenerate the working copies and lock.
+Downstream projects update only the requested source ref and generated dependency metadata.
+Never patch or commit their installed copies.
+`pixi run check-apm` tests full and selective consumption, fresh metadata-only restoration, and tamper detection.
+CI also restores Workshop's own working copies and checks audit and Git cleanliness on each push.
+A separate pinned `security` environment scans reusable source and audits its Python dependencies on pushes, PRs, and weekly.
+Run `pixi run --locked -e security scan-skills` and `pixi run --locked -e security audit-dependencies` locally; that optional environment requires macOS 14+ or Linux with glibc 2.28+.
+
 ## Update and troubleshoot
 
 After pulling changes into an existing checkout:
@@ -90,6 +124,7 @@ After pulling changes into an existing checkout:
 ```console
 git submodule update --init --recursive
 pixi install --locked
+pixi run --locked setup-skills
 pixi run configure-upstreams
 pixi run setup-agent
 pixi run setup-agent --apply

@@ -16,12 +16,12 @@
       "id": "urn:uuid:717d4769-6817-4b11-affb-b67eaaa0f828",
       "kind": "git",
       "locator": "https://github.com/leej3/skills-workshop.git",
-      "notes": "",
+      "notes": "APM-distributed canonical source; .agents copy is generated.",
       "role": "canonical",
       "subpath": ".apm/skills/build-github-app"
     }
   ],
   "summary": "Build, deploy, debug, rotate credentials for, and verify GitHub Apps with OAuth, repository installations, Actions artifacts, and stateless hosted services",
   "tag_ids": [],
-  "updated_at": "2026-08-25T15:20:01Z"
+  "updated_at": "2026-09-24T22:25:34Z"
 }

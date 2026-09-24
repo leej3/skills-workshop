@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.31.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:7ed6fba1-5410-4ad3-b068-04eea2d7ebd1",
+  "occurred_at": "2026-09-24T22:24:47Z",
+  "payload": {
+    "resolution_digest": "sha256:bb92bdb6de01c9f9d6d1919c7b61f64cbaccf2f6a46cac9a54b441f44887fb6f",
+    "skill_name": "duct",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.31.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": ".apm/skills/duct",
+    "dirty": true,
+    "lock_digest": "sha256:b669dce2b67f10446136948c0049fe6fa85d38c11ae8bf751d949e64a7edd638",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "fca2a6e35f64e5584afe15992430ab782f7c8f36"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "project-membership"
+}

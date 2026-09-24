@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "21 8 * * 1"
 
 permissions:
   contents: read
@@ -13,15 +15,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository and upstream skills
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           submodules: recursive
 
       - name: Install Pixi
-        uses: prefix-dev/setup-pixi@v0.10.1
+        uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
         with:
           cache: true
           frozen: true
 
+      - name: Restore and audit reusable skills
+        run: |
+          pixi run --locked setup-skills
+          pixi run --locked audit-skills
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+
+      - name: Verify downstream APM packaging
+        run: pixi run --locked check-apm
+
       - name: Validate
         run: pixi run validate
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+        with:
+          environments: security
+          frozen: true
+      - run: pixi run --locked -e security scan-skills
+      - run: pixi run --locked -e security audit-dependencies

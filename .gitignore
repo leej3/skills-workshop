@@ -8,3 +8,8 @@ apm_modules/
 # Locks and interrupted temporary writes for schema-validated observations.
 .feedback.lock
 .feedback-*.tmp
+
+# APM-owned deployments; native Workshop skill source stays tracked.
+/.agents/skills/duct/
+/.agents/skills/commit-provenance/
+/.agents/skills/build-github-app/
