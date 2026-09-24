@@ -1,0 +1,6 @@
+interface:
+  display_name: "Duct Project Runs"
+  short_description: "Capture project runs centrally, outside Git"
+  default_prompt: "Use $duct to run the project checks and retain their logs centrally."
+policy:
+  allow_implicit_invocation: true

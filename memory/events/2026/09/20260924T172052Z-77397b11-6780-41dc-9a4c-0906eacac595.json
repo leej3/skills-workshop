@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "ab71da9cc9056eccc29c99c98117c3d84c2d99aa",
+      "scope": "SKILL.md only",
+      "sha256": "ac737427c48fa0e877c757a7ec3b4537bddf5a02d27253c7a22036a748e4a01f"
+    },
+    "skills-workshop/session": "01a0d46a-b3b8-73b2-b771-c57ff365c579"
+  },
+  "id": "urn:uuid:77397b11-6780-41dc-9a4c-0906eacac595",
+  "occurred_at": "2026-09-24T17:20:52Z",
+  "payload": {
+    "benefit": "better-result",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Fresh multi-provider discovery found a selective profiling alternative; native authoring supported the requested central-storage policy.",
+    "task_summary": "Create and install a user duct execution skill"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "ab71da9cc9056eccc29c99c98117c3d84c2d99aa"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
+  "type": "use"
+}

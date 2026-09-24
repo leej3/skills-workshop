@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:1827aa13-b25f-436b-87b7-ddbcc149dfb3",
+  "occurred_at": "2026-09-24T17:20:21Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "Created and installed a user-level skill for substantive commands, central retained logs, and explicit export as requested."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "consideration"
+}

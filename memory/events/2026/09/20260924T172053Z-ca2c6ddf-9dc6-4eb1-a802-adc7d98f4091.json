@@ -1,0 +1,49 @@
+{
+  "asserted_by": {
+    "id": "codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {
+    "skills-workshop/entrypoint": {
+      "repository_revision": "ab71da9cc9056eccc29c99c98117c3d84c2d99aa",
+      "scope": "SKILL.md only",
+      "sha256": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18"
+    },
+    "skills-workshop/session": "01a0d46a-b3b8-73b2-b771-c57ff365c579"
+  },
+  "id": "urn:uuid:ca2c6ddf-9dc6-4eb1-a802-adc7d98f4091",
+  "occurred_at": "2026-09-24T17:20:53Z",
+  "payload": {
+    "benefit": "new-capability",
+    "invocation": "unknown",
+    "listing_state": "unknown",
+    "outcome": "success",
+    "rationale": "Central capture preserved validation evidence. Initial con-duct 0.17.0 lacked working macOS sampling; Python 3.12 with 0.22.0 produced resource measurements and informed installation guidance.",
+    "task_summary": "Capture project validation and verify macOS resource monitoring"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": null,
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "ab71da9cc9056eccc29c99c98117c3d84c2d99aa"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "use"
+}

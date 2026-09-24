@@ -1,0 +1,40 @@
+{
+  "asserted_by": {
+    "id": "project-tree",
+    "kind": "tool",
+    "runtime": "agent-skills"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:f032e05c-ddf1-4d5e-964d-63a27d344458",
+  "occurred_at": "2026-09-24T17:20:21Z",
+  "payload": {
+    "resolution_digest": "sha256:2f4b6bfa725407b6f9a1f9e846ea4b39ca286d0525e4dbeab99fc515f6bd64a4",
+    "skill_name": "duct",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": null,
+    "command": [
+      "scan",
+      ".agents/skills"
+    ],
+    "dependency_selector": ".agents/skills/duct",
+    "dirty": true,
+    "lock_digest": null,
+    "lock_path": null,
+    "manifest_path": null,
+    "project_id": "urn:uuid:7bea25b4-8855-4e71-a079-ae079a72c0c6",
+    "repository_commit": "ab71da9cc9056eccc29c99c98117c3d84c2d99aa"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:840a82de-0189-4a74-a0aa-5e75b212e16a",
+  "type": "project-membership"
+}
