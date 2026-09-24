@@ -137,42 +137,20 @@ Read [references/workflow.md](references/workflow.md) for the boundary and verif
 
 ## Record evidence after real use
 
-Use the separate global `workshop-feedback` skill after actual use; one short observation per skill and meaningful task is enough.
-`workshop feedback` accepts the same evidence options as `use`, can remember a newly used skill with `--skill-path`, and can infer an already registered project from `--project-path`.
-Ratings are optional.
-Capture a concrete benefit or improvement when observed, and use `workshop insights --since YYYY-MM-DD` to review patterns later.
-Do not create a feedback event about the feedback recorder itself or routine Workshop bookkeeping.
+Use `workshop-feedback` for one minimal local baseline record per skill/task after material use.
+Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review.
+Routine successes require no narrative, memory registration, Git commit, or push.
+Installation and project membership are not evidence of use.
 
+Local `feedback-local summary` reports observed outcomes and measured durations; `feedback-local insights` prioritizes grouped exceptional lessons.
+Keep raw observations separate from consolidated knowledge and active skill instructions.
+Consult relevant open lessons when revising a skill; record a proposed change and its validation before treating it as an improvement.
+Retain rejected findings so later work does not repeat an unsuccessful intervention.
 
-Project membership is not usage.
-Record a `use` event only after the skill participated in a task:
-
-```console
-pixi run workshop use <skill> --task "sanitized task summary" \
-  --invocation explicit --outcome success --rating 4 \
-  --rationale "Useful because ..." \
-  --asserted-kind agent --asserted-by <agent-id>
-```
-
-Ratings are cheap contextual observations, not efficacy evidence.
-The scale is 1 harmful, 2 unhelpful, 3 mixed, 4 useful, and 5 decisive.
-Record enough task, runtime, and project context to interpret the observation without storing secrets or private task content.
-
-Workshop memory is Git-backed project data.
-Before completing a task that creates or updates memory, run `pixi run workshop validate`, inspect the records, and commit their explicit paths in the Workshop checkout using its commit conventions.
-Do this even when the main task takes place in another project; do not leave intentional memory untracked.
-When asked to sync the Workshop, also inspect and include relevant pending memory records rather than excluding them solely because they predate the task.
-Preserve append-only event history and keep agent assertions unreviewed; committing a record does not mark it human-reviewed.
-Exclude unrelated files and push when the task authorizes publication.
-Do not create additional events solely to record this routine memory bookkeeping.
-
-Recall the evidence later with:
-
-```console
-pixi run workshop show <skill>
-pixi run workshop history <skill>
-pixi run workshop where-used <skill>
-```
+The existing `workshop feedback`, `use`, `insights`, `history`, and `recall` commands operate on Git-backed memory.
+They remain available for deliberately curated records after the feedback skill's publication review.
+Validate and commit intentional authorized memory changes under the checkout conventions, but never convert routine local collection into that workflow.
+Agent observations remain unreviewed assertions; counts and ratings do not establish causal benefit.
 
 ## Evaluate important claims
 

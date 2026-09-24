@@ -191,7 +191,7 @@ pixi run workshop project add my-project \
 pixi run workshop project scan my-project --project-path ../my-project
 ```
 
-After a skill participates in a real task, record a sanitized observation:
+For a deliberately curated, publication-reviewed observation, the Git-backed memory interface remains available:
 
 ```console
 pixi run workshop use example-skill \
@@ -225,36 +225,21 @@ pixi run workshop contribution add example-skill \
 ## Lightweight feedback across projects
 
 [`workshop-feedback`](../../.agents/skills/workshop-feedback/SKILL.md) is the feedback half of the standard Workshop workflow, installed alongside discovery by `pixi run setup-agent --apply`.
-It records one short observation after actual skill use.
-For manual installation or another host, install both control skill directories at user scope and configure the checkout in `~/.config/skills-workshop/config.json`:
-
-```json
-{"workshop_root": "/absolute/path/to/skills-workshop"}
-```
-
-A global agent instruction to invoke it after meaningful skill use makes the process explicit; implicit skill selection alone is not a guaranteed hook.
-The skill and its launcher are portable, with Pixi and the configured Workshop CLI as declared dependencies.
-No external posting or push is automatic.
+It records minimal baseline outcomes in private JSONL outside Git, with grouped qualitative notes only for exceptional lessons.
+The bundled `scripts/usage.py` hook needs only Python on macOS or Linux; it can be called directly by an agent or a host completion adapter.
+It does not automatically register a host callback.
 
 ```console
-pixi run workshop feedback example-skill \
-  --task "Reviewed a release" --rationale "Found a missing checksum" \
-  --outcome success --benefit avoided-error \
-  --next-step "Cover detached signatures" \
-  --project-path ../project --asserted-kind agent --asserted-by codex
-pixi run workshop insights --since 2026-09-18
+pixi run feedback-local record example-skill --task release-review --outcome success
+pixi run feedback-local summary --since 2026-09-01
+pixi run feedback-local insights
 ```
 
-Ratings are optional.
-Unknown outcomes remain unknown; failures and unclear benefit belong in memory too.
-`--skill-path` can remember a newly used skill and record an entrypoint digest.
-`--project-path` links an already remembered project by remote identity when unambiguous.
-`--session` makes retries idempotent for the same skill/task; later milestones or corrections use a distinct task summary.
-Evidence links and proposed improvements can be added without creating an evaluation or an upstream issue.
-
-`insights` reports observed benefits, outcomes, review/evidence coverage, and proposed follow-ups over a chosen period.
-Use it over the next few weeks to assess discovery breadth, new capabilities, repeat usefulness, and recording effort.
-These observations do not establish causality.
+The user-level instruction delegates collection exemptions and publication policy to that skill.
+Routine collection requires no registration, prose report, validation run, commit, or push.
+Use the separate Git-backed `workshop feedback` interface only after reviewing the full record for publication and confirming authorization.
+The launcher no longer automatically inserts conversation IDs.
+See [local feedback and learning](local-feedback.md) for measurement semantics and the relationship to WikiSkill.
 
 ## Evaluate an important skill
 

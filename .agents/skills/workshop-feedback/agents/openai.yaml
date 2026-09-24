@@ -1,6 +1,6 @@
 interface:
   display_name: "Workshop Feedback"
-  short_description: "Remember what helped after actual skill use"
-  default_prompt: "Use $workshop-feedback to record a short observation about the skills used in this task."
+  short_description: "Collect private outcomes and exceptional lessons"
+  default_prompt: "Use $workshop-feedback for minimal local skill outcomes; group exceptional lessons and review publication separately."
 policy:
   allow_implicit_invocation: true

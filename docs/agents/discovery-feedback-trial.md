@@ -1,5 +1,8 @@
 # Discovery and feedback trial
 
+Historical trial report.
+Routine collection now uses [private baseline records](local-feedback.md); the Git-backed feedback examples below are for curated, publication-reviewed lessons.
+
 This iteration preserves fresh discovery, project-local working skills, and the existing prototype workflows.
 The user reports that finding more skills and using them more is already a substantial benefit.
 The next few weeks should evaluate that benefit alongside repeat usefulness and recording effort.

@@ -21,12 +21,12 @@ Use $skills-workshop for skill discovery, selection, installation, and recall.
 For a named installation, proceed with that choice after compatibility checks;
 offer fresh alternatives without blocking or substituting the requested skill.
 Keep working skills project-local; these two Workshop controls are user-level.
-After meaningful skill use, apply $workshop-feedback once per skill and task.
-Record a short, sanitized observation, including failures or uncertain benefit;
-ratings are optional. Do not record mere reads, installations, or bookkeeping.
-Batch memory validation and scoped commits under the checkout's conventions.
-If feedback is unavailable, finish the main task and report the pending record.
-Do not push memory or post upstream without publication authorization.
+After material use, follow $workshop-feedback for one minimal local baseline
+record per skill/task. Its policy owns exemptions and exceptional notes.
+Routine successes require no narrative, Git commit, or push.
+Keep observations private; separately review and authorize public lessons.
+Do not record reads, installations, the recorder itself, or bookkeeping.
+Collection failures must not block the main task.
 {END}"""
 
 

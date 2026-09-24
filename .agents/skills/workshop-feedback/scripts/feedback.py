@@ -34,10 +34,6 @@ def main() -> int:
         print("Configured Skills Workshop checkout is unavailable.", file=sys.stderr)
         return 1
     arguments = sys.argv[1:]
-    if os.environ.get("CODEX_THREAD_ID") and not any(
-        arg == "--session" or arg.startswith("--session=") for arg in arguments
-    ):
-        arguments += ["--session", os.environ["CODEX_THREAD_ID"]]
     try:
         return subprocess.run(
             [

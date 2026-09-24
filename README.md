@@ -41,7 +41,9 @@ Start a new Codex task in the project you are working on and ask:
 > Use $skills-workshop to find a skill for reviewing this project's releases.
 
 The agent searches remembered skills, pinned local catalogs, and public providers.
-After meaningful skill use, `workshop-feedback` records a short observation; ratings are optional.
+After material skill use, `workshop-feedback` appends a minimal private baseline record.
+Exceptional lessons are grouped locally; only separately reviewed and authorized lessons enter Git-backed memory.
+See [local feedback and learning](docs/agents/local-feedback.md) for the hook, aggregates, and publication boundary.
 The installed instruction asks the agent to do this, but it is not an automatic runtime hook.
 
 > Use $skills-workshop to recall which skills helped with release reviews.

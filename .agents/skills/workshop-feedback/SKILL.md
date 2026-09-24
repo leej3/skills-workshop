@@ -1,71 +1,73 @@
 ---
 name: workshop-feedback
-description: Record lightweight Skills Workshop memory after an agent actually uses a skill in a task. Use at a meaningful task milestone or completion to capture what helped, failed, enabled new work, or should improve. Installation, merely reading a skill, and routine memory bookkeeping are not use.
+description: Record minimal local skill-use outcomes, group exceptional lessons, and curate publication-safe feedback. Routine use needs one local call, not a report or Git commit.
 ---
 
 # Workshop feedback
 
-Close the loop after real skill use without interrupting the main task.
-This is a user-level control skill; working skills stay in their owning projects.
-It requires Pixi and a Skills Workshop checkout with the `feedback` command.
-Use the checkout's Pixi environment for Python; a system Python installation is not required.
-Configure that checkout in `~/.config/skills-workshop/config.json` as `{"workshop_root": "/absolute/checkout"}`, or set `SKILLS_WORKSHOP_ROOT`.
-The bundled launcher locates and runs the CLI; it never installs software or publishes anything itself.
-The agent completes the Git commit and push described below.
+Separate baseline measurement, qualitative learning, and publication.
+Use the bundled standard-library Python hook; it does not need Pixi, a Workshop checkout, registration, Git, or network access.
+Do not narrate routine collection or interrupt the main task for it.
 
-At a meaningful milestone, record one short observation per skill that materially participated.
-Capture failures, abandonment, and unclear benefit as readily as success.
-Merely loading instructions is insufficient.
-Do not record this feedback skill itself, repeated reads, routine commits, or bookkeeping.
+## Baseline: one local call
 
-Read the configured checkout path from the JSON file (or `SKILLS_WORKSHOP_ROOT`).
-Use the bundled launcher from any project, replacing the manifest path with that checkout's `pixi.toml` and the launcher path with the installed skill directory:
+After actual material use, record once per skill and task (not per command).
+Resolve `scripts/usage.py` relative to this skill directory:
 
 ```console
-pixi run --manifest-path /absolute/checkout/pixi.toml \
-  python /path/to/workshop-feedback/scripts/feedback.py <skill-name-or-uuid> \
-  --task "Short, sanitized account of the work" \
-  --rationale "What this skill changed, missed, or made possible" \
-  --outcome success --benefit new-capability \
-  --project-path /path/to/active-project \
-  --asserted-kind agent --asserted-by codex
+python /path/to/workshop-feedback/scripts/usage.py record duct \
+  --task build-validation --outcome success
 ```
 
-Only the skill, task, rationale, and actor flags are required.
-Outcome and invocation default to unknown.
-Do not infer success from a finished agent turn.
-A rating is optional; do not manufacture one.
-If warranted, the scale is 1 harmful, 2 unhelpful, 3 mixed, 4 useful, 5 decisive.
+Use a short, stable task category, without project names or task transcripts.
+`--outcome` describes whether the skill performed its intended role: `success`, `partial`, `failure`, or `unknown`.
+An expected project test failure can coexist with successful log capture; use optional `--task-outcome` separately.
+For measured elapsed time, add `--duration-seconds 120 --duration-scope task` (whole task) or `--duration-scope skill` (measured skill-active interval).
+Omit unmeasured durations; never estimate from memory or imply time saved.
+Add `--skill-path` to hash the actual SKILL.md when convenient; its path and contents are not stored.
+Add `--model` only when known.
+Reuse `--event-id` with a random identifier for an uncertain retry; changed content with the same ID is rejected.
 
-- For a skill not yet remembered, include `--skill-path /path/to/skill/SKILL.md`.
-  The CLI records its observed source and description.
-  For a known skill this also retains a digest of the entrypoint actually used; it is not a full-tree controlled-evaluation artifact.
-  Use a UUID when names are ambiguous.
-- `--project-path` matches an already remembered project by Git remote.
-  If none matches, feedback still succeeds without a project link.
-  Add a durable project record only when useful; do not turn that into a prerequisite for feedback.
-- Add `--next-step "Concrete improvement"` when there is an actionable gap.
-  This records a proposal, not permission to change the skill or post an upstream issue.
-- Add `--evidence https://...` for a useful, sanitized durable result link.
-  Record only runtime/model information actually known; omit the rest.
-- Use `--benefit` for an observed `new-capability`, `saved-time`, `avoided-error`, `better-result`, `no-clear-benefit`, or `harmful` effect.
-  These are observations, not causal proof.
-- The launcher supplies the current Codex task ID as `--session` when available, preventing identical retries for the same skill/task.
-  For a later meaningful milestone or correction, use a distinct task summary.
-  Never rewrite old events.
+Records are private JSONL under `${XDG_STATE_HOME:-~/.local/state}/skills-workshop/feedback/`, outside Git, with restrictive permissions.
+No session, conversation, project, environment, command, or log metadata is collected automatically.
+A local host may invoke the same CLI with arguments as its completion hook; installation alone does not register an automatic host callback.
 
-Keep task summaries free of secrets and private transcripts.
-Observations are agent assertions and remain unreviewed.
-Do not ask the user to rate every use.
-If uncertain, say so in the rationale.
+Skip mere reads, installation, the feedback recorder, and bookkeeping.
+Honor explicit user opt-outs and omit collection when even a task category would be sensitive.
+Do not log exemptions or create a pending-work obligation for a missed routine observation.
+If collection fails, finish the task; mention it only when it affects requested measurement or suggests a recurring fault.
 
-Batch memory bookkeeping at the end of the task: validate the Workshop memory, inspect changed records, and commit only the task's intentional paths under the checkout's commit conventions.
-Honor its provenance requirement.
-By the user's standing authorization, commit and push completed Workshop feedback to the configured remote by default, including when the main task takes place in another project.
-Do not ask for confirmation again unless the user overrides this default or the push would publish unrelated changes.
-Inspect outgoing commits, use the configured SSH transport for GitHub, and verify that the push succeeds.
-Do not force-push; report authentication failures or divergent history as blockers.
-If the checkout, tools, or commit provenance are unavailable, finish the main task and briefly report the pending observation; do not invent a record or repeatedly retry.
+## Exceptional lessons
 
-Later, `pixi run workshop recall "task I remember"` retrieves experience and `pixi run workshop insights --since YYYY-MM-DD` summarizes benefits, failures, evidence gaps, and proposed improvements.
-An upstream contribution requires separate authorization; record its link once it actually exists.
+Write a qualitative note only for new failures of the skill, workarounds, surprising costs, ambiguities, concrete improvements, or success in a new setting.
+Routine success is covered by the baseline; it needs no prose report, rating, commit, or push.
+A user-requested evaluation may collect richer evidence for a bounded period.
+
+```console
+python /path/to/workshop-feedback/scripts/usage.py note duct \
+  --group macos-sampling --priority 1 --confidence high \
+  --summary "Older runtime failed to sample resources on macOS" \
+  --action "Use the verified runtime and retain a sampling regression check"
+```
+
+Link actual baseline records with repeatable `--usage-id` when available.
+Use the same skill/group for recurring findings; append a note to refine its action, confidence, priority, or status (`open`, `resolved`, `deferred`).
+Never rewrite the historical observations.
+Grouping and resolution do not require a new skill or a public report.
+
+Read `summary` for outcomes and median measured durations grouped by skill, task category, skill digest, and model.
+Read `insights` for open groups ordered by priority, then distinct linked uses; both accept `--since YYYY-MM-DD`.
+Priority is an explicit judgment: 0 immediate harm or data loss; 1 a blocker or recurring material failure; 2 a useful improvement; 3 a minor refinement.
+Confidence reflects evidence quality, not frequency.
+Check the supporting observations before changing a skill.
+Counts describe recorded uses, not all uses; missing outcomes and times remain unknown.
+Do not sum overlapping task durations across skills or interpret these observational statistics as causal benefit.
+
+## Publication is separate
+
+Local observations and aggregates are not automatically public.
+Read [publication.md](references/publication.md) before promoting a lesson to Git-backed memory or publishing it.
+Use the existing `scripts/feedback.py` launcher only for an intentionally curated public-memory record after that review; it requires the configured Workshop checkout and Pixi.
+Do not copy the JSONL store into a repository.
+The user may authorize publication of a reviewed set; use that authorization without asking again, but inspect the exact staged records and metadata first.
+Shared-thread messages still require their separately applicable approval.

@@ -41,6 +41,8 @@ workshop_manifest="$PWD/pixi.toml"
     cd /tmp
     pixi run --manifest-path "$workshop_manifest" python \
         "$HOME/.agents/skills/workshop-feedback/scripts/feedback.py" --help
+    pixi run --manifest-path "$workshop_manifest" python \
+        "$HOME/.agents/skills/workshop-feedback/scripts/usage.py" --help
 )
 pixi run validate
 # No tracked files should change during installation or validation.

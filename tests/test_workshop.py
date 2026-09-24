@@ -2333,7 +2333,8 @@ def test_feedback_launcher_uses_configured_checkout(monkeypatch, memory_root):
         "workshop",
         "feedback",
     ]
-    assert command[-2:] == ["--session", "test-session"]
+    assert "--session" not in command
+    assert "test-session" not in command
     assert options["cwd"] == memory_root
 
 
