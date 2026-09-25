@@ -39,6 +39,20 @@ Full searches still query public providers, but never send remembered event text
 
 ## Project-owned versus reusable skills
 
+### Project instructions
+
+Follow the [AGENTS.md convention](https://agents.md/) when integrating skills into a project.
+Inspect the root file and any nested files governing the paths you will change before choosing commands or editing setup.
+The closest applicable file resolves conflicts between repository instructions; nonconflicting parent guidance remains in effect, and explicit user instructions take precedence.
+Preserve existing content and conventions, including established instruction-file links.
+Add only the concrete setup, restoration, and validation commands needed for the installed dependency, using the project's environment manager and the correct working directory.
+Put shared setup at the root and package-specific differences in the relevant nested file; add a new nested file only when distinct guidance is needed.
+Keep `README.md` focused on human-facing overview and onboarding, and update command guidance when setup changes.
+Project `AGENTS.md` files remain tracked even when generated skill deployments are ignored.
+Client-specific configuration is separate from these portable instructions; configure another client only when requested.
+
+### Source and dependency ownership
+
 Reusable skills are authored in a dedicated skill repository, normally `con/skills`.
 Use APM for any selected reusable skill it can manage.
 Consumers track `apm.yml`, `apm.lock.yaml`, the pinned APM environment dependency, setup task, targeted ignores, and concise AGENTS.md/README setup guidance.

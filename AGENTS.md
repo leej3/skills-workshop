@@ -1,5 +1,24 @@
 # Skills Workshop working agreement
 
+Skills Workshop coordinates skill discovery and cross-project evidence; APM owns reusable dependency installation and locks.
+This file follows the [AGENTS.md convention](https://agents.md/).
+Before editing a path, read any applicable nested `AGENTS.md`; the nearest file takes precedence for conflicting project instructions, while nonconflicting parent guidance still applies.
+Explicit user instructions take precedence over repository guidance.
+
+## Development and validation
+
+Run commands from the repository root using the locked Pixi environment.
+
+- Restore tooling with `pixi install --locked` and skills with `pixi run --locked setup-skills`.
+- Run `pixi run validate` before committing code changes: it checks lint, formatting, compilation, tests, metadata, memory, and shareable feedback.
+- For focused iteration, run `pixi run pytest -q tests/<test_file>.py`; format Python with `pixi run format`.
+- For reusable skill packaging changes, run `pixi run check-apm`; for control packaging changes, run `pixi run check-controls-apm`.
+  These verify installation, restoration, and tamper detection.
+- For documentation-only changes, run Snapper on the changed files with `pixi run pre-commit run snapper --files <paths>` and validate any changed skill or memory records.
+
+Keep command examples synchronized with `pixi.toml` and relevant checks in `.github/workflows/`.
+Keep human-facing setup and overview material in `README.md`; use this file for actionable agent instructions.
+
 ## Commit Workshop changes
 
 - Commit every intentional change made in this repository before completing the task.

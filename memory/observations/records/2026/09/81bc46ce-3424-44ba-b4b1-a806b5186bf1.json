@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "81bc46ce-3424-44ba-b4b1-a806b5186bf1",
+  "recorded_at": "2026-09-25T16:29:34.919378+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "agents-guidance-alignment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

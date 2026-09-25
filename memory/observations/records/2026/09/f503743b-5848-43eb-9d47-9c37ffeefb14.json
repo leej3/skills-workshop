@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "f503743b-5848-43eb-9d47-9c37ffeefb14",
+  "recorded_at": "2026-09-25T16:29:34.681105+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "agents-guidance-alignment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "8a74c9b412a3bb085016c45340c66f32e28458c5c729fdc2c38a8ac66119a081",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

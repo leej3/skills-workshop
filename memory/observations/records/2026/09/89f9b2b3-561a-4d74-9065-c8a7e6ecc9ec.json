@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "89f9b2b3-561a-4d74-9065-c8a7e6ecc9ec",
+  "recorded_at": "2026-09-25T16:29:34.801218+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "agents-guidance-alignment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

@@ -105,10 +105,14 @@ Never attribute an agent judgment to the user.
 
 ## Install and audit in a project
 
+Before changing a project, read its root `AGENTS.md` and any nested instructions governing the affected paths.
+Follow the closest file for conflicting project guidance, retain nonconflicting parent instructions, and honor explicit user instructions over repository guidance.
+Preserve existing instructions; add setup and audit commands at the scope where they apply, following the [AGENTS.md convention](https://agents.md/).
 APM alone owns the downstream manifest, lock, external dependency graph, deployment, update, and drift state.
 Use the metadata-only consumer workflow for every reusable skill APM can install.
 Develop reusable source in a dedicated skill repository, normally `con/skills`; never develop or commit its deployed copies in a consumer.
-Add a pinned APM setup/development dependency through the project's existing environment manager, a frozen-install setup task, targeted ignores for `apm_modules/` and APM-owned deployment paths, a concise additive root `AGENTS.md` instruction, and a README/development setup note.
+Add a pinned APM setup/development dependency through the project's existing environment manager, a frozen-install setup task, targeted ignores for `apm_modules/` and APM-owned deployment paths, concise setup and audit commands in the applicable `AGENTS.md`, and a README/development setup note.
+Use root instructions for shared setup and nested instructions for package-specific differences; do not flatten or duplicate a project's existing hierarchy.
 Track the manifest, generated lock, and setup metadata; validate a fresh metadata-only consumer with frozen restoration and audit.
 Use `install-apm-skills` when available for the full consumer workflow and `author-apm-skills` for explicit APM distribution or collection-maintenance requests; the latter must not take over generic skill creation.
 These workflows are maintained in `con/skills`; downstream setup must not require the Workshop or either skill to be preinstalled.
