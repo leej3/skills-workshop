@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "9aa193e3-5ba8-4990-b793-5b7c1bff8cf0",
+  "recorded_at": "2026-09-25T16:45:32.274034+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "notice-styling",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

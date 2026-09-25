@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "1d19126c-2aa2-4cd6-b9d5-88848a0b85ea",
+  "recorded_at": "2026-09-25T16:45:32.399218+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "notice-styling",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
