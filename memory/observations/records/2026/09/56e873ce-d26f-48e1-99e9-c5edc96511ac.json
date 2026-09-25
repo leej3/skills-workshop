@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "56e873ce-d26f-48e1-99e9-c5edc96511ac",
+  "recorded_at": "2026-09-25T16:41:32.281094+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "transfer-summary-dismissal",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
