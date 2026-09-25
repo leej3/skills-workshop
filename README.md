@@ -77,7 +77,8 @@ Start a new Codex task in the project you are working on and ask:
 The agent searches remembered skills, pinned local catalogs, and public providers.
 After material skill use, `workshop-feedback` writes a schema-validated concise baseline record.
 Routine records are shareable; a private overlay holds sensitive fields and classification reasons.
-Exceptional lessons are grouped and prioritized, with shareable records committed in batches.
+Exceptional lessons are grouped and prioritized.
+Agents inspect, validate, and commit shareable records before completing each task, batching within the task even when its main work is in another project.
 See [local feedback and learning](docs/agents/local-feedback.md) for the hook, aggregates, and publication boundary.
 The installed instruction asks the agent to do this, but it is not an automatic runtime hook.
 
@@ -107,6 +108,10 @@ Only the supplied public query is sent to discovery providers.
 | External reusable skill dependencies | That project's APM manifest and lock |
 | Decisions, use, outcomes, and contribution links | This checkout's `memory/` |
 | Search catalogs | Pinned Git submodules under `upstreams/` |
+
+`workshop install --apply` adds targeted `.gitignore` entries for `apm_modules/` and deployed skill directories from the APM lockfile.
+Project-authored skills remain tracked; downstream projects track the manifest, lock, and setup metadata.
+Git tracking is independent of APM organization-policy discovery.
 
 Workshop is not a package manager.
 Projects with only their own skills need no APM setup.

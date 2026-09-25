@@ -42,7 +42,10 @@ Full searches still query public providers, but never send remembered event text
 Reusable skills are authored in a dedicated skill repository, normally `con/skills`.
 Use APM for any selected reusable skill it can manage.
 Consumers track `apm.yml`, `apm.lock.yaml`, the pinned APM environment dependency, setup task, targeted ignores, and concise AGENTS.md/README setup guidance.
-Ignore package caches and generated deployment paths; never ignore canonical source in its source repository.
+Ignore package caches and generated deployment paths as part of every downstream installation; never ignore canonical source in its source repository.
+`workshop install --apply` adds targeted ignores from the APM deployment ledger automatically.
+For direct APM installation, add equivalent entries and verify with `git check-ignore`.
+Organization-policy discovery is separate from Git tracking and is not a prerequisite for these ignores.
 Run setup before starting the agent so discovery sees installed skills.
 Prove restoration and audit from tracked metadata without requiring a Workshop checkout.
 Normal downstream updates change pins, hashes, and deployment metadata, keeping skill-development history upstream.

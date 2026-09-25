@@ -77,7 +77,11 @@ Use a stable group and link baseline IDs; priorities, confidence, and proposed a
 Append notes with resolved, deferred, or rejected status to preserve what was tried.
 Do not generate a narrative about routine successful execution.
 
-Shareable records can be committed and pushed in batches under standing user authorization after inspecting the exact batch.
+Before completing each task, inspect and validate its shareable records and commit them in the configured Workshop checkout, even when the main task is in another project.
+Batch within the task; never defer valid records to a later task.
+An explicit Workshop sync also includes reviewed pending records from earlier tasks.
+Stage exact reviewed paths, follow repository provenance requirements, and push under standing publication authorization.
+Report validation or Git blockers and remaining paths explicitly.
 No per-record commit, approval request, or external message is required.
 The recording command itself does not execute Git or network writes.
 Never publish the overlay or merged output without separately assessing the content.

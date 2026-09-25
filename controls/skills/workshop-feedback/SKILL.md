@@ -34,7 +34,13 @@ Do not invent metrics, timing, model identity, or causal benefit.
 
 ## Shareable tree and sensitive overlay
 
-Ordinary records go to the configured Workshop's `memory/observations/records/YYYY/MM/<uuid>.json` and can be committed and pushed in batches under the user's publication authorization.
+Ordinary records go to the configured Workshop's `memory/observations/records/YYYY/MM/<uuid>.json`.
+Before completing the task, inspect and validate the shareable records, then commit every record created or updated by that task in the configured Workshop checkout, even when the main work is in another project.
+Batch records into one task-end commit; batching must never defer them to a later task.
+During an explicit Workshop sync, also review and commit pending shareable records from earlier tasks.
+Stage exact reviewed paths, preserve unrelated changes, and follow the checkout's commit and provenance requirements.
+Push under the user's publication authorization; private overlays must never be staged.
+If validation or a Git operation fails, report the concrete blocker and remaining paths instead of silently leaving records pending.
 No separate narrative report or per-record commit is needed.
 With no configured checkout, the shareable tree falls back to a local state directory.
 

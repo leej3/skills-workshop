@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "4c4dea05-a968-431d-96ed-a8b95ba0d5e0",
+  "recorded_at": "2026-09-24T22:25:19.953081+00:00",
+  "kind": "usage",
+  "skill": "gh-fix-ci",
+  "task": "ci-fix",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

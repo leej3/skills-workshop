@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "515f3c59-e0f6-4050-a5ff-78d0c34218b0",
+  "recorded_at": "2026-09-25T15:48:03.972532+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "workshop-maintenance",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

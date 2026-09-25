@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+import yaml
 from jsonschema import Draft202012Validator
 
 from scripts import workshop as workshop_cli
@@ -1925,6 +1926,8 @@ def test_install_delegates_to_apm_with_preview_by_default(
         dry_run: bool = False,
     ) -> subprocess.CompletedProcess[str]:
         calls.append((provider, command, cwd, mutation, dry_run))
+        if apply:
+            (cwd / "apm.lock.yaml").write_text("deployments: []\n")
         return subprocess.CompletedProcess(command, 0, "APM completed\n", "")
 
     monkeypatch.setattr(workshop_cli, "run_external", fake_run_external)
@@ -1961,6 +1964,82 @@ def test_install_delegates_to_apm_with_preview_by_default(
     assert command[-len(expected_tail) :] == expected_tail
     assert mutation_fragment in mutation
     assert wrapper_dry_run is False
+    assert (project / ".gitignore").exists() is apply
+
+
+def test_install_ignores_only_apm_owned_skills(tmp_path):
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    ignore = tmp_path / ".gitignore"
+    ignore.write_text("# Existing project rules\n/build/\n")
+    (tmp_path / "apm.lock.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "deployments": [
+                    {"kind": "project-relative", "value": value}
+                    for value in [
+                        ".agents/skills/external/SKILL.md",
+                        ".agents/skills/external/references/help.md",
+                        ".claude/skills/external/SKILL.md",
+                        ".agents/skills/literal[1]/SKILL.md",
+                        "AGENTS.md",
+                        "../outside",
+                        ".agents/skills/../native",
+                    ]
+                ]
+            }
+        )
+    )
+    workshop_cli.ignore_apm_skills(tmp_path)
+    first = ignore.read_text()
+    assert workshop_cli.ignore_apm_skills(tmp_path) == []
+    assert ignore.read_text() == first
+    for path, ignored in [
+        ("apm_modules/example/SKILL.md", True),
+        (".agents/skills/external/SKILL.md", True),
+        (".claude/skills/external/SKILL.md", True),
+        (".agents/skills/literal[1]/SKILL.md", True),
+        (".agents/skills/literal1/SKILL.md", False),
+        (".agents/skills/native/SKILL.md", False),
+        ("AGENTS.md", False),
+        ("apm.yml", False),
+        ("apm.lock.yaml", False),
+        ("build/output", True),
+    ]:
+        result = subprocess.run(
+            ["git", "check-ignore", "-q", path], cwd=tmp_path, check=False
+        )
+        assert (result.returncode == 0) is ignored, path
+
+
+def test_ignore_apm_skills_rejects_missing_ledger_and_symlink(tmp_path):
+    with pytest.raises(workshop_cli.WorkshopError, match="lockfile"):
+        workshop_cli.ignore_apm_skills(tmp_path)
+    (tmp_path / "apm.lock.yaml").write_text("dependencies: []\n")
+    with pytest.raises(workshop_cli.WorkshopError, match="ledger"):
+        workshop_cli.ignore_apm_skills(tmp_path)
+    (tmp_path / "apm.lock.yaml").write_text("deployments: []\n")
+    target = tmp_path / "unrelated"
+    target.write_text("leave alone\n")
+    (tmp_path / ".gitignore").symlink_to(target)
+    with pytest.raises(workshop_cli.WorkshopError, match="symlink"):
+        workshop_cli.ignore_apm_skills(tmp_path)
+    assert target.read_text() == "leave alone\n"
+
+
+def test_failed_install_does_not_edit_gitignore(invoke, tmp_path, monkeypatch):
+    ignore = tmp_path / ".gitignore"
+    ignore.write_text("/build/\n")
+    monkeypatch.setattr(
+        workshop_cli,
+        "run_external",
+        lambda *args, **kwargs: subprocess.CompletedProcess(
+            [], 1, "", "install failed"
+        ),
+    )
+    assert (
+        invoke("install", "example/skills", "--project", str(tmp_path), "--apply") == 1
+    )
+    assert ignore.read_text() == "/build/\n"
 
 
 def test_install_warns_when_apm_preview_contradicts_itself(

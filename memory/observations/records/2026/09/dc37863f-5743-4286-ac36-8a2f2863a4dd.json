@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "dc37863f-5743-4286-ac36-8a2f2863a4dd",
+  "recorded_at": "2026-09-24T20:58:46.503732+00:00",
+  "kind": "usage",
+  "skill": "gh-address-comments",
+  "task": "review-fixes",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

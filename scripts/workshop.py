@@ -1950,6 +1950,60 @@ def cmd_where_used(args: argparse.Namespace) -> int:
     return 0
 
 
+def ignore_apm_skills(project: Path) -> list[str]:
+    """Ignore generated skill roots from APM's ledger, leaving native skills visible."""
+    lock_path = project / "apm.lock.yaml"
+    if not lock_path.is_file():
+        raise WorkshopError(
+            "APM installed without a lockfile; cannot identify generated skills"
+        )
+    lock = yaml.safe_load(lock_path.read_text())
+    if not isinstance(lock, dict) or not isinstance(lock.get("deployments"), list):
+        raise WorkshopError(
+            "APM lockfile has no deployment ledger; cannot identify generated skills"
+        )
+    roots = {"apm_modules"}
+    for deployment in lock["deployments"]:
+        if (
+            not isinstance(deployment, dict)
+            or deployment.get("kind") != "project-relative"
+        ):
+            continue
+        value = deployment.get("value")
+        if not isinstance(value, str):
+            continue
+        parts = value.split("/")
+        if (
+            len(parts) >= 3
+            and parts[0] in {".agents", ".claude", ".github"}
+            and parts[1] == "skills"
+            and all(part not in {"", ".", ".."} for part in parts)
+            and not any(char in value for char in "\n\r\\")
+        ):
+            roots.add("/".join(parts[:3]))
+    # Literal, anchored patterns: package names must not become Git glob patterns.
+    patterns = [
+        "/" + re.sub(r"([*?\[\] ])", r"\\\1", root) + "/" for root in sorted(roots)
+    ]
+    ignore = project / ".gitignore"
+    if ignore.is_symlink():
+        raise WorkshopError("refusing to edit a symlinked .gitignore")
+    original = ignore.read_text() if ignore.exists() else ""
+    additions = [
+        pattern for pattern in patterns if pattern not in original.splitlines()
+    ]
+    if additions:
+        separator = "" if not original or original.endswith("\n") else "\n"
+        ignore.write_text(
+            original
+            + separator
+            + "\n# APM-generated skill dependencies\n"
+            + "\n".join(additions)
+            + "\n"
+        )
+    return additions
+
+
 def cmd_install(args: argparse.Namespace) -> int:
     project = args.project.resolve()
     if not project.is_dir():
@@ -1962,7 +2016,8 @@ def cmd_install(args: argparse.Namespace) -> int:
     if args.no_policy:
         command.append("--no-policy")
     mutation = (
-        "will update the project's apm.yml, apm.lock.yaml, cache, and deployed files"
+        "will update the project's apm.yml, apm.lock.yaml, cache, deployed files, "
+        "and targeted .gitignore entries for generated skills"
     )
     if not args.apply:
         command.append("--dry-run")
@@ -1972,7 +2027,13 @@ def cmd_install(args: argparse.Namespace) -> int:
         print(completed.stdout.rstrip())
     if completed.stderr:
         print(completed.stderr.rstrip(), file=sys.stderr)
+    if args.apply and completed.returncode == 0:
+        additions = ignore_apm_skills(project)
+        print(f"Generated skills are Git-ignored ({len(additions)} new patterns).")
     if not args.apply:
+        print(
+            "Applying will add targeted .gitignore entries for APM-generated skills and apm_modules/."
+        )
         output = f"{completed.stdout or ''}\n{completed.stderr or ''}".casefold()
         inconsistent = "would add " in output and "would install no changes" in output
         if inconsistent:

@@ -236,7 +236,8 @@ pixi run feedback-local insights
 ```
 
 The user-level instruction delegates collection exemptions and publication policy to that skill.
-Routine collection requires no registration, prose report, or per-record commit; schema validation is automatic and shareable records are batched.
+Routine collection requires no registration, prose report, or per-record commit; schema validation is automatic.
+Inspect and commit the task's shareable records in one batch before completing it, including work in other projects; never defer that commit to a later task.
 Use the separate Git-backed `workshop feedback` interface only after reviewing the full record for publication and confirming authorization.
 The launcher no longer automatically inserts conversation IDs.
 See [local feedback and learning](local-feedback.md) for measurement semantics and the relationship to WikiSkill.

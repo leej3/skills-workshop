@@ -1,7 +1,9 @@
 # Shareable records with a private overlay
 
 Ordinary concise observations can be versioned and shared; sensitivity is a property of particular fields or records, not of all telemetry.
-Classify while recording, then batch inspect and commit the shareable tree under the user's standing publication authorization.
+Classify while recording, then inspect, validate, and commit the task's shareable records before completing the task, including work performed in another project.
+Batching means one task-end commit, never postponing valid records to a later task.
+For an explicit Workshop sync, include reviewed pending records from earlier tasks.
 Avoid a separate approval exchange or commit for every routine record.
 Shared-thread posting still follows its own approval rules.
 
@@ -44,5 +46,6 @@ Do not copy raw logs or transcripts merely because a record references them.
 If uncertain, keep the specific data in the overlay while sharing the remaining useful record.
 
 The recorder performs no Git writes or network calls.
-Batch commit/push follows normal user authorization and repository conventions.
+The agent performs the required task-end commit using exact reviewed paths and repository provenance conventions, then pushes when publication is authorized.
+Report any validation or Git blocker and the remaining paths; do not claim the task's feedback is complete while its shareable records remain uncommitted.
 Already-published records cannot be made private by writing an overlay: suspected past disclosure requires a separate remediation decision, not silent history rewriting.

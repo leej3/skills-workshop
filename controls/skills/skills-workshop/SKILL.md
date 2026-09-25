@@ -126,6 +126,10 @@ pixi run workshop audit <project>
 ```
 
 Review the printed APM command and preview before applying.
+`workshop install --apply` automatically adds targeted `.gitignore` entries for `apm_modules/` and APM-deployed skill directories identified by the lockfile.
+When installing directly with APM, add those entries as part of installation and verify them with `git check-ignore`; retain project-authored skills in Git.
+This is the normal downstream workflow and requires no extra approval or organization-policy exception.
+Organization-policy discovery is independent of Git tracking; do not disable it merely to ignore generated files.
 Never pass APM `--force` through the workshop.
 Edit an external skill in its canonical Git source rather than its APM-deployed `.agents/skills` copy.
 If organization-policy discovery would cause an unwanted login or network lookup in a personal project, explicitly add `--no-policy`; do not make that bypass invisible.
@@ -150,7 +154,10 @@ Read [references/workflow.md](references/workflow.md) for the boundary and verif
 Use `workshop-feedback` for one schema-validated baseline record per skill/task after material use.
 Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review.
 Routine successes require no narrative, memory registration, or per-record commit.
-Batch shareable records under user authorization; keep sensitive fields and classification reasons in the private overlay.
+Inspect, validate, and commit the task's shareable records before completing it, including when working in another project.
+Batch the task's records into one commit; do not defer it to a later task.
+Push under user publication authorization.
+Keep sensitive fields and classification reasons in the private overlay.
 Installation and project membership are not evidence of use.
 
 `feedback-local summary` reports observed outcomes and measured durations; `feedback-local insights` prioritizes grouped exceptional lessons.

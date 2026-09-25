@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "dab2777d-e728-487c-b642-f8f13bf8db61",
+  "recorded_at": "2026-09-25T15:48:03.838291+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "workshop-maintenance",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

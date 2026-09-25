@@ -7,6 +7,7 @@ import argparse
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -48,7 +49,11 @@ def check_content(consumer: Path, package: Path, names: list[str]) -> None:
             if source.suffix != ".md":
                 assert destination.read_bytes() == source.read_bytes(), destination
     ignored = run(
-        "git", "check-ignore", "apm_modules/", ".agents/skills/", cwd=consumer
+        "git",
+        "check-ignore",
+        "apm_modules/",
+        *(f".agents/skills/{name}/SKILL.md" for name in names),
+        cwd=consumer,
     )
     assert ignored.returncode == 0
     untracked = subprocess.check_output(
@@ -124,13 +129,27 @@ def main() -> None:
                     sort_keys=False,
                 )
             )
-            (consumer / ".gitignore").write_text("/apm_modules/\n/.agents/skills/\n")
+            (consumer / ".gitignore").write_text("# Existing project rules\n/build/\n")
             (consumer / "AGENTS.md").write_text(
                 "Run apm install --frozen before work. Reusable skill copies are generated.\n"
             )
             run("git", "init", "--quiet", cwd=consumer)
             # Fixtures intentionally have no organization policy or credentials.
-            run("apm", "install", "--no-policy", cwd=consumer)
+            selectors = [arg for name in selection for arg in ("--skill", name)]
+            run(
+                sys.executable,
+                str(ROOT / "scripts/workshop.py"),
+                "install",
+                source,
+                "--project",
+                str(consumer),
+                "--target",
+                "agent-skills",
+                *selectors,
+                "--no-policy",
+                "--apply",
+                cwd=consumer,
+            )
             run(
                 "git",
                 "add",

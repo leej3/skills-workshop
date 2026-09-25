@@ -28,7 +28,7 @@ def command(root: Path, action: str) -> str:
 
 def instruction_block(root: Path, mode: str = "on") -> str:
     policy = {
-        "on": "Use $skills-workshop for skill discovery, selection, installation, and recall.\nAfter material skill use, follow $workshop-feedback for one minimal baseline record.\nSkip reads, installations, recorder use, and bookkeeping; collection failures must not block work.\nReview shareable records before publishing under user authorization; keep sensitive details private.",
+        "on": "Use $skills-workshop for skill discovery, selection, installation, and recall.\nAfter material skill use, follow $workshop-feedback for one minimal baseline record.\nSkip reads, installations, recorder use, and bookkeeping; collection failures must not block work.\nBefore completing each task, inspect, validate, and commit its shareable records in the Workshop checkout, even for work in other projects. Batch within the task, never defer commits to a later task; report Git blockers.\nPush under user publication authorization; keep sensitive details in the private overlay.",
         "manual": "Use Workshop discovery and feedback only when the user explicitly requests them.\nDo not invoke either control automatically, including routine feedback collection.\nSkill availability alone is not a request to invoke it.",
         "off": "Do not invoke Workshop discovery or feedback. Its control entrypoints are hidden.\nTooling, memory, and project-installed skills remain available and unchanged.",
     }[mode]
