@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "820bdd5d-c05f-4d69-a4d1-4bb2a92dfd96",
+  "recorded_at": "2026-09-25T16:14:00.252972+00:00",
+  "kind": "usage",
+  "skill": "review-terminology",
+  "task": "implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
