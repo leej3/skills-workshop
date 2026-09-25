@@ -27,11 +27,21 @@ def check_content(consumer: Path, package: Path, names: list[str]) -> None:
     actual = sorted(p.name for p in deployed.iterdir() if p.is_dir())
     assert actual == sorted(names), (actual, names)
     for name in names:
-        for source in (package / ".apm/skills" / name).rglob("*"):
+        for source in (
+            package
+            / ("skills" if (package / "skills").is_dir() else ".apm/skills")
+            / name
+        ).rglob("*"):
             if not source.is_file() or "__pycache__" in source.parts:
                 continue
             destination = (
-                deployed / name / source.relative_to(package / ".apm/skills" / name)
+                deployed
+                / name
+                / source.relative_to(
+                    package
+                    / ("skills" if (package / "skills").is_dir() else ".apm/skills")
+                    / name
+                )
             )
             assert destination.is_file(), f"missing resource: {destination}"
             # APM may normalize Markdown links; non-Markdown resources are exact.
@@ -53,31 +63,45 @@ def main() -> None:
     parser.add_argument(
         "--source", help="Published Git package#full-SHA; default: local snapshot"
     )
+    parser.add_argument("--package", choices=(".", "controls"), default=".")
+    parser.add_argument(
+        "--scan-only",
+        action="store_true",
+        help="scan distributable source, excluding runtime caches",
+    )
     args = parser.parse_args()
+    source_root = ROOT / args.package
+    skill_root = "skills" if args.package == "controls" else ".apm/skills"
     if args.source and not re.fullmatch(r".+#[0-9a-f]{40}", args.source):
         parser.error("--source must name a Git package and full lowercase commit SHA")
-    manifest = yaml.safe_load((ROOT / "apm.yml").read_text())
-    assert manifest["includes"] == [
-        ".apm/skills/duct",
-        ".apm/skills/commit-provenance",
-        ".apm/skills/build-github-app",
-    ]
-    names = sorted(p.parent.name for p in (ROOT / ".apm/skills").glob("*/SKILL.md"))
+    manifest = yaml.safe_load((source_root / "apm.yml").read_text())
+    assert manifest["includes"], "package must explicitly declare source"
+    names = sorted(p.parent.name for p in (source_root / skill_root).glob("*/SKILL.md"))
     assert names, "empty skill collection"
     with tempfile.TemporaryDirectory(prefix="workshop-skills-apm-") as directory:
         base = Path(directory)
         package = base / "package"
         package.mkdir()
-        shutil.copy2(ROOT / "apm.yml", package / "apm.yml")
+        shutil.copy2(source_root / "apm.yml", package / "apm.yml")
         for name in names:
             shutil.copytree(
-                ROOT / ".apm/skills" / name,
-                package / ".apm/skills" / name,
+                source_root / skill_root / name,
+                package / skill_root / name,
                 ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache"),
             )
+        if args.scan_only:
+            run(
+                "skill-scanner",
+                "scan-all",
+                str(package / skill_root),
+                "--fail-on-severity",
+                "high",
+                cwd=package,
+            )
+            return
         source = args.source or "../package"
         # Both complete collection and selective installation must survive replay.
-        for selection in (names, ["duct"]):
+        for selection in (names, [names[0]]):
             consumer = base / ("all" if selection == names else "selected")
             consumer.mkdir()
             dep = (

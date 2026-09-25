@@ -33,7 +33,9 @@ jobs:
           test -z "$(git ls-files --others --exclude-standard)"
 
       - name: Verify downstream APM packaging
-        run: pixi run --locked check-apm
+        run: |
+          pixi run --locked check-apm
+          pixi run --locked check-controls-apm
 
       - name: Validate
         run: pixi run validate
@@ -49,4 +51,5 @@ jobs:
           environments: security
           frozen: true
       - run: pixi run --locked -e security scan-skills
+      - run: pixi run --locked -e security scan-controls
       - run: pixi run --locked -e security audit-dependencies

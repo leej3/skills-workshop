@@ -1,0 +1,6 @@
+name: workshop-controls
+version: 0.1.0
+description: User-level discovery and feedback controls for Skills Workshop.
+type: skill
+includes:
+  - skills

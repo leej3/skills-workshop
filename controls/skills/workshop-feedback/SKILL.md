@@ -5,6 +5,8 @@ description: Collect schema-validated skill outcomes, keep sensitive details in 
 
 # Workshop feedback
 
+Respect the user-level Workshop mode in agent guidance: in manual mode, invoke only on an explicit user request; in off mode, use only the retained status/reactivation guidance.
+
 Record once per skill/task after material use.
 Do not narrate routine collection.
 This is an agent-called recording command, not an installed automatic runtime callback.

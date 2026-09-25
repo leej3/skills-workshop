@@ -23,17 +23,50 @@ pixi run workshop validate
 
 `setup-agent` previews changes; `--apply` makes them:
 
-- Links the `skills-workshop` and `workshop-feedback` control skills into `~/.agents/skills/` (or reuses matching links under `~/.codex/skills/`).
+- Restores the two control skills through a dedicated user-owned APM manifest and lock in `~/.local/share/skills-workshop/control-install/`.
+- Links those deployed controls into user discovery, migrating recognized legacy links.
 - Sets this checkout as the memory destination in `~/.config/skills-workshop/config.json`.
 - Adds a marked workflow block to `~/.codex/AGENTS.md`, respecting `CODEX_HOME` when set.
 
 Setup preserves unrelated settings and refuses conflicting skill installations or a different configured checkout.
 Keep the checkout at this location: the installed skills link to it.
+The tooling uses this checkout's locked Pixi environment; APM installs skill content, not the tooling runtime.
 Setup installs no runtime hooks and publishes nothing.
+The first setup pins `leej3/skills-workshop/controls` at this checkout's HEAD, which must already be published; later setups restore the existing user lock.
+To update deliberately, pass `--source leej3/skills-workshop/controls#FULL_COMMIT_SHA`.
 `configure-upstreams` configures the catalog remotes listed in [registry.toml](registry.toml), including the maintainer's forks; it does not create forks for you.
 
 For your own ongoing history, clone your fork or private copy instead.
 Existing memory records describe the maintainer's experience, not your own use.
+
+## User activation modes
+
+From the checkout, run:
+
+```console
+pixi run workshop enable
+pixi run workshop manual
+pixi run workshop disable
+pixi run workshop status
+```
+
+On enables proactive discovery and feedback guidance.
+Manual keeps the controls discoverable but instructs agents to invoke them only when explicitly requested, including feedback collection.
+Off removes only owned control links and retains a small instruction block with working status and reactivation commands.
+Memory, tooling, runtime, the user APM installation, and project dependencies stay intact in every mode.
+This is an agent-guidance policy, not a runtime permission boundary; start a new task or reload the client after changing mode.
+Previously loaded instructions cannot be removed from an active conversation.
+
+`setup-agent --apply` preserves the saved mode (on for a first installation).
+Use `--mode on`, `--mode manual`, or `--mode off` to choose it explicitly.
+Default setup is a read-only preview.
+Foreign skill directories or links are never replaced; conflicts are reported before activation changes.
+The managed block supersedes older Workshop lifecycle advice elsewhere in user guidance without rewriting unrelated instructions.
+The adapter currently supports Codex user guidance and the shared `.agents/skills/` discovery directory; it does not configure other clients' private instruction files.
+
+For a different working directory, use `pixi run --manifest-path /path/to/skills-workshop/pixi.toml workshop status` (substitute the desired command).
+APM's shared `--global` install is deliberately separate: toggles change only discovery links, so an off-mode user installation still passes APM audit.
+Project installations keep using their own manifest, lock, and frozen setup; they do not inherit the Workshop controls or user mode.
 
 ## Use it
 
@@ -69,7 +102,7 @@ Only the supplied public query is sent to discovery providers.
 
 | Item | Owner and location |
 | --- | --- |
-| The two Workshop control skills | This checkout, linked at user scope |
+| The two Workshop control skills | `controls/skills/` source; APM installation and activation at user scope |
 | A project's own working skills | That project's `.agents/skills/` |
 | External reusable skill dependencies | That project's APM manifest and lock |
 | Decisions, use, outcomes, and contribution links | This checkout's `memory/` |
@@ -88,13 +121,14 @@ They are discovery sources, not a set of skills automatically installed in your 
 
 This checkout uses APM 0.31.0 through the locked Pixi environment.
 Run `pixi run --locked setup-skills` before opening an agent task, and `pixi run --locked audit-skills` to verify it.
-`setup-agent` also restores these project dependencies before configuring the user-level controls.
+User setup is independent: `setup-agent` does not restore or change project dependencies.
 First setup needs network access; private packages additionally need suitable Git credentials.
 
 Reusable source is tracked in `.apm/skills/`: `duct`, `commit-provenance`, and `build-github-app`.
 The root `apm.yml` publishes this collection and declares what APM may deploy.
 Workshop's own setup generates ignored copies under `.agents/skills/` and records their hashes in `apm.lock.yaml`.
-The two Workshop controls remain native under `.agents/skills/`; this remains the fallback for repo-specific skills that are not APM dependencies.
+The Workshop controls live in the separate `controls/` APM package and are activated only at user scope.
+Repo-specific working skills may still live directly under `.agents/skills/` as the fallback.
 Existing user-level links keep pointing to their established `.agents/skills/` locations.
 
 Other projects can select skills from this repository at an exact published commit:

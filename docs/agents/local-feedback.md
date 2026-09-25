@@ -12,14 +12,14 @@ No runtime callback, completion listener, or timer is installed today.
 pixi run feedback-local record duct --task build-validation --outcome success
 ```
 
-The command validates each written and read record against the bundled [JSON Schema draft 2020-12 contract](../../.agents/skills/workshop-feedback/schemas/observation-v2.schema.json).
+The command validates each written and read record against the bundled [JSON Schema draft 2020-12 contract](../../controls/skills/workshop-feedback/schemas/observation-v2.schema.json).
 Run `pixi run feedback-local schema` to print the contract.
 Unknown fields and invalid types are rejected; dates, UUIDs, nonnegative costs and counts, and duration scope are checked.
 Python and jsonschema are provided by the existing Pixi environment; the installed skill includes its own schema and helpers.
 
 The three required arguments remain skill, task category, and skill outcome.
 Generated fields identify and date the observation.
-Optional groups cover context, execution, resources, quality, evidence, and evaluation; see [reporting examples](../../.agents/skills/workshop-feedback/references/reporting.md).
+Optional groups cover context, execution, resources, quality, evidence, and evaluation; see [reporting examples](../../controls/skills/workshop-feedback/references/reporting.md).
 Use `--details file.json` for richer concise reporting rather than a long list of flags.
 No environment details are guessed or automatically scanned.
 
@@ -81,7 +81,7 @@ Shareable records can be committed and pushed in batches under standing user aut
 No per-record commit, approval request, or external message is required.
 The recording command itself does not execute Git or network writes.
 Never publish the overlay or merged output without separately assessing the content.
-See the [classification and publication policy](../../.agents/skills/workshop-feedback/references/publication.md).
+See the [classification and publication policy](../../controls/skills/workshop-feedback/references/publication.md).
 
 ## Autonomous optimization
 

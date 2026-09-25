@@ -2303,7 +2303,8 @@ def test_feedback_launcher_uses_configured_checkout(monkeypatch, memory_root):
     import importlib.util
 
     script = (
-        workshop_cli.REPOSITORY / ".agents/skills/workshop-feedback/scripts/feedback.py"
+        workshop_cli.REPOSITORY
+        / "controls/skills/workshop-feedback/scripts/feedback.py"
     )
     spec = importlib.util.spec_from_file_location("feedback_launcher", script)
     module = importlib.util.module_from_spec(spec)

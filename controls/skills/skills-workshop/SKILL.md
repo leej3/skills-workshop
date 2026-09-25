@@ -5,6 +5,8 @@ description: Coordinate systematic agent-skill discovery, native project skill c
 
 # Skills Workshop
 
+Respect the user-level Workshop mode in agent guidance: in manual mode, invoke only on an explicit user request; in off mode, use only the retained status/reactivation guidance.
+
 Use the workshop as a source-agnostic memory and a transparent interface to existing tools.
 Do not turn it into another installer, registry, or project lock.
 

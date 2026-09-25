@@ -27,8 +27,10 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 if __package__:
     from .search import rank
+    from .setup_agent import mode_command
 else:
     from search import rank
+    from setup_agent import mode_command
 
 VERSION = "0.1.0"
 REPOSITORY = Path(__file__).resolve().parents[1]
@@ -737,6 +739,16 @@ def local_search(root: Path, query: str, limit: int) -> list[dict[str, Any]]:
         source=None,
         revision=git_head(root),
         relative_to=root,
+    )
+    documents.extend(
+        tree_documents(
+            root / "controls/skills",
+            provider="local",
+            collection="workshop-controls",
+            source=None,
+            revision=git_head(root),
+            relative_to=root,
+        )
     )
     for upstream in search_configuration(root).get("upstreams", []):
         directory = (root / upstream["path"]).resolve()
@@ -2106,6 +2118,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--version", action="version", version=f"skills-workshop {VERSION}"
     )
     commands = parser.add_subparsers(dest="command", required=True)
+    for action in ("enable", "manual", "disable", "status"):
+        activation = commands.add_parser(
+            action, help="manage user-level Workshop activation"
+        )
+        activation.set_defaults(
+            handler=lambda args: mode_command(args.command, args.root)
+        )
 
     validate = commands.add_parser(
         "validate", help="validate schemas, records, and references"

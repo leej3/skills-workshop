@@ -6,7 +6,7 @@
   "id": "urn:uuid:7a5c0e4c-078e-4832-9e6d-f5c4ff0298e4",
   "name": "skills-workshop",
   "notes": "",
-  "preferred_source_id": "urn:uuid:879d219c-ac1e-4b69-bfab-47cecfc26882",
+  "preferred_source_id": "urn:uuid:a78a4da3-be78-4e81-8060-12e4f1c914a9",
   "relations": [],
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
   "sources": [
@@ -19,9 +19,19 @@
       "notes": "",
       "role": "canonical",
       "subpath": ".apm/skills/skills-workshop"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-25T13:39:34Z",
+      "id": "urn:uuid:a78a4da3-be78-4e81-8060-12e4f1c914a9",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "User control package source; APM deployment and activation live at user scope.",
+      "role": "canonical",
+      "subpath": "controls/skills/skills-workshop"
     }
   ],
   "summary": "Coordinate source-agnostic skill recall, external discovery, APM-managed project installation, usage evidence, evaluation, and upstream contribution.",
   "tag_ids": [],
-  "updated_at": "2026-08-17T19:47:17Z"
+  "updated_at": "2026-09-25T13:39:34Z"
 }

@@ -21,12 +21,13 @@ pre-commit = ">=4.6,<5"
 
 [tasks]
 workshop = "python scripts/workshop.py"
-feedback-local = "python .agents/skills/workshop-feedback/scripts/usage.py"
-feedback-validate = "python .agents/skills/workshop-feedback/scripts/usage.py --store memory/observations validate --public-only"
+feedback-local = "python controls/skills/workshop-feedback/scripts/usage.py"
+feedback-validate = "python controls/skills/workshop-feedback/scripts/usage.py --store memory/observations validate --public-only"
 setup-skills = "apm install --frozen"
 audit-skills = "apm audit --ci"
 check-apm = "python scripts/check_apm.py"
-setup-agent = { cmd = "python scripts/setup_agent.py", depends-on = ["setup-skills"] }
+check-controls-apm = "python scripts/check_apm.py --package controls"
+setup-agent = "python scripts/setup_agent.py"
 memory-validate = "python scripts/workshop.py validate"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
@@ -68,7 +69,8 @@ cisco-ai-skill-scanner = "==2.1.0"
 pip-audit = "==2.10.1"
 
 [feature.security.tasks]
-scan-skills = "skill-scanner scan-all .apm/skills --fail-on-severity high"
+scan-skills = "python scripts/check_apm.py --scan-only"
+scan-controls = "python scripts/check_apm.py --package controls --scan-only"
 audit-dependencies = "pip-audit"
 
 [environments]

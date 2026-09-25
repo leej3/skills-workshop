@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator, FormatChecker
 
-SKILL = Path(__file__).resolve().parents[1] / ".agents/skills/workshop-feedback"
+SKILL = Path(__file__).resolve().parents[1] / "controls/skills/workshop-feedback"
 HOOK = SKILL / "scripts/usage.py"
 SCHEMA = json.loads((SKILL / "schemas/observation-v2.schema.json").read_text())
 

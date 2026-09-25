@@ -22,7 +22,7 @@ home = Path.home()
 for name in ("skills-workshop", "workshop-feedback"):
     link = home / ".agents/skills" / name
     assert link.is_symlink()
-    assert link.resolve() == root / ".agents/skills" / name
+    assert link.resolve() == home / ".local/share/skills-workshop/control-install/.agents/skills" / name
 config = home / ".config/skills-workshop/config.json"
 assert json.loads(config.read_text())["workshop_root"] == str(root)
 instructions = home / ".codex/AGENTS.md"

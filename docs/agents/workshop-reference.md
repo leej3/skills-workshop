@@ -224,7 +224,7 @@ pixi run workshop contribution add example-skill \
 
 ## Lightweight feedback across projects
 
-[`workshop-feedback`](../../.agents/skills/workshop-feedback/SKILL.md) is the feedback half of the standard Workshop workflow, installed alongside discovery by `pixi run setup-agent --apply`.
+[`workshop-feedback`](../../controls/skills/workshop-feedback/SKILL.md) is the feedback half of the standard Workshop workflow, installed alongside discovery by `pixi run setup-agent --apply`.
 It records schema-validated baseline outcomes in a shareable tree with a private sensitivity overlay, with grouped qualitative notes only for exceptional lessons.
 The bundled `scripts/usage.py` hook needs Python and jsonschema on macOS or Linux; it can be called directly by an agent or a host completion adapter.
 It does not automatically register a host callback.

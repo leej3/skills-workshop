@@ -6,7 +6,7 @@
   "id": "urn:uuid:f31bc4bd-a452-47ca-9ddb-45ea6cf914b6",
   "name": "workshop-feedback",
   "notes": "",
-  "preferred_source_id": "urn:uuid:c0061d9e-5a9d-49d2-89f5-8a62bc2bc01f",
+  "preferred_source_id": "urn:uuid:9be1c9a0-0aea-4c0c-8ddc-012df490463b",
   "relations": [],
   "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
   "sources": [
@@ -16,12 +16,22 @@
       "id": "urn:uuid:c0061d9e-5a9d-49d2-89f5-8a62bc2bc01f",
       "kind": "git",
       "locator": "https://github.com/leej3/skills-workshop.git",
-      "notes": "",
-      "role": "canonical",
+      "notes": "Moved to controls/skills for user-scoped APM distribution and activation.",
+      "role": "deprecated",
       "subpath": ".agents/skills/workshop-feedback"
+    },
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-09-25T13:39:35Z",
+      "id": "urn:uuid:9be1c9a0-0aea-4c0c-8ddc-012df490463b",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "User control package source; APM deployment and activation live at user scope.",
+      "role": "canonical",
+      "subpath": "controls/skills/workshop-feedback"
     }
   ],
   "summary": "Record lightweight observations after actual skill use across projects; optional benefits, failures, evidence, and improvement proposals.",
   "tag_ids": [],
-  "updated_at": "2026-09-18T15:37:01Z"
+  "updated_at": "2026-09-25T13:39:35Z"
 }
