@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "dd9ad3fa-2675-405c-b1d9-325638f58e0a",
+  "recorded_at": "2026-09-25T21:33:10.866440+00:00",
+  "kind": "usage",
+  "skill": "author-apm-skills",
+  "task": "assessment-foundation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
