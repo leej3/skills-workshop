@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "13e90c9c-9482-4b3c-acf8-81116448dec2",
+  "recorded_at": "2026-09-25T20:24:18.106282+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "stale-preview-fallback",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
