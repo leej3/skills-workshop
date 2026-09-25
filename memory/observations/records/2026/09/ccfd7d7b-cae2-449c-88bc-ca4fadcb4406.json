@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "ccfd7d7b-cae2-449c-88bc-ca4fadcb4406",
+  "recorded_at": "2026-09-25T19:13:04.984048+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "reproducibility-analysis",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

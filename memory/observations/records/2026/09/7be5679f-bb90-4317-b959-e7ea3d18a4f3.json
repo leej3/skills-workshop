@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "7be5679f-bb90-4317-b959-e7ea3d18a4f3",
+  "recorded_at": "2026-09-25T19:13:04.853137+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "skill-discovery",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "b32a10dedd30ed7483a89e8fff5bb8e341ca79e2d0728c9c38d1b2727b0b7f0b",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
