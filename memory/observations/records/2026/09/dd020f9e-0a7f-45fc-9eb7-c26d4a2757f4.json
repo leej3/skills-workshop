@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "id": "dd020f9e-0a7f-45fc-9eb7-c26d4a2757f4",
+  "recorded_at": "2026-09-26T17:28:52.867551+00:00",
+  "kind": "usage",
+  "skill": "cloudflare-deploy",
+  "task": "service-deployment",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "d7632537cf19be17cf33d2c696b9d9c2ea3ee51026030e9b203d5b9255e75b15",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "context": {
+    "project": "https://github.com/board-game-therapy/board-game-shelf",
+    "project_revision": "93ee2b947c19f8974cc2829f6632470753906ef5"
+  },
+  "visibility": "shareable"
+}

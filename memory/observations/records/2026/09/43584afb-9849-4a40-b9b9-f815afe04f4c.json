@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "id": "43584afb-9849-4a40-b9b9-f815afe04f4c",
+  "recorded_at": "2026-09-26T17:28:52.664599+00:00",
+  "kind": "usage",
+  "skill": "design-learning-ux",
+  "task": "ui-redesign",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "ba1bd45058671a1afff44301b717344d26ff4c8c70bd12f7efb9f6cfa198876d",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "context": {
+    "project": "https://github.com/board-game-therapy/board-game-shelf",
+    "project_revision": "93ee2b947c19f8974cc2829f6632470753906ef5"
+  },
+  "visibility": "shareable"
+}

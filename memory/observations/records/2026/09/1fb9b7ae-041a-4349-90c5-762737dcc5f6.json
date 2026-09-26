@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "id": "1fb9b7ae-041a-4349-90c5-762737dcc5f6",
+  "recorded_at": "2026-09-26T17:28:52.456517+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "skill-discovery",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "b32a10dedd30ed7483a89e8fff5bb8e341ca79e2d0728c9c38d1b2727b0b7f0b",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "context": {
+    "project": "https://github.com/board-game-therapy/board-game-shelf",
+    "project_revision": "93ee2b947c19f8974cc2829f6632470753906ef5"
+  },
+  "visibility": "shareable"
+}
