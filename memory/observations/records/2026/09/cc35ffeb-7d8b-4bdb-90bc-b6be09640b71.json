@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "cc35ffeb-7d8b-4bdb-90bc-b6be09640b71",
+  "recorded_at": "2026-09-26T15:31:50.029809+00:00",
+  "kind": "usage",
+  "skill": "cloudflare-deploy",
+  "task": "cloudflare-pages-deployment",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "d7632537cf19be17cf33d2c696b9d9c2ea3ee51026030e9b203d5b9255e75b15",
+  "model": "gpt-6-luna",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

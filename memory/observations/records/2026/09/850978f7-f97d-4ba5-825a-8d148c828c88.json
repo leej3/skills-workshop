@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "850978f7-f97d-4ba5-825a-8d148c828c88",
+  "recorded_at": "2026-09-26T15:31:49.749339+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "web-app-build",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": "gpt-6-luna",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

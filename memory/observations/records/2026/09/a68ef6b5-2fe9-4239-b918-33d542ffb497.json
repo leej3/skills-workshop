@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a68ef6b5-2fe9-4239-b918-33d542ffb497",
+  "recorded_at": "2026-09-26T15:31:50.315243+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "git-commit-provenance",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "d6c08a50a90b7ddc252e174d228c01d1010fb1d52d4862d0f27bf706b4e347ee",
+  "model": "gpt-6-luna",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

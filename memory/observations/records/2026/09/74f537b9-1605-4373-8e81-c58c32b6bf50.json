@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "74f537b9-1605-4373-8e81-c58c32b6bf50",
+  "recorded_at": "2026-09-26T15:31:49.473341+00:00",
+  "kind": "usage",
+  "skill": "pdf",
+  "task": "pdf-source-extraction",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "9efb9e9c58daea2a4bc246b0c6eb553b092cadcaad329579e644e09635dcdb31",
+  "model": "gpt-6-luna",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
