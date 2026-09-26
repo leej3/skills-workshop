@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "b96fa9ea-e68a-4428-a127-bafa628d7b4d",
+  "recorded_at": "2026-09-26T16:35:21.946797+00:00",
+  "kind": "insight",
+  "skill": "commit-provenance",
+  "group": "bundled-runtime-path",
+  "priority": 2,
+  "confidence": "high",
+  "status": "open",
+  "summary": "Resolver targets the obsolete Resources/codex binary path.",
+  "action": "Resolve the bundled executable using codex-cli/codex-package.json; user-authorized temporary path correction succeeded.",
+  "usage_ids": [
+    "1e4910a0-8d34-4933-86e1-67e731c2bcbd"
+  ],
+  "visibility": "shareable"
+}
