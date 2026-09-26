@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "9dd16583-a8f8-4fdb-b795-c39387242b4d",
+  "recorded_at": "2026-09-26T17:26:33.989618+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "guided-workflow-implementation",
+  "outcome": "partial",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "d6c08a50a90b7ddc252e174d228c01d1010fb1d52d4862d0f27bf706b4e347ee",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

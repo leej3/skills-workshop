@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "03d75428-8221-4186-a1a9-15bf02648ccc",
+  "recorded_at": "2026-09-26T17:26:33.889489+00:00",
+  "kind": "usage",
+  "skill": "security-best-practices",
+  "task": "guided-workflow-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "7b3dae1ffc5434d890f3c65c8f552af52d0307fab3b35dec13013c9ca3844c4f",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
