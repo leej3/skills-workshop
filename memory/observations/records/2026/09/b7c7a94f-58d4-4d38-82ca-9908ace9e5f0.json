@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "id": "b7c7a94f-58d4-4d38-82ca-9908ace9e5f0",
+  "recorded_at": "2026-09-28T13:15:08.769218+00:00",
+  "kind": "insight",
+  "skill": "commit-provenance",
+  "group": "bundled-runtime-path",
+  "priority": 2,
+  "confidence": "high",
+  "status": "open",
+  "summary": "The resolver exits 127 after the Desktop runtime moved under codex-cli/CodexCLI.app/Contents/MacOS/codex. A temporary resolver copy using the observed running binary succeeded.",
+  "action": "Resolve the active bundled runtime path rather than assuming Contents/Resources/codex.",
+  "usage_ids": [],
+  "visibility": "shareable"
+}
