@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "95ae7e31-45b9-4797-a656-3845c570ba30",
+  "recorded_at": "2026-09-28T19:58:23.181324+00:00",
+  "kind": "usage",
+  "skill": "orinoco-github-app-deployment",
+  "task": "service-deployment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

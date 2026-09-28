@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "ea192fc7-d30c-40b2-9ffb-b7022a9c80ab",
+  "recorded_at": "2026-09-28T19:58:23.410088+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "service-deployment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
