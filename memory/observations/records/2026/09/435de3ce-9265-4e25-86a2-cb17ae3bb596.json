@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "435de3ce-9265-4e25-86a2-cb17ae3bb596",
+  "recorded_at": "2026-09-28T21:07:45.986360+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "integration-validation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

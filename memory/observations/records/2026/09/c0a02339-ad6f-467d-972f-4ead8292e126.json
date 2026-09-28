@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "c0a02339-ad6f-467d-972f-4ead8292e126",
+  "recorded_at": "2026-09-28T21:07:46.056389+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "integration-validation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

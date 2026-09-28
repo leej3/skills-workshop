@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "f1c0eb5d-2ede-45b5-9360-a95d8ca6ff2a",
+  "recorded_at": "2026-09-28T21:07:46.127744+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "integration-validation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fcd54bf60ec5e05b2e3d69108cd6989f7947060a45d8657ddb29b5d71c69453b",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
