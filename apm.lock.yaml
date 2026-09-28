@@ -82,7 +82,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:95c6e1d74451c8bee8e9eaea8b648e85bf07bed09f3df45885f23eed8bf19a37
+  content_hash: sha256:dab8fa7248f90bcb565103332d9998fa3e5d4820f065f31abc93738ad4568851
 - kind: project-relative
   target: legacy
   value: .agents/skills/commit-provenance/scripts/runtime_context.py
@@ -170,7 +170,7 @@ local_deployed_file_hashes:
   .agents/skills/build-github-app/references/oauth-permissions.md: sha256:c36d640f539c18a9653cb103d488c89f15ce02b9af02d0eb2f84082860e877c2
   .agents/skills/commit-provenance/SKILL.md: sha256:d6c08a50a90b7ddc252e174d228c01d1010fb1d52d4862d0f27bf706b4e347ee
   .agents/skills/commit-provenance/agents/openai.yaml: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
-  .agents/skills/commit-provenance/scripts/resolve.sh: sha256:95c6e1d74451c8bee8e9eaea8b648e85bf07bed09f3df45885f23eed8bf19a37
+  .agents/skills/commit-provenance/scripts/resolve.sh: sha256:dab8fa7248f90bcb565103332d9998fa3e5d4820f065f31abc93738ad4568851
   .agents/skills/commit-provenance/scripts/runtime_context.py: sha256:2e8e59e564895860210c441a646c1c969dce92d82e23c50c964b93343b257b37
   .agents/skills/commit-provenance/scripts/test_runtime_context.py: sha256:66b15ee3217c94c58bb2211c96634e096bee6568f25bfa9d40e01ae4d8197281
   .agents/skills/duct/SKILL.md: sha256:db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18
