@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a59269a8-6e39-499b-8d25-d34eee523aa7",
+  "recorded_at": "2026-09-28T23:50:41.758319+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "hook-maintenance",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

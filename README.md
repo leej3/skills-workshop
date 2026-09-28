@@ -32,6 +32,7 @@ Setup preserves unrelated settings and refuses conflicting skill installations o
 Keep the checkout at this location: the installed skills link to it.
 The tooling uses this checkout's locked Pixi environment; APM installs skill content, not the tooling runtime.
 Setup installs no runtime hooks and publishes nothing.
+An optional [GitHub attribution hook](docs/github-attribution-hook.md) is maintained here and installed separately.
 The first setup pins `leej3/skills-workshop/controls` at this checkout's HEAD, which must already be published; later setups restore the existing user lock.
 To update deliberately, pass `--source leej3/skills-workshop/controls#FULL_COMMIT_SHA`.
 `configure-upstreams` configures the catalog remotes listed in [registry.toml](registry.toml), including the maintainer's forks; it does not create forks for you.
