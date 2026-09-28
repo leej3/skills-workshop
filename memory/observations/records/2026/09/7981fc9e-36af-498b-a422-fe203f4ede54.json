@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "7981fc9e-36af-498b-a422-fe203f4ede54",
+  "recorded_at": "2026-09-28T19:30:46.106567+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "annex-media-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

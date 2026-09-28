@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "cf86c87e-1c10-4066-b7e5-08bc302fc074",
+  "recorded_at": "2026-09-28T19:30:45.708075+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "annex-media-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

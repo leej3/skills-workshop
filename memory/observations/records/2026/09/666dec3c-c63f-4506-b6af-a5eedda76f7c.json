@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "666dec3c-c63f-4506-b6af-a5eedda76f7c",
+  "recorded_at": "2026-09-28T19:30:45.976865+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "annex-media-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
