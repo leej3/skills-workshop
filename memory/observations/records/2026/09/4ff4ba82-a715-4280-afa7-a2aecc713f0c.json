@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "4ff4ba82-a715-4280-afa7-a2aecc713f0c",
+  "recorded_at": "2026-09-28T19:36:31.922533+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "pull-request-splitting",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
