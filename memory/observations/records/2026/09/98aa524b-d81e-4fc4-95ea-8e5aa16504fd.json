@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "98aa524b-d81e-4fc4-95ea-8e5aa16504fd",
+  "recorded_at": "2026-09-28T19:49:38.198538+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "documentation-maintenance",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
