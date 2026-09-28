@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "9a0a787a-dade-4fdf-8bad-fffe861a1880",
+  "recorded_at": "2026-09-28T14:42:45.254561+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "template-update-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
