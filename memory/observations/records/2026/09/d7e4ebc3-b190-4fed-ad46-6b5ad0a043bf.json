@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "d7e4ebc3-b190-4fed-ad46-6b5ad0a043bf",
+  "recorded_at": "2026-09-28T21:40:30.317817+00:00",
+  "kind": "usage",
+  "skill": "develop-orinoco-lite",
+  "task": "integration-validation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "57685d7dc45cc39674186c97b68ad8e484480890eeba5ff88babde6b8416e5b4",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "4cfa145a-ded6-4b27-9ff6-5bed189f0938",
+  "recorded_at": "2026-09-28T21:40:30.704311+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "integration-validation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
