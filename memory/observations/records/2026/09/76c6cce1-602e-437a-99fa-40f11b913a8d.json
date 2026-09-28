@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "76c6cce1-602e-437a-99fa-40f11b913a8d",
+  "recorded_at": "2026-09-28T21:49:14.040185+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "issue-scoping",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
