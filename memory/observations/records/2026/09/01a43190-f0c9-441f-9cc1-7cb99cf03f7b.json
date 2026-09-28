@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "01a43190-f0c9-441f-9cc1-7cb99cf03f7b",
+  "recorded_at": "2026-09-28T14:59:57.732959+00:00",
+  "kind": "usage",
+  "skill": "datalad",
+  "task": "annex-media-assessment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
