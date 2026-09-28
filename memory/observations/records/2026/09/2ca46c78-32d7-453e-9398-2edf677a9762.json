@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "2ca46c78-32d7-453e-9398-2edf677a9762",
+  "recorded_at": "2026-09-28T19:02:49.109330+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "pull-request-splitting",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
