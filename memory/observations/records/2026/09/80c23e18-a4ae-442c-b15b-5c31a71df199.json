@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "80c23e18-a4ae-442c-b15b-5c31a71df199",
+  "recorded_at": "2026-09-29T17:55:39.857740+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "upstream-update-review",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

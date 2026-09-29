@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "2196e431-3cdc-47d9-b8e9-685bd0a1dbda",
+  "recorded_at": "2026-09-29T17:55:39.325273+00:00",
+  "kind": "usage",
+  "skill": "develop-orinoco-lite",
+  "task": "upstream-update-review",
+  "outcome": "partial",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
