@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "014aa7f0-f2a0-4264-9ccd-9db947b1081e",
+  "recorded_at": "2026-09-29T13:50:33.748051+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "upstream-setup-defaults",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

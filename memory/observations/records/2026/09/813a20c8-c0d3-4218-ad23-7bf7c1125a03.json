@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "813a20c8-c0d3-4218-ad23-7bf7c1125a03",
+  "recorded_at": "2026-09-29T13:50:33.880359+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "upstream-setup-defaults",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fcd54bf60ec5e05b2e3d69108cd6989f7947060a45d8657ddb29b5d71c69453b",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

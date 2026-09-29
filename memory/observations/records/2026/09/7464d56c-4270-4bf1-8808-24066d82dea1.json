@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "7464d56c-4270-4bf1-8808-24066d82dea1",
+  "recorded_at": "2026-09-29T13:50:33.616027+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "upstream-setup-defaults",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
