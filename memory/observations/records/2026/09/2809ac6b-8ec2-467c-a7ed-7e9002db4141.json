@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "2809ac6b-8ec2-467c-a7ed-7e9002db4141",
+  "recorded_at": "2026-09-29T15:51:23.896024+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "cli-timing-review",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
