@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "beb7d8a6-23c0-40f1-9962-322201ffb203",
+  "recorded_at": "2026-09-29T16:03:30.733847+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "recorded-development-tasks",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
