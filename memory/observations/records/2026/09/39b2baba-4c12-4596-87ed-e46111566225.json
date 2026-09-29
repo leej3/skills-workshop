@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "39b2baba-4c12-4596-87ed-e46111566225",
+  "recorded_at": "2026-09-29T20:35:42.140028+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "ci-token-configuration",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

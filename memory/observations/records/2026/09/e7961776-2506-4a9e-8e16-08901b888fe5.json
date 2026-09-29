@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "e7961776-2506-4a9e-8e16-08901b888fe5",
+  "recorded_at": "2026-09-29T20:35:41.962917+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "ci-token-configuration",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
