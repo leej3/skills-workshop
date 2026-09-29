@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "285cb2ee-e4d3-4b6b-94a9-dc2b9f3d1db6",
+  "recorded_at": "2026-09-29T18:58:50.833969+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "documentation-placement",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
