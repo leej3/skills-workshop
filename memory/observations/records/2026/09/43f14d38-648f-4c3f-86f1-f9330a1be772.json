@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "43f14d38-648f-4c3f-86f1-f9330a1be772",
+  "recorded_at": "2026-09-29T00:40:42.288961+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "downstream-workflow-prerequisites",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "cccb3862009b884e156ffdd8ace9bd65f22c33736dfaa77849ef268006cb62c3",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

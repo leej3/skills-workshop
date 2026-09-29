@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "bda2c4eb-c95e-42e0-a1de-ca3a44d871a8",
+  "recorded_at": "2026-09-29T00:40:43.075602+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "downstream-workflow-prerequisites",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

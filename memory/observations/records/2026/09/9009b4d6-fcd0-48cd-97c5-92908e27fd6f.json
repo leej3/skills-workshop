@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "9009b4d6-fcd0-48cd-97c5-92908e27fd6f",
+  "recorded_at": "2026-09-29T00:40:42.417671+00:00",
+  "kind": "usage",
+  "skill": "review-terminology",
+  "task": "downstream-workflow-prerequisites",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "b1b4cea32efa43d557ae79e0f51c18d051e7b2cd577543268a523e897c2b94ca",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
