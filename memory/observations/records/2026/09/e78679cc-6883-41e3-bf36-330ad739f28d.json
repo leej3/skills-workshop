@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "e78679cc-6883-41e3-bf36-330ad739f28d",
+  "recorded_at": "2026-09-29T19:53:42.050698+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "template-objective",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
