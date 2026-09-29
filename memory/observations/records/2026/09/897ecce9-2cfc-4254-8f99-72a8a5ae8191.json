@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "897ecce9-2cfc-4254-8f99-72a8a5ae8191",
+  "recorded_at": "2026-09-29T20:12:50.960890+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "ci-portability-fix",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
