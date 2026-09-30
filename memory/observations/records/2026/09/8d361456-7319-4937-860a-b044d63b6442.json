@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "8d361456-7319-4937-860a-b044d63b6442",
+  "recorded_at": "2026-09-30T22:34:32.483254+00:00",
+  "kind": "usage",
+  "skill": "review-terminology",
+  "task": "diff-review-interface",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

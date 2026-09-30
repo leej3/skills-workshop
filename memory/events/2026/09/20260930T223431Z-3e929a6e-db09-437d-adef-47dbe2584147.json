@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:3e929a6e-db09-437d-adef-47dbe2584147",
+  "occurred_at": "2026-09-30T22:34:31Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "User requested project installation and application to the diff review interface."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:321ef532-152b-4c54-acc7-5ac25a1afa24",
+  "type": "consideration"
+}
