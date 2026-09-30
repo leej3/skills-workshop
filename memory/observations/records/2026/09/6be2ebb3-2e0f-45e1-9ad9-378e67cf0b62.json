@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "6be2ebb3-2e0f-45e1-9ad9-378e67cf0b62",
+  "recorded_at": "2026-09-30T18:56:27.680210+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "architecture-design",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
