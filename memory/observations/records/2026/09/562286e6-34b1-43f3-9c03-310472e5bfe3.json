@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "562286e6-34b1-43f3-9c03-310472e5bfe3",
+  "recorded_at": "2026-09-30T16:38:10.448491+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "local-chat-recovery",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
