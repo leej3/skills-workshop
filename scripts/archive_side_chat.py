@@ -2,7 +2,7 @@
 
 Installed as UserPromptSubmit and Stop hooks. The public hook payload has no
 side-chat flag. Eligibility therefore requires all three current-runtime facts:
-no transcript path, no persisted thread, and a local Desktop client binding.
+no transcript path, no persisted thread, and local Desktop interaction state.
 Unknown sessions are skipped. No network requests or app database writes.
 """
 
@@ -39,10 +39,14 @@ def eligible(event, home):
             "SELECT 1 FROM threads WHERE id=?", (session,)
         ).fetchone():
             return False
-    # Interactive Desktop side chats have a client binding but no persisted
-    # thread. CLI ephemeral runs and background sessions lack this binding.
+    # Forked side chats need not acquire a temporary client-ID binding, but
+    # Desktop still saves their submitted prompts. CLI/background sessions
+    # have neither kind of Desktop interaction state.
     state = json.loads((home / ".codex-global-state.json").read_text())
     atoms = state.get("electron-persisted-atom-state", {})
+    prompts = atoms.get("prompt-history", {}).get(session)
+    if isinstance(prompts, list) and any(isinstance(p, str) and p for p in prompts):
+        return True
     client = atoms.get(f"thread-client-id-v1:local%3A{session}")
     return (
         isinstance(client, str)
@@ -84,7 +88,7 @@ def save(event, home):
             "content": content,
         }
         # Recover the first prompt at Stop if the UI had not persisted its
-        # client binding when the prompt hook ran. Only read this chat's history.
+        # interaction state when the prompt hook ran. Only read this chat's history.
         if role == "assistant" and not any(
             m["role"] == "user" and m.get("turn_id") == item["turn_id"]
             for m in messages

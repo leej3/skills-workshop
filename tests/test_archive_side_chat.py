@@ -102,6 +102,33 @@ class ArchiveTests(unittest.TestCase):
             save(dict(self.event, transcript_path="/a/transcript.jsonl"), self.home)
         )
 
+    def test_desktop_fork_without_client_binding_is_saved_but_main_is_not(self):
+        # Real Desktop forks have prompt history without client-new-thread state.
+        atoms = {"prompt-history": {self.session: ["Side question"]}}
+        (self.home / ".codex-global-state.json").write_text(
+            json.dumps({"electron-persisted-atom-state": atoms})
+        )
+        self.assertTrue(save(self.event, self.home))
+        archive = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        rows = [json.loads(line) for line in archive.read_text().splitlines()]
+        self.assertEqual(
+            [r["content"] for r in rows],
+            ["Side question", self.event["last_assistant_message"]],
+        )
+        # Saving a normal thread always excludes it, even with Desktop history.
+        with database(self.home / "state_5.sqlite") as db:
+            db.execute("INSERT INTO threads VALUES (?)", (self.session,))
+        before = archive.read_bytes()
+        self.assertFalse(save(dict(self.event, turn_id="turn-2"), self.home))
+        self.assertEqual(archive.read_bytes(), before)
+
+    def test_another_chats_prompt_history_does_not_qualify_this_session(self):
+        atoms = {"prompt-history": {"another-session": ["Unrelated prompt"]}}
+        (self.home / ".codex-global-state.json").write_text(
+            json.dumps({"electron-persisted-atom-state": atoms})
+        )
+        self.assertFalse(save(self.event, self.home))
+
     def test_unknown_ephemeral_thread_is_not_saved(self):
         self.assertFalse(save(self.event, self.home))
 

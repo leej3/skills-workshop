@@ -17,7 +17,7 @@ Prompts and completed assistant replies are stored as private Markdown and JSONL
 Archives stay on their host, outside Git; installation does not synchronize conversations.
 Main threads, tool output, and unfinished replies are excluded.
 
-The hook uses Codex Desktop's local client bindings and thread database because hook events lack a side-chat flag.
+The hook checks Codex Desktop's prompt history or client bindings and excludes persisted threads because hook events lack a side-chat flag.
 Unknown sessions are skipped; app changes can require an update to this detection.
 The current implementation supports macOS and Linux, using Python's POSIX file locking.
 See [Codex hooks](https://learn.chatgpt.com/docs/hooks) for event and trust behavior.
