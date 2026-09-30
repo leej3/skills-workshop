@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "0e80a585-2e5b-47ad-b769-1a0dd57f9dfc",
+  "recorded_at": "2026-09-30T21:06:24.056683+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "live-site-diff-review",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
