@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "671b8a8f-43ee-4af5-a185-83dd8db6d7c7",
+  "recorded_at": "2026-09-30T21:25:21.084692+00:00",
+  "kind": "usage",
+  "skill": "review-terminology",
+  "task": "diff-investigation-annotations",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

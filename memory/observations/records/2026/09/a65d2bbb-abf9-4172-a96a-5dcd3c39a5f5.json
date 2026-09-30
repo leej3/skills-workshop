@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a65d2bbb-abf9-4172-a96a-5dcd3c39a5f5",
+  "recorded_at": "2026-09-30T21:25:21.552145+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "diff-investigation-annotations",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
