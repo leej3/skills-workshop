@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a585bd64-83ba-4359-acc7-7021f9c70d8c",
+  "recorded_at": "2026-09-30T18:46:21.447806+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "downstream-pin-adoption",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
