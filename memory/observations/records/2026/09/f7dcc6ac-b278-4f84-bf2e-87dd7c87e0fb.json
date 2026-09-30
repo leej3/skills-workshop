@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "f7dcc6ac-b278-4f84-bf2e-87dd7c87e0fb",
+  "recorded_at": "2026-09-30T00:51:43.837574+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "upstream-ci-adoption",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

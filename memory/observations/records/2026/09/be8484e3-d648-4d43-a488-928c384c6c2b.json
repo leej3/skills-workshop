@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "be8484e3-d648-4d43-a488-928c384c6c2b",
+  "recorded_at": "2026-09-30T00:51:43.422927+00:00",
+  "kind": "usage",
+  "skill": "datalad",
+  "task": "upstream-ci-adoption",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
