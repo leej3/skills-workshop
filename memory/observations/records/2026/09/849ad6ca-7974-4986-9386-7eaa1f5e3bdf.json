@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "849ad6ca-7974-4986-9386-7eaa1f5e3bdf",
+  "recorded_at": "2026-09-30T13:59:41.964229+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "upstream-graph-repin",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
