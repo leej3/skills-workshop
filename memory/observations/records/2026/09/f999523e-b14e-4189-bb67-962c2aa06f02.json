@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "f999523e-b14e-4189-bb67-962c2aa06f02",
+  "recorded_at": "2026-09-30T19:20:57.339458+00:00",
+  "kind": "usage",
+  "skill": "commit-provenance",
+  "task": "pull-request-review",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fcd54bf60ec5e05b2e3d69108cd6989f7947060a45d8657ddb29b5d71c69453b",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
