@@ -18,6 +18,8 @@ Archives stay on their host, outside Git; installation does not synchronize conv
 Main threads, tool output, and unfinished replies are excluded.
 
 The hook checks Codex Desktop's prompt history or client bindings and excludes persisted threads because hook events lack a side-chat flag.
-Unknown sessions are skipped; app changes can require an update to this detection.
+Unidentified non-persisted sessions and incomplete or failed backups emit an immediate Codex warning; copy the chat somewhere safe before closing it.
+Successful backups and identified main threads stay quiet.
+App changes can require an update to detection; a disabled hook or an app crash cannot report its own failure.
 The current implementation supports macOS and Linux, using Python's POSIX file locking.
 See [Codex hooks](https://learn.chatgpt.com/docs/hooks) for event and trust behavior.

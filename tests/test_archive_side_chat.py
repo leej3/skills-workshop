@@ -1,11 +1,15 @@
+import fcntl
+import io
 import json
+import os
 import sqlite3
 import tempfile
 import unittest
 from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import patch
 
-from scripts.archive_side_chat import save
+from scripts.archive_side_chat import BackupError, handle, main, save
 
 
 @contextmanager
@@ -39,6 +43,7 @@ class ArchiveTests(unittest.TestCase):
         self.atoms = {
             f"thread-client-id-v1:local%3A{self.session}": "client-new-thread:test",
             "client-thread-bindings-v1": {"client-new-thread:test": self.session},
+            "prompt-history": {self.session: ["Side question"]},
         }
         (self.home / ".codex-global-state.json").write_text(
             json.dumps({"electron-persisted-atom-state": self.atoms})
@@ -127,27 +132,93 @@ class ArchiveTests(unittest.TestCase):
         (self.home / ".codex-global-state.json").write_text(
             json.dumps({"electron-persisted-atom-state": atoms})
         )
-        self.assertFalse(save(self.event, self.home))
+        with self.assertRaises(BackupError):
+            save(self.event, self.home)
 
     def test_unknown_ephemeral_thread_is_not_saved(self):
-        self.assertFalse(save(self.event, self.home))
+        result = handle(self.event, self.home)
+        self.assertIn("Cannot identify", result["systemMessage"])
+        self.assertFalse((self.home / "side-chat-archive").exists())
 
     def test_inconsistent_binding_is_not_saved(self):
         self.mark_side_chat()
+        self.atoms.pop("prompt-history")
         self.atoms["client-thread-bindings-v1"]["client-new-thread:test"] = (
             "different-session"
         )
         (self.home / ".codex-global-state.json").write_text(
             json.dumps({"electron-persisted-atom-state": self.atoms})
         )
-        self.assertFalse(save(self.event, self.home))
+        with self.assertRaises(BackupError):
+            save(self.event, self.home)
 
     def test_empty_or_other_hook_does_not_create_archive(self):
         self.mark_side_chat()
-        self.assertFalse(save(dict(self.event, last_assistant_message=None), self.home))
+        result = handle(dict(self.event, last_assistant_message=None), self.home)
+        self.assertIn("no assistant text", result["systemMessage"])
         self.assertFalse(
             save(dict(self.event, hook_event_name="PreToolUse"), self.home)
         )
+
+    def test_missing_prompt_warns_after_saving_reply(self):
+        self.mark_side_chat()
+        self.atoms.pop("prompt-history")
+        (self.home / ".codex-global-state.json").write_text(
+            json.dumps({"electron-persisted-atom-state": self.atoms})
+        )
+        result = handle(self.event, self.home)
+        self.assertIn("reply was saved", result["systemMessage"])
+        path = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        rows = [json.loads(line) for line in path.read_text().splitlines()]
+        self.assertEqual(rows[0]["content"], self.event["last_assistant_message"])
+
+    def test_write_failure_warns_without_exposing_content(self):
+        self.mark_side_chat()
+        (self.home / "side-chat-archive").write_text("Obstruct directory creation")
+        result = handle(self.event, self.home)
+        self.assertIn("WARNING", result["systemMessage"])
+        self.assertIn("Copy this chat", result["systemMessage"])
+        self.assertNotIn(self.event["last_assistant_message"], json.dumps(result))
+        self.assertNotIn("continue", result)
+
+    def test_lock_contention_warns_immediately(self):
+        self.mark_side_chat()
+        save(self.event, self.home)
+        path = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        with path.open("a") as stream:
+            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            result = handle(self.event, self.home)
+        self.assertIn("Archive access failed", result["systemMessage"])
+
+    def test_corrupt_database_or_archive_warns(self):
+        self.mark_side_chat()
+        save(self.event, self.home)
+        path = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        path.write_text("broken JSON with private text")
+        result = handle(self.event, self.home)
+        self.assertIn("JSONDecodeError", result["systemMessage"])
+        self.assertNotIn("private text", result["systemMessage"])
+        (self.home / "state_5.sqlite").unlink()
+        self.assertIn("systemMessage", handle(self.event, self.home))
+
+    def test_main_threads_and_successful_side_chats_are_quiet(self):
+        self.mark_side_chat()
+        self.assertEqual(handle(self.event, self.home), {})
+        with database(self.home / "state_5.sqlite") as db:
+            db.execute("INSERT INTO threads VALUES (?)", (self.session,))
+        self.assertEqual(handle(self.event, self.home), {})
+
+    def test_malformed_hook_input_still_emits_warning_json(self):
+        output = io.StringIO()
+        with (
+            patch.dict(os.environ, {"CODEX_HOME": str(self.home)}),
+            patch("sys.stdin", io.StringIO("private malformed payload")),
+            patch("sys.stdout", output),
+        ):
+            main()
+        result = json.loads(output.getvalue())
+        self.assertIn("JSONDecodeError", result["systemMessage"])
+        self.assertNotIn("private malformed payload", result["systemMessage"])
 
 
 if __name__ == "__main__":

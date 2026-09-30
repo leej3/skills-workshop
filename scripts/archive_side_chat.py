@@ -3,7 +3,8 @@
 Installed as UserPromptSubmit and Stop hooks. The public hook payload has no
 side-chat flag. Eligibility therefore requires all three current-runtime facts:
 no transcript path, no persisted thread, and local Desktop interaction state.
-Unknown sessions are skipped. No network requests or app database writes.
+Unidentified ephemeral sessions warn without being archived.
+No network requests or app database writes.
 """
 
 import fcntl
@@ -16,6 +17,10 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import UUID
+
+
+class BackupError(Exception):
+    """A backup problem that is safe to describe without exposing chat text."""
 
 
 @contextmanager
@@ -48,10 +53,14 @@ def eligible(event, home):
     if isinstance(prompts, list) and any(isinstance(p, str) and p for p in prompts):
         return True
     client = atoms.get(f"thread-client-id-v1:local%3A{session}")
-    return (
+    if (
         isinstance(client, str)
         and client.startswith("client-new-thread:")
         and atoms.get("client-thread-bindings-v1", {}).get(client) == session
+    ):
+        return True
+    raise BackupError(
+        "Cannot identify this non-persisted chat; this message was not archived."
     )
 
 
@@ -62,12 +71,14 @@ def save(event, home):
     session = event.get("session_id")
     if not isinstance(session, str) or str(UUID(session)) != session:
         raise ValueError("Invalid session identifier")
+    if not eligible(event, home):
+        return False
     role = "user" if kind == "UserPromptSubmit" else "assistant"
     content = event.get("prompt" if role == "user" else "last_assistant_message")
     if not isinstance(content, str) or not content:
-        return False
-    if not eligible(event, home):
-        return False
+        raise BackupError(
+            f"The hook supplied no {role} text; this message was not archived."
+        )
 
     directory = home / "side-chat-archive"
     directory.mkdir(mode=0o700, exist_ok=True)
@@ -76,7 +87,8 @@ def save(event, home):
     flags = os.O_RDWR | os.O_CREAT | os.O_APPEND | os.O_NOFOLLOW
     descriptor = os.open(filename, flags, 0o600)
     with os.fdopen(descriptor, "a+", encoding="utf-8") as stream:
-        fcntl.flock(stream, fcntl.LOCK_EX)
+        # Report contention immediately instead of waiting for the hook timeout.
+        fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
         os.fchmod(stream.fileno(), 0o600)
         stream.seek(0)
         messages = [json.loads(line) for line in stream if line.strip()]
@@ -137,19 +149,49 @@ def save(event, home):
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
+        if role == "assistant" and not any(
+            m["role"] == "user" and m.get("turn_id") == item["turn_id"]
+            for m in messages
+        ):
+            raise BackupError(
+                "The assistant reply was saved, but its user prompt is missing."
+            )
     return True
 
 
+def handle(event, home):
+    try:
+        save(event, home)
+        return {}
+    except Exception as error:  # noqa: BLE001 - every hook failure must warn Codex
+        return warning(error, home)
+
+
+def warning(error, home):
+    # Never include raw exception text: malformed JSON can contain chat content.
+    if isinstance(error, BackupError):
+        reason = str(error)
+    elif isinstance(error, OSError) and error.errno:
+        reason = f"Archive access failed: {os.strerror(error.errno)}."
+    else:
+        reason = f"Backup processing failed ({type(error).__name__})."
+    return {
+        "systemMessage": (
+            f"WARNING: Side-chat backup needs attention. {reason} "
+            "Copy this chat somewhere safe before closing or updating the app. "
+            f"Check {home / 'side-chat-archive'}."
+        )
+    }
+
+
 def main():
+    home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
     try:
         event = json.load(sys.stdin)
-        save(event, Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))))
-        result = {}
-    except (OSError, ValueError, KeyError, TypeError, sqlite3.Error) as error:
-        # Advisory: never continue or block a turn, and do not log its contents.
-        result = {
-            "systemMessage": f"Side-chat backup unavailable: {type(error).__name__}."
-        }
+    except (OSError, ValueError, TypeError) as error:
+        result = warning(error, home)
+    else:
+        result = handle(event, home)
     print(json.dumps(result))
 
 
