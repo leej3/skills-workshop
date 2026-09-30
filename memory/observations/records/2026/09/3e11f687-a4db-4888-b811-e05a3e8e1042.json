@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "3e11f687-a4db-4888-b811-e05a3e8e1042",
+  "recorded_at": "2026-09-30T17:25:28.442162+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "software-data-update-separation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
