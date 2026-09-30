@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "e10635a4-7052-4e9f-8aaf-b71716695279",
+  "recorded_at": "2026-09-30T14:31:20.538170+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "annex-diagnostic-scoping",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
