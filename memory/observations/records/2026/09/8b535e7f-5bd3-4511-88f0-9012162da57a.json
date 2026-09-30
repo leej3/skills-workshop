@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "8b535e7f-5bd3-4511-88f0-9012162da57a",
+  "recorded_at": "2026-09-30T17:16:14.333687+00:00",
+  "kind": "usage",
+  "skill": "openai-docs",
+  "task": "portable-side-chat-backup",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
