@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "1e69ab9b-6eac-4393-ab4d-7b27726d0c76",
+  "recorded_at": "2026-09-30T20:41:12.180335+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "diff-review-development",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
