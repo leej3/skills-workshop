@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "id": "0def924c-0923-4c62-8467-41b9499472e2",
+  "recorded_at": "2026-09-30T22:32:30.667333+00:00",
+  "kind": "insight",
+  "skill": "autoharness-reflect",
+  "group": "authoring-limit-disclosure",
+  "priority": 2,
+  "confidence": "high",
+  "status": "resolved",
+  "summary": "Installed-skill smoke test required shortening a description because the bundle omitted the configured 60-character limit.",
+  "action": "Resolved by including active runtime limits in prepare output; native regression tests passed.",
+  "usage_ids": [],
+  "visibility": "shareable"
+}

@@ -130,6 +130,13 @@ Run `pixi run --locked setup-skills` before opening an agent task, and `pixi run
 User setup is independent: `setup-agent` does not restore or change project dependencies.
 First setup needs network access; private packages additionally need suitable Git credentials.
 
+The project also installs the pinned `autoharness-reflect` trial from our AutoHarness fork.
+After setup, start a new task in this checkout and ask: “Use $autoharness-reflect to reflect on this completed task and propose useful skill improvements.”
+It uses the current agent (and native subagents when available), with a pinned Python runtime fetched through `uv`; Python 3 and `uv` must be on PATH.
+It is a project skill, not a global installation or automatic completion hook.
+Reflection produces proposals; asking it to implement improvements also allows relevant local application and validation.
+Runtime state under `.agents/autoharness/` is ignored; source changes to native skills remain reviewable in Git.
+
 Reusable source is tracked in `.apm/skills/`: `duct`, `commit-provenance`, and `build-github-app`.
 The root `apm.yml` publishes this collection and declares what APM may deploy.
 Workshop's own setup generates ignored copies under `.agents/skills/` and records their hashes in `apm.lock.yaml`.
