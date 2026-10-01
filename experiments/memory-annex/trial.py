@@ -20,7 +20,11 @@ import uuid
 from pathlib import Path
 
 HOST = "hub.datalad.org"
-REPOS = {"shared": "skills-workshop", "sensitive": "skills-memories-sensitive"}
+REPOS = {
+    "shared": "skills-workshop",
+    "sensitive": "skills-memories-sensitive",
+    "test": "test-store",
+}
 PREFIX = "refs/workshop/memory/v1/"
 
 
@@ -147,7 +151,9 @@ class Trial:
             self.git(repo, store, "config", "remote.origin." + key, value)
         return repo, elapsed
 
-    def batch(self, repo, store, writer, records):
+    def batch(
+        self, repo, store, writer, records, content_remote="origin", content_store=None
+    ):
         # Classification applies to each complete record; mixed batches are refused.
         if any(
             ("sensitive" if record["sensitive"] else "shared") != store
@@ -187,7 +193,14 @@ class Trial:
         self.git(repo, store, "reset", "HEAD", "--", path)
         (repo / path).unlink()
         # Upload bytes before publishing the discoverable ref.
-        self.git(repo, store, "annex", "copy", "--to=origin", "--key=" + key)
+        self.git(
+            repo,
+            content_store or store,
+            "annex",
+            "copy",
+            "--to=" + content_remote,
+            "--key=" + key,
+        )
         return {
             "ref": ref,
             "key": key,
@@ -268,7 +281,7 @@ class Trial:
         )
         batches.append(private_batch)
         self.results["batches"] = batches
-        for store in REPOS:
+        for store in ("shared", "sensitive"):
             reader, seconds = self.clone(
                 store + "-reader", store, authenticated=store == "sensitive"
             )

@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a77c7dc6-31f2-4c42-88c5-6010282e0d7c",
+  "recorded_at": "2026-10-01T17:37:11.242097+00:00",
+  "kind": "usage",
+  "skill": "datalad",
+  "task": "memory-storage-experiment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
