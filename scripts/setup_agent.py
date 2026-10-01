@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 START = "<!-- skills-workshop:start -->"
 END = "<!-- skills-workshop:end -->"
-NAMES = ("skills-workshop", "workshop-feedback")
+NAMES = ("skills-workshop", "workshop-feedback", "duct")
 MODES = ("on", "manual", "off")
 
 
@@ -28,9 +28,9 @@ def command(root: Path, action: str) -> str:
 
 def instruction_block(root: Path, mode: str = "on") -> str:
     policy = {
-        "on": "Use $skills-workshop for skill discovery, selection, installation, and recall.\nAfter material skill use, follow $workshop-feedback for one minimal baseline record.\nSkip reads, installations, recorder use, and bookkeeping; collection failures must not block work.\nBefore completing each task, inspect, validate, and commit its shareable records in the Workshop checkout, even for work in other projects. Batch within the task, never defer commits to a later task; report Git blockers.\nPush under user publication authorization; keep sensitive details in the private overlay.",
-        "manual": "Use Workshop discovery and feedback only when the user explicitly requests them.\nDo not invoke either control automatically, including routine feedback collection.\nSkill availability alone is not a request to invoke it.",
-        "off": "Do not invoke Workshop discovery or feedback. Its control entrypoints are hidden.\nTooling, memory, and project-installed skills remain available and unchanged.",
+        "on": "Use $skills-workshop for skill discovery, selection, installation, and recall.\nUse the Workshop duct control for substantive commands and retain classified task captures in annex.\nAfter material skill use, follow $workshop-feedback for one minimal baseline record.\nSkip reads, installations, recorder use, and bookkeeping; collection failures must not block work.\nBefore completing each task, inspect, validate, and commit its shareable records in the Workshop checkout, even for work in other projects. Batch within the task, never defer commits to a later task; report Git blockers.\nPush under user publication authorization; keep sensitive details in the private overlay.",
+        "manual": "Use Workshop discovery, feedback and annex capture only when the user explicitly requests them.\nDo not invoke either control automatically, including routine feedback collection.\nSkill availability alone is not a request to invoke it.",
+        "off": "Do not invoke Workshop discovery, feedback or annex capture. Its control entrypoints are hidden.\nTooling, memory, and project-installed skills remain available and unchanged.",
     }[mode]
     return f"""{START}
 ## Skills Workshop
@@ -76,10 +76,7 @@ def restore_controls(root: Path, home: Path, source: str | None = None) -> None:
     if source:
         cmd += [
             source,
-            "--skill",
-            NAMES[0],
-            "--skill",
-            NAMES[1],
+            *[arg for name in NAMES for arg in ("--skill", name)],
             "--target",
             "agent-skills",
         ]

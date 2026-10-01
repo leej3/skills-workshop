@@ -96,3 +96,22 @@ The journals and outbox currently retain all history and aggregation scans retai
 This is suitable for the initial few-person trial, not a claim of unbounded throughput.
 Migration of other curated Workshop memory families and replacing the feedback recorder's Git compatibility path remain separate work.
 First collect reliable evidence; use observed costs before adding compaction or distributed coordination.
+
+## Duct captures as on-demand evidence
+
+Duct is now a Workshop control installed with discovery and feedback.
+A finished capture becomes a small evidence envelope containing command, outcome, measured resources and a content-addressed external-artifact descriptor.
+The complete exact capture files are stored in a deterministic compressed archive in annex under `refs/workshop/artifacts/v1/<SHA-256>`.
+They are not embedded in the 1000-record batches.
+
+`memory capture-duct RUN --store STORE --agent LABEL --config CONFIG` stages the assessment and uploads the archive immediately; `--related UUID` links its assessment, and sensitive captures require `--reason`.
+Daily batch publication verifies referenced content is uploaded first.
+Without `--config`, collection stages locally for daily publication.
+No capture is deleted.
+
+Ordinary restore fetches memory batches only.
+Explicit `memory fetch-artifact REFERENCE_JSON --config CONFIG --output ARCHIVE` retrieves a referenced archive and verifies its content hash and size.
+Backup/retention must cover both memory and artifact refs plus annex payloads. Do not instrument capture/upload commands with duct: doing so would create recursive capture obligations.
+
+The associated record and its artifacts share classification; a sensitive capture is kept in the sensitive store.
+A public trial may have a separate private supporting capture containing local execution paths; that private record points to the public trial without exposing its details in the shared store.

@@ -19,7 +19,7 @@ from pathlib import Path
 
 root = Path.cwd()
 home = Path.home()
-for name in ("skills-workshop", "workshop-feedback"):
+for name in ("skills-workshop", "workshop-feedback", "duct"):
     link = home / ".agents/skills" / name
     assert link.is_symlink()
     assert link.resolve() == home / ".local/share/skills-workshop/control-install/.agents/skills" / name

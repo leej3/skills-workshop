@@ -16,6 +16,7 @@ if __package__ in (None, ""):
 from scripts.memory_store import atomic_bytes, digest
 
 PREFIX = "refs/workshop/memory/v2/"
+ARTIFACT_PREFIX = "refs/workshop/artifacts/v1/"
 
 
 def credential(config, store):
@@ -129,8 +130,32 @@ class AnnexTransport:
         self.git("config", "annex.used-refspec", "+refs/*:+HEAD")
 
     def __call__(self, ident, raw):
-        ref = PREFIX + ident
-        path = "batches/" + ident + ".json"
+        return self._put(ident, raw, PREFIX)
+
+    def publish_artifact(self, item, raw):
+        if (
+            item["store"] != self.store
+            or digest(raw) != item["sha256"]
+            or len(raw) != item["size"]
+        ):
+            raise ValueError("external artifact mismatch")
+        return self._put(item["sha256"], raw, ARTIFACT_PREFIX)
+
+    def fetch_artifact(self, item):
+        if item["store"] != self.store:
+            raise ValueError("artifact store mismatch")
+        key = item["annex_key"]
+        self.git("annex", "get", "--from=payload", "--key=" + key, role="payload")
+        location = self.git("annex", "contentlocation", key)
+        raw = (self.repo / location).read_bytes()
+        if digest(raw) != item["sha256"] or len(raw) != item["size"]:
+            raise ValueError("artifact integrity failure")
+        return raw
+
+    def _put(self, ident, raw, prefix):
+        ref = prefix + ident
+        filename = ident + (".json" if prefix == PREFIX else ".tar.gz")
+        path = "batches/" + filename
         old = self.git("rev-parse", "--verify", ref, check=False)
         if old.returncode:
             # Fetch a remotely existing ref before creating a replacement after local loss.
@@ -151,7 +176,7 @@ class AnnexTransport:
             key = self.git("annex", "lookupkey", path)
             entry = self.git("ls-files", "-s", "--", path).split()[1]
             # Nested tree contains exactly the batch pointer, never other staged files.
-            tree = self.git("mktree", input=f"120000 blob {entry}\t{ident}.json\n")
+            tree = self.git("mktree", input=f"120000 blob {entry}\t{filename}\n")
             tree = self.git("mktree", input=f"040000 tree {tree}\tbatches\n")
             trailers = subprocess.check_output(
                 ["bash", self.config["provenance_script"]], text=True

@@ -23,7 +23,7 @@ pixi run workshop validate
 
 `setup-agent` previews changes; `--apply` makes them:
 
-- Restores the two control skills through a dedicated user-owned APM manifest and lock in `~/.local/share/skills-workshop/control-install/`.
+- Restores the three control skills through a dedicated user-owned APM manifest and lock in `~/.local/share/skills-workshop/control-install/`.
 - Links those deployed controls into user discovery, migrating recognized legacy links.
 - Sets this checkout as the memory destination in `~/.config/skills-workshop/config.json`.
 - Adds a marked workflow block to `~/.codex/AGENTS.md`, respecting `CODEX_HOME` when set.
@@ -104,7 +104,7 @@ Only the supplied public query is sent to discovery providers.
 
 | Item | Owner and location |
 | --- | --- |
-| The two Workshop control skills | `controls/skills/` source; APM installation and activation at user scope |
+| The Workshop control skills | `controls/skills/` source; APM installation and activation at user scope |
 | A project's own working skills | That project's `.agents/skills/` |
 | External reusable skill dependencies | That project's APM manifest and lock |
 | Decisions, use, outcomes, and contribution links | This checkout's `memory/` |
@@ -139,15 +139,16 @@ User-level availability does not install a completion hook or automatically coll
 Reusable skill source is tracked in `.apm/skills/`.
 The root `apm.yml` publishes this collection and declares what APM may deploy.
 Workshop's own setup generates ignored copies under `.agents/skills/` and records their hashes in `apm.lock.yaml`.
-The Workshop controls live in the separate `controls/` APM package and are activated only at user scope.
+The Workshop controls (`skills-workshop`, `workshop-feedback`, and `duct`) live in the separate `controls/` APM package and are activated only at user scope.
+Duct now depends on Workshop memory configuration for classified annex capture; its CLI executable remains independently usable.
 Repo-specific working skills may still live directly under `.agents/skills/` as the fallback.
 Existing user-level links keep pointing to their established `.agents/skills/` locations.
 
 Other projects can select skills from this repository at an exact published commit:
 
 ```console
-apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill duct --target agent-skills --dry-run
-apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill duct --target agent-skills
+apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill unix-cli-design --target agent-skills --dry-run
+apm install leej3/skills-workshop#FULL_COMMIT_SHA --skill unix-cli-design --target agent-skills
 ```
 
 Replace `FULL_COMMIT_SHA` with a reviewed 40-character commit SHA and run APM through the consumer's pinned environment.
@@ -183,7 +184,7 @@ pixi run workshop validate
 - **Catalog missing:** run the submodule command above.
 - **Public search unavailable:** use `--offline`, then check network access and GitHub authentication.
   Successful results survive individual provider failures.
-- **Another agent host:** install both control skill directories at user scope, configure the checkout, and add equivalent global guidance as described in the [feedback reference](docs/agents/workshop-reference.md#lightweight-feedback-across-projects).
+- **Another agent host:** install all three control skill directories at user scope, configure the checkout, and add equivalent global guidance as described in the [feedback reference](docs/agents/workshop-reference.md#lightweight-feedback-across-projects).
   The setup command currently targets Codex.
 
 ## Development and reference

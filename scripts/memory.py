@@ -195,6 +195,25 @@ def main():
     )
     imp.add_argument("--public", type=Path, required=True)
     imp.add_argument("--private", type=Path, required=True)
+    capture = commands.add_parser(
+        "capture-duct", help="stage a finished run; optional immediate annex upload"
+    )
+    capture.add_argument("directory", type=Path)
+    capture.add_argument("--store", choices=("shared", "sensitive"), required=True)
+    capture.add_argument("--agent", required=True)
+    capture.add_argument("--reason")
+    capture.add_argument("--related")
+    capture.add_argument(
+        "--config",
+        type=Path,
+        help="upload artifact now; its assessment still joins the daily batch",
+    )
+    fetch = commands.add_parser(
+        "fetch-artifact", help="explicitly download one referenced artifact"
+    )
+    fetch.add_argument("reference", type=Path, help="artifact descriptor JSON")
+    fetch.add_argument("--config", type=Path, required=True)
+    fetch.add_argument("--output", type=Path, required=True)
     daily = commands.add_parser(
         "daily", help="import, seal yesterday, retry uploads and rebuild projections"
     )
@@ -218,7 +237,39 @@ def main():
     args = parser.parse_args()
     try:
         memory = MemoryStore(args.state)
-        if args.command == "daily":
+        if args.command == "capture-duct":
+            from scripts.memory_capture import capture_duct
+
+            result = capture_duct(
+                memory,
+                args.directory,
+                args.store,
+                args.agent,
+                args.reason,
+                args.related,
+            )
+            if args.config:
+                from scripts.memory_annex import AnnexTransport
+
+                transport = AnnexTransport(memory.root, args.config, args.store)
+                item = result["artifact"]
+                with memory.lock(args.store):
+                    transport.setup()
+                    result["receipt"] = transport.publish_artifact(
+                        item,
+                        (
+                            memory.store_root(args.store) / "objects" / item["sha256"]
+                        ).read_bytes(),
+                    )
+        elif args.command == "fetch-artifact":
+            from scripts.memory_annex import AnnexTransport
+
+            item = json.loads(args.reference.read_text())
+            transport = AnnexTransport(memory.root, args.config, item["store"])
+            transport.setup()
+            atomic_bytes(args.output, transport.fetch_artifact(item))
+            result = {"output": str(args.output), "sha256": item["sha256"]}
+        elif args.command == "daily":
             from scripts.memory_annex import AnnexTransport
 
             result = {

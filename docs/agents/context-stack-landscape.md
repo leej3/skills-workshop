@@ -236,3 +236,9 @@ No product becomes canonical storage.
 The first six-query comparison passed 6/6 coarse checks for SQLite and qmd and 5/6 for Brain, which returned a result for an absent term.
 This is evidence for a follow-up abstention test, not a general quality ranking.
 Model cost, semantic quality and isolated skill effectiveness remain unmeasured.
+
+## First native Luna baseline and capture retention
+
+On October 1, three account-backed Luna trials completed: CLI baseline and explicit-skill responses each passed 5/5 basic checks, and the native tree response passed 4/4 citation/abstention checks. These are unblinded, agent-graded, single-trial observations; see [retained trial identities and limits](../../experiments/context-pilots/README.md#luna-baseline--october-1-2026). PageIndex/ChatIndex product integrations remain pending.
+
+Duct task captures now have a Workshop-owned path to separately fetched annex objects. The small memory records retain measurements and content identities; the original logs are available on demand. Duct packaging moves from reusable standalone skills into the Workshop control installation.

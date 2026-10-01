@@ -55,7 +55,7 @@ lint = "ruff check scripts tests"
 check-format = "ruff format --check scripts tests"
 compile = "python -m compileall -q scripts tests"
 test = "pytest -q tests"
-test-skill-helpers = { cmd = "pytest -q .apm/skills/duct/scripts .apm/skills/commit-provenance/scripts", env = { PYTHONDONTWRITEBYTECODE = "1" } }
+test-skill-helpers = { cmd = "pytest -q controls/skills/duct/scripts .apm/skills/commit-provenance/scripts", env = { PYTHONDONTWRITEBYTECODE = "1" } }
 hooks-install = "pre-commit install"
 validate = { depends-on = ["lint", "check-format", "compile", "test", "test-skill-helpers", "validate-metadata", "memory-validate", "feedback-validate"] }
 

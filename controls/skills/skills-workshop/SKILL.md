@@ -14,6 +14,8 @@ Do not turn it into another installer, registry, or project lock.
 
 This is the user-level control skill for discovery and adoption.
 The separate `workshop-feedback` control skill handles lightweight post-task observations across projects.
+The bundled `duct` control captures substantive command execution and retains classified task logs as on-demand annex evidence.
+Install these controls together through Workshop user setup; the duct control requires Workshop memory configuration.
 When an agent is asked to find, create, install, audit, record, or evaluate a skill, it should invoke this skill first.
 That does not make discovered skills user-global: keep a new project-owned skill directly in the active project's `.agents/skills/`, or install an independently maintained reusable skill through the project's APM state, then record the relationship and any later real use in workshop memory.
 A project's reproducible skill set must remain usable if this user-level control skill or the workshop checkout is unavailable.

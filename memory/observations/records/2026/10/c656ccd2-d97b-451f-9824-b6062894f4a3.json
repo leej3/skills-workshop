@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "c656ccd2-d97b-451f-9824-b6062894f4a3",
+  "recorded_at": "2026-10-01T21:14:17.230777+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "annex-capture-luna-baseline",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

@@ -30,7 +30,8 @@ Do not infer model cost from an account subscription or claim zero resource cost
 Before answering, run `pixi run python experiments/context-pilots/native_trial.py prepare --kind cli` (or `--kind tree`) and use its printed private workspace.
 It freezes the prompt, rubric, complete treatment skill, fixture, protocol, and source digests.
 Do not consult earlier trial answers or scores.
-Read the frozen manifest's prompt and assigned treatment only.
+Read only `agent-input.json` as the trial input; it contains the prompt and assigned treatment but excludes grading rubrics.
+Keep `fixture.json` and previous answers closed until the response is saved.
 The host may already expose skill descriptions/instructions, so a baseline is ambient host context, not a clean no-skill condition.
 Record that limitation.
 

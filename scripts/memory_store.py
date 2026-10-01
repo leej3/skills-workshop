@@ -59,6 +59,11 @@ def validate(row):
         if digest(raw) != item["sha256"] or item["name"] in names:
             raise ValueError("artifact digest mismatch or duplicate name")
         names.add(item["name"])
+    for item in row.get("external_artifacts", []):
+        if item["store"] != row["classification"]["store"]:
+            raise ValueError("artifact classification mismatch")
+        if item["annex_key"] != f"SHA256-s{item['size']}--{item['sha256']}":
+            raise ValueError("artifact key mismatch")
     return row
 
 
@@ -364,6 +369,17 @@ class MemoryStore:
         with self.lock(store), self.ledger(store) as db:
             for batch in self.pending(store, db):
                 raw = (batch["body"] + "\n").encode()
+                for row in json.loads(batch["body"])["records"]:
+                    for item in row.get("external_artifacts", []):
+                        content = (
+                            self.store_root(store) / "objects" / item["sha256"]
+                        ).read_bytes()
+                        if (
+                            digest(content) != item["sha256"]
+                            or len(content) != item["size"]
+                        ):
+                            raise ValueError("external artifact content mismatch")
+                        transport.publish_artifact(item, content)
                 receipt = transport(batch["id"], raw)
                 if receipt.get("sha256") != digest(raw):
                     raise ValueError("transport receipt digest mismatch")

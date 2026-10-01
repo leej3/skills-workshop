@@ -1,5 +1,4 @@
 lockfile_version: '1'
-apm_version: 0.31.0
 dependencies: []
 deployments:
 - kind: project-relative
@@ -103,51 +102,6 @@ deployments:
   content_hash: sha256:66b15ee3217c94c58bb2211c96634e096bee6568f25bfa9d40e01ae4d8197281
 - kind: project-relative
   target: legacy
-  value: .agents/skills/duct
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/duct/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/duct/agents/openai.yaml
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:051abdeca7cd8c422c7566270e6e5d5cdc820e5b21aa2ebde62601c5b03d51fd
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/duct/scripts/run.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:9e1fdabfe78dc83a387cc92b070133fe21eb304ec0bac2278d837f22235e4e78
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/duct/scripts/test_run.py
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:bbdb20a217aa41a275cd3d5694b0de3ebcbd429504eb867fe83f630f862f649d
-- kind: project-relative
-  target: legacy
   value: .agents/skills/unix-cli-design
   runtime: null
   scope: project
@@ -176,11 +130,6 @@ local_deployed_files:
 - .agents/skills/commit-provenance/scripts/resolve.sh
 - .agents/skills/commit-provenance/scripts/runtime_context.py
 - .agents/skills/commit-provenance/scripts/test_runtime_context.py
-- .agents/skills/duct
-- .agents/skills/duct/SKILL.md
-- .agents/skills/duct/agents/openai.yaml
-- .agents/skills/duct/scripts/run.py
-- .agents/skills/duct/scripts/test_run.py
 - .agents/skills/unix-cli-design
 - .agents/skills/unix-cli-design/SKILL.md
 local_deployed_file_hashes:
@@ -193,8 +142,4 @@ local_deployed_file_hashes:
   .agents/skills/commit-provenance/scripts/resolve.sh: sha256:dab8fa7248f90bcb565103332d9998fa3e5d4820f065f31abc93738ad4568851
   .agents/skills/commit-provenance/scripts/runtime_context.py: sha256:2e8e59e564895860210c441a646c1c969dce92d82e23c50c964b93343b257b37
   .agents/skills/commit-provenance/scripts/test_runtime_context.py: sha256:66b15ee3217c94c58bb2211c96634e096bee6568f25bfa9d40e01ae4d8197281
-  .agents/skills/duct/SKILL.md: sha256:db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18
-  .agents/skills/duct/agents/openai.yaml: sha256:051abdeca7cd8c422c7566270e6e5d5cdc820e5b21aa2ebde62601c5b03d51fd
-  .agents/skills/duct/scripts/run.py: sha256:9e1fdabfe78dc83a387cc92b070133fe21eb304ec0bac2278d837f22235e4e78
-  .agents/skills/duct/scripts/test_run.py: sha256:bbdb20a217aa41a275cd3d5694b0de3ebcbd429504eb867fe83f630f862f649d
   .agents/skills/unix-cli-design/SKILL.md: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d

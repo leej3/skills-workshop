@@ -1,9 +1,13 @@
 ---
 name: duct
-description: Use con/duct for substantive project commands such as tests, builds, benchmarks, analyses, and batch jobs. Capture execution logs and resource usage in central per-project storage outside Git, inspect failures, and export selected runs when needed.
+description: Use con/duct for substantive project commands such as tests, builds, benchmarks, analyses, and batch jobs. Capture execution logs and resource usage in central per-project storage outside Git, inspect failures, and retain classified task captures in Workshop annex. Installed as part of Skills Workshop.
 ---
 
 # Project execution with con/duct
+
+This control is distributed and activated with Skills Workshop, not as an independent reusable skill.
+Respect Workshop mode: in manual mode, capture to memory only when requested; in off mode do not invoke this control.
+The con/duct executable itself remains independent.
 
 Use duct by default in every project for tests, builds, analyses, benchmarks, reproductions, and other substantive commands.
 Routine reads, navigation, Git inspection, and simple edits do not need wrapping.
@@ -42,7 +46,8 @@ Establish whether the command started before choosing a recovery.
 Default root: `${XDG_STATE_HOME:-~/.local/state}/con-duct/projects/`.
 Each project has a directory containing unique UTC/UUID run directories. Each run contains `context.json`, duct's `run_info.json`, `run_usage.jsonl`, and captured `run_stdout`/`run_stderr` when produced.
 No repository files or ignores are changed.
-Logs stay until the user requests cleanup; do not silently rotate, upload, commit, or move them.
+Logs stay until the user requests cleanup.
+Retain completed task captures in the configured Workshop annex under standing task-log publication authorization; do not commit raw logs to the code repository.
 
 The default project key is a readable name plus a hash of its resolved Git root (or working directory outside Git).
 Worktrees and separate clones are distinct.
@@ -89,3 +94,37 @@ Export is not permission to commit raw logs.
 
 CLI semantics: [con/duct](https://github.com/con/duct).
 Consult installed help before using version-specific options or optional inspection commands.
+
+## Retain task evidence in Workshop
+
+Before completing a task, collect its finished duct runs, including failed attempts relevant to the outcome.
+Read `~/.config/skills-workshop/config.json` for `workshop_root`; this installation must supply the Workshop memory CLI and configured transport.
+Keep source captures until explicit cleanup.
+Do not instrument the capture/upload operation itself: that would recursively create logs requiring capture.
+
+Classify the complete capture with the assessment using Workshop sensitivity rules.
+Inspect commands, stdout/stderr and metadata without echoing sensitive values.
+If any portion is sensitive, use the sensitive store and a private reason.
+Never add secrets deliberately to a capture.
+A missing configuration or upload failure leaves local evidence intact and must be reported; never claim it was uploaded.
+
+Run from the configured checkout, substituting paths and record IDs:
+
+```sh
+pixi run memory capture-duct /path/to/finished-run \
+  --store shared --agent AGENT --related ASSESSMENT_UUID \
+  --config /path/to/memory/transport.json
+```
+
+For sensitive captures, use `--store sensitive --reason "classification reason"`.
+Omit `--related` if no assessment exists yet; retain the returned evidence ID for later relations.
+`--config` uploads the artifact immediately, while its small evidence record joins the daily 1000-record batch.
+Without transport configuration, omit that option to stage locally and report publication pending.
+
+The archive includes exact capture files, is content-addressed, and lives separately in annex.
+Normal memory restore/index operations do not download it.
+`memory fetch-artifact REFERENCE_JSON --config CONFIG --output ARCHIVE` explicitly retrieves it with integrity verification.
+Follow the host's configured memory state location; the default is `~/.local/state/skills-workshop/memory`.
+
+Record missing measurements as unknown.
+Duct measures local process work and elapsed waiting; remote model compute, token use and charges require separately reported provider evidence.

@@ -23,7 +23,7 @@ from scripts.memory_store import (
 STATE = Path.home() / ".local/state/skills-workshop/memory"
 
 
-def prepare(kind, state):
+def prepare(kind, state, assigned_treatment=None):
     ident = str(uuid.uuid4())
     work = state / "native-trials" / ident
     work.mkdir(parents=True, mode=0o700)
@@ -34,6 +34,13 @@ def prepare(kind, state):
         if kind == "cli"
         else "heading-tree"
     )
+    if assigned_treatment is not None:
+        if kind != "cli" or assigned_treatment not in (
+            "ambient-baseline",
+            "explicit-skill",
+        ):
+            raise ValueError("invalid treatment assignment")
+        treatment = assigned_treatment
     skill = (ROOT / ".agents/skills/unix-cli-design/SKILL.md").read_bytes()
     if kind == "cli":
         prompt = yaml.safe_load(
@@ -93,7 +100,11 @@ def prepare(kind, state):
                 "cipher unknown; abstain",
             ],
         }
+    agent_input = {key: value for key, value in fixture.items() if key != "rubric"}
+    if treatment == "explicit-skill":
+        agent_input["skill"] = skill.decode()
     files = {
+        "agent-input.json": canonical(agent_input).encode(),
         "fixture.json": canonical(fixture).encode(),
         "treatment-skill.md": skill,
         "protocol.md": Path(__file__).with_name("scheduled-protocol.md").read_bytes(),

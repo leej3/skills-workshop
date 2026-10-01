@@ -7,7 +7,7 @@ from scripts.setup_agent import END, START, setup, status, store_path
 def installation(tmp_path):
     root = tmp_path / "workshop"
     home = tmp_path / "user"
-    for name in ("skills-workshop", "workshop-feedback"):
+    for name in ("skills-workshop", "workshop-feedback", "duct"):
         path = store_path(home) / ".agents" / "skills" / name
         path.mkdir(parents=True)
         (path / "SKILL.md").write_text(f"---\nname: {name}\n---\n")
@@ -26,7 +26,7 @@ def test_preview_is_read_only_and_install_is_repeatable(installation):
     setup(*installation, apply=True)
     assert instructions.read_bytes() == original
     assert instructions.read_text().count(START) == 1
-    for name in ("skills-workshop", "workshop-feedback"):
+    for name in ("skills-workshop", "workshop-feedback", "duct"):
         assert (home / ".agents" / "skills" / name).resolve() == store_path(
             home
         ) / ".agents" / "skills" / name
@@ -104,7 +104,7 @@ def test_all_transitions_preserve_memory_and_keep_off_recovery(installation):
         text = (codex_home / "AGENTS.md").read_text()
         assert f"Workshop mode: {mode}" in text
         assert "workshop enable" in text and "workshop manual" in text
-        for name in ("skills-workshop", "workshop-feedback"):
+        for name in ("skills-workshop", "workshop-feedback", "duct"):
             assert (home / ".agents/skills" / name).is_symlink() == (mode != "off")
             assert (store_path(home) / ".agents/skills" / name / "SKILL.md").exists()
         assert memory.read_text() == '{"preserve": true}'
