@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "9904275b-0c20-4e13-a42c-262d139eadb0",
+  "recorded_at": "2026-10-01T14:30:55.346999+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "annex-migration",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "fc485179a6c493158a11c13f58d1a2ff55e0814813ece8aa33968d12e29b753b",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
