@@ -8,9 +8,3 @@ includes:
   - .apm/skills/build-github-app
 targets:
   - agent-skills
-dependencies:
-  apm:
-    - git: leej3/autoharness/native-skills
-      ref: d58d2f78adbf79a9604c98b11d719740c83c8138
-      skills:
-        - autoharness-reflect

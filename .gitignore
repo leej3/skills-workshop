@@ -13,8 +13,3 @@ apm_modules/
 /.agents/skills/duct/
 /.agents/skills/commit-provenance/
 /.agents/skills/build-github-app/
-/.agents/autoharness/
-
-# APM-generated skill dependencies
-/.agents/skills/autoharness-reflect/
-/apm_modules/

@@ -45,6 +45,5 @@ Activate those controls at user scope with `pixi run setup-agent --apply`; do no
 If setup fails, report it rather than claiming missing skills were loaded.
 Run `pixi run --locked audit-skills` to check integrity and drift.
 
-The external `autoharness-reflect` trial is pinned in `apm.yml` and restored by the same setup task.
-Its launcher requires Python 3 and `uv` on PATH and fetches its pinned runtime on first use.
-Keep trial runtime state in the ignored `.agents/autoharness/` directory and use project-owned skill source for applied improvements.
+`autoharness-reflect` belongs at user scope for reflection across projects, not in Workshop's project dependencies.
+Workshop coordinates discovery, creation, and installation; invoke reflection in the actual work context.

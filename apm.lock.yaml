@@ -1,53 +1,7 @@
 lockfile_version: '1'
 apm_version: 0.31.0
-dependencies:
-- repo_url: leej3/autoharness
-  name: autoharness-native-skills
-  host: github.com
-  resolved_commit: d58d2f78adbf79a9604c98b11d719740c83c8138
-  resolved_ref: d58d2f78adbf79a9604c98b11d719740c83c8138
-  version: 0.1.0
-  virtual_path: native-skills
-  is_virtual: true
-  package_type: skill_bundle
-  deployed_files:
-  - .agents/skills/autoharness-reflect
-  - .agents/skills/autoharness-reflect/SKILL.md
-  - .agents/skills/autoharness-reflect/scripts/run.py
-  deployed_file_hashes:
-    .agents/skills/autoharness-reflect/SKILL.md: sha256:fa7c745ed206d9759b70464ecacda02209ffd462d8a6e6820ff58b001947ef47
-    .agents/skills/autoharness-reflect/scripts/run.py: sha256:f20dee95cd67d6246d6c3d01d7dea4c23b46498789ae81c2e4ebd72f4a1580b8
-  content_hash: sha256:031c024b9c1155b5182ad9ad55ec13f170b59f1ca7dc2c20aa06ee94a57defdc
-  skill_subset:
-  - autoharness-reflect
+dependencies: []
 deployments:
-- kind: project-relative
-  target: agent-skills
-  value: .agents/skills/autoharness-reflect
-  runtime: null
-  scope: project
-  owners:
-  - leej3/autoharness/native-skills
-  active_owner: leej3/autoharness/native-skills
-  content_hash: null
-- kind: project-relative
-  target: agent-skills
-  value: .agents/skills/autoharness-reflect/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - leej3/autoharness/native-skills
-  active_owner: leej3/autoharness/native-skills
-  content_hash: sha256:fa7c745ed206d9759b70464ecacda02209ffd462d8a6e6820ff58b001947ef47
-- kind: project-relative
-  target: agent-skills
-  value: .agents/skills/autoharness-reflect/scripts/run.py
-  runtime: null
-  scope: project
-  owners:
-  - leej3/autoharness/native-skills
-  active_owner: leej3/autoharness/native-skills
-  content_hash: sha256:f20dee95cd67d6246d6c3d01d7dea4c23b46498789ae81c2e4ebd72f4a1580b8
 - kind: project-relative
   target: legacy
   value: .agents/skills/build-github-app
