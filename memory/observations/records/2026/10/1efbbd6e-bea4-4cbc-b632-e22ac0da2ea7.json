@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "1efbbd6e-bea4-4cbc-b632-e22ac0da2ea7",
+  "recorded_at": "2026-10-01T16:49:56.210650+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "pr-refresh",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

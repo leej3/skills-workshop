@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "ba3e7f2a-8ad0-4ccd-995c-70a571292b8e",
+  "recorded_at": "2026-10-01T16:50:22.143925+00:00",
+  "kind": "usage",
+  "skill": "maintain-orinoco-site",
+  "task": "pr-refresh",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

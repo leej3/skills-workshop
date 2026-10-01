@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "97c6c30a-8ec1-4b08-8b06-8e39fa66bd75",
+  "recorded_at": "2026-10-01T16:49:56.608564+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "pr-refresh",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
