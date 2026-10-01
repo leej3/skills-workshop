@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "7fdee234-d5af-4369-aac5-a36e188a38f5",
+  "recorded_at": "2026-10-01T19:29:52.006909+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "remove-projection-overrides",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
