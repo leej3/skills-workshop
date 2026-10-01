@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "e6f2bf73-d189-403f-a526-c96e610f0b64",
+  "recorded_at": "2026-10-01T01:13:21.271393+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "completion-hook-skill-update",
+  "outcome": "success",
+  "task_outcome": "partial",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
