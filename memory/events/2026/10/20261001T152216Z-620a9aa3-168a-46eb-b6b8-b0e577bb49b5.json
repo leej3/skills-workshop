@@ -1,0 +1,27 @@
+{
+  "asserted_by": {
+    "id": "Codex",
+    "kind": "agent"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:620a9aa3-168a-46eb-b6b8-b0e577bb49b5",
+  "occurred_at": "2026-10-01T15:22:16Z",
+  "payload": {
+    "direction": "upstream",
+    "kind": "pull-request",
+    "state": "draft",
+    "summary": "Publish original self-contained Unix CLI design guidance through the Workshop APM package.",
+    "url": "https://github.com/leej3/skills-workshop/pull/13"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7dc4c3f3-dbf8-4e31-beb5-d5202884e9cb",
+  "type": "contribution"
+}

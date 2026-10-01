@@ -146,6 +146,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:bbdb20a217aa41a275cd3d5694b0de3ebcbd429504eb867fe83f630f862f649d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unix-cli-design
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unix-cli-design/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d
 local_deployed_files:
 - .agents/skills/build-github-app
 - .agents/skills/build-github-app/SKILL.md
@@ -163,6 +181,8 @@ local_deployed_files:
 - .agents/skills/duct/agents/openai.yaml
 - .agents/skills/duct/scripts/run.py
 - .agents/skills/duct/scripts/test_run.py
+- .agents/skills/unix-cli-design
+- .agents/skills/unix-cli-design/SKILL.md
 local_deployed_file_hashes:
   .agents/skills/build-github-app/SKILL.md: sha256:0d7a55c8accc0739e3ad1eba41d57190d86ecc8ae9886feb06f53f9ac720ca6f
   .agents/skills/build-github-app/agents/openai.yaml: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
@@ -177,3 +197,4 @@ local_deployed_file_hashes:
   .agents/skills/duct/agents/openai.yaml: sha256:051abdeca7cd8c422c7566270e6e5d5cdc820e5b21aa2ebde62601c5b03d51fd
   .agents/skills/duct/scripts/run.py: sha256:9e1fdabfe78dc83a387cc92b070133fe21eb304ec0bac2278d837f22235e4e78
   .agents/skills/duct/scripts/test_run.py: sha256:bbdb20a217aa41a275cd3d5694b0de3ebcbd429504eb867fe83f630f862f649d
+  .agents/skills/unix-cli-design/SKILL.md: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d

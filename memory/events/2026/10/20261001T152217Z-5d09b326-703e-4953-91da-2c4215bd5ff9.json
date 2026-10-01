@@ -1,0 +1,42 @@
+{
+  "asserted_by": {
+    "id": "apm-lock",
+    "kind": "tool",
+    "runtime": "apm",
+    "runtime_version": "0.31.0"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:5d09b326-703e-4953-91da-2c4215bd5ff9",
+  "occurred_at": "2026-10-01T15:22:17Z",
+  "payload": {
+    "resolution_digest": "sha256:8d31001b688fa4735e3b040b0855b92df36bf16d1fd0a13a642e372eae3ae046",
+    "skill_name": "unix-cli-design",
+    "state": "resolved"
+  },
+  "project_evidence": {
+    "apm_version": "0.31.0",
+    "command": [
+      "apm",
+      "deps",
+      "list"
+    ],
+    "dependency_selector": "leej3/skills-workshop#skill=unix-cli-design",
+    "dirty": true,
+    "lock_digest": "sha256:23034f0486810c573e5666efae0e53cf14689b9634a8bbd0b50b35bf180e4f31",
+    "lock_path": "apm.lock.yaml",
+    "manifest_path": "apm.yml",
+    "project_id": "urn:uuid:4e3a79eb-dd6f-4e2c-b60c-4de70dcdb2e5",
+    "repository_commit": "c21402528de714d16cdb1affcd94cb2b1dd43202"
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7dc4c3f3-dbf8-4e31-beb5-d5202884e9cb",
+  "type": "project-membership"
+}
