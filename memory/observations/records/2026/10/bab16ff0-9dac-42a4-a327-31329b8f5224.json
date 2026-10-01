@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "bab16ff0-9dac-42a4-a327-31329b8f5224",
+  "recorded_at": "2026-10-01T15:03:06.708537+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "template-update-correction",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
