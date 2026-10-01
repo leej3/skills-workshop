@@ -13,7 +13,7 @@ Sensitivity governs derived indexes and context packets as well as original reco
 Current project-native skills and APM dependency management remain in place.
 Current observation storage still uses the existing recorder and private overlay.
 The accepted next storage design uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
-It is tested with synthetic fixtures but is not migrated or scheduled in production.
+Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled. Duct captures have been uploaded and explicitly retrieved. The first production daily batch cycle and independent-host recovery are not yet established by the October 1 evidence.
 
 Entire CLI and Brain are **probed candidates**, not required dependencies.
 No tool below gains canonical storage authority merely because it provides capture, memory, indexing, evaluation, and a UI in one package.
@@ -250,3 +250,7 @@ PageIndex and ChatIndex now have recurring actual-product evaluation slots, with
 Current interface evidence: [PageIndex client source](https://github.com/VectifyAI/PageIndex/blob/main/pageindex/client.py) exposes separate local indexing/chat model backends; [ChatIndex quick start](https://github.com/VectifyAI/ChatIndex#quick-start) uses OpenAI for construction and Anthropic for retrieval. Pin exact source revisions for adapter work and retain native prompts, outputs and modifications. Account-backed compatibility must be demonstrated rather than inferred from these provider interfaces.
 
 The rotation also covers Waza/native skill evaluation, SQLite/qmd/Brain retrieval, native context selection, Entire/native capture and annex storage. Compare tools within their layer using common fixtures and separate quality, operational cost and portability measurements. A blocked integration is useful compatibility evidence, not a zero-quality result or a reason to omit the candidate.
+
+## STAMPED workflow assessment — October 1, 2026
+
+The [version-pinned STAMPED assessment](stamped-workflow-assessment.md) uses the independent stamped-assess skill and canonical record schemas. Its selected modularity boundary is demonstrated; six principle criteria are partial and workflow optimization is unknown. This does not assign an overall STAMPED score. Prioritize exact execution-source preservation, a versioned recovery manifest, independent handoff/recovery and collection-completeness measurements before treating additional retrieval adapters as the main optimization. Twenty-eight focused tests passed; full independent reproduction and controlled before/after comparisons were not attempted.

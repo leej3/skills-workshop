@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "14989f24-e426-4ccc-8109-ba290f742c9a",
+  "recorded_at": "2026-10-01T23:29:24.173189+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "workflow-stamped-assessment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "0254284227ea91cfa8492b23975519ddc6e6e98fe7a43e987e31e3e652d203d8",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

@@ -1,0 +1,10 @@
+schema_version: 0.1.0
+id: workshop-small-team
+record_type: use_case
+title: Durable, replaceable agent-skill workflow for a few people
+objective: Collect sufficient reusable evidence, sustain busy concurrent agents, and replace downstream
+  tools without losing memory or requiring paid proprietary features.
+audience: John and a small group of authorized collaborators
+description: Assess recoverability and operating simplicity of code, control skills, task evidence,
+  annex stores, projections, and native-agent pilots. No enterprise scale requirement. Preserve sensitive
+  boundaries and on-demand log retrieval.
