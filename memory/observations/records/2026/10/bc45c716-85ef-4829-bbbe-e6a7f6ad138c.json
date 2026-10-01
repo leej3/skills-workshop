@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "bc45c716-85ef-4829-bbbe-e6a7f6ad138c",
+  "recorded_at": "2026-10-01T18:42:19.321172+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "document-creation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "db3b742b392caa18d1c7aa968da0bf82391b9888d7cd42c3ec018d61dcfc2f18",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
