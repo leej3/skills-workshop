@@ -136,7 +136,8 @@ Ask “Use $autoharness-reflect to reflect on this completed task and propose us
 Its pinned runtime requires Python 3 and `uv` on PATH.
 User-level availability does not install a completion hook or automatically collect every task.
 
-Reusable source is tracked in `.apm/skills/`: `duct`, `commit-provenance`, and `build-github-app`.
+Reusable source is tracked in `.apm/skills/`: `duct`, `commit-provenance`, `build-github-app`, and `unix-cli-design`.
+Use `unix-cli-design` to build or review composable command-line interfaces, including pipes, output formats, exit status, and interruption.
 The root `apm.yml` publishes this collection and declares what APM may deploy.
 Workshop's own setup generates ignored copies under `.agents/skills/` and records their hashes in `apm.lock.yaml`.
 The Workshop controls live in the separate `controls/` APM package and are activated only at user scope.

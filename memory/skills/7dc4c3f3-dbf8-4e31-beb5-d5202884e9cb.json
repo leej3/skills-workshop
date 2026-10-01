@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "artifacts": [],
+  "created_at": "2026-10-01T15:19:53Z",
+  "extensions": {},
+  "id": "urn:uuid:7dc4c3f3-dbf8-4e31-beb5-d5202884e9cb",
+  "name": "unix-cli-design",
+  "notes": "",
+  "preferred_source_id": "urn:uuid:7a4fbf9f-f622-444a-9377-5519e131f297",
+  "relations": [],
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/skill-v0.schema.json",
+  "sources": [
+    {
+      "external_ids": {},
+      "first_seen_at": "2026-10-01T15:19:53Z",
+      "id": "urn:uuid:7a4fbf9f-f622-444a-9377-5519e131f297",
+      "kind": "git",
+      "locator": "https://github.com/leej3/skills-workshop.git",
+      "notes": "",
+      "role": "canonical",
+      "subpath": ".apm/skills/unix-cli-design"
+    }
+  ],
+  "summary": "Design and review Unix CLI composition: pipes, streams, output formats, exit status, and interruption.",
+  "tag_ids": [],
+  "updated_at": "2026-10-01T15:19:53Z"
+}

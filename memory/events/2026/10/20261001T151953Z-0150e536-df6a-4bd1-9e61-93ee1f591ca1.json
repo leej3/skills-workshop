@@ -1,0 +1,24 @@
+{
+  "asserted_by": {
+    "id": "John",
+    "kind": "human"
+  },
+  "evidence": [],
+  "extensions": {},
+  "id": "urn:uuid:0150e536-df6a-4bd1-9e61-93ee1f591ca1",
+  "occurred_at": "2026-10-01T15:19:53Z",
+  "payload": {
+    "decision": "adopted",
+    "reason": "John requested an original reusable skill in Skills Workshop and installation into Orinoco Lite, with CLI alignment after the skill PR merges."
+  },
+  "recorded_by": {
+    "tool": "skills-workshop",
+    "version": "0.1.0"
+  },
+  "review": {
+    "state": "unreviewed"
+  },
+  "schema": "https://github.com/leej3/skills-workshop/schemas/memory/event-v0.schema.json",
+  "skill_id": "urn:uuid:7dc4c3f3-dbf8-4e31-beb5-d5202884e9cb",
+  "type": "consideration"
+}
