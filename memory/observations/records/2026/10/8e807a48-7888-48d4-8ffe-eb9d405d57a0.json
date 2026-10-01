@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "8e807a48-7888-48d4-8ffe-eb9d405d57a0",
+  "recorded_at": "2026-10-01T19:46:31.466716+00:00",
+  "kind": "usage",
+  "skill": "compare-orinoco-provenance",
+  "task": "projection-architecture",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
