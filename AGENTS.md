@@ -39,7 +39,8 @@ Run `pixi run --locked setup-skills` before starting work; it restores the versi
 Start a new agent task after setup so native discovery sees the installed skills.
 APM-owned copies are generated and Git-ignored; do not edit or commit them.
 This repository publishes reusable source from `.apm/skills/`; edit that source here and run `pixi run apm install` to refresh the deployment lock.
-Other consumer projects must pin a published Workshop revision and never develop these skills in their deployed copies.
+Consumers pin published skill sources through APM and never develop deployed copies.
+Keep their setup and agent guidance independent of Workshop; its repository URL is only a dependency coordinate.
 Workshop control-skill source is tracked in `controls/skills/` and published separately through `controls/apm.yml`.
 Activate those controls at user scope with `pixi run setup-agent --apply`; do not place them in this project's discovery directory.
 If setup fails, report it rather than claiming missing skills were loaded.

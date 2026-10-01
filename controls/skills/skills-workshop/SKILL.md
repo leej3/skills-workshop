@@ -111,9 +111,13 @@ Preserve existing instructions; add setup and audit commands at the scope where 
 APM alone owns the downstream manifest, lock, external dependency graph, deployment, update, and drift state.
 Use the metadata-only consumer workflow for every reusable skill APM can install.
 Develop reusable source in a dedicated skill repository, normally `con/skills`; never develop or commit its deployed copies in a consumer.
-Add a pinned APM setup/development dependency through the project's existing environment manager, a frozen-install setup task, targeted ignores for `apm_modules/` and APM-owned deployment paths, concise setup and audit commands in the applicable `AGENTS.md`, and a README/development setup note.
+Add a pinned APM setup/development dependency through the project's existing environment manager, a frozen-install setup task, targeted ignores for `apm_modules/` and APM-owned deployment paths, and concise setup and audit commands in the applicable `AGENTS.md`.
 Use root instructions for shared setup and nested instructions for package-specific differences; do not flatten or duplicate a project's existing hierarchy.
 Track the manifest, generated lock, and setup metadata; validate a fresh metadata-only consumer with frozen restoration and audit.
+Keep downstream instructions independent of Workshop: use the project's APM setup and audit tasks, and refer to external skills' canonical source repositories generically.
+Do not add Workshop commands, checkout paths, control skills, or Workshop-specific contribution instructions to the consumer.
+A Workshop repository URL in APM dependency metadata is an ordinary source coordinate, not a requirement to use Workshop.
+Do not add README skill catalogs or setup narration unless the user requests it or human onboarding requires it.
 Use `install-apm-skills` when available for the full consumer workflow and `author-apm-skills` for explicit APM distribution or collection-maintenance requests; the latter must not take over generic skill creation.
 These workflows are maintained in `con/skills`; downstream setup must not require the Workshop or either skill to be preinstalled.
 
@@ -131,7 +135,8 @@ pixi run workshop audit <project>
 
 Review the printed APM command and preview before applying.
 `workshop install --apply` automatically adds targeted `.gitignore` entries for `apm_modules/` and APM-deployed skill directories identified by the lockfile.
-When installing directly with APM, add those entries as part of installation and verify them with `git check-ignore`; retain project-authored skills in Git.
+When installing directly with APM, add those entries as part of installation and verify them with `git check-ignore`; inspect the staged diff to ensure the installed external skill source is not tracked.
+Retain project-authored skills in Git.
 This is the normal downstream workflow and requires no extra approval or organization-policy exception.
 Organization-policy discovery is independent of Git tracking; do not disable it merely to ignore generated files.
 Never pass APM `--force` through the workshop.

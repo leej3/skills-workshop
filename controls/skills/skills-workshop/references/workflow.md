@@ -47,7 +47,9 @@ The closest applicable file resolves conflicts between repository instructions; 
 Preserve existing content and conventions, including established instruction-file links.
 Add only the concrete setup, restoration, and validation commands needed for the installed dependency, using the project's environment manager and the correct working directory.
 Put shared setup at the root and package-specific differences in the relevant nested file; add a new nested file only when distinct guidance is needed.
-Keep `README.md` focused on human-facing overview and onboarding, and update command guidance when setup changes.
+Keep `README.md` focused on human-facing overview and onboarding; do not add a skill catalog or installation narrative by default.
+Consumer instructions describe generic APM restoration and audit, without Workshop commands, paths, or source-editing directives.
+User-level Workshop controls stay outside the consumer; a source URL in APM metadata does not make those controls a project dependency.
 Project `AGENTS.md` files remain tracked even when generated skill deployments are ignored.
 Client-specific configuration is separate from these portable instructions; configure another client only when requested.
 
@@ -55,10 +57,11 @@ Client-specific configuration is separate from these portable instructions; conf
 
 Reusable skills are authored in a dedicated skill repository, normally `con/skills`.
 Use APM for any selected reusable skill it can manage.
-Consumers track `apm.yml`, `apm.lock.yaml`, the pinned APM environment dependency, setup task, targeted ignores, and concise AGENTS.md/README setup guidance.
+Consumers track `apm.yml`, `apm.lock.yaml`, the pinned APM environment dependency, setup task, targeted ignores, and concise `AGENTS.md` setup guidance.
 Ignore package caches and generated deployment paths as part of every downstream installation; never ignore canonical source in its source repository.
 `workshop install --apply` adds targeted ignores from the APM deployment ledger automatically.
 For direct APM installation, add equivalent entries and verify with `git check-ignore`.
+Inspect the staged diff to confirm that external skill source is absent; ignore rules alone do not untrack files.
 Organization-policy discovery is separate from Git tracking and is not a prerequisite for these ignores.
 Run setup before starting the agent so discovery sees installed skills.
 Prove restoration and audit from tracked metadata without requiring a Workshop checkout.
