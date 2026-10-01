@@ -61,3 +61,10 @@ Raw responses, frozen inputs, artifact hashes, runtime conditions and separate g
 PageIndex/ChatIndex are still evaluation candidates, not deployed components.
 This run does not test their indexing or traversal implementation.
 Their actual adapters remain future work; using Luna through the native agent runtime does not automatically provide an API backend for either project.
+
+## Continuing evaluations
+
+The daily Luna job now follows a [seven-day cross-layer rotation](scheduled-protocol.md#daily-candidate-rotation), with PageIndex on Fridays and ChatIndex on Saturdays, beginning October 2–3, 2026.
+Their first work is real-product adapter implementation under the existing account-backed boundary.
+Subsequent milestones collect indexing, retrieval, updates, citations, measured resources and recovery evidence against matched baselines.
+Enrollment is not a completed benchmark; keep interface blockers and measured outcomes distinct.
