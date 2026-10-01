@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "d7c15a4d-f377-4c18-ba34-801ef87959d2",
+  "recorded_at": "2026-10-01T14:17:34.021559+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "comparison-review-implementation",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
