@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "96cb26d5-242a-4998-954d-3e90bfce62dd",
+  "recorded_at": "2026-10-01T21:15:21.131194+00:00",
+  "kind": "usage",
+  "skill": "gh-fix-ci",
+  "task": "restacked-pr-ci-repair",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
