@@ -1,0 +1,16 @@
+[workspace]
+authors = ["leej3 <johnleenimh@gmail.com>"]
+channels = ["conda-forge"]
+name = "annex-trial"
+platforms = [{ platform = "osx-arm64", macos = "14.0" }]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = ">=3.14.7,<3.15"
+git = ">=2.56.0,<3"
+
+[pypi-dependencies]
+datalad = ">=1.6.5, <2"
+git-annex = ">=10.20260901.post1, <11"
