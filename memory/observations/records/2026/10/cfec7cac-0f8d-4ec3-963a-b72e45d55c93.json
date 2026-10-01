@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "cfec7cac-0f8d-4ec3-963a-b72e45d55c93",
+  "recorded_at": "2026-10-01T01:40:12.971035+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "content-migration-review",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

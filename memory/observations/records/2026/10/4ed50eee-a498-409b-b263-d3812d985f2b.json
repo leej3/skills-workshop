@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "4ed50eee-a498-409b-b263-d3812d985f2b",
+  "recorded_at": "2026-10-01T01:40:12.778197+00:00",
+  "kind": "usage",
+  "skill": "datalad-provenance",
+  "task": "content-migration-review",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
