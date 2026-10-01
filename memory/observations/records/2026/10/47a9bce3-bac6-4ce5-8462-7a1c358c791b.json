@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "47a9bce3-bac6-4ce5-8462-7a1c358c791b",
+  "recorded_at": "2026-10-01T15:35:02.366683+00:00",
+  "kind": "usage",
+  "skill": "unix-cli-design",
+  "task": "cli-alignment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
