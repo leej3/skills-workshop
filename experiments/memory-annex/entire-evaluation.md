@@ -16,11 +16,8 @@ A flush snapshots complete records up to a cutoff while agents continue in new s
 Never truncate an active agent file or treat an incomplete final JSONL line as a complete record.
 
 A designated aggregator per store combines sealed segments across agents, deduplicates identical record IDs, and rejects conflicting contents for the same ID.
-Agents on one machine can share a spool; agents on different machines need an explicit inbox-transfer mechanism.
-Local file locks alone cannot coordinate multiple hosts.
-For this small deployment, configure one aggregation owner per store and use a local lock to prevent overlapping daily runs, rather than inventing distributed leader election.
-Offline agents' records join the next successful flush.
-Cross-host inbox transport is still to be implemented.
+Agents share a local spool, with a local lock per store preventing overlapping daily aggregation runs.
+Records arriving after the cutoff join the next daily flush.
 
 The aggregator persists a manifest mapping record IDs and source offsets to batch IDs, uploads annex content, publishes the independent batch refs, and retries annex metadata synchronization.
 Source segments are acknowledged only when publication is confirmed.
@@ -29,7 +26,8 @@ No automatic staging deletion is enabled by this design document.
 
 Sensitivity applies to each entire record and its supporting evidence.
 A sensitive record enters only the sensitive spool and aggregation.
-Classification reasons, staging files, manifests, and generated indexes inherit the relevant store's visibility.
+Classification reasons, staging files, and publication manifests inherit the relevant store's visibility.
+Local retrieval and synthesis may combine shared and sensitive evidence; derived insights are classified on their own publishable content.
 The separate private payload remote remains a transport choice for the sensitive store, not a third assessment classification.
 
 This records the accepted policy; it does not migrate the current recorder or install a daily scheduled job.
@@ -105,12 +103,23 @@ agent observations and captured evidence
        disposable projection/normalization
                  |
        Brain keyword search and source references
+                 |
+       synthesize across shared + sensitive evidence
+                 |
+       obscure sensitive details in derived insights
+                 |
+       publish the resulting insight store
 ```
 
 Keep assessment records distinct from captured transcripts: a successful checkpoint capture is not a skill assessment.
 Preserve raw evidence and provenance alongside assessments, rather than converting everything into Brain facts.
 Brain-authored facts worth retaining must flow back through the normal classification and record path; the Brain directory must remain rebuildable.
-Use separate generated views for shared and sensitive retrieval so publishing a shared index cannot accidentally include the sensitive store.
+Aggregate across shared and sensitive evidence locally to produce the overall insights.
+Sensitive evidence may inform a shareable insight when its sensitive details are obscured or omitted in the published result.
+Publish that derived insight store; raw sensitive facts, identifying details, and revealing source excerpts remain private.
+Keep full evidence links locally so insights remain traceable without requiring private evidence to be generally retrievable.
+A derived insight is not automatically sensitive merely because some supporting evidence is private; apply the existing sensitivity judgment to the insight itself.
+The local combined index is a working input to synthesis, while the published store contains the resulting publishable insights.
 
 Entire is useful as a capture/import component, but its current primary storage contract is Git-backed.
 Non-Git plugins are write-only mirrors, and annex pointer hydration is not a built-in primary read path.
