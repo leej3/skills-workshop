@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "3e2a4629-cf6d-46a7-a734-08c1add2d2f5",
+  "recorded_at": "2026-10-01T20:43:25.477303+00:00",
+  "kind": "usage",
+  "skill": "unix-cli-design",
+  "task": "portable-memory-pilots",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

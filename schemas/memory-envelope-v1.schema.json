@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Portable Workshop evidence envelope v1",
+  "type": "object",
+  "required": ["schema_version", "id", "kind", "occurred_at", "classification", "source", "context", "payload", "artifacts", "relations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "format": "uuid"},
+    "kind": {"enum": ["observation", "evaluation", "retrieval", "evidence", "decision"]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "classification": {
+      "type": "object", "required": ["store", "policy", "reason"], "additionalProperties": false,
+      "properties": {"store": {"enum": ["shared", "sensitive"]}, "policy": {"type": "string", "minLength": 1}, "reason": {"type": ["string", "null"]}}
+    },
+    "source": {
+      "type": "object", "required": ["producer", "version", "schema"], "additionalProperties": false,
+      "properties": {"producer": {"type": "string", "minLength": 1}, "version": {"type": ["string", "null"]}, "schema": {"type": "string", "minLength": 1}}
+    },
+    "context": {
+      "type": "object", "required": ["task_id", "agent_id", "runtime", "model", "skill", "conditions", "missing"], "additionalProperties": false,
+      "properties": {
+        "task_id": {"type": ["string", "null"]}, "agent_id": {"type": ["string", "null"]},
+        "runtime": {"type": ["object", "null"]}, "model": {"type": ["object", "null"]},
+        "skill": {"type": ["object", "null"]},
+        "conditions": {"type": "object"}, "missing": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "payload": {},
+    "artifacts": {
+      "type": "array", "items": {
+        "type": "object", "required": ["name", "media_type", "sha256", "bytes_base64"], "additionalProperties": false,
+        "properties": {"name": {"type": "string", "minLength": 1}, "media_type": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "bytes_base64": {"type": "string"}}
+      }
+    },
+    "relations": {"type": "array", "items": {"type": "object", "required": ["relation", "id"], "properties": {"relation": {"type": "string"}, "id": {"type": "string"}}}}
+  }
+}

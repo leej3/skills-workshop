@@ -204,3 +204,9 @@ Use `pixi run format` to format Python code.
 
 Workshop code is [MIT licensed](LICENSE).
 Upstream skills retain their own terms.
+
+## Portable memory pilot
+
+Daily annex collection and account-backed Luna evaluation now have a [collection contract and operator commands](docs/agents/memory-collection.md).
+See [initial replaceable-tool pilots](experiments/context-pilots/README.md) for measured results and untested boundaries.
+Existing feedback sources remain intact during this trial.

@@ -226,3 +226,13 @@ Root `AGENTS.md` makes this maintenance part of material tool reviews.
 - [Entire probe](../../experiments/memory-annex/entire-evaluation.md): preserves concrete results.
   Its Brain-first recommendation is superseded by the comparative candidate approach here; the compatibility finding still stands.
 - [Evaluation protocol](evaluation-protocol.md): controls interpretation of evaluation evidence regardless of runner.
+
+## Collection and first pilots — 2026-10-01
+
+The [portable collection contract](memory-collection.md) is implemented with per-agent journals, whole-record routing, daily 1000-record batches, immutable annex refs, recovery and rebuildable projections.
+The [pilot results](../../experiments/context-pilots/README.md) retain the execution boundary: Waza paired mock plumbing completed; SQLite/qmd/Brain lexical comparison completed; account-backed Luna trials scheduled locally; actual PageIndex/ChatIndex model-backed adapters remain pending.
+No product becomes canonical storage.
+
+The first six-query comparison passed 6/6 coarse checks for SQLite and qmd and 5/6 for Brain, which returned a result for an absent term.
+This is evidence for a follow-up abstention test, not a general quality ranking.
+Model cost, semantic quality and isolated skill effectiveness remain unmeasured.

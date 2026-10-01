@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "00cd6659-f22d-40bd-888c-ccc651e9b8da",
+  "recorded_at": "2026-10-01T20:43:24.156574+00:00",
+  "kind": "usage",
+  "skill": "datalad",
+  "task": "portable-memory-pilots",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "56d1072c2a157a5bde2df3b1698bf545896e02d6f216cd4675bb7fe2b978d855",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
