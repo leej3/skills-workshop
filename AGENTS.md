@@ -48,3 +48,17 @@ Run `pixi run --locked audit-skills` to check integrity and drift.
 
 `autoharness-reflect` belongs at user scope for reflection across projects, not in Workshop's project dependencies.
 Workshop coordinates discovery, creation, and installation; invoke reflection in the actual work context.
+
+
+## Tool landscape and architecture assessments
+
+Keep cumulative assessments of tools, protocols, and architectural alternatives in `docs/agents/`.
+Before proposing or adopting a component, consult `docs/agents/context-stack-landscape.md` and the relevant existing research ledger.
+Update the landscape during material tool reviews, including candidates tested and rejected; do not leave the only assessment in chat or an experiment directory.
+Keep executable fixtures and detailed run instructions with experiments, and link them from the assessment.
+
+For each materially assessed candidate, record its roles (including overlaps), primary sources, review date, evidence level, current decision, data/export boundary, hosted or model dependencies, and the next discriminating test.
+Distinguish source-reviewed claims, local probes, production use, and untested hypotheses; a candidate listing is not adoption or evidence of skill use.
+Treat the landscape diagram as a map of interchangeable capabilities, not an installation plan.
+Preserve canonical identities, original evidence, sensitivity decisions, and portable records independently of downstream indexes and application databases.
+Update an existing assessment rather than creating a parallel ledger, and mark superseded conclusions explicitly.

@@ -1,6 +1,12 @@
 # Current direction: memory plus composed tools
 
-Decision date: 2026-08-17.
+Decision date: 2026-08-17; context and memory boundary clarified 2026-10-01.
+
+The [context-stack landscape](context-stack-landscape.md) extends this direction across capture, evaluation, retrieval, and agent context assembly.
+Canonical memory remains tool-neutral; Entire and Brain are experimental candidates, not architecture dependencies.
+The accepted storage direction is agent-specific staging, daily per-store aggregation into 1,000-record batches, and annex payloads with independent Git refs.
+That migration and daily scheduling are not implemented.
+The current recorder still uses its existing Git-backed records and private overlay.
 
 ## Decision
 
@@ -73,7 +79,8 @@ Use APM for every accepted external downstream dependency.
 This preserves ASM's strong human and agent search experience while giving collaborators one project-local `apm.yml` and `apm.lock.yaml`.
 
 This repository now dogfoods that model.
-It tracks project-owned skills once under `.agents/skills` and carries no speculative APM manifest, lock, deployment, or bootstrap.
+It tracks project-owned skills under `.agents/skills` and now also has an APM manifest, lock, and frozen-install setup for external reusable dependencies.
+The earlier native-only setup description is superseded.
 The workshop memory records project membership and real use without copying either native source or APM state.
 
 A native skill graduates to an independent Git/APM dependency when another project needs it or it gains an independent versioned lifecycle.

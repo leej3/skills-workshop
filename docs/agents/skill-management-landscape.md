@@ -11,6 +11,9 @@ The Agent Skills repository was assessed at commit [`69ef37e`](https://github.co
 The standard currently has no tagged release, so claims in this report should be rechecked as its documentation and client implementations evolve.
 Source-code links are pinned where implementation details matter; product documentation otherwise reflects the research date.
 
+For the wider agent context and evaluation stack, use the [context-stack landscape](context-stack-landscape.md).
+This ledger retains the detailed skill discovery, packaging, and standards assessments.
+
 ## Research status and maintenance method
 
 The original pass was deep but targeted: it began with the three supplied upstreams, the Agent Skills specification, major vendor clients, GitHub CLI, and Vercel `skills`.

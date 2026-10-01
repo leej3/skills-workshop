@@ -27,7 +27,8 @@ Use frequency and self-reported success describe observed use, not causal benefi
 Structural validation does not establish correctness or skill effectiveness.
 Preserve rejected proposals and their evidence so future agents can learn from them.
 Routine outcomes remain concise; qualitative reports are for exceptional lessons.
-Sensitive details stay in the private overlay rather than forcing all records private.
+The current recorder uses a private overlay.
+For the accepted annex migration, any sensitive part makes the entire record sensitive; aggregation and derived views must preserve that classification.
 
 ## Document indexing
 
@@ -52,4 +53,5 @@ Preserve domain-specific judgments and human calibration instead of turning ever
 Exercise the native AutoHarness bridge in a real Codex parent/subagent task and retain a Claude regression case.
 Then normalize host events and install a completion adapter with explicit task identity and retry handling.
 Compare candidate and baseline skills on matched fixtures, with independent human-calibrated judgments.
-The evaluation protocol, rather than an external runner, is the principal gap.
+Use the [context-stack landscape](context-stack-landscape.md) to compare external runners and retrieval providers.
+Runner choice and evaluation protocol are separate concerns; neither has been settled by the Entire probe.

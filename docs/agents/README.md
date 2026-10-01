@@ -16,6 +16,8 @@ Git history, rather than the active documentation tree, preserves old exploratio
 
 ## Current references
 
+- [Context stack: scope diagram, tool choices, and assessment ledger](context-stack-landscape.md)
+
 - [Workshop CLI and workflow reference](workshop-reference.md)
 - [Clean installation check](clean-install.md)
 

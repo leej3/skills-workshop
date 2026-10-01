@@ -85,7 +85,11 @@ A normal session refresh can overwrite this projection, so this is a demonstrate
 Source inspection is consistent with the result: Brain's conversation parser reads assistant text from `message.content` for an `assistant` record, whereas the compact export has top-level `content`.
 Source snapshots inspected were CLI `30fa2a79ffe2c269914b036df62084ba25c94921` and Brain `f423963df61fe70077234170567055aa88cb3e62`; runtime findings above refer to the released binaries, not an assumption that main equals a release.
 
-## Recommended integration boundary
+## Provisional integration boundary
+
+**Superseded recommendation:** the [context-stack landscape](../../docs/agents/context-stack-landscape.md) keeps Brain as one retrieval candidate alongside other providers.
+The diagram below describes this experiment, not a selected Workshop-wide architecture.
+The probe findings remain valid within their stated scope.
 
 ```text
 agent observations and captured evidence
