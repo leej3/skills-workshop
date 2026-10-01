@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "814d05d3-5a59-4a0d-a062-909332c21466",
+  "recorded_at": "2026-10-01T01:24:57.850791+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "skill-refinement",
+  "outcome": "success",
+  "task_outcome": "success",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
+  "model": "gpt-6-astra",
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
