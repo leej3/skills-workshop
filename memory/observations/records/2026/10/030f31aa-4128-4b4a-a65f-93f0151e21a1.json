@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "030f31aa-4128-4b4a-a65f-93f0151e21a1",
+  "recorded_at": "2026-10-01T21:02:57.534212+00:00",
+  "kind": "usage",
+  "skill": "organize-project-docs",
+  "task": "upstream-build-adoption",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
