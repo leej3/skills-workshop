@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "a8a72dc8-e8fa-45da-9170-6995eaf98ae1",
+  "recorded_at": "2026-10-01T16:50:39.313974+00:00",
+  "kind": "usage",
+  "skill": "unix-cli-design",
+  "task": "cli-rebase",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

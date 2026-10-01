@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "d9d5fb6a-8fba-4a4f-a263-3336901816d7",
+  "recorded_at": "2026-10-01T16:50:39.117381+00:00",
+  "kind": "usage",
+  "skill": "skills-workshop",
+  "task": "dependency-maintenance",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
