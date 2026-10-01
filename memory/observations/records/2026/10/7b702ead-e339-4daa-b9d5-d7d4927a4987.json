@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "7b702ead-e339-4daa-b9d5-d7d4927a4987",
+  "recorded_at": "2026-10-01T13:40:25.245425+00:00",
+  "kind": "usage",
+  "skill": "openai-docs",
+  "task": "hook-behavior",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
