@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "f9f90c5b-7806-456c-956c-2a7379b0f3a3",
+  "recorded_at": "2026-10-01T17:52:27.053846+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "entire-integration-experiment",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

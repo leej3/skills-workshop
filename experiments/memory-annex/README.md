@@ -158,8 +158,8 @@ Clone used `--no-local` to avoid hardlink shortcuts.
 Indexing starts from already available payloads and excludes download time.
 The script does not simulate realistic prose search relevance, network failures, long-term annex-log growth, compaction, or multiple human accounts.
 
-Start with batches around 1,000 records or roughly 1 MB, plus a time/session flush for low-volume writers.
-This is a tuning starting point, not a hard limit.
+Use batches of 1,000 records and one daily flush per store, aggregating across agents before emitting a smaller remainder.
+See the [accepted policy and Entire evaluation](entire-evaluation.md) for staging, recovery, and integration details.
 A local durable queue should acknowledge individual assessments before sealing and uploading a batch.
 Keep batches immutable and separated by visibility; rebuild a local SQLite index from accessible content.
 Do not scan all history or run retention maintenance on every assessment.
