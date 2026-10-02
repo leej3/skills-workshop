@@ -111,3 +111,9 @@ pixi run python experiments/context-pilots/check_replaceability.py \
 
 Use `--resume` with that same workspace after interrupted publication.
 The probe writes synthetic refs and payloads; it never deletes remote evidence.
+
+## PageIndex Luna adapter checkpoint — October 2, 2026
+
+The [pinned-source checkpoint](pageindex-2026-10-02.md) reviewed PageIndex `6d23caf416858f2ca136840305d1f479a86f6ef7` and pinned ChatIndex `7df2c9208db6f113f85a6c09295bec7f0f2114e7` for Saturday.
+PageIndex's current local indexer uses LiteLLM chat completions; its tree traversal uses the OpenAI Agents Responses API or provider-specific interfaces.
+The scheduled account-backed Luna runtime is available as an agent/CLI invocation, not as either callable provider interface. No account requests or PageIndex product execution occurred, so there are no quality or performance measurements. The adapter checkpoint is blocked pending a local transport bridge that preserves the upstream request/response semantics; indexing and traversal must be demonstrated separately before retrieval is reported.

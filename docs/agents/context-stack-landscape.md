@@ -170,8 +170,8 @@ Synthesized claims must retain supporting sources and their status instead of si
 | [SQLite FTS5](https://sqlite.org/fts5.html) | Probed structured/lexical baseline | Local, model-free, rebuildable index | Exact structured results, evidence recall and incremental update correctness |
 | [qmd](https://github.com/tobi/qmd/blob/main/README.md) | Source-reviewed; strong file-retrieval comparator. BM25, vectors, expansion, reranking, CLI/MCP | Local SQLite/GGUF inference; initial model downloads. Ordinary source files + YAML config; lexical route needs no LLM | Its `qmd bench` plus Workshop fixtures: compare lexical/hybrid with citation correctness and memory use |
 | [Entire Brain](https://github.com/entireio/entire-brain/blob/main/docs/reference.md) | Probed 0.1.0 document/fact retrieval; transcript adapter required; semantic retrieval untested | Local deterministic path, optional model distillation and Graph. Default setup can backfill/install watcher; explicit controls needed. Facts are not our authoritative store | Same corpus and queries as SQLite/qmd; rebuild from canonical evidence without retaining proprietary IDs |
-| [PageIndex](https://github.com/VectifyAI/PageIndex/blob/main/README.md) | Active recurring evaluation candidate; local SDK/model adapter milestone pending | October 1 SDK source review: local indexing/chat exposes model backends; an account-backed Luna adapter remains unverified. Preserve document digest/page mapping | Page-cited questions on long evidence documents against plain text search; cost/egress included |
-| [ChatIndex](https://github.com/VectifyAI/ChatIndex/blob/main/README.md) | Active recurring evaluation candidate; actual construction/retrieval adapter milestone pending | Example uses OpenAI construction and Anthropic querying; local JSON with original-message leaves. Provider generalization/incremental updates need verification | Long-session questions, exact message citations, update cost and removal behavior |
+| [PageIndex](https://github.com/VectifyAI/PageIndex/blob/main/README.md) | Active recurring evaluation candidate; **blocked at adapter boundary**, source pinned October 2 to `6d23caf416858f2ca136840305d1f479a86f6ef7` | Current local SDK source uses LiteLLM chat completions for indexing and OpenAI Agents Responses/provider-native interfaces for tree traversal. Codex account-backed Luna is an agent/CLI invocation, not either callable endpoint. No product execution or performance result. See [checkpoint](../../experiments/context-pilots/pageindex-2026-10-02.md). | Build a credential-free local transport bridge; prove one real upstream indexing request, then structured traversal, before comparing page citations |
+| [ChatIndex](https://github.com/VectifyAI/ChatIndex/blob/main/README.md) | Active recurring evaluation candidate; pinned for October 3 to `7df2c9208db6f113f85a6c09295bec7f0f2114e7`; no adapter or execution assessment yet | October 2 source pin only. Keep the prior source-reviewed note separate from this uninspected revision; preserve local JSON and original-message leaves. | Review the pinned request/response seams and the account-backed adapter boundary; construction, citations, updates, and removal remain unmeasured |
 | [Mem0 OSS](https://github.com/mem0ai/mem0) | Source-reviewed; exploratory extraction, personalization, memory update and retrieval | Configurable models/vector services, library/self-host/cloud options. [Enumeration/history APIs](https://docs.mem0.ai/open-source/features/rest-api) do not yet prove lossless evidence round-trip | Test whether inferred facts preserve provenance, corrections and whole-record sensitivity |
 | [Letta Code](https://github.com/letta-ai/letta-code/blob/main/README.md) | Source-reviewed; broader stateful runtime/working-memory candidate, not a drop-in index | Cloud default; documented local backend and Git MemFS. Memory/transcript export exists; full AgentFile export removed. Keep runtime state distinct from canonical records | Only if runtime-owned persistent context becomes a requirement; prove local restore/export first |
 
@@ -264,3 +264,24 @@ Skill comparisons prepare matched pairs with identical frozen inputs, randomized
 Local synthesis may aggregate across shared and sensitive evidence and publish derived insights with sensitive details obscured; inherited private provenance alone does not force the resulting insight to be private.
 
 SQLite FTS5 and qmd 2.8.3 passed the same three positive and one absent-term queries after a live annex publication and fresh local restore on October 2. Canonical evidence IDs/text hashes agreed and a one-byte log remained lazy until explicit retrieval. This supports interchangeability of these lexical projections, not a general quality ranking. The [reproducible replacement probe](../../experiments/context-pilots/README.md#reliability-and-replaceability--october-2-2026) retains the upload failure/retry and scope limits. Next test: representative held-out questions and incremental rebuild behavior.
+
+## PageIndex account-backed adapter checkpoint — 2026-10-02
+
+The pinned PageIndex source changed substantially from the earlier local SDK
+review. Its current local indexing path uses LiteLLM chat completions, while
+local tree traversal uses the OpenAI Agents Responses API or provider-specific
+adapters. The SDK quickstart's Luna model name is configured through an OpenAI
+API key. The available account-backed Luna boundary exposes Codex agent/CLI
+execution, with no callable LiteLLM endpoint or native Responses/function
+call interface. A bridge would have to map upstream request schemas to Luna
+turns and map structured outputs back into provider response envelopes. The
+Friday milestone therefore stopped at source review: no adapter was
+implemented, no model request was made, and no PageIndex indexing/retrieval
+result or performance score is claimed.
+
+The next discriminating step is a local credential-free bridge for the actual
+index request format, followed by a separate check that structured function
+calls can resume PageIndex's own traversal loop. Retained evidence and exact
+source digests are in [the October 2 checkpoint](../../experiments/context-pilots/pageindex-2026-10-02.md);
+its account-backed request count is zero. ChatIndex is pinned for October 3,
+but its new revision has not yet had its interface reviewed.
