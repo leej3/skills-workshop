@@ -18,6 +18,8 @@ Superseding the initial planning status: the transitional collector is implement
 Entire CLI and Brain are **probed candidates**, not required dependencies.
 No tool below gains canonical storage authority merely because it provides capture, memory, indexing, evaluation, and a UI in one package.
 
+Multi-host support is an explicit non-goal. Collection and aggregation serve agents sharing one local environment.
+
 ## Scope diagram
 
 Solid arrows show data or work flow; dashed arrows show feedback, selection, or optional use.

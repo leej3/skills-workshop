@@ -29,7 +29,8 @@ Changing classification after publication needs explicit remediation of the orig
 Each agent stages in its own SQLite file outside Git.
 An identity registry rejects conflicting IDs across agents and stores.
 A designated aggregator per store seals one day at a time under an OS lock.
-Multiple hosts must deliver to that aggregator; independent host aggregation is not a global daily coordinator.
+All agents use the local staging area.
+Multi-host support is an explicit non-goal; do not design host-to-host transfer or distributed coordination.
 
 The collector seals yesterday in America/New_York, using receive time to avoid including late deliveries retroactively. It groups all eligible agents' records into 1000-record batches, with at most one remainder per day/store.
 Identical records deduplicate by ID.
@@ -95,7 +96,7 @@ Every explicit batch commit resolves fresh Codex provenance; missing provenance 
 The journals and outbox currently retain all history and aggregation scans retained staging.
 This is suitable for the initial few-person trial, not a claim of unbounded throughput.
 Migration of other curated Workshop memory families and replacing the feedback recorder's Git compatibility path remain separate work.
-First collect reliable evidence; use observed costs before adding compaction or distributed coordination.
+First collect reliable evidence; use observed costs before adding compaction.
 
 ## Duct captures as on-demand evidence
 
