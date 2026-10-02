@@ -53,7 +53,18 @@ def public_root():
             )["workshop_root"]
         except (OSError, ValueError, KeyError):
             return private_root().parent / "feedback-shareable"
-    return Path(root).expanduser() / "memory/observations"
+    root = Path(root).expanduser()
+    if (root / "memory-storage.json").is_file():
+        return (
+            Path(
+                os.environ.get(
+                    "WORKSHOP_MEMORY_WORKTREE",
+                    Path.home() / ".local/state/skills-workshop/memory/legacy",
+                )
+            ).expanduser()
+            / "observations"
+        )
+    return root / "memory/observations"
 
 
 def validate(row):

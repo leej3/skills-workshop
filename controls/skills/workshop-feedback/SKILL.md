@@ -34,14 +34,13 @@ Do not invent metrics, timing, model identity, or causal benefit.
 
 ## Shareable tree and sensitive overlay
 
-Ordinary records go to the configured Workshop's `memory/observations/records/YYYY/MM/<uuid>.json`.
-Before completing the task, inspect and validate the shareable records, then commit every record created or updated by that task in the configured Workshop checkout, even when the main work is in another project.
-Batch records into one task-end commit; batching must never defer them to a later task.
-During an explicit Workshop sync, also review and commit pending shareable records from earlier tasks.
-Stage exact reviewed paths, preserve unrelated changes, and follow the checkout's commit and provenance requirements.
-Push under the user's publication authorization; private overlays must never be staged.
-If validation or a Git operation fails, report the concrete blocker and remaining paths instead of silently leaving records pending.
-No separate narrative report or per-record commit is needed.
+In an annex-backed Workshop (`memory-storage.json` is present), ordinary records stage outside the checkout at `~/.local/state/skills-workshop/memory/legacy/observations/records/YYYY/MM/<uuid>.json`.
+`WORKSHOP_MEMORY_WORKTREE` can override the local working-copy root.
+Before completing the task, inspect and validate its records and run `memory import-feedback --public PATH --private OVERLAY` to queue them in per-agent memory journals.
+The daily collector publishes 1000-record batches with at most one remainder per store; do not flush or commit individual records at task end.
+Merge the private overlay before routing: any sensitive portion makes the complete source record sensitive.
+Report collection failures and retain local files for retry.
+Older checkouts without the storage marker still use `memory/observations`; validate and commit their reviewed shareable records under their checkout conventions.
 With no configured checkout, the shareable tree falls back to a local state directory.
 
 Keep sensitive fields in a matching tree outside Git, normally `${XDG_STATE_HOME:-~/.local/state}/skills-workshop/feedback-overlay/`.

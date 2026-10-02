@@ -66,7 +66,6 @@ The computer must be available; completion requires a successful run, not merely
 
 ```sh
 pixi run memory daily \
-  --public memory/observations \
   --private "$HOME/.local/state/skills-workshop/feedback-overlay" \
   --config "$HOME/.local/state/skills-workshop/memory/transport.json"
 pixi run memory status --store shared
@@ -143,7 +142,7 @@ Sensitive records remain on their private endpoints.
 
 The journals and outbox currently retain all history and aggregation scans retained staging.
 This is suitable for the initial few-person trial, not a claim of unbounded throughput.
-Migration of other curated Workshop memory families and replacing the feedback recorder's Git compatibility path remain separate work.
+The curated v0 working tree now lives outside the checkout and uses lossless annex snapshots; feedback staging also lives outside Git.
 First collect reliable evidence; use observed costs before adding compaction.
 
 ## Duct captures as on-demand evidence
@@ -180,3 +179,32 @@ Local synthesis can combine shared and sensitive evidence.
 Classify a derived insight on its publishable content after obscuring or omitting sensitive details.
 Publish the resulting insight store while keeping revealing excerpts and full private evidence links local.
 Separate raw-store indexes are inputs to synthesis, not a prohibition on using sensitive evidence for overall insights.
+
+## Retiring the repository memory directory
+
+`memory-storage.json` selects the annex-backed layout and identifies the initial curated snapshot.
+The compatibility working copy is `~/.local/state/skills-workshop/memory/legacy`, overridable with `WORKSHOP_MEMORY_WORKTREE`.
+It contains curated skills, projects and events plus feedback staging; it is not tracked in the code branch.
+The collector imports feedback with its private overlay and snapshots changed curated files as one compressed annex artifact.
+Curated snapshots exclude observations, preserving whole-record private routing.
+This is a compatibility adapter for the existing v0 commands, not a replacement for per-agent journals and 1000-record assessment batches.
+Local working copies still contain individual files; durable snapshots do not.
+Curated source records remain shareable; sensitive evidence belongs in the classified collector.
+
+Snapshots preserve exact JSON bytes and relative paths.
+Their content-derived identity deduplicates unchanged trees; an epoch sentinel explicitly marks an unknown source event time, while batch delivery provenance records collection time.
+Use `memory snapshot-curated DIRECTORY` to stage a snapshot without flushing.
+The daily collector does this automatically before its usual seal/upload step.
+
+To recover the initial curated working copy, save the `curated_snapshot` descriptor from `memory-storage.json` to a file, then run:
+
+```sh
+pixi run memory fetch-artifact descriptor.json --config /path/to/transport.json --output curated.tar.gz
+pixi run memory restore-curated curated.tar.gz --output /path/to/new-working-copy
+```
+
+Recovery requires a new destination and never overwrites local work.
+For later snapshots, restore/export the shared memory batches and select the `workshop-curated` record from the desired batch delivery date, then fetch its external artifact.
+Feedback records remain independently recoverable from the classified memory batches.
+The one-time migration retains a verified complete local backup, including previously untracked observations; deleting the repository directory does not delete those records.
+An ordinary clone carries the initial snapshot descriptor, not its payload.

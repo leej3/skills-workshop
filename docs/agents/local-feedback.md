@@ -31,7 +31,7 @@ These are observational statistics over reported uses, not evidence that a skill
 ## Two matching trees
 
 ```text
-<workshop>/memory/observations/
+~/.local/state/skills-workshop/memory/legacy/observations/
   records/YYYY/MM/<uuid>.json       # shareable projection
 
 <local-state>/skills-workshop/feedback-overlay/
@@ -77,15 +77,10 @@ Use a stable group and link baseline IDs; priorities, confidence, and proposed a
 Append notes with resolved, deferred, or rejected status to preserve what was tried.
 Do not generate a narrative about routine successful execution.
 
-Before completing each task, inspect and validate its shareable records and commit them in the configured Workshop checkout, even when the main task is in another project.
-Batch within the task; never defer valid records to a later task.
-An explicit Workshop sync also includes reviewed pending records from earlier tasks.
-Stage exact reviewed paths, follow repository provenance requirements, and push under standing publication authorization.
-Report validation or Git blockers and remaining paths explicitly.
-No per-record commit, approval request, or external message is required.
-The recording command itself does not execute Git or network writes.
-Never publish the overlay or merged output without separately assessing the content.
-See the [classification and publication policy](../../controls/skills/workshop-feedback/references/publication.md).
+Before completing each task, inspect, validate and queue its records through the overlay-aware importer.
+The annex-backed collector publishes daily 1000-record batches with at most one remainder per store.
+Do not recreate a Git-tracked memory directory or commit records individually.
+See [memory collection and recovery](memory-collection.md).
 
 ## Autonomous optimization
 

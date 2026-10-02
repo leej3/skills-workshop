@@ -11,7 +11,6 @@ Run from the Workshop checkout through duct:
 
 ```sh
 pixi run memory daily \
-  --public memory/observations \
   --private "$HOME/.local/state/skills-workshop/feedback-overlay" \
   --config "$HOME/.local/state/skills-workshop/memory/transport.json"
 ```

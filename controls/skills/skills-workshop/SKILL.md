@@ -165,9 +165,9 @@ Read [references/workflow.md](references/workflow.md) for the boundary and verif
 Use `workshop-feedback` for one schema-validated baseline record per skill/task after material use.
 Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review.
 Routine successes require no narrative, memory registration, or per-record commit.
-Inspect, validate, and commit the task's shareable records before completing it, including when working in another project.
-Batch the task's records into one commit; do not defer it to a later task.
-Push under user publication authorization.
+Inspect, validate, and queue the task's records through the feedback collector before completing it.
+In annex-backed checkouts, publication uses daily batches; do not recreate a Git-tracked memory tree.
+Legacy Git-backed checkouts still require a reviewed task-end commit and authorized push.
 Keep sensitive fields and classification reasons in the private overlay.
 Installation and project membership are not evidence of use.
 
@@ -176,9 +176,10 @@ Keep raw observations separate from consolidated knowledge and active skill inst
 Consult relevant open lessons when revising a skill; record a proposed change and its validation before treating it as an improvement.
 Retain rejected findings so later work does not repeat an unsuccessful intervention.
 
-The existing `workshop feedback`, `use`, `insights`, `history`, and `recall` commands operate on Git-backed memory.
+The existing `workshop feedback`, `use`, `insights`, `history`, and `recall` commands operate on a curated local working copy.
+In annex-backed checkouts it lives outside the repository and is retained as a lossless annex snapshot by the daily collector.
 They remain available for deliberately curated records after the feedback skill's publication review.
-Validate and commit intentional authorized memory changes under the checkout conventions, and batch routine shareable observations without generating extra prose reports.
+Validate intentional curated changes and let the daily collector snapshot them; batch routine observations without generating extra prose reports.
 Agent observations remain unreviewed assertions; counts and ratings do not establish causal benefit.
 
 ## Evaluate important claims

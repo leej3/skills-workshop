@@ -14,3 +14,6 @@ apm_modules/
 /.agents/skills/commit-provenance/
 /.agents/skills/build-github-app/
 /.agents/skills/unix-cli-design/
+
+# Memory is collected outside the code checkout and retained in annex.
+/memory/

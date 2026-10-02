@@ -25,6 +25,9 @@ import tomllib
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 if __package__:
     from .search import rank
     from .setup_agent import mode_command
@@ -76,7 +79,9 @@ def schema_uri(kind: str) -> str:
 
 
 def memory_dir(root: Path, kind: str) -> Path:
-    return root / "memory" / kind
+    from scripts.memory_legacy import working_tree
+
+    return working_tree(root) / kind
 
 
 def json_text(value: object) -> str:

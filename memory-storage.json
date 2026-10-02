@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "backend": "annex",
+  "curated_snapshot": {
+    "name": "curated-memory.tar.gz",
+    "sha256": "59e20e0d1031a43503fcefc24cb1e3699d7a1c57513dbef4abc1eb5ba2c743aa",
+    "size": 94092,
+    "store": "shared",
+    "annex_key": "SHA256-s94092--59e20e0d1031a43503fcefc24cb1e3699d7a1c57513dbef4abc1eb5ba2c743aa"
+  },
+  "curated_receipt": {
+    "sha256": "59e20e0d1031a43503fcefc24cb1e3699d7a1c57513dbef4abc1eb5ba2c743aa",
+    "key": "SHA256-s94092--59e20e0d1031a43503fcefc24cb1e3699d7a1c57513dbef4abc1eb5ba2c743aa",
+    "ref": "refs/workshop/artifacts/v1/59e20e0d1031a43503fcefc24cb1e3699d7a1c57513dbef4abc1eb5ba2c743aa",
+    "commit": "e54c1f435a6f192e81d5016d73ef444e062a3664"
+  }
+}

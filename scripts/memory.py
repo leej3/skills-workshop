@@ -9,6 +9,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+import tarfile
 from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -217,10 +218,27 @@ def main():
     daily = commands.add_parser(
         "daily", help="import, seal yesterday, retry uploads and rebuild projections"
     )
-    daily.add_argument("--public", type=Path, required=True)
-    daily.add_argument("--private", type=Path, required=True)
+    from scripts.memory_legacy import working_tree
+
+    legacy = working_tree(Path(__file__).resolve().parents[1])
+    daily.add_argument("--public", type=Path, default=legacy / "observations")
+    daily.add_argument("--curated", type=Path, default=legacy)
+    daily.add_argument(
+        "--private",
+        type=Path,
+        default=Path.home() / ".local/state/skills-workshop/feedback-overlay",
+    )
     daily.add_argument("--config", type=Path, required=True)
     daily.add_argument("--timezone", default="America/New_York")
+    curated = commands.add_parser(
+        "snapshot-curated", help="stage a lossless curated working-tree snapshot"
+    )
+    curated.add_argument("directory", type=Path)
+    recovery = commands.add_parser(
+        "restore-curated", help="recover a fetched curated archive into a new directory"
+    )
+    recovery.add_argument("archive", type=Path)
+    recovery.add_argument("--output", type=Path, required=True)
     for name in ("flush", "publish", "restore", "status", "index", "export"):
         sub = commands.add_parser(name)
         sub.add_argument("--store", choices=("shared", "sensitive"), required=True)
@@ -237,7 +255,15 @@ def main():
     args = parser.parse_args()
     try:
         memory = MemoryStore(args.state)
-        if args.command == "capture-duct":
+        if args.command == "snapshot-curated":
+            from scripts.memory_legacy import snapshot
+
+            result = snapshot(memory, args.directory)
+        elif args.command == "restore-curated":
+            from scripts.memory_legacy import recover
+
+            result = recover(args.archive.read_bytes(), args.output)
+        elif args.command == "capture-duct":
             from scripts.memory_capture import capture_duct
 
             result = capture_duct(
@@ -271,8 +297,10 @@ def main():
             result = {"output": str(args.output), "sha256": item["sha256"]}
         elif args.command == "daily":
             from scripts.memory_annex import AnnexTransport
+            from scripts.memory_legacy import snapshot
 
             result = {
+                "curated": snapshot(memory, args.curated),
                 "imported": import_feedback(memory, args.public, args.private),
                 "stores": {},
             }
@@ -332,6 +360,8 @@ def main():
         print(json.dumps(result))
     except (
         OSError,
+        tarfile.TarError,
+        TypeError,
         ValueError,
         RuntimeError,
         sqlite3.Error,

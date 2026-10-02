@@ -11,7 +11,7 @@ Adapters preserve native output alongside normalized fields rather than making l
 Sensitivity governs derived indexes and context packets as well as original records.
 
 Current project-native skills and APM dependency management remain in place.
-Current observation storage still uses the existing recorder and private overlay.
+The recorder and private overlay stage outside the checkout. The repository `memory/` directory was retired on October 2 after lossless migration and remote recovery verification. Curated v0 commands use an external working copy with compact annex snapshots; assessment publication retains the daily 1000-record batch boundary. See [recovery details](memory-collection.md#retiring-the-repository-memory-directory).
 The implemented transitional storage path uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
 The October 2 correction places shared memory/artifact refs and annex metadata in the project's GitHub repository, with DataLad Hub serving payload bytes. The initial Hub-only shared Git destination was an implementation mismatch, not the intended architecture; it is superseded without a compatibility layer.
 Production verification on October 2 recovered 455 shared records exactly from a fresh GitHub clone and explicitly downloaded all 15 referenced artifacts with matching bytes. This replaces the October 1 deployment uncertainty below; it does not establish multi-host coordination or capture of every agent transcript.

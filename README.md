@@ -79,7 +79,9 @@ The agent searches remembered skills, pinned local catalogs, and public provider
 After material skill use, `workshop-feedback` writes a schema-validated concise baseline record.
 Routine records are shareable; a private overlay holds sensitive fields and classification reasons.
 Exceptional lessons are grouped and prioritized.
-Agents inspect, validate, and commit shareable records before completing each task, batching within the task even when its main work is in another project.
+Agents inspect, validate, and queue records before completing each task.
+The annex collector publishes daily batches.
+Curated legacy records use an external local working copy and lossless annex snapshots; see [memory recovery](docs/agents/memory-collection.md).
 See [local feedback and learning](docs/agents/local-feedback.md) for the hook, aggregates, and publication boundary.
 The installed instruction asks the agent to do this, but it is not an automatic runtime hook.
 
@@ -107,7 +109,7 @@ Only the supplied public query is sent to discovery providers.
 | The Workshop control skills | `controls/skills/` source; APM installation and activation at user scope |
 | A project's own working skills | That project's `.agents/skills/` |
 | External reusable skill dependencies | That project's APM manifest and lock |
-| Decisions, use, outcomes, and contribution links | This checkout's `memory/` |
+| Decisions, use, outcomes, and contribution links | Annex memory batches and curated snapshots |
 | Search catalogs | Pinned Git submodules under `upstreams/` |
 
 `workshop install --apply` adds targeted `.gitignore` entries for `apm_modules/` and deployed skill directories from the APM lockfile.

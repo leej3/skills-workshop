@@ -1,10 +1,9 @@
 # Shareable records with a private overlay
 
 Ordinary concise observations can be versioned and shared; sensitivity is a property of particular fields or records, not of all telemetry.
-Classify while recording, then inspect, validate, and commit the task's shareable records before completing the task, including work performed in another project.
-Batching means one task-end commit, never postponing valid records to a later task.
-For an explicit Workshop sync, include reviewed pending records from earlier tasks.
-Avoid a separate approval exchange or commit for every routine record.
+Classify while recording, then inspect and validate the task's records.
+For an annex-backed Workshop, queue them through the overlay-aware importer and let the daily collector publish batches; do not create task-end Git commits for records.
+Legacy Git-backed checkouts still require a reviewed task-end commit.
 Shared-thread posting still follows its own approval rules.
 
 ## Classification
@@ -39,13 +38,9 @@ Classification records are evidence for improving policy, not proof that a class
 
 ## Batch publication
 
-Before committing a batch, inspect the exact shareable files and `summary --public-only`.
-Check text and metadata for accidental omissions in classification; schema validation guarantees structure, not disclosure suitability.
-Publish that tree only, never the merged view or overlay.
-Do not copy raw logs or transcripts merely because a record references them.
-If uncertain, keep the specific data in the overlay while sharing the remaining useful record.
-
-The recorder performs no Git writes or network calls.
-The agent performs the required task-end commit using exact reviewed paths and repository provenance conventions, then pushes when publication is authorized.
-Report any validation or Git blocker and the remaining paths; do not claim the task's feedback is complete while its shareable records remain uncommitted.
+Inspect the exact shareable files and `summary --public-only` before collection.
+Schema validation checks structure, not disclosure suitability.
+The annex collector merges overlays first and routes the complete source record to its classified store.
+It publishes daily, with 1000 records per batch and at most one remainder per store.
+Keep classification reasons and original sensitive fields private; publish generalized insights only after examining their content.
 Already-published records cannot be made private by writing an overlay: suspected past disclosure requires a separate remediation decision, not silent history rewriting.
