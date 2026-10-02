@@ -41,7 +41,10 @@ No empty batches are published.
 
 The annex transport uploads content, checks presence, publishes an immutable `refs/workshop/memory/v2/<batch UUID>` ref, verifies it, and syncs annex metadata.
 Each ref contains only its batch pointer.
-The shared repository stores shared metadata/content; sensitive metadata uses its separate repository and content uses the private test-store annex.
+The project's GitHub repository (`git@github.com:leej3/skills-workshop.git`) stores shared memory refs, artifact refs, and the `git-annex` branch.
+Shared payload bytes live on the DataLad Hub annex at `https://hub.datalad.org/leej3/skills-workshop.git`.
+GitHub is the canonical shared Git store; the Hub is its content server.
+Sensitive metadata uses its separate private repository and content uses the private test-store annex.
 Tokens remain in `.git/info` files and are read by a scoped Git credential helper.
 Local configuration contains paths, never token values.
 Encryption is not configured.
@@ -50,7 +53,7 @@ Ordinary clones do not retrieve custom refs or annex content.
 `memory restore` explicitly fetches the refs and payloads, verifies SHA-256, validates classification and reconstructs the ledger.
 `memory index` and `memory export` rebuild per-store disposable projections.
 Recovery works without Entire, qmd or a model.
-Backup must include the refs, annex payload remote and unflushed local journals; a regular code clone alone is insufficient.
+Backup must include the GitHub memory/artifact refs and `git-annex` branch, annex payload remote and unflushed local journals; a regular code clone alone is insufficient.
 Current retention is indefinite: no automatic pruning or source deletion.
 Remote restore does not recover never-uploaded staging data.
 
@@ -78,10 +81,55 @@ Output is JSON; failures use stderr and nonzero status without echoing evidence.
 Agent-native envelopes enter via `memory ingest - --agent LABEL`.
 
 Local transport configuration has `annex_bin`, `provenance_script`, and `stores`.
-Each store has `metadata` and optionally `payload`, each with `url`, `username`, and `token_file`.
-The payload endpoint defaults to metadata.
-The tested annex runtime is the existing isolated DataLad/Pixi trial environment.
+Each store must explicitly specify `metadata` and `payload`.
+`metadata` is an ordinary Git endpoint with a `url`; SSH uses the configured SSH credential.
+An authenticated HTTPS metadata endpoint additionally supplies `username` and `token_file`.
+`payload` supplies the Hub `url`, `username`, and `token_file` for annex endpoint discovery and content access.
+Only the payload server is queried for annex configuration; GitHub is configured with `annex-ignore=true` for content while still synchronizing Git metadata.
+There is no fallback from payload to metadata and no compatibility mode for the previous shared Hub Git store.
+The root Pixi environment pins the git-annex wheel; use `pixi run git annex`.
+Its supported platforms require macOS 14 on Apple Silicon, macOS 15 on Intel, or glibc 2.34 on Linux.
+The active configuration's `annex_bin` selects the project's `.pixi/envs/default/bin`, not a host installation or the earlier trial environment.
 Every explicit batch commit resolves fresh Codex provenance; missing provenance blocks publication with the outbox retained.
+
+Shared endpoint configuration (the token file contains only the content-server token):
+
+```json
+{
+  "metadata": {
+    "url": "git@github.com:leej3/skills-workshop.git"
+  },
+  "payload": {
+    "url": "https://hub.datalad.org/leej3/skills-workshop.git",
+    "username": "leej3",
+    "token_file": "/path/to/workshop-shared-token"
+  }
+}
+```
+
+The collector uses a separate working checkout of this same GitHub repository so publishing evidence does not change the developer's index or code branch.
+Local journals and indexes are working state outside Git; their published records are carried by the repository's annex refs.
+To inspect those refs in an ordinary code clone:
+
+```sh
+git fetch origin 'refs/workshop/*:refs/workshop/*'
+pixi run git annex init
+git config annex.used-refspec '+refs/*:+HEAD'
+git for-each-ref refs/workshop refs/remotes/origin/git-annex
+```
+
+Use `memory restore --store shared --config /path/to/transport.json` with a fresh `--state` directory to recover records from GitHub and fetch their batches from the annex server.
+Artifact downloads remain explicit through `memory fetch-artifact`.
+
+## GitHub storage correction: 2026-10-02
+
+The initial shared transport put Git history on DataLad Hub instead of this project's GitHub repository.
+That deployment was incorrect for the intended repository-backed storage design.
+The replacement published 455 shared records in a new batch and 15 artifact refs to GitHub, with annex location metadata on its `git-annex` branch.
+A fresh GitHub clone restored all 455 records exactly and downloaded all 15 artifacts with matching bytes; batch restore left artifacts absent until explicitly requested.
+The active collector now uses this GitHub destination, and the development checkout is annex-enabled with these refs fetched.
+Old batch commits were not imported and the previous shared Hub Git history is not used for recovery or ongoing publication.
+Sensitive records remain on their private endpoints.
 
 ## Initial evidence and limits
 

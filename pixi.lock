@@ -1,27 +1,18 @@
 version: 7
 platforms:
-- name: linux-64
+- name: linux-annex
+  subdir: linux-64
   virtual-packages:
+  - __glibc=2.34
   - __unix=0=0
   - __linux=4.18
-  - __glibc=2.28
   - __archspec=0=x86_64
-- name: osx-64
-  virtual-packages:
-  - __unix=0=0
-  - __osx=13.0
-  - __archspec=0=x86_64
-- name: osx-64-macos-14-0
+- name: osx-64-macos-15-0
   subdir: osx-64
   virtual-packages:
-  - __osx=14.0
+  - __osx=15.0
   - __unix=0=0
   - __archspec=0=x86_64
-- name: osx-arm64
-  virtual-packages:
-  - __unix=0=0
-  - __osx=13.0
-  - __archspec=0=m1
 - name: osx-arm64-macos-14-0
   subdir: osx-arm64
   virtual-packages:
@@ -35,7 +26,8 @@ environments:
     indexes:
     - https://pypi.org/simple
     packages:
-      linux-64:
+      linux-annex:
+      - pypi: https://files.pythonhosted.org/packages/d4/27/17294611ace2e47aec386620620a568942a4dc6086c5add96b7a12cf9d74/git_annex-10.20260901.post1-py3-none-manylinux_2_34_x86_64.whl
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/backports.zstd-1.6.0-py313h18e8e13_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/brotli-python-1.2.0-py313h2fc2bef_3.conda
@@ -184,7 +176,8 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d232694e31e59da9f6ec747bae31c3f5946e4e9b98860d5/click-8.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fd/7b/122376b1fd3c62c1ed9dc80c931ace4844b3c55407b6fb2d199377c9736f/pydantic-2.13.4-py3-none-any.whl
-      osx-64:
+      osx-64-macos-15-0:
+      - pypi: https://files.pythonhosted.org/packages/9c/b3/f37f34ce8f87a5a062a7a25f1d0e93b8bb3eefa7a3be7b07a5dd582853be/git_annex-10.20260901.post1-py3-none-macosx_15_0_x86_64.whl
       - conda: https://conda.anaconda.org/conda-forge/noarch/attrs-26.1.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyh5ded981_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda
@@ -326,7 +319,8 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d232694e31e59da9f6ec747bae31c3f5946e4e9b98860d5/click-8.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fd/7b/122376b1fd3c62c1ed9dc80c931ace4844b3c55407b6fb2d199377c9736f/pydantic-2.13.4-py3-none-any.whl
-      osx-arm64:
+      osx-arm64-macos-14-0:
+      - pypi: https://files.pythonhosted.org/packages/b1/de/4ed5b844db176182ae27840b5bb87eeb8944169219a2a4e81e7ca91f1a26/git_annex-10.20260901.post1-py3-none-macosx_14_0_arm64.whl
       - conda: https://conda.anaconda.org/conda-forge/noarch/attrs-26.1.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyh5ded981_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda
@@ -474,7 +468,7 @@ environments:
     indexes:
     - https://pypi.org/simple
     packages:
-      linux-64:
+      linux-annex:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_10.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/icu-78.3-py310h44b86e0_2.conda
@@ -609,7 +603,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/fb/be/35261223d9416a0751cdff1c7b4a6f881387218a12d439fe22fefebc8c04/textual-8.2.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fc/16/963096d224b80909432dc16561a615fd33d2d13beef3ce4c63fa25e40867/huggingface_hub-1.33.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ff/be/5b468d653ece56ab24497b6bb308e0487cc6b4b1b77bb1ebd4b5eb26a19c/cisco_ai_skill_scanner-2.1.0-cp311.cp312.cp313.cp314-none-manylinux_2_17_x86_64.whl
-      osx-64-macos-14-0:
+      osx-64-macos-15-0:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.7.22-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026c-h151e31d_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/bzip2-1.0.8-h374f1ed_10.conda
@@ -6897,3 +6891,18 @@ packages:
   - httplib2>=0.32.0 ; extra == 'vertex'
   - pyasn1>=0.6.4 ; extra == 'vertex'
   requires_python: '>=3.11,<3.15'
+- pypi: https://files.pythonhosted.org/packages/9c/b3/f37f34ce8f87a5a062a7a25f1d0e93b8bb3eefa7a3be7b07a5dd582853be/git_annex-10.20260901.post1-py3-none-macosx_15_0_x86_64.whl
+  name: git-annex
+  version: 10.20260901.post1
+  sha256: a3c395d02a82fa8c92e54eb894bfc675595a5aefab716ff36d48de87a9b91b32
+  requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/b1/de/4ed5b844db176182ae27840b5bb87eeb8944169219a2a4e81e7ca91f1a26/git_annex-10.20260901.post1-py3-none-macosx_14_0_arm64.whl
+  name: git-annex
+  version: 10.20260901.post1
+  sha256: ff5e0b0e4948296b61dadd81801bb65f39027c22ae786a5a2cb2b437a83c1ca1
+  requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/d4/27/17294611ace2e47aec386620620a568942a4dc6086c5add96b7a12cf9d74/git_annex-10.20260901.post1-py3-none-manylinux_2_34_x86_64.whl
+  name: git-annex
+  version: 10.20260901.post1
+  sha256: 099ae1df0c22837f446d9380103fc4fba7f4842b2b17b9dc27a68542d4bd0915
+  requires_python: '>=3.9'

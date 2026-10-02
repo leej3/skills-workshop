@@ -3,7 +3,11 @@ name = "skills-workshop"
 version = "0.1.0"
 description = "Track cross-project skill evidence and compose existing skill tools"
 channels = ["conda-forge"]
-platforms = ["osx-arm64", "osx-64", "linux-64"]
+platforms = [
+  { platform = "osx-arm64", macos = "14.0" },
+  { platform = "osx-64", macos = "15.0" },
+  { name = "linux-annex", platform = "linux-64", glibc = "2.34" },
+]
 
 [dependencies]
 python = ">=3.11,<3.14"
@@ -62,6 +66,7 @@ validate = { depends-on = ["lint", "check-format", "compile", "test", "test-skil
 [pypi-dependencies]
 apm-cli = "==0.31.0"
 con-duct = "==0.22.0"
+git-annex = "==10.20260901.post1"
 
 [feature.security.dependencies]
 python = "3.12.*"
@@ -77,7 +82,3 @@ audit-dependencies = "pip-audit"
 
 [environments]
 security = { features = ["security"], no-default-feature = true }
-
-[feature.security.system-requirements]
-macos = "14.0"
-libc = { family = "glibc", version = "2.28" }

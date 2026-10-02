@@ -13,6 +13,8 @@ Sensitivity governs derived indexes and context packets as well as original reco
 Current project-native skills and APM dependency management remain in place.
 Current observation storage still uses the existing recorder and private overlay.
 The implemented transitional storage path uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
+The October 2 correction places shared memory/artifact refs and annex metadata in the project's GitHub repository, with DataLad Hub serving payload bytes. The initial Hub-only shared Git destination was an implementation mismatch, not the intended architecture; it is superseded without a compatibility layer.
+Production verification on October 2 recovered 455 shared records exactly from a fresh GitHub clone and explicitly downloaded all 15 referenced artifacts with matching bytes. This replaces the October 1 deployment uncertainty below; it does not establish multi-host coordination or capture of every agent transcript.
 Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled. Duct captures have been uploaded and explicitly retrieved. The first production daily batch cycle and fresh-local-checkout recovery are not yet established by the October 1 evidence.
 
 Entire CLI and Brain are **probed candidates**, not required dependencies.

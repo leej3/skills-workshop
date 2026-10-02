@@ -209,5 +209,7 @@ Upstream skills retain their own terms.
 ## Portable memory pilot
 
 Daily annex collection and account-backed Luna evaluation now have a [collection contract and operator commands](docs/agents/memory-collection.md).
+Shared memory and artifact refs, together with the `git-annex` branch, live in this GitHub repository; DataLad Hub holds the annex payload bytes.
+The collector's local journals and indexes are staging and projections, not the published store.
 See [initial replaceable-tool pilots](experiments/context-pilots/README.md) for measured results and untested boundaries.
 Existing feedback sources remain intact during this trial.

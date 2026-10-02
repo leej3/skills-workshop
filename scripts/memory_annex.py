@@ -25,8 +25,10 @@ def credential(config, store):
 
     remote = config["stores"][store]
     role = os.environ.get("WORKSHOP_MEMORY_ROLE", "metadata")
-    endpoints = [remote.get(role, remote["metadata"])]
+    endpoints = [remote[role]]
     for entry in endpoints:
+        if "token_file" not in entry:
+            continue
         url = urlparse(entry["url"])
         if fields.get("protocol") == "https" and fields.get("host") in (
             url.netloc,
@@ -86,7 +88,15 @@ class AnnexTransport:
             raise RuntimeError("annex/Git operation failed: " + args[0])
         return p.stdout.strip() if check else p
 
-    def configure_remote(self, name, entry):
+    def configure_remote(self, name, entry, *, content=False):
+        if name not in self.git("remote").splitlines():
+            self.git("remote", "add", name, entry["url"])
+        elif self.git("remote", "get-url", name) != entry["url"]:
+            raise ValueError("configured remote differs from existing transport")
+        if not content:
+            # GitHub carries refs and location metadata, never annex payloads.
+            self.git("config", f"remote.{name}.annex-ignore", "true")
+            return
         request = urllib.request.Request(
             entry["url"] + "/config",
             headers={
@@ -104,10 +114,6 @@ class AnnexTransport:
         with urllib.request.urlopen(request, timeout=30) as response:
             config = configparser.ConfigParser(strict=False)
             config.read_string(response.read().decode())
-        if name not in self.git("remote").splitlines():
-            self.git("remote", "add", name, entry["url"])
-        elif self.git("remote", "get-url", name) != entry["url"]:
-            raise ValueError("configured remote differs from existing transport")
         for key, value in [
             ("annex-ignore", "false"),
             ("annex-uuid", config["annex"]["uuid"]),
@@ -116,6 +122,10 @@ class AnnexTransport:
             self.git("config", f"remote.{name}.{key}", value)
 
     def setup(self):
+        if "payload" not in self.settings:
+            raise ValueError(
+                "transport requires separate metadata and payload endpoints"
+            )
         if not (self.repo / ".git").exists():
             self.repo.mkdir(parents=True, exist_ok=True, mode=0o700)
             self.git("clone", self.settings["metadata"]["url"], ".")
@@ -124,9 +134,7 @@ class AnnexTransport:
             self.git("config", "commit.gpgsign", "false")
             self.git("annex", "init", "Workshop " + self.store)
         self.configure_remote("origin", self.settings["metadata"])
-        self.configure_remote(
-            "payload", self.settings.get("payload", self.settings["metadata"])
-        )
+        self.configure_remote("payload", self.settings["payload"], content=True)
         self.git("config", "annex.used-refspec", "+refs/*:+HEAD")
 
     def __call__(self, ident, raw):

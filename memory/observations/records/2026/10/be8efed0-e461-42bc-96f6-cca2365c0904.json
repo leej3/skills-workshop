@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "be8efed0-e461-42bc-96f6-cca2365c0904",
+  "recorded_at": "2026-10-02T16:08:09.320809+00:00",
+  "kind": "usage",
+  "skill": "datalad",
+  "task": "annex-storage-integration",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": "56d1072c2a157a5bde2df3b1698bf545896e02d6f216cd4675bb7fe2b978d855",
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
