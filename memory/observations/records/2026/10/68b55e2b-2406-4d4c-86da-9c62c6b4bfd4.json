@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "68b55e2b-2406-4d4c-86da-9c62c6b4bfd4",
+  "recorded_at": "2026-10-02T13:32:46.392641+00:00",
+  "kind": "usage",
+  "skill": "skill-creator",
+  "task": "pr-review-fixes",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

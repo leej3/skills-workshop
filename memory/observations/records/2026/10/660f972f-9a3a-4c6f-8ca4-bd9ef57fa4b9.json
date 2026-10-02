@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "660f972f-9a3a-4c6f-8ca4-bd9ef57fa4b9",
+  "recorded_at": "2026-10-02T13:32:46.194014+00:00",
+  "kind": "usage",
+  "skill": "gh-address-comments",
+  "task": "pr-review-fixes",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}
