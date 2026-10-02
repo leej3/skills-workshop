@@ -102,6 +102,8 @@ First collect reliable evidence; use observed costs before adding compaction.
 
 Duct is now a Workshop control installed with discovery and feedback.
 A finished capture becomes a small evidence envelope containing command, outcome, measured resources and a content-addressed external-artifact descriptor.
+All collected logs, regardless of size, use this one external-artifact path and are fetched only on demand.
+Small measurements and artifact references stay in the memory record; there is no inline small-log tier.
 The complete exact capture files are stored in a deterministic compressed archive in annex under `refs/workshop/artifacts/v1/<SHA-256>`.
 They are not embedded in the 1000-record batches.
 
@@ -116,3 +118,17 @@ Backup/retention must cover both memory and artifact refs plus annex payloads. D
 
 The associated record and its artifacts share classification; a sensitive capture is kept in the sensitive store.
 A public trial may have a separate private supporting capture containing local execution paths; that private record points to the public trial without exposing its details in the shared store.
+
+## Trial lifecycle and insight publication
+
+Native baseline preparation records an immutable attempted event before execution.
+Completion, failure, interruption, blocking and abandonment are separate linked outcomes; partial output and missing runtime measurements remain evidence.
+Local event files support replay after interrupted journal writes.
+Unresolved attempts are reported, not silently discarded or assumed failed.
+Collected trial logs and responses use external annex artifacts at every size.
+Older immutable records retain their historical inline representation; this policy governs new collection.
+
+Local synthesis can combine shared and sensitive evidence.
+Classify a derived insight on its publishable content after obscuring or omitting sensitive details.
+Publish the resulting insight store while keeping revealing excerpts and full private evidence links local.
+Separate raw-store indexes are inputs to synthesis, not a prohibition on using sensitive evidence for overall insights.

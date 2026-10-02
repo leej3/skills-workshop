@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "id": "b7568e57-cf7c-4142-9b9c-2a4d28029143",
+  "recorded_at": "2026-10-02T13:26:58.778513+00:00",
+  "kind": "usage",
+  "skill": "duct",
+  "task": "evaluation-reliability",
+  "outcome": "success",
+  "task_outcome": "unknown",
+  "duration_seconds": null,
+  "duration_scope": null,
+  "skill_digest": null,
+  "model": null,
+  "measurement": "agent-reported",
+  "unit": "skill-task",
+  "visibility": "shareable"
+}

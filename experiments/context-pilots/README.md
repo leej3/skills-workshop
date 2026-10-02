@@ -68,3 +68,46 @@ The daily Luna job now follows a [seven-day cross-layer rotation](scheduled-prot
 Their first work is real-product adapter implementation under the existing account-backed boundary.
 Subsequent milestones collect indexing, retrieval, updates, citations, measured resources and recovery evidence against matched baselines.
 Enrollment is not a completed benchmark; keep interface blockers and measured outcomes distinct.
+
+
+## Reliability and replaceability — October 2, 2026
+
+All newly collected logs use external annex artifacts regardless of size.
+Duct, native trial responses/runtime output, and lexical pilot command outputs share that policy.
+Small measurements, statuses, hashes and references remain in records.
+Historical immutable records retain their old representation.
+
+Native preparation now journals an attempted event before execution.
+Outcomes are separate immutable records linked by trial ID, including failed, interrupted, blocked and abandoned attempts.
+`pending` replays persisted event files after crashes and reports unresolved attempts without guessing that they failed.
+Non-completed outcomes can preserve partial output without runtime metadata.
+
+Use `native_trial.py prepare-pair` for the CLI comparison.
+Both conditions freeze the same prompt, harder edge-case rubric, skill revision and protocol together; execution order is randomized.
+Execute each in a fresh context with the same runtime/budget.
+`grading-packet --pair PAIR_JSON --output NEW_DIRECTORY` produces an assignment-free grader input and a separate local answer key.
+Wording and ambient host context may still reveal treatment; this is not guaranteed blind or isolated evaluation.
+No new model-effectiveness result is claimed here.
+
+`check_replaceability.py` completed a live synthetic test against the private `test-store` annex: publish canonical evidence, restore into a fresh local state, then build independent SQLite FTS5 and qmd 2.8.3 lexical views.
+Three positive queries returned identical evidence IDs; one absent-term query returned no hits in either tool.
+Results carry canonical text hashes.
+The derived statement is a deterministic quotation of evidence, not a model-synthesis quality test.
+A one-byte log stayed absent throughout restore and search, then passed hash verification on explicit retrieval.
+This proves a small replacement/rebuild path, not semantic-search quality or production throughput.
+
+The first upload failed after staging.
+Retrying the same annex key succeeded; `--resume` then reused the original batch and record identities.
+No cause for the transient failure was established.
+Both failed and successful captures are retained.
+
+Reproduce with a test-only configuration whose shared entry points to the private test repository, and the existing pinned local qmd installation:
+
+```sh
+pixi run python experiments/context-pilots/check_replaceability.py \
+  --workspace /private/path/new-replaceability-trial \
+  --config /private/path/test-only-transport.json
+```
+
+Use `--resume` with that same workspace after interrupted publication.
+The probe writes synthetic refs and payloads; it never deletes remote evidence.

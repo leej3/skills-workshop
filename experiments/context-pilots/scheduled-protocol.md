@@ -72,7 +72,11 @@ Preserve failures and provider restrictions as operational evidence, separate fr
 Record build cost separately from query and incremental-update cost.
 Compare within a layer and keep the canonical source corpus identical across candidates.
 
-Use portable memory envelopes for each attempt and separate annex objects for substantial captures/index artifacts; fetch those only when needed. Whole-record sensitivity applies. Update cumulative assessments in `docs/agents`; link evidence IDs rather than copying private capture details. No tool becomes canonical storage as a consequence of an evaluation. Evaluate exit/rebuild, data egress and dependency/account requirements alongside quality.
+Use portable memory envelopes for each attempt and separate annex objects for all collected logs and index artifacts, regardless of size; fetch those only when needed.
+Whole-record sensitivity applies.
+Update cumulative assessments in `docs/agents`; link evidence IDs rather than copying private capture details.
+No tool becomes canonical storage as a consequence of an evaluation.
+Evaluate exit/rebuild, data egress and dependency/account requirements alongside quality.
 
 ## Native baseline execution
 
@@ -81,7 +85,13 @@ Use them on the corresponding baseline or skill-evaluation day, or as a clearly 
 Retain failed and incomplete trials as well as successes.
 Do not infer model cost from an account subscription or claim zero resource cost.
 
-Before answering, run `pixi run python experiments/context-pilots/native_trial.py prepare --kind cli` (or `--kind tree`) and use its printed private workspace.
+Before execution, run `pixi run python experiments/context-pilots/native_trial.py pending` to replay persisted events and inspect unresolved attempts.
+Do not assume an unresolved attempt is dead; explicitly close a stopped attempt with `finish --workspace PATH --status interrupted --reason TEXT`.
+For the CLI comparison, run `native_trial.py prepare-pair` and execute both printed workspaces in the recorded randomized order within the same scheduled milestone.
+Use separate fresh executor contexts with the same model, effort and budget; if the host cannot provide those contexts, record the deviation or a blocked outcome rather than claiming isolation.
+Never pass one condition's answer into the other condition.
+For the tree baseline, run `native_trial.py prepare --kind tree`.
+Preparation records an attempted event before any model response is requested.
 It freezes the prompt, rubric, complete treatment skill, fixture, protocol, and source digests.
 Do not consult earlier trial answers or scores.
 Read only `agent-input.json` as the trial input; it contains the prompt and assigned treatment but excludes grading rubrics.
@@ -89,7 +99,9 @@ Keep `fixture.json` and previous answers closed until the response is saved.
 The host may already expose skill descriptions/instructions, so a baseline is ambient host context, not a clean no-skill condition.
 Record that limitation.
 
-For CLI trials, treatment alternates on each CLI trial; the baseline asks for a response without explicitly reading the skill.
+For CLI pairs, both conditions share frozen fixture, rubric, skill revision, collector and protocol bytes.
+The baseline asks for a response without explicitly reading the skill.
+Repeat matched pairs across runs; do not interpret between-day treatment alternation as a controlled comparison.
 For tree trials, use the supplied heading outline and inspect the cited document or conversation nodes.
 This measures a native heading-tree baseline only.
 Actual PageIndex/ChatIndex evaluations follow their candidate slots above; keep their product identities separate from this baseline.
@@ -97,7 +109,16 @@ Actual PageIndex/ChatIndex evaluations follow their candidate slots above; keep 
 Write your answer verbatim to `response.txt` in that workspace.
 Write `runtime.json` with the actual model identifier, reasoning effort and host version if known (otherwise null), elapsed time and token usage only if measured, and any deviations.
 Run `native_trial.py finish --workspace PATH`.
-This retains originals, hashes, missing fields, classification, treatment assignment and the raw answer in the shared journal.
+This appends a separate immutable completed outcome linked to the attempt.
+Exact inputs, logs, raw response and runtime metadata use external annex artifacts; the shared journal contains statuses, hashes and artifact references.
+For a failed, blocked, abandoned or interrupted execution, use `finish --workspace PATH --status STATUS --reason TEXT`; missing response/runtime files are allowed and partial output is preserved. Inspect any failure detail before retaining it: these baseline fixtures are public/synthetic, so do not add ambient sensitive text.
+Retrying an unchanged event is idempotent.
+`pending` replays persisted events after a journal-append interruption without inventing a completion.
+After both pair outcomes complete, use `native_trial.py grading-packet --pair PAIR_JSON --output NEW_DIRECTORY`.
+Give only `grader-input.json` to a fresh grader.
+Keep the separate assignment key closed until grading is saved, and retain the grade, grader identity and deviations as a separate related memory record.
+The packet withholds treatment/runtime labels, but answer wording may reveal the treatment; do not claim guaranteed blinding.
+Incomplete pairs remain operational evidence, not zero-valued quality scores.
 Synthetic fixtures contain no private project data.
 Do not put ambient conversation text or secrets in shared evidence.
 

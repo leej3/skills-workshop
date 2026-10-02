@@ -215,8 +215,10 @@ def test_native_trial_freezes_inputs_and_retains_unknowns(tmp_path):
     first = module.finish(work, tmp_path)
     assert module.finish(work, tmp_path)["duplicate"]
     seal(MemoryStore(tmp_path))
-    record = next(MemoryStore(tmp_path).records("shared"))
-    assert record["id"] == first["id"]
+    records = list(MemoryStore(tmp_path).records("shared"))
+    assert {r["payload"]["status"] for r in records} == {"attempted", "completed"}
+    record = next(r for r in records if r["id"] == first["id"])
+    assert record["external_artifacts"] and not record["artifacts"]
     assert "model" in record["context"]["missing"]
     assert record["payload"]["grade"] is None
     (work / "fixture.json").write_text("{}")

@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
+from scripts.memory_capture import store_archive
 from scripts.memory_store import MemoryStore, artifact, canonical, digest, envelope
 
 
@@ -132,28 +133,33 @@ def main():
     run_id = str(uuid.uuid4())
     corpus_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
-    memory.append(
-        envelope(
-            {"fixture_sha256": digest(frozen_bytes), "files": list(corpus)},
-            ident=corpus_id,
-            kind="evidence",
-            occurred_at=now,
-            store="shared",
-            producer="workshop-retrieval-pilot",
-            version="1",
-            source_schema="corpus-v1",
-            context={
-                "task_id": run_id,
-                "conditions": {"synthetic": False, "public_documents_only": True},
-            },
-            artifacts=[
-                artifact("frozen-inputs.json", frozen_bytes, "application/json"),
-                artifact("setup.json", canonical(setup).encode(), "application/json"),
-                artifact("protocol.py", Path(__file__).read_bytes(), "text/x-python"),
-            ],
-        ),
-        "retrieval-pilot",
+    corpus_packet = envelope(
+        {"fixture_sha256": digest(frozen_bytes), "files": list(corpus)},
+        ident=corpus_id,
+        kind="evidence",
+        occurred_at=now,
+        store="shared",
+        producer="workshop-retrieval-pilot",
+        version="1",
+        source_schema="corpus-v1",
+        context={
+            "task_id": run_id,
+            "conditions": {"synthetic": False, "public_documents_only": True},
+        },
+        artifacts=[
+            artifact("frozen-inputs.json", frozen_bytes, "application/json"),
+            artifact("protocol.py", Path(__file__).read_bytes(), "text/x-python"),
+        ],
     )
+    corpus_packet["external_artifacts"] = [
+        store_archive(
+            memory,
+            "shared",
+            "setup-log.tar.gz",
+            {"setup.json": canonical(setup).encode()},
+        )
+    ]
+    memory.append(corpus_packet, "retrieval-pilot")
     db = sqlite3.connect(work / "baseline.sqlite")
     db.execute("CREATE VIRTUAL TABLE docs USING fts5(name UNINDEXED,body)")
     db.executemany("INSERT INTO docs VALUES(?,?)", corpus.items())
@@ -255,15 +261,16 @@ def main():
                 version=version,
                 source_schema="native-query-result",
                 context=context,
-                artifacts=[
-                    artifact(
-                        "native-output.json",
-                        canonical(native).encode(),
-                        "application/json",
-                    )
-                ],
                 relations=[{"relation": "corpus", "id": corpus_id}],
             )
+            packet["external_artifacts"] = [
+                store_archive(
+                    memory,
+                    "shared",
+                    "query-log.tar.gz",
+                    {"native-output.json": canonical(native).encode()},
+                )
+            ]
             memory.append(packet, "retrieval-pilot")
     db.close()
     (work / "results.json").write_text(json.dumps(results, indent=2) + "\n")

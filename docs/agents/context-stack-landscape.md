@@ -12,8 +12,8 @@ Sensitivity governs derived indexes and context packets as well as original reco
 
 Current project-native skills and APM dependency management remain in place.
 Current observation storage still uses the existing recorder and private overlay.
-The accepted next storage design uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
-Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled. Duct captures have been uploaded and explicitly retrieved. The first production daily batch cycle and independent-host recovery are not yet established by the October 1 evidence.
+The implemented transitional storage path uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
+Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled. Duct captures have been uploaded and explicitly retrieved. The first production daily batch cycle and fresh-local-checkout recovery are not yet established by the October 1 evidence.
 
 Entire CLI and Brain are **probed candidates**, not required dependencies.
 No tool below gains canonical storage authority merely because it provides capture, memory, indexing, evaluation, and a UI in one package.
@@ -256,3 +256,11 @@ The rotation also covers Waza/native skill evaluation, SQLite/qmd/Brain retrieva
 ## STAMPED workflow assessment — October 1, 2026
 
 The [version-pinned STAMPED assessment](stamped-workflow-assessment.md) uses the independent stamped-assess skill and canonical record schemas. Its selected modularity boundary is demonstrated; six principle criteria are partial and workflow optimization is unknown. This does not assign an overall STAMPED score. Prioritize exact execution-source preservation, a versioned recovery manifest, independent handoff/recovery and collection-completeness measurements before treating additional retrieval adapters as the main optimization. Twenty-eight focused tests passed; full independent reproduction and controlled before/after comparisons were not attempted.
+
+## Evaluation reliability follow-up — 2026-10-02
+
+Native trial collection now writes attempted and terminal-outcome events separately, retains unsuccessful/partial output, and supports exact event replay. All newly collected logs use lazy annex artifacts without a size threshold.
+Skill comparisons prepare matched pairs with identical frozen inputs, randomized execution order and harder CLI edge cases. Grading packets withhold assignment/runtime labels; ambient context and answer wording still limit isolation and blinding. These are protocol improvements, not new evidence of skill effectiveness.
+Local synthesis may aggregate across shared and sensitive evidence and publish derived insights with sensitive details obscured; inherited private provenance alone does not force the resulting insight to be private.
+
+SQLite FTS5 and qmd 2.8.3 passed the same three positive and one absent-term queries after a live annex publication and fresh local restore on October 2. Canonical evidence IDs/text hashes agreed and a one-byte log remained lazy until explicit retrieval. This supports interchangeability of these lexical projections, not a general quality ranking. The [reproducible replacement probe](../../experiments/context-pilots/README.md#reliability-and-replaceability--october-2-2026) retains the upload failure/retry and scope limits. Next test: representative held-out questions and incremental rebuild behavior.
