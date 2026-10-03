@@ -13,7 +13,7 @@ See [collection contract](../../docs/agents/memory-collection.md) and [scheduled
 | qmd 2.8.3 | Same corpus/queries, lexical `search` | 6/6 checks. About 0.15–0.16 seconds including process startup. No embeddings or model download. |
 | Entire Brain 0.1.0 | Same corpus/queries, keyword document retrieval, isolated local/no-egress setup | 5/6 checks. Returned a document for an absent nonsense term. About 0.047–0.062 seconds including startup. Duplicate sections differ from qmd's file-level results. |
 | Native Luna | Daily local account-backed schedule created, frozen CLI and long-document/conversation fixtures | Three immediate Luna trials completed October 1; scheduled follow-ups remain active. Ambient host context is not isolated; results remain exploratory. |
-| PageIndex / ChatIndex | No model-backed execution | Native heading-tree fixtures establish a comparison baseline; they do not test either product. Compatible account-backed adapters remain unimplemented. |
+| PageIndex / ChatIndex | No model-backed execution | Native heading-tree fixtures establish a comparison baseline; they do not test either product. PageIndex uses separate LiteLLM/OpenAI Agents interfaces; pinned ChatIndex uses OpenAI Chat Completions for construction and Anthropic Messages tool calls for retrieval. The Luna runtime exposes neither endpoint here; see the [PageIndex](pageindex-2026-10-02.md) and [ChatIndex](chatindex-2026-10-03.md) checkpoints. |
 
 Six coarse checks do not rank overall retrieval quality.
 Keep citation correctness, semantic questions, abstention and exact-ID recall as separate future measurements.
@@ -117,3 +117,11 @@ The probe writes synthetic refs and payloads; it never deletes remote evidence.
 The [pinned-source checkpoint](pageindex-2026-10-02.md) reviewed PageIndex `6d23caf416858f2ca136840305d1f479a86f6ef7` and pinned ChatIndex `7df2c9208db6f113f85a6c09295bec7f0f2114e7` for Saturday.
 PageIndex's current local indexer uses LiteLLM chat completions; its tree traversal uses the OpenAI Agents Responses API or provider-specific interfaces.
 The scheduled account-backed Luna runtime is available as an agent/CLI invocation, not as either callable provider interface. No account requests or PageIndex product execution occurred, so there are no quality or performance measurements. The adapter checkpoint is blocked pending a local transport bridge that preserves the upstream request/response semantics; indexing and traversal must be demonstrated separately before retrieval is reported.
+
+## ChatIndex Luna adapter checkpoint — October 3, 2026
+
+The [pinned-source checkpoint](chatindex-2026-10-03.md) reviewed ChatIndex `7df2c9208db6f113f85a6c09295bec7f0f2114e7`.
+Its tree builder calls OpenAI Chat Completions; retrieval directly requires Anthropic Messages structured tool-use responses.
+The account-backed Luna runtime in this execution environment exposes neither provider interface.
+No model requests or product execution occurred, and no product quality or performance result is claimed.
+The next adapter must preserve both interfaces and persist resumable requests and responses across runs.
