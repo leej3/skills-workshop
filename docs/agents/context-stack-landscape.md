@@ -241,6 +241,31 @@ The first six-query comparison passed 6/6 coarse checks for SQLite and qmd and 5
 This is evidence for a follow-up abstention test, not a general quality ranking.
 Model cost, semantic quality and isolated skill effectiveness remain unmeasured.
 
+## Retrieval milestone — 2026-10-04
+
+The scheduled six-file/six-query lexical comparison was rerun against SQLite
+FTS5 3.53.4, qmd 2.8.3, and Entire Brain 0.1.0. All three returned the
+labeled source for the five positive queries; SQLite and qmd abstained on
+the absent-term query, while Brain returned `README.md`. Brain emitted
+duplicate paths on positive queries. This reproduces the earlier narrow
+fixture result and is not a new held-out or semantic-quality result.
+
+The run remained local with zero model requests. qmd indexed six files but
+did not build embeddings. Brain's local keyword query worked, while setup
+reported that it could not establish a complete readable local checkpoint
+catalog and that semantic/entity retrieval lacked the Entire graph plugin.
+Semantic retrieval, incremental changes/removals, and held-out questions
+remain unmeasured. Query-time medians were about 0.171 s for qmd and 0.047 s
+for Brain including CLI startup; SQLite's about 0.000064 s excludes startup,
+so these timings are not comparable. No performance ranking is warranted.
+See the [retained retrieval checkpoint](../../experiments/context-pilots/retrieval-2026-10-04.md)
+for source revisions, hashes, outcome IDs, and annex references.
+
+Next discriminating step: determine whether Brain's graph plugin and complete
+local checkpoint catalog can be provided without egress. If not, retain the
+lexical-only boundary and evaluate held-out questions plus incremental
+update/removal behavior for SQLite and qmd.
+
 ## First native Luna baseline and capture retention
 
 On October 1, three account-backed Luna trials completed: CLI baseline and explicit-skill responses each passed 5/5 basic checks, and the native tree response passed 4/4 citation/abstention checks. These are unblinded, agent-graded, single-trial observations; see [retained trial identities and limits](../../experiments/context-pilots/README.md#luna-baseline--october-1-2026). PageIndex/ChatIndex product integrations remain pending.
