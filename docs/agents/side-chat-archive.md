@@ -19,7 +19,11 @@ Main threads, tool output, and unfinished replies are excluded.
 
 The hook checks Codex Desktop's prompt history or client bindings and excludes persisted threads because hook events lack a side-chat flag.
 Unidentified non-persisted sessions and incomplete or failed backups emit an immediate Codex warning; copy the chat somewhere safe before closing it.
-Successful backups and identified main threads stay quiet.
+On each submitted prompt, the hook supplies a short model-visible archive recovery hint when the archive directory exists.
+An archived side chat also receives its own ID and transcript path; no archived message content is injected into other conversations.
+JSONL records include the working directory when supplied by Codex.
+The hook payload has no parent-thread ID, so locate older chats by content and timestamps rather than assuming the newest archive belongs to the current thread.
+Successful backups do not display warnings.
 App changes can require an update to detection; a disabled hook or an app crash cannot report its own failure.
 The current implementation supports macOS and Linux, using Python's POSIX file locking.
 See [Codex hooks](https://learn.chatgpt.com/docs/hooks) for event and trust behavior.

@@ -220,6 +220,42 @@ class ArchiveTests(unittest.TestCase):
         self.assertIn("JSONDecodeError", result["systemMessage"])
         self.assertNotIn("private malformed payload", result["systemMessage"])
 
+    def test_side_chat_receives_its_archive_location(self):
+        self.mark_side_chat()
+        result = handle(
+            dict(self.event, hook_event_name="UserPromptSubmit", prompt="Question"),
+            self.home,
+        )
+        context = result["hookSpecificOutput"]["additionalContext"]
+        self.assertIn(f"{self.session}.md", context)
+        self.assertNotIn("systemMessage", result)
+
+    def test_main_thread_can_discover_archives_without_copying_their_content(self):
+        self.mark_side_chat()
+        save(dict(self.event, cwd="/work/project"), self.home)
+        with database(self.home / "state_5.sqlite") as db:
+            db.execute("INSERT INTO threads VALUES (?)", (self.session,))
+        archive = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        before = archive.read_bytes()
+        result = handle(
+            dict(self.event, hook_event_name="UserPromptSubmit", prompt="Recover it"),
+            self.home,
+        )
+        context = result["hookSpecificOutput"]["additionalContext"]
+        self.assertIn(str(archive.parent), context)
+        self.assertNotIn("This side chat's archive ID", context)
+        self.assertNotIn(self.event["last_assistant_message"], context)
+        self.assertEqual(archive.read_bytes(), before)
+        self.assertEqual(json.loads(before.splitlines()[-1])["cwd"], "/work/project")
+
+    def test_no_discovery_hint_when_archive_does_not_exist(self):
+        with database(self.home / "state_5.sqlite") as db:
+            db.execute("INSERT INTO threads VALUES (?)", (self.session,))
+        self.assertEqual(
+            handle(dict(self.event, hook_event_name="UserPromptSubmit"), self.home),
+            {},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
