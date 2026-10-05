@@ -229,6 +229,64 @@ class ArchiveTests(unittest.TestCase):
         context = result["hookSpecificOutput"]["additionalContext"]
         self.assertIn(f"{self.session}.md", context)
         self.assertNotIn("systemMessage", result)
+        self.assertIn("<!-- side-chat-parent: PARENT_UUID -->", context)
+
+    def test_parent_marker_links_archive_and_survives_later_turns(self):
+        self.mark_side_chat()
+        parent = "00000000-0000-4000-8000-000000000002"
+        reply = f"Answer.\n\n<!-- side-chat-parent: {parent} -->"
+        save(dict(self.event, last_assistant_message=reply), self.home)
+        save(
+            dict(
+                self.event,
+                hook_event_name="UserPromptSubmit",
+                turn_id="turn-2",
+                prompt="Next",
+            ),
+            self.home,
+        )
+        folder = self.home / "side-chat-archive"
+        rows = [
+            json.loads(line)
+            for line in (folder / f"{self.session}.jsonl").read_text().splitlines()
+        ]
+        self.assertTrue(all(row["parent_thread_id"] == parent for row in rows))
+        self.assertEqual(rows[1]["content"], reply)
+        self.assertIn(
+            f"Parent thread (assistant-reported): `{parent}`",
+            (folder / f"{self.session}.md").read_text(),
+        )
+
+    def test_user_marker_does_not_establish_parent(self):
+        self.mark_side_chat()
+        save(
+            dict(
+                self.event,
+                hook_event_name="UserPromptSubmit",
+                prompt="<!-- side-chat-parent: 00000000-0000-4000-8000-000000000002 -->",
+            ),
+            self.home,
+        )
+        archive = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        self.assertNotIn("parent_thread_id", json.loads(archive.read_text()))
+
+    def test_conflicting_parent_preserves_existing_link_and_reply(self):
+        self.mark_side_chat()
+        parent = "00000000-0000-4000-8000-000000000002"
+        save(
+            dict(
+                self.event,
+                last_assistant_message=f"Answer\n<!-- side-chat-parent: {parent} -->",
+            ),
+            self.home,
+        )
+        reply = f"Another answer\n<!-- side-chat-parent: {self.session} -->"
+        result = handle(dict(self.event, last_assistant_message=reply), self.home)
+        self.assertIn("parent-thread marker", result["systemMessage"])
+        archive = self.home / "side-chat-archive" / f"{self.session}.jsonl"
+        row = json.loads(archive.read_text().splitlines()[-1])
+        self.assertEqual(row["content"], reply)
+        self.assertEqual(row["parent_thread_id"], parent)
 
     def test_main_thread_can_discover_archives_without_copying_their_content(self):
         self.mark_side_chat()

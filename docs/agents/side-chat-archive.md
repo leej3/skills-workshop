@@ -22,7 +22,11 @@ Unidentified non-persisted sessions and incomplete or failed backups emit an imm
 On each submitted prompt, the hook supplies a short model-visible archive recovery hint when the archive directory exists.
 An archived side chat also receives its own ID and transcript path; no archived message content is injected into other conversations.
 JSONL records include the working directory when supplied by Codex.
-The hook payload has no parent-thread ID, so locate older chats by content and timestamps rather than assuming the newest archive belongs to the current thread.
+The side-chat assistant is instructed to append `<!-- side-chat-parent: PARENT_UUID -->` as its response's final line when its context explicitly identifies the immediate parent.
+The hook stores that assistant-reported ID as `parent_thread_id` in JSONL and in the Markdown header, then retains it on subsequent messages.
+Search JSONL records for the main thread's ID to find linked side chats.
+The hook cannot independently verify the assistant's identification; missing context leaves the archive unlinked, and conflicting IDs warn without replacing an existing link or discarding the reply.
+Locate older or unlinked chats by content and timestamps rather than assuming the newest archive belongs to the current thread.
 Successful backups do not display warnings.
 App changes can require an update to detection; a disabled hook or an app crash cannot report its own failure.
 The current implementation supports macOS and Linux, using Python's POSIX file locking.
