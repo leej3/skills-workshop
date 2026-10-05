@@ -125,3 +125,10 @@ Its tree builder calls OpenAI Chat Completions; retrieval directly requires Anth
 The account-backed Luna runtime in this execution environment exposes neither provider interface.
 No model requests or product execution occurred, and no product quality or performance result is claimed.
 The next adapter must preserve both interfaces and persist resumable requests and responses across runs.
+
+## Waza and native Luna checkpoint — October 5, 2026
+
+The scheduled Monday milestone was blocked before model execution.
+Waza 0.38.8 is not available on `PATH` or in the locked Pixi environment, and this turn does not provide fresh isolated account-backed Luna contexts for a matched comparison.
+No account requests were made and no model-effectiveness result is claimed.
+See the [checkpoint](skill-eval-2026-10-05.md) and daily collection duct capture evidence `1f304e89-e88d-5e45-8e82-887787791489`.

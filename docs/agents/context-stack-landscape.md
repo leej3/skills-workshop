@@ -326,3 +326,17 @@ resource score is claimed. The next discriminating step is a credential-free,
 resumable bridge that preserves both upstream protocols and can be invoked by
 the account-backed runtime. The [checkpoint](../../experiments/context-pilots/chatindex-2026-10-03.md)
 retains exact source digests and annex evidence IDs.
+
+## Waza/native Luna skill evaluation checkpoint — 2026-10-05
+
+The Monday milestone was blocked before model execution: the pinned Waza
+0.38.8 executable was absent from `PATH` and the locked Pixi environment, and
+the scheduled turn did not expose fresh isolated account-backed Luna contexts
+for matched native conditions. The earlier Waza mock result remains plumbing
+evidence only. No account requests, skill-effectiveness score, or performance
+measurement were produced. See the
+[checkpoint](../../experiments/context-pilots/skill-eval-2026-10-05.md) and
+daily collection duct evidence `1f304e89-e88d-5e45-8e82-887787791489`.
+
+Next discriminating step: restore Waza 0.38.8 by its verified digest and make
+fresh matched Luna contexts available; keep executor identities separate.
