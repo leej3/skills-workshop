@@ -340,3 +340,25 @@ daily collection duct evidence `1f304e89-e88d-5e45-8e82-887787791489`.
 
 Next discriminating step: restore Waza 0.38.8 by its verified digest and make
 fresh matched Luna contexts available; keep executor identities separate.
+
+## Native context-selection checkpoint — 2026-10-06
+
+The Tuesday native context-selection milestone did not start. Before trial
+preparation, `native_trial.py pending` found two unresolved trials from the
+same CLI pair (ambient baseline and explicit-skill condition). The protocol
+prohibits preparing another native trial until these outcomes are reconciled;
+the original attempts were left untouched. No model requests or context
+quality/volume measurements occurred. See the
+[checkpoint](../../experiments/context-pilots/context-selection-2026-10-06.md).
+
+The experiment audit remained valid with 50 records and no journal-integrity
+errors. It repeats the narrow October 4 Brain false-positive and duplicate-path
+observations; these do not inform context selection. The daily collection
+command reached `memory.publish` but stalled twice during
+`git annex copy --to=payload`; it was stopped after 593.8 seconds and again
+after 200.4 seconds. Feedback import reported 517 shared, 3 sensitive, and 520
+duplicate source records. Local status shows 733 sealed shared records with
+one pending batch, and 72 sealed sensitive records with none pending. Annex
+publication and projection rebuild completion are unconfirmed. Restore annex
+transport before another daily attempt. See the
+[checkpoint](../../experiments/context-pilots/context-selection-2026-10-06.md).
