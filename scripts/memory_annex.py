@@ -149,6 +149,24 @@ class AnnexTransport:
             raise ValueError("external artifact mismatch")
         return self._put(item["sha256"], raw, ARTIFACT_PREFIX)
 
+    def publish_batch_with_artifacts(self, ident, batch_raw, artifacts):
+        """Publish a batch and its artifacts, syncing annex metadata once.
+
+        Each artifact is content- and ref-verified before the batch pointer is
+        published. Receipts are returned only after annex metadata sync succeeds.
+        """
+        for item, artifact_raw in artifacts:
+            if (
+                item["store"] != self.store
+                or digest(artifact_raw) != item["sha256"]
+                or len(artifact_raw) != item["size"]
+            ):
+                raise ValueError("external artifact mismatch")
+            self._put(item["sha256"], artifact_raw, ARTIFACT_PREFIX, sync=False)
+        receipt = self._put(ident, batch_raw, PREFIX, sync=False)
+        self._sync_annex_metadata()
+        return receipt
+
     def fetch_artifact(self, item):
         if item["store"] != self.store:
             raise ValueError("artifact store mismatch")
@@ -160,7 +178,7 @@ class AnnexTransport:
             raise ValueError("artifact integrity failure")
         return raw
 
-    def _put(self, ident, raw, prefix):
+    def _put(self, ident, raw, prefix, *, sync=True):
         ref = prefix + ident
         filename = ident + (".json" if prefix == PREFIX else ".tar.gz")
         path = "batches/" + filename
@@ -179,6 +197,11 @@ class AnnexTransport:
             if key != expected:
                 raise ValueError("batch ref conflicts with outbox content")
         else:
+            # Resolve required commit provenance before creating or staging the
+            # annex pointer. A missing runtime context must leave no dirty outbox.
+            trailers = subprocess.check_output(
+                ["bash", self.config["provenance_script"]], text=True
+            )
             atomic_bytes(self.repo / path, raw)
             self.git("annex", "add", "--backend=SHA256", "--", path)
             key = self.git("annex", "lookupkey", path)
@@ -186,9 +209,6 @@ class AnnexTransport:
             # Nested tree contains exactly the batch pointer, never other staged files.
             tree = self.git("mktree", input=f"120000 blob {entry}\t{filename}\n")
             tree = self.git("mktree", input=f"040000 tree {tree}\tbatches\n")
-            trailers = subprocess.check_output(
-                ["bash", self.config["provenance_script"]], text=True
-            )
             commit = self.git(
                 "commit-tree",
                 tree,
@@ -209,8 +229,12 @@ class AnnexTransport:
         commit = self.git("rev-parse", ref)
         if self.git("ls-remote", "origin", ref).split()[0] != commit:
             raise ValueError("remote ref verification failed")
-        self.git("annex", "sync", "--only-annex", "--no-content", "origin")
+        if sync:
+            self._sync_annex_metadata()
         return {"sha256": digest(raw), "key": key, "ref": ref, "commit": commit}
+
+    def _sync_annex_metadata(self):
+        self.git("annex", "sync", "--only-annex", "--no-content", "origin")
 
     def retrieve(self):
         self.git("fetch", "origin", PREFIX + "*:" + PREFIX + "*")

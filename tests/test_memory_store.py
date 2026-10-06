@@ -91,6 +91,255 @@ def test_ambiguous_publish_retry_preserves_batch_identity(tmp_path):
     assert len(list(memory.records("shared"))) == 1
 
 
+def test_local_publication_hold_skips_only_held_batch_and_keeps_it_auditable(
+    tmp_path,
+):
+    memory = MemoryStore(tmp_path)
+    memory.append(row(1), "a")
+    held_batch = memory.prepare("shared", "2099-01-01", "2099-01-02T00:00:00Z")[0]
+    memory.append(row(2), "a")
+    other_batch = next(
+        batch
+        for batch in memory.prepare("shared", "2099-01-02", "2099-01-03T00:00:00Z")
+        if batch["id"] != held_batch["id"]
+    )
+    holds = {
+        "schema_version": 1,
+        "held_batch_ids": [held_batch["id"]],
+    }
+    hold_path = memory.store_root("shared") / "publication-holds.json"
+    hold_path.write_text(json.dumps(holds))
+    published = []
+
+    def publish_batch(ident, content):
+        published.append(ident)
+        return {"sha256": digest(content)}
+
+    class Remote:
+        def publish_artifact(self, *args):
+            pytest.fail("fixture records have no external artifacts")
+
+        def __call__(self, ident, content):
+            return publish_batch(ident, content)
+
+    outcome = memory.publish("shared", Remote())
+
+    assert published == [other_batch["id"]]
+    assert outcome == {
+        "published_batches": [other_batch["id"]],
+        "withheld_batches": [held_batch["id"]],
+    }
+    assert memory.pending("shared") == [held_batch]
+    assert memory.publishable_pending("shared") == []
+    assert {record["id"] for record in memory.records("shared")} == {
+        row(1)["id"],
+        row(2)["id"],
+    }
+    assert memory.status("shared")["withheld_batches"] == [held_batch["id"]]
+
+
+def test_all_held_batches_need_no_transport_and_remain_pending(tmp_path):
+    memory = MemoryStore(tmp_path)
+    memory.append(row(1), "a")
+    held_batch = seal(memory)[0]
+    hold_path = memory.store_root("shared") / "publication-holds.json"
+    hold_path.write_text(
+        json.dumps({"schema_version": 1, "held_batch_ids": [held_batch["id"]]})
+    )
+
+    assert memory.publishable_pending("shared") == []
+    outcome = memory.publish("shared", None)
+
+    assert outcome == {
+        "published_batches": [],
+        "withheld_batches": [held_batch["id"]],
+    }
+    assert memory.pending("shared") == [held_batch]
+    assert len(list(memory.records("shared"))) == 1
+
+
+def test_supersession_keeps_original_historical_and_out_of_active_views(tmp_path):
+    source_memory = MemoryStore(tmp_path / "source")
+    source_rows = [row(i) for i in (10, 11, 12)]
+    for item in source_rows:
+        source_memory.append(item, "source")
+    source_batch = source_memory.prepare(
+        "shared", "2099-01-01", "2099-01-02T00:00:00Z"
+    )[0]
+    source_path = source_memory.store_root("shared") / "publication-holds.json"
+    source_path.write_text(
+        json.dumps({"schema_version": 1, "held_batch_ids": [source_batch["id"]]})
+    )
+    original_body = source_batch["body"]
+
+    candidate_memory = MemoryStore(tmp_path / "candidate")
+    candidate_memory.append(source_rows[0], "corrected-shared")
+    candidate_batch = candidate_memory.prepare(
+        "shared", "2099-01-01", "2099-01-02T00:00:00Z"
+    )[0]
+
+    private_id = str(uuid.uuid5(uuid.NAMESPACE_URL, "private-replacement"))
+    private_row = envelope(
+        {"redacted_fixture": True},
+        ident=private_id,
+        kind="observation",
+        occurred_at="2026-10-01T00:00:00Z",
+        store="sensitive",
+        producer="fixture",
+        source_schema="fixture-v1",
+        reason="synthetic reclassification fixture",
+        relations=[{"id": source_rows[1]["id"], "relation": "reclassified-from"}],
+    )
+    source_memory.append(private_row, "corrected-private")
+    private_batch = source_memory.prepare(
+        "sensitive", "2099-01-01", "2099-01-02T00:00:00Z"
+    )[0]
+
+    def publish(memory, store):
+        class Remote:
+            def __call__(self, ident, content):
+                return {
+                    "sha256": digest(content),
+                    "ref": "refs/workshop/memory/v2/" + ident,
+                    "commit": "a" * 40,
+                }
+
+        memory.publish(store, Remote())
+
+    publish(candidate_memory, "shared")
+    publish(source_memory, "sensitive")
+
+    event = source_memory.append_batch_supersession(
+        "shared",
+        source_batch["id"],
+        [
+            {
+                "state_path": str(candidate_memory.root),
+                "store": "shared",
+                "id": candidate_batch["id"],
+            },
+            {
+                "state_path": str(source_memory.root),
+                "store": "sensitive",
+                "id": private_batch["id"],
+            },
+        ],
+        [source_rows[2]["id"]],
+        {"routing_manifest_sha256": "b" * 64},
+        "classification correction; source retained unchanged",
+    )
+
+    assert event["source_batch_id"] == source_batch["id"]
+    assert event["source_record_count"] == 3
+    with pytest.raises(ValueError, match="append-only supersession"):
+        source_memory.append_batch_supersession(
+            "shared",
+            source_batch["id"],
+            [],
+            [],
+            {"routing_manifest_sha256": "b" * 64},
+            "conflicting retry",
+        )
+    assert source_memory.pending("shared") == []
+    assert source_memory.publishable_pending("shared") == []
+    assert list(source_memory.records("shared")) == []
+    assert source_memory.status("shared")["historical_batches"] == [source_batch["id"]]
+    assert source_memory.status("shared")["records_active"] == 0
+    assert source_memory.status("shared")["withheld_batches"] == []
+
+    # Even removing the old hold cannot turn a resolved historical batch into work.
+    source_path.write_text(json.dumps({"schema_version": 1, "held_batch_ids": []}))
+    assert source_memory.publish("shared", None) == {
+        "published_batches": [],
+        "withheld_batches": [],
+    }
+
+    promoted_id = str(uuid.uuid5(uuid.UUID(source_rows[2]["id"]), "corrected-shared"))
+    promoted = copy.deepcopy(source_rows[2])
+    promoted["id"] = promoted_id
+    promoted["relations"] = [
+        {"id": source_rows[2]["id"], "relation": "reclassified-from"},
+        {"id": "e7d1fab3-6ef5-59ba-a13e-a15f99466354", "relation": "supported-by"},
+    ]
+    source_memory.append(promoted, "corrected-shared")
+    amendment_batch = source_memory.prepare(
+        "shared", "2099-01-02", "2099-01-03T00:00:00Z"
+    )[0]
+    publish(source_memory, "shared")
+    amendment = source_memory.append_batch_supersession_amendment(
+        "shared",
+        source_batch["id"],
+        [
+            {
+                "state_path": str(source_memory.root),
+                "store": "shared",
+                "id": amendment_batch["id"],
+            }
+        ],
+        [source_rows[2]["id"]],
+        {"corrected_capture_sha256": "c" * 64},
+        "corrected classification after full-capture review; failed run status retained",
+    )
+    assert amendment["promoted_source_record_ids"] == [source_rows[2]["id"]]
+    assert source_memory.pending("shared") == []
+    active_ids = [record["id"] for record in source_memory.records("shared")]
+    assert active_ids == [promoted_id]
+    resolved = source_memory.batch_supersessions("shared")[source_batch["id"]]
+    assert resolved["retained_local_only_source_record_ids"] == []
+    assert [item["id"] for item in resolved["replacement_batches"]][
+        -1
+    ] == amendment_batch["id"]
+    assert source_memory.status("shared")["records_active"] == 1
+
+    with source_memory.ledger("shared") as db:
+        retained = db.execute(
+            "SELECT body,state,receipt FROM batches WHERE id=?", (source_batch["id"],)
+        ).fetchone()
+    assert retained == (original_body, "pending", None)
+
+
+def test_supersession_requires_complete_lineage_and_published_replacements(tmp_path):
+    memory = MemoryStore(tmp_path / "source")
+    source = row(20)
+    memory.append(source, "source")
+    batch = memory.prepare("shared", "2099-01-01", "2099-01-02T00:00:00Z")[0]
+    hold_path = memory.store_root("shared") / "publication-holds.json"
+    hold_path.write_text(
+        json.dumps({"schema_version": 1, "held_batch_ids": [batch["id"]]})
+    )
+    replacement = MemoryStore(tmp_path / "replacement")
+    replacement.append(source, "replacement")
+    replacement_batch = replacement.prepare(
+        "shared", "2099-01-01", "2099-01-02T00:00:00Z"
+    )[0]
+
+    with pytest.raises(ValueError, match="not durably published"):
+        memory.append_batch_supersession(
+            "shared",
+            batch["id"],
+            [
+                {
+                    "state_path": str(replacement.root),
+                    "store": "shared",
+                    "id": replacement_batch["id"],
+                }
+            ],
+            [],
+            {"manifest_sha256": "c" * 64},
+            "fixture supersession",
+        )
+    assert not (memory.store_root("shared") / "batch-supersessions.jsonl").exists()
+    assert memory.pending("shared") == [batch]
+
+
+def test_invalid_publication_hold_fails_closed(tmp_path):
+    memory = MemoryStore(tmp_path)
+    hold_path = memory.store_root("shared") / "publication-holds.json"
+    hold_path.write_text("not-json")
+    with pytest.raises(ValueError, match="cannot read publication hold file"):
+        memory.publish("shared", lambda *args: pytest.fail("must not publish"))
+
+
 def test_restore_and_rebuild_from_remote_bytes(tmp_path):
     original = MemoryStore(tmp_path / "original")
     original.append(row(1), "a")

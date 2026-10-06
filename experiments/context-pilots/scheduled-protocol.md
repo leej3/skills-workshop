@@ -19,6 +19,7 @@ This imports both feedback trees before routing whole records, seals yesterday u
 It does not delete originals.
 Never print token files.
 If classification/content changed under an existing ID, stop and report the conflict; do not silently publish a new classification or discard the original.
+After collection, run `pixi run --locked experiment-audit` to check retained pilot records and unsealed native trial events without changing or closing them.
 
 ## Daily candidate rotation
 
@@ -86,6 +87,14 @@ Do not infer model cost from an account subscription or claim zero resource cost
 
 Before execution, run `pixi run python experiments/context-pilots/native_trial.py pending` to replay persisted events and inspect unresolved attempts.
 Do not assume an unresolved attempt is dead; explicitly close a stopped attempt with `finish --workspace PATH --status interrupted --reason TEXT`.
+If `pending` reports unresolved attempts, do not prepare or dispatch another native pair until admission and outcome are reconciled; continue independent collection and data-integrity auditing.
+If an operator explicitly authorizes recovery for a known pair whose admission cannot be resolved, use `native_trial.py prepare-recovery --pair PAIR_JSON --operator-authorized`.
+This creates new execution workspaces with byte-identical frozen inputs, preserves the logical pair ID, and links each alternative to its original trial.
+Never edit or close the originals as part of recovery or count alternatives as additional independent observations.
+After the two alternative outcomes are complete and their matching blinded grade and response provenance have been retained, the runner appends a supersession record.
+It resolves only the admission block: originals remain admission-unknown, and `pending` lists them as historical rather than actionable.
+A late original outcome is surfaced under `reconciliation_required`; it remains an alternative and is excluded from duplicate analysis until reconciled.
+Routine `prepare-pair` may then start the next pair without deleting or relabeling the original attempts.
 For the CLI comparison, run `native_trial.py prepare-pair` and execute both printed workspaces in the recorded randomized order within the same scheduled milestone.
 Use separate fresh executor contexts with the same model, effort and budget; if the host cannot provide those contexts, record the deviation or a blocked outcome rather than claiming isolation.
 Never pass one condition's answer into the other condition.
@@ -116,10 +125,15 @@ Retrying an unchanged event is idempotent.
 After both pair outcomes complete, use `native_trial.py grading-packet --pair PAIR_JSON --output NEW_DIRECTORY`.
 Give only `grader-input.json` to a fresh grader.
 Keep the separate assignment key closed until grading is saved, and retain the grade, grader identity and deviations as a separate related memory record.
-The packet withholds treatment/runtime labels, but answer wording may reveal the treatment; do not claim guaranteed blinding.
+For an authorized recovery, ingest the returned JSON against the exact packet with `native_trial.py ingest-grade --recovery RECOVERY_JSON --grade-json GRADE.json --packet-json grader-input.json`.
+This verifies the packet digest, rubric entries, scores and source response bytes, stores the raw grade/capture bundle and appends a separate grade record. The exact grader runtime identity remains unknown when the grade source does not report it. The packet withholds treatment/runtime labels, but answer wording may reveal the treatment; do not claim guaranteed blinding.
 Incomplete pairs remain operational evidence, not zero-valued quality scores.
 Synthetic fixtures contain no private project data.
 Do not put ambient conversation text or secrets in shared evidence.
+
+For native response capture, the task response itself must be returned in the final response channel so it can be stored verbatim.
+Do not send the answer through collaboration tools or substitute a receipt that says it was sent elsewhere.
+A transport correction must use the same versioned wrapper for both treatments and retain both source and delivered input hashes.
 
 The fixture rubric supports later independent grading; self-grading is not evidence of effectiveness.
 A scheduled execution alone is not a controlled comparison.

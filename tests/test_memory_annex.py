@@ -5,6 +5,7 @@ import subprocess
 import pytest
 
 from scripts.memory_annex import AnnexTransport, credential
+from scripts.memory_store import digest
 
 
 def configuration(tmp_path):
@@ -51,6 +52,117 @@ def test_payload_endpoint_is_required_before_cloning(tmp_path):
     with pytest.raises(ValueError, match="separate metadata and payload"):
         transport.setup()
     assert not transport.repo.exists()
+
+
+def test_missing_provenance_does_not_create_or_stage_pointer(tmp_path, monkeypatch):
+    _, path = configuration(tmp_path)
+    transport = AnnexTransport(tmp_path, path, "shared")
+    transport.config["provenance_script"] = "resolve.sh"
+    calls = []
+
+    class MissingRef:
+        returncode = 1
+        stdout = ""
+
+    def git(*args, **kwargs):
+        calls.append(args)
+        if args[:2] == ("rev-parse", "--verify"):
+            return MissingRef()
+        if args[:2] == ("ls-remote", "origin"):
+            return ""
+        raise AssertionError(f"unexpected Git mutation before provenance: {args[0]}")
+
+    def missing_provenance(*args, **kwargs):
+        raise subprocess.CalledProcessError(1, args[0])
+
+    monkeypatch.setattr(transport, "git", git)
+    monkeypatch.setattr(
+        "scripts.memory_annex.subprocess.check_output", missing_provenance
+    )
+
+    with pytest.raises(subprocess.CalledProcessError):
+        transport._put("artifact-id", b"archive", "refs/workshop/artifacts/v1/")
+
+    assert calls == [
+        ("rev-parse", "--verify", "refs/workshop/artifacts/v1/artifact-id"),
+        ("ls-remote", "origin", "refs/workshop/artifacts/v1/artifact-id"),
+    ]
+    assert not (transport.repo / "batches" / "artifact-id.tar.gz").exists()
+    assert not (transport.repo / ".git").exists()
+
+
+def test_publish_batch_syncs_annex_metadata_once_after_all_refs(tmp_path, monkeypatch):
+    _, path = configuration(tmp_path)
+    transport = AnnexTransport(tmp_path, path, "shared")
+    published = []
+    synced = []
+
+    def put(ident, raw, prefix, *, sync):
+        published.append((ident, raw, prefix, sync))
+        return {"sha256": ident, "ref": prefix + ident}
+
+    def git(*args, **kwargs):
+        synced.append((args, kwargs))
+
+    monkeypatch.setattr(transport, "_put", put)
+    monkeypatch.setattr(transport, "git", git)
+    artifacts = [
+        (
+            {
+                "store": "shared",
+                "sha256": digest(b"one"),
+                "size": 3,
+            },
+            b"one",
+        ),
+        (
+            {
+                "store": "shared",
+                "sha256": digest(b"two"),
+                "size": 3,
+            },
+            b"two",
+        ),
+    ]
+
+    receipt = transport.publish_batch_with_artifacts(
+        "batch-id", b"batch", iter(artifacts)
+    )
+
+    assert [item[3] for item in published] == [False, False, False]
+    assert [(item[0], item[2]) for item in published] == [
+        (digest(b"one"), "refs/workshop/artifacts/v1/"),
+        (digest(b"two"), "refs/workshop/artifacts/v1/"),
+        ("batch-id", "refs/workshop/memory/v2/"),
+    ]
+    assert receipt["sha256"] == "batch-id"
+    assert synced == [(("annex", "sync", "--only-annex", "--no-content", "origin"), {})]
+
+
+def test_publish_batch_failure_does_not_sync_or_return_receipt(tmp_path, monkeypatch):
+    _, path = configuration(tmp_path)
+    transport = AnnexTransport(tmp_path, path, "shared")
+    calls = []
+
+    def put(ident, raw, prefix, *, sync):
+        calls.append((ident, sync))
+        if len(calls) == 2:
+            raise RuntimeError("fixture failure")
+        return {"sha256": ident}
+
+    def git(*args, **kwargs):
+        calls.append((args, kwargs))
+
+    monkeypatch.setattr(transport, "_put", put)
+    monkeypatch.setattr(transport, "git", git)
+    artifacts = [
+        ({"store": "shared", "sha256": digest(b"1"), "size": 1}, b"1"),
+        ({"store": "shared", "sha256": digest(b"2"), "size": 1}, b"2"),
+    ]
+
+    with pytest.raises(RuntimeError, match="fixture failure"):
+        transport.publish_batch_with_artifacts("batch-id", b"batch", iter(artifacts))
+    assert calls == [(digest(b"1"), False), (digest(b"2"), False)]
 
 
 def test_credentials_are_scoped_to_endpoint_role(tmp_path, monkeypatch, capsys):

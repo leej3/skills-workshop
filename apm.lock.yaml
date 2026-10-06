@@ -63,7 +63,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d6c08a50a90b7ddc252e174d228c01d1010fb1d52d4862d0f27bf706b4e347ee
+  content_hash: sha256:ff3109a21873b242059457f21a1a11d3d53d09a3d3bd62a370d8ff1c59889ebd
 - kind: project-relative
   target: legacy
   value: .agents/skills/commit-provenance/agents/openai.yaml
@@ -81,7 +81,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:dab8fa7248f90bcb565103332d9998fa3e5d4820f065f31abc93738ad4568851
+  content_hash: sha256:7b99c2dbe34bd90cbd5cf2ac54525e7fbf855f081b0c451733755cbfefc55960
 - kind: project-relative
   target: legacy
   value: .agents/skills/commit-provenance/scripts/runtime_context.py
@@ -90,7 +90,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:2e8e59e564895860210c441a646c1c969dce92d82e23c50c964b93343b257b37
+  content_hash: sha256:2d2389e4ea1dd67782e518d9d3a9bde8f6a536b81804430bac157603573d9a74
 - kind: project-relative
   target: legacy
   value: .agents/skills/commit-provenance/scripts/test_runtime_context.py
@@ -99,7 +99,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:66b15ee3217c94c58bb2211c96634e096bee6568f25bfa9d40e01ae4d8197281
+  content_hash: sha256:7dff5ee8bcbc1fe23c09b4f36281de7beb39a925f110bba5c3962a6e3f66d0a2
 - kind: project-relative
   target: legacy
   value: .agents/skills/unix-cli-design
@@ -137,9 +137,9 @@ local_deployed_file_hashes:
   .agents/skills/build-github-app/agents/openai.yaml: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
   .agents/skills/build-github-app/references/artifacts-deployment.md: sha256:8dd316f3d7ad2b5186d4b69a13f8d428c21f50d441e0530398c1eb33f39cbb0e
   .agents/skills/build-github-app/references/oauth-permissions.md: sha256:c36d640f539c18a9653cb103d488c89f15ce02b9af02d0eb2f84082860e877c2
-  .agents/skills/commit-provenance/SKILL.md: sha256:d6c08a50a90b7ddc252e174d228c01d1010fb1d52d4862d0f27bf706b4e347ee
+  .agents/skills/commit-provenance/SKILL.md: sha256:ff3109a21873b242059457f21a1a11d3d53d09a3d3bd62a370d8ff1c59889ebd
   .agents/skills/commit-provenance/agents/openai.yaml: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
-  .agents/skills/commit-provenance/scripts/resolve.sh: sha256:dab8fa7248f90bcb565103332d9998fa3e5d4820f065f31abc93738ad4568851
-  .agents/skills/commit-provenance/scripts/runtime_context.py: sha256:2e8e59e564895860210c441a646c1c969dce92d82e23c50c964b93343b257b37
-  .agents/skills/commit-provenance/scripts/test_runtime_context.py: sha256:66b15ee3217c94c58bb2211c96634e096bee6568f25bfa9d40e01ae4d8197281
+  .agents/skills/commit-provenance/scripts/resolve.sh: sha256:7b99c2dbe34bd90cbd5cf2ac54525e7fbf855f081b0c451733755cbfefc55960
+  .agents/skills/commit-provenance/scripts/runtime_context.py: sha256:2d2389e4ea1dd67782e518d9d3a9bde8f6a536b81804430bac157603573d9a74
+  .agents/skills/commit-provenance/scripts/test_runtime_context.py: sha256:7dff5ee8bcbc1fe23c09b4f36281de7beb39a925f110bba5c3962a6e3f66d0a2
   .agents/skills/unix-cli-design/SKILL.md: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d

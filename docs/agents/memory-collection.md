@@ -32,6 +32,15 @@ A designated aggregator per store seals one day at a time under an OS lock.
 All agents use the local staging area.
 Multi-host support is an explicit non-goal; do not design host-to-host transfer or distributed coordination.
 
+When a sealed batch must be replaced without rewriting its original evidence, use `memory supersede-batch --manifest PATH` to append a `memory-batch-supersession-v1` event to that store's `batch-supersessions.jsonl`.
+The command verifies the held source batch, replacement batches and receipts, complete source-record accounting, and explicit IDs retained local-only.
+The original batch and artifacts remain unchanged.
+Resolved batches are historical: the collector excludes them from pending publication, indexes, and exports even if a hold is later removed.
+The event retains replacement refs/digests and local-only record IDs.
+If a previously local-only record is later corrected and published, use `memory amend-supersession --manifest PATH` to append a `memory-batch-supersession-amendment-v1` event.
+The amendment must link the record through `reclassified-from` in a durably published replacement batch; it removes that source ID from the local-only list without editing the original resolution or source batch.
+Never clear a hold as a substitute for recording a supersession.
+
 The collector seals yesterday in America/New_York, using receive time to avoid including late deliveries retroactively. It groups all eligible agents' records into 1000-record batches, with at most one remainder per day/store.
 Identical records deduplicate by ID.
 A local SQLite transaction persists the exact batch bytes and IDs before transport.

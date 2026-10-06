@@ -35,6 +35,7 @@ check-controls-apm = "python scripts/check_apm.py --package controls"
 setup-agent = "python scripts/setup_agent.py"
 setup-side-chat-archive = "python scripts/setup_side_chat_archive.py"
 memory-validate = "python scripts/workshop.py validate"
+experiment-audit = "python experiments/context-pilots/audit_data.py"
 inventory = "python scripts/inventory.py"
 inventory-table = "python scripts/inventory.py --format tsv"
 inventory-vd = { cmd = "vd inventory/skills.tsv", depends-on = ["inventory-table"] }

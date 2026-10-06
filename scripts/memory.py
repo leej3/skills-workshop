@@ -230,6 +230,16 @@ def main():
     )
     daily.add_argument("--config", type=Path, required=True)
     daily.add_argument("--timezone", default="America/New_York")
+    supersede = commands.add_parser(
+        "supersede-batch",
+        help="append a verified resolution for a retained historical batch",
+    )
+    supersede.add_argument("--manifest", type=Path, required=True)
+    amend_supersession = commands.add_parser(
+        "amend-supersession",
+        help="append verified lineage for records previously retained locally",
+    )
+    amend_supersession.add_argument("--manifest", type=Path, required=True)
     curated = commands.add_parser(
         "snapshot-curated", help="stage a lossless curated working-tree snapshot"
     )
@@ -313,17 +323,64 @@ def main():
             for store in ("shared", "sensitive"):
                 memory.prepare(store, (today - timedelta(days=1)).isoformat(), cutoff)
                 if memory.pending(store):
-                    transport = AnnexTransport(memory.root, args.config, store)
-                    transport.setup()
-                    memory.publish(store, transport)
+                    if memory.publishable_pending(store):
+                        transport = AnnexTransport(memory.root, args.config, store)
+                        transport.setup()
+                    else:
+                        transport = None
+                    publication = memory.publish(store, transport)
+                else:
+                    publication = {
+                        "published_batches": [],
+                        "withheld_batches": [],
+                    }
                 result["stores"][store] = rebuild_index(
                     memory, store, memory.store_root(store) / "projection.sqlite"
                 )
+                result["stores"][store].update(publication)
         elif args.command == "ingest":
             data = (
                 sys.stdin.read() if args.input == "-" else Path(args.input).read_text()
             )
             result = memory.append(json.loads(data), args.agent)
+        elif args.command == "supersede-batch":
+            manifest = json.loads(args.manifest.read_text())
+            required = {
+                "source_batch_id",
+                "replacement_batches",
+                "retained_local_only_source_record_ids",
+                "evidence",
+                "reason",
+            }
+            if set(manifest) != required:
+                raise ValueError("invalid batch supersession manifest")
+            result = memory.append_batch_supersession(
+                "shared",
+                manifest["source_batch_id"],
+                manifest["replacement_batches"],
+                manifest["retained_local_only_source_record_ids"],
+                manifest["evidence"],
+                manifest["reason"],
+            )
+        elif args.command == "amend-supersession":
+            manifest = json.loads(args.manifest.read_text())
+            required = {
+                "source_batch_id",
+                "replacement_batches",
+                "promoted_source_record_ids",
+                "evidence",
+                "reason",
+            }
+            if set(manifest) != required:
+                raise ValueError("invalid batch supersession amendment manifest")
+            result = memory.append_batch_supersession_amendment(
+                "shared",
+                manifest["source_batch_id"],
+                manifest["replacement_batches"],
+                manifest["promoted_source_record_ids"],
+                manifest["evidence"],
+                manifest["reason"],
+            )
         elif args.command == "import-feedback":
             result = import_feedback(memory, args.public, args.private)
         elif args.command == "flush":
@@ -340,13 +397,17 @@ def main():
         elif args.command in ("publish", "restore"):
             from scripts.memory_annex import AnnexTransport
 
-            transport = AnnexTransport(memory.root, args.config, args.store)
-            transport.setup()
             if args.command == "restore":
+                transport = AnnexTransport(memory.root, args.config, args.store)
+                transport.setup()
                 result = restore(memory, args.store, transport)
             else:
-                memory.publish(args.store, transport)
-                result = memory.status(args.store)
+                transport = None
+                if memory.publishable_pending(args.store):
+                    transport = AnnexTransport(memory.root, args.config, args.store)
+                    transport.setup()
+                publication = memory.publish(args.store, transport)
+                result = {**memory.status(args.store), **publication}
         elif args.command == "status":
             result = memory.status(args.store)
         elif args.command == "index":

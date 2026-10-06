@@ -47,12 +47,19 @@ def test_capture_is_separate_deterministic_and_restore_does_not_fetch_logs(tmp_p
     batches = []
 
     class Remote:
+        def publish_batch_with_artifacts(self, ident, batch_content, artifacts):
+            uploads.append("bulk-start")
+            for reference, artifact_content in artifacts:
+                self.publish_artifact(reference, artifact_content)
+            uploads.append("annex-sync")
+            return self.__call__(ident, batch_content)
+
         def publish_artifact(self, reference, content):
             assert reference == item and content == raw
             uploads.append("artifact")
 
         def __call__(self, ident, content):
-            assert uploads == ["artifact"]
+            assert uploads == ["bulk-start", "artifact", "annex-sync"]
             batches.append((ident, content))
             return {"sha256": digest(content)}
 
@@ -62,6 +69,7 @@ def test_capture_is_separate_deterministic_and_restore_does_not_fetch_logs(tmp_p
 
     remote = Remote()
     memory.publish("shared", remote)
+    assert uploads == ["bulk-start", "artifact", "annex-sync"]
     recovered = MemoryStore(tmp_path / "reader")
     restore(recovered, "shared", remote)
     row = next(recovered.records("shared"))
@@ -81,6 +89,46 @@ def test_incomplete_or_symlink_capture_is_not_accepted(tmp_path):
     (source / "outside").symlink_to(tmp_path / "secret")
     with pytest.raises(ValueError, match="regular files"):
         capture_duct(memory, source, "shared", "test")
+
+
+def test_capture_routing_uses_explicit_store_for_path_and_secret_fixture(tmp_path):
+    memory = MemoryStore(tmp_path / "memory")
+    cross_project = duct_run(tmp_path / "cross-project")
+    context = json.loads((cross_project / "context.json").read_text())
+    context["project_id"] = "synthetic-other-project"
+    context["working_directory"] = "/tmp/synthetic-other-project"
+    (cross_project / "context.json").write_text(json.dumps(context))
+    cross_result = capture_duct(memory, cross_project, "shared", "test-agent")
+
+    secret_fixture = duct_run(tmp_path / "synthetic-sensitive")
+    canary = b"Authorization: Bearer SYNTHETIC_ONLY_NOT_A_REAL_CREDENTIAL"
+    (secret_fixture / "run_stderr").write_bytes(canary)
+    sensitive_result = capture_duct(
+        memory,
+        secret_fixture,
+        "sensitive",
+        "test-agent",
+        reason="Synthetic credential-like routing fixture; no real credential",
+    )
+
+    memory.prepare("shared", "2099-01-01", "2099-01-02T00:00:00Z")
+    memory.prepare("sensitive", "2099-01-01", "2099-01-02T00:00:00Z")
+    shared_row = next(memory.records("shared"))
+    sensitive_row = next(memory.records("sensitive"))
+
+    assert cross_result["artifact"]["store"] == "shared"
+    assert shared_row["classification"]["store"] == "shared"
+    assert sensitive_result["artifact"]["store"] == "sensitive"
+    assert sensitive_row["classification"]["store"] == "sensitive"
+    assert sensitive_row["classification"]["reason"].startswith("Synthetic")
+    assert [row["id"] for row in memory.records("shared")] == [shared_row["id"]]
+    archive = (
+        memory.store_root("sensitive")
+        / "objects"
+        / sensitive_result["artifact"]["sha256"]
+    ).read_bytes()
+    with tarfile.open(fileobj=io.BytesIO(gzip.decompress(archive))) as saved:
+        assert saved.extractfile("run_stderr").read() == canary
 
 
 def test_missing_artifact_prevents_batch_publication(tmp_path):

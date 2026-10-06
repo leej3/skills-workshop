@@ -17,6 +17,38 @@ Runtime logs are an internal format: revalidate this fallback after format chang
 Treat the resolved per-turn evidence as authoritative for model and reasoning effort.
 Never infer either from prose or use `config.toml` as the current-turn value.
 
+When the runtime exposes neither model nor reasoning effort, a human may supply a task-service context file only when the task service has verified the thread and turn IDs.
+Set `CODEX_TASK_SERVICE_CONTEXT` to the file path.
+The file must use schema version 1 and contain exactly these fields: `schema_version`, `evidence_source`, `evidence_reference`, `thread_id`, `turn_id`, `model`, and `reasoning_effort`.
+Use `task-service-verified-delegation-transcript` as the `evidence_source`; `evidence_reference` is the UUID of the delegation transcript that records the task-service verification.
+This is traceable user-supplied evidence, not a cryptographic task-service signature; use only identifiers explicitly present in that transcript.
+The thread ID must match `CODEX_THREAD_ID`; both IDs must be canonical UUIDs.
+Each of `model` and `reasoning_effort` must be an object with `status: "unavailable"`, `value: null`, and a nonempty single-line `reason`.
+Do not fill these fields from configuration, prose, another thread, or an unverified setting.
+Task-service context is only a fallback when no local transcript or fresh runtime-log record is available; a local transcript or fresh runtime record remains authoritative when present.
+
+For example:
+
+```json
+{
+  "schema_version": 1,
+  "evidence_source": "task-service-verified-delegation-transcript",
+  "evidence_reference": "01a0f366-073b-7231-a8d6-b4188e1450d7",
+  "thread_id": "01a10eed-811f-701a-943f-5f9b8d9680db",
+  "turn_id": "01a112d4-959b-7435-ba7d-25cbfd29f3c9",
+  "model": {
+    "status": "unavailable",
+    "value": null,
+    "reason": "Task service verified IDs but did not provide runtime model identity."
+  },
+  "reasoning_effort": {
+    "status": "unavailable",
+    "value": null,
+    "reason": "Task service did not expose runtime reasoning effort."
+  }
+}
+```
+
 ## Commit trailer
 
 Use the script's two output trailers unchanged:
@@ -25,6 +57,9 @@ Use the script's two output trailers unchanged:
 Co-Authored-By: Codex Desktop <desktop-version> (runtime codex-cli <runtime-version>) / <model> <codex@openai.com>
 Codex-Reasoning-Effort: <effort>
 ```
+
+With task-service partial context, the model and effort values are literally `unavailable`; additional trailers record both verified IDs, the evidence source and reference, and each unavailable reason.
+These trailers do not claim a model or effort from application configuration.
 
 If the script cannot identify every required value, stop and ask the user; do not create the commit with guessed provenance.
 Preserve any stricter repository commit-message requirements.
