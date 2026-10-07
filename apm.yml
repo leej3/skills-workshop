@@ -6,5 +6,6 @@ includes:
   - .apm/skills/commit-provenance
   - .apm/skills/build-github-app
   - .apm/skills/unix-cli-design
+  - .apm/skills/wt-utils
 targets:
   - agent-skills
