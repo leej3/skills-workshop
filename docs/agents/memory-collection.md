@@ -226,15 +226,10 @@ Sensitive catalogs must remain on a private store; never combine them into the s
 A fresh checkout can run `memory import-catalog DIRECTORY` followed by `show-capture` with the transport configuration.
 The existing daily batches remain the canonical envelope publication path.
 
-The [Entire round-trip probe](../../experiments/memory-annex/entire-evaluation.md#annex-round-trip-october-7-2026) demonstrates a useful read adapter boundary.
-Annex pointers cannot replace transcript blobs transparently in Entire 0.11.3.
-Hydrating exact checkpoint bytes into a disposable Git tree restores successful metadata and transcript reads.
-
 Verification on October 7 exercised the real recorder on a private task conversation and ten explicitly selected duct runs.
 The configured sensitive transport accepted the 761,861-byte archive; a fresh memory state imported its catalog, downloaded the artifact from the configured remote, and recovered all 55 members with archive and member digest checks.
 The catalog used for this recovery was copied locally; GitHub catalog publication was not established by that test.
 The synthetic acceptance capture was removed on October 7; it is not collection evidence.
-Its original observation and fixed snapshot were retained for retry.
 
 ## Synthetic evidence removal — October 7, 2026
 
@@ -256,3 +251,46 @@ The cleanup receipts contain IDs, hashes, ref changes and verification results i
 They retain no synthetic payloads.
 Repository history was not rewritten; prior source commits are historical, not active tooling or evaluation evidence.
 Original genuine conversations remain unmodified, including any historical discussion of retired experiments.
+
+## Collection health
+
+`pixi run memory health --store shared` prints one JSON report for recorded skill uses in the last seven days, newest first, limited to 50 uses.
+Select the private report with `--store sensitive`.
+`--days` and `--limit` are positive integers.
+The report states the total matching count, returned count and whether it was truncated; summary counts cover returned uses only.
+It cannot detect skill uses that were never recorded.
+
+The report reads source observations, private overlays, journals and active batches, including observations not yet queued.
+Both feedback trees must be available so a missing private overlay cannot silently expose a shared placeholder.
+Private fields never enter the shared report.
+`--public` and `--private` override the source trees.
+It neither imports nor publishes records.
+
+Each use lists presence of the agent assessment, captured conversation, duct logs and pinned APM reference.
+Explicitly linked duct evidence counts as present and is listed by ID; unattached logs are not guessed from timestamps.
+Declared evidence gaps remain visible.
+Missing components describe available evidence, not an automatic policy violation: older minimal observations and tasks with no command execution may legitimately lack them.
+
+Storage status distinguishes unqueued, journaled, pending, held and published records.
+For rich captures, local payload status verifies archive size/hash.
+Upload receipts and batch publication receipts are historical evidence, not a current availability guarantee.
+Older immediate uploads without saved receipts are reported as unknown.
+New immediate uploads save their receipt for future reports.
+Storage status describes the rich capture when present, otherwise the observation; separately linked duct IDs do not imply that their payloads were checked.
+
+To check current metadata refs and annex payload presence, run:
+
+```console
+pixi run memory health --store sensitive --verify-remote --config /absolute/path/to/transport.json
+```
+
+This may initialize/update the local transport cache and contact its configured remotes, but does not download evidence payloads.
+Remote metadata absence, payload absence and check failures remain distinct.
+`retrievable` means both the metadata ref and content-addressed payload are present; it is not a fresh byte-for-byte download test.
+Configuration or initial connectivity failures fail the command rather than reporting a healthy store.
+
+Every use includes an `inspect_command`.
+For a rich capture it prints the full envelope using `show-capture`; add `--output NEW_DIRECTORY` and `--config CONFIG` to recover the complete archive.
+For an observation without a capture it uses `health --id UUID`, which includes the complete observation regardless of age.
+Evidence gaps return exit status 0 with issue fields; invalid inputs or operational failures return 1.
+CLI syntax errors return 2.

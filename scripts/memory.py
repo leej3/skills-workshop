@@ -264,6 +264,30 @@ def main():
     )
     daily.add_argument("--config", type=Path, required=True)
     daily.add_argument("--timezone", default="America/New_York")
+    health_parser = commands.add_parser(
+        "health",
+        help="JSON health of recorded uses; evidence gaps are not command failures",
+    )
+    health_parser.add_argument(
+        "--store", choices=("shared", "sensitive"), required=True
+    )
+    health_parser.add_argument("--days", type=int, default=7)
+    health_parser.add_argument("--limit", type=int, default=50)
+    health_parser.add_argument(
+        "--id", help="inspect one full observation, ignoring the date window"
+    )
+    health_parser.add_argument("--public", type=Path, default=legacy / "observations")
+    health_parser.add_argument(
+        "--private",
+        type=Path,
+        default=Path.home() / ".local/state/skills-workshop/feedback-overlay",
+    )
+    health_parser.add_argument(
+        "--verify-remote",
+        action="store_true",
+        help="check refs and payload presence without downloading payloads",
+    )
+    health_parser.add_argument("--config", type=Path)
     supersede = commands.add_parser(
         "supersede-batch",
         help="append a verified resolution for a retained historical batch",
@@ -299,7 +323,29 @@ def main():
     args = parser.parse_args()
     try:
         memory = MemoryStore(args.state)
-        if args.command == "snapshot-curated":
+        if args.command == "health":
+            from scripts.memory_health import health, remote_checker
+
+            check = None
+            if args.verify_remote:
+                if not args.config:
+                    raise ValueError("remote verification requires --config")
+                from scripts.memory_annex import AnnexTransport
+
+                transport = AnnexTransport(memory.root, args.config, args.store)
+                transport.setup()
+                check = remote_checker(transport)
+            result = health(
+                memory,
+                args.store,
+                args.public,
+                args.private,
+                args.days,
+                args.limit,
+                check,
+                observation_id=args.id,
+            )
+        elif args.command == "snapshot-curated":
             from scripts.memory_legacy import snapshot
 
             result = snapshot(memory, args.directory)
@@ -372,6 +418,12 @@ def main():
                         (
                             memory.store_root(args.store) / "objects" / item["sha256"]
                         ).read_bytes(),
+                    )
+                    atomic_bytes(
+                        memory.store_root(args.store)
+                        / "artifact-receipts"
+                        / (item["sha256"] + ".json"),
+                        (canonical(result["receipt"]) + "\n").encode(),
                     )
         elif args.command == "fetch-artifact":
             from scripts.memory_annex import AnnexTransport
