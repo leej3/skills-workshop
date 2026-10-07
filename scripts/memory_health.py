@@ -92,6 +92,9 @@ def health(
     for ident, (report, classification) in sources.items():
         if classification == store:
             observations[ident] = report
+        elif store == "sensitive" and ident in captures:
+            # A shareable assessment can accompany a private conversation capture.
+            observations[ident] = captures[ident]["payload"]["observation"]
         else:
             observations.pop(ident, None)
             captures.pop(ident, None)

@@ -153,3 +153,14 @@ def test_cli_json_and_bad_limit(tmp_path):
         and not result.stdout
         and "Traceback" not in result.stderr
     )
+
+
+def test_shareable_assessment_with_sensitive_capture(tmp_path):
+    memory, public, private, report, request, _ = setup(tmp_path)
+    capture_feedback(
+        memory, report, request, "sensitive", "unit-test", "private conversation"
+    )
+    sensitive = health(memory, "sensitive", public, private, now=NOW)
+    assert sensitive["uses"][0]["capture_id"]
+    shared = health(memory, "shared", public, private, now=NOW)
+    assert shared["uses"][0]["capture_id"] is None
