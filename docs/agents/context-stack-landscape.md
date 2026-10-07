@@ -371,12 +371,12 @@ Restoring the exact checkpoint tree from a separately fetched annex archive made
 Evidence level: executed local synthetic probe with a fresh clone, local bare metadata remote and directory annex remote.
 No hosted/model dependency was exercised.
 
-Decision: retain annex-backed portable evidence and align with Entire through a disposable hydrated checkpoint projection.
+Decision (revised after maintainability review): retain annex-backed portable evidence and defer Entire alignment. The hydration probe establishes recoverability, not an economical integration. Maintaining transcript normalization, checkpoint trees and upstream lifecycle compatibility is not justified by the readers tested so far. This supersedes the earlier recommendation to align through a hydrated projection.
 Do not claim direct annex compatibility or adopt its Git primary store merely to obtain its readers.
 The Workshop catalog branch is an explicit format with complete capture envelopes and annex references; it does not impersonate Entire's checkpoint namespace.
 Current upstream backend documentation still requires Git-backed primary storage.
-Original native conversation bytes and Workshop observation/capture IDs remain canonical outside the projection.
-Next test: a real recovered rich capture through Entire import and source-linked Brain retrieval; live hooks, resume and hosted services remain unverified.
+Original native conversation bytes and Workshop observation/capture IDs remain canonical. No production Entire projection is installed.
+Next discriminating test, only if Entire offers a needed capability: compare that capability against direct Workshop catalog/annex retrieval and measure adapter maintenance. Live hooks, resume and hosted services remain unverified.
 
 The recorder now supports an agent self-assessment plus a linked conversation/log archive through `feedback-local record --capture`.
 This builds on demonstrated recorder use without requiring a new runtime hook for collection.

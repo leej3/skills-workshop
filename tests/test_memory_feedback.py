@@ -267,3 +267,51 @@ def test_unsafe_files_and_other_session_logs_are_rejected(tmp_path):
     (tmp_path / "run/linked-secret").symlink_to(report)
     with pytest.raises(ValueError, match="regular file"):
         capture_feedback(memory, report, request, "shared", "test")
+
+
+def test_apm_reference_roundtrip_and_reject_embedding(tmp_path):
+    report, request, _ = inputs(tmp_path)
+    spec = json.loads(request.read_text())
+    spec["schema_version"] = 2
+    reference = {
+        "manager": "apm",
+        "package": "leej3/skills-workshop/controls",
+        "resolved_commit": "38c9df6cfee8241f1bce9bb2f65d1c083a574757",
+        "skill": "duct",
+    }
+    spec["skill_reference"] = reference
+    request.write_text(json.dumps(spec))
+    memory = MemoryStore(tmp_path / "memory")
+    result = capture_feedback(memory, report, request, "shared", "test")
+    row = find_capture(memory, "shared", result["id"])
+    raw = (
+        memory.store_root("shared") / "objects" / result["artifact"]["sha256"]
+    ).read_bytes()
+    output = tmp_path / "recovered"
+    recover_capture(row, raw, output)
+    assert (
+        json.loads((output / "manifest.json").read_text())["skill_reference"]
+        == reference
+    )
+    assert not (output / "skill").exists()
+    assert (output / "schemas/capture-request-v2.schema.json").exists()
+    reference["resolved_commit"] = "main"
+    request.write_text(json.dumps(spec))
+    with pytest.raises(ValueError, match="invalid capture input"):
+        capture_feedback(memory, report, request, "shared", "test")
+    reference["resolved_commit"] = "a" * 40
+    reference["skill"] = "another-skill"
+    request.write_text(json.dumps(spec))
+    with pytest.raises(ValueError, match="does not match"):
+        capture_feedback(memory, report, request, "shared", "test")
+    spec.pop("skill_reference")
+    spec["skill_path"] = "/unused/SKILL.md"
+    request.write_text(json.dumps(spec))
+    with pytest.raises(ValueError, match="invalid capture input"):
+        capture_feedback(memory, report, request, "shared", "test")
+    spec["schema_version"] = 1
+    request.write_text(json.dumps(spec))
+    with pytest.raises(ValueError, match="embedding retired"):
+        capture_feedback(
+            MemoryStore(tmp_path / "fresh"), report, request, "shared", "test"
+        )

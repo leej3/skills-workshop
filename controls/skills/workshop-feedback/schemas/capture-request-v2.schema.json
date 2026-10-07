@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Explicit skill-use capture inputs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "conversation",
+    "duct_runs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "conversation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "format"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "enum": [
+            "codex-jsonl",
+            "jsonl",
+            "text"
+          ]
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "turn_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "duct_runs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      }
+    },
+    "skill_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manager",
+        "package",
+        "resolved_commit",
+        "skill"
+      ],
+      "properties": {
+        "manager": {
+          "const": "apm"
+        },
+        "package": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*$"
+        },
+        "resolved_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "skill": {
+          "type": "string",
+          "minLength": 1
+        },
+        "host": {
+          "const": "github.com"
+        }
+      }
+    }
+  }
+}

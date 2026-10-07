@@ -221,7 +221,7 @@ An ordinary clone carries the initial snapshot descriptor, not its payload.
 ## Linked skill-use records — October 7, 2026
 
 The existing `feedback-local record` command accepts `--capture REQUEST.json` alongside a schema-validated `assessment` in `--details`.
-It calls `memory capture-feedback`, retaining the original observation, explicit transcript snapshot, selected finished duct logs, optional skill entrypoint, and hashed manifest in one external annex artifact.
+It calls `memory capture-feedback`, retaining the original observation, explicit transcript snapshot, selected finished duct logs, optional pinned APM skill reference, and hashed manifest in one external annex artifact.
 The envelope links back to the observation UUID and embeds its self-assessment for indexing.
 The source observation remains independently importable through the existing daily collector.
 

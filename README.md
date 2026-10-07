@@ -77,7 +77,7 @@ Start a new Codex task in the project you are working on and ask:
 
 The agent searches remembered skills, pinned local catalogs, and public providers.
 After material skill use, `workshop-feedback` writes a schema-validated record.
-For substantive work, its rich capture includes an agent utility assessment, the supplied conversation snapshot, selected duct logs, and an optional skill entrypoint.
+For substantive work, its rich capture includes an agent utility assessment, the supplied conversation snapshot, selected duct logs, and an optional pinned APM skill reference.
 Routine records are shareable; a private overlay holds sensitive fields and classification reasons.
 Exceptional lessons are grouped and prioritized.
 Agents inspect, validate, and queue records before completing each task.

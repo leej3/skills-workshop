@@ -53,7 +53,14 @@ def capture_feedback(memory, observation, request_path, store, agent, reason=Non
         raise ValueError("capture requires a usage observation with an assessment")
     request_raw = snapshot(request_path)
     request = json.loads(request_raw)
-    validate_input(request, "capture-request-v1.schema.json")
+    version = request.get("schema_version")
+    if type(version) is not int or version not in (1, 2):
+        raise ValueError("unsupported capture request version")
+    request_schema = f"capture-request-v{version}.schema.json"
+    validate_input(request, request_schema)
+    reference = request.get("skill_reference")
+    if reference and reference["skill"] != report["skill"]:
+        raise ValueError("APM reference does not match assessed skill")
     if store == "shared" and (
         report.get("sensitivity") or report["visibility"] == "private"
     ):
@@ -76,15 +83,15 @@ def capture_feedback(memory, observation, request_path, store, agent, reason=Non
                 raise ValueError("capture inputs changed; use a new observation ID")
             row = validate(receipt["record"])
         else:
+            if request.get("skill_path"):
+                raise ValueError("skill embedding retired; use a v2 APM reference")
             files = {
                 "observation.json": raw,
                 "capture-request.json": request_raw,
                 "schemas/observation-v2.schema.json": (
                     SCHEMAS / "observation-v2.schema.json"
                 ).read_bytes(),
-                "schemas/capture-request-v1.schema.json": (
-                    SCHEMAS / "capture-request-v1.schema.json"
-                ).read_bytes(),
+                f"schemas/{request_schema}": (SCHEMAS / request_schema).read_bytes(),
             }
             base = Path(request_path).resolve().parent
 
@@ -138,16 +145,6 @@ def capture_feedback(memory, observation, request_path, store, agent, reason=Non
                         "execution_summary": summary,
                     }
                 )
-            if request.get("skill_path"):
-                skill = source(request["skill_path"])
-                if skill.is_dir():
-                    skill = skill / "SKILL.md"
-                files["skill/SKILL.md"] = snapshot(skill)
-                if (
-                    report.get("skill_digest")
-                    and digest(files["skill/SKILL.md"]) != report["skill_digest"]
-                ):
-                    raise ValueError("skill changed since assessment")
             manifest = {
                 "schema_version": 1,
                 "observation_id": report["id"],
@@ -167,6 +164,8 @@ def capture_feedback(memory, observation, request_path, store, agent, reason=Non
                     for name, value in sorted(files.items())
                 ],
             }
+            if reference:
+                manifest["skill_reference"] = reference
             files["manifest.json"] = (canonical(manifest) + "\n").encode()
             item = store_archive(memory, store, "skill-use-capture.tar.gz", files)
             ident = str(

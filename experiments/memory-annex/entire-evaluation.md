@@ -164,7 +164,9 @@ References:
 
 ## Annex round-trip: October 7, 2026
 
-Decision: align at the checkpoint metadata/export boundary and retain annex as canonical payload storage.
+Decision (revised): defer Entire alignment and retain annex as canonical payload storage.
+The successful hydration experiment does not justify the cost of maintaining a checkpoint adapter.
+This supersedes the earlier recommendation to align at the export boundary.
 Do not make Entire's current primary backend the Workshop storage contract.
 An annex pointer is not a transparent replacement for a transcript Git blob.
 
@@ -203,5 +205,5 @@ pixi run python experiments/memory-annex/entire_annex_roundtrip.py \
 
 Run through duct, as with the earlier probe.
 Every authored fixture commit resolves fresh provenance.
-Next discriminating test: import a recovered real Workshop capture into a disposable Entire repository, normalize its transcript for Brain if needed, and verify source-linked retrieval.
-Only consider changing Entire's primary storage implementation if that adapter proves too costly or loses required lifecycle functionality.
+Next discriminating test, only for a concrete unmet requirement: compare the desired Entire capability against direct Workshop retrieval, including normalization and lifecycle maintenance costs.
+Do not build or operate a projection solely because the round-trip passed.

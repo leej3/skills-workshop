@@ -61,7 +61,7 @@ Numeric durations remain measured values in the existing fields.
 }
 ```
 
-The capture request follows [capture-request-v1.schema.json](../schemas/capture-request-v1.schema.json).
+The capture request follows [capture-request-v2.schema.json](../schemas/capture-request-v2.schema.json).
 Paths are explicit; relative paths resolve against the request file's directory.
 The collector never searches unrelated sessions or guesses log ownership from timestamps.
 Codex conversation identity is checked against the native `session_meta` record.
@@ -70,20 +70,35 @@ Older runs without that field remain explicitly selected inputs, not independent
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "conversation": {
     "path": "/absolute/path/to/rollout.jsonl",
     "format": "codex-jsonl",
     "session_id": "actual-session-id"
   },
   "duct_runs": ["/absolute/path/to/finished-duct-run"],
-  "skill_path": "/absolute/path/to/skill/SKILL.md",
+  "skill_reference": {
+    "manager": "apm",
+    "package": "leej3/skills-workshop/controls",
+    "resolved_commit": "38c9df6cfee8241f1bce9bb2f65d1c083a574757",
+    "skill": "duct"
+  },
   "missing_evidence": ["External attachments are referenced in the transcript but not copied."]
 }
 ```
 
+Take the package (repository plus virtual path), `resolved_commit`, and skill selector from the APM lock that supplied the skill actually used.
+The pin above is illustrative, not a default.
+GitHub APM packages are supported; omit the reference and explain `missing_evidence` for a native/unmanaged skill or another host.
+Do not substitute the latest commit for the version used.
+Resolve in an isolated APM project with `apm install PACKAGE#RESOLVED_COMMIT --skill SKILL --target agent-skills`; access to that repository is still required.
+The reference is provenance, not proof of an untampered installation: audit the supplying APM deployment, and use the observation entrypoint digest to identify drift.
+
+Old v1 captures remain readable and exact retries reuse their existing snapshot.
+New requests cannot embed a skill, including through v1.
+
 ```console
-pixi run feedback-local record example-skill --task implementation --outcome success \
+pixi run feedback-local record duct --task implementation --outcome success \
   --details details.json --event-id ACTUAL_UUID \
   --capture capture.json --capture-store sensitive \
   --capture-reason "Conversation contains private project context" \
@@ -94,10 +109,15 @@ pixi run feedback-local record example-skill --task implementation --outcome suc
 It requires the Workshop checkout and its memory dependencies; it is not an independent portable annex implementation.
 `--capture-state` can select an isolated state directory for testing.
 Sensitive is the default capture store; give a reason, and classify any sensitive assessment fields with the ordinary overlay options too.
-Choose shared only after reviewing the entire conversation, logs, skill text and report.
+Choose shared only after reviewing the entire conversation, logs and report.
 Do not instrument collection itself with duct.
 
-The archive retains the original observation, request, transcript bytes, complete selected finished duct directories, optional skill entrypoint, the reporting/request schemas, and a manifest of member hashes and sizes. Conversation scope is the whole supplied transcript through the byte boundary at collection; later messages, attachments, and unselected sessions are not silently included. The manifest marks the boundary and caller-reported missing evidence. It preserves a partial final line as original bytes rather than silently truncating it. The entrypoint is not a full skill dependency/source snapshot.
+The archive retains the original observation, request, transcript bytes, complete selected finished duct directories, optional pinned APM reference, the reporting/request schemas, and a manifest of member hashes and sizes.
+Conversation scope is the whole supplied transcript through the byte boundary at collection; later messages, attachments, and unselected sessions are not silently included.
+The manifest marks the boundary and caller-reported missing evidence.
+It preserves a partial final line as original bytes rather than silently truncating it.
+No separate skill source file is copied.
+Skill text already present in the original conversation remains part of that unmodified evidence.
 
 The result contains both the observation ID and capture ID plus an artifact descriptor.
 Collection stages locally; `--capture-config` also uploads the artifact immediately.
