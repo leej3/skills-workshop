@@ -161,3 +161,47 @@ References:
 - [Entire primary/mirror and independent-ref design](https://github.com/entireio/cli/blob/30fa2a79ffe2c269914b036df62084ba25c94921/docs/architecture/ref-checkpoint-backend.md)
 - [Brain configuration, privacy, and retrieval](https://github.com/entireio/entire-brain/blob/f423963df61fe70077234170567055aa88cb3e62/docs/reference.md)
 - [Brain conversation parser](https://github.com/entireio/entire-brain/blob/f423963df61fe70077234170567055aa88cb3e62/internal/cli/conversation.go)
+
+## Annex round-trip: October 7, 2026
+
+Decision: align at the checkpoint metadata/export boundary and retain annex as canonical payload storage.
+Do not make Entire's current primary backend the Workshop storage contract.
+An annex pointer is not a transparent replacement for a transcript Git blob.
+
+The new [round-trip fixture](entire_annex_roundtrip.py) used the prior synthetic checkpoint and the same pinned Entire CLI 0.11.3 binary.
+It placed an exact checkpoint-tree archive in git-annex, indexed it on `workshop/captures/v1` in an isolated local bare metadata repository, and cloned that repository without local object sharing.
+The clone initially had no payload.
+Fetching from the directory annex remote reproduced the archive byte for byte.
+
+The fixture then built an Entire checkpoint with ordinary metadata but annex pointers at the transcript paths.
+`entire checkpoint explain ID --transcript` returned exit status 0 and the literal annex pointer, not the transcript, even though annex content was present locally.
+Readers use Git tree blobs rather than hydrated working-tree files.
+After constructing a disposable checkpoint ref with the retrieved original bytes as blobs, its Git tree hash exactly matched the original checkpoint.
+Both Entire's JSON metadata read and exact transcript export succeeded.
+
+The first probe attempt left Entire disabled and received a disabled-status message with exit 0; it did not prove a transcript read.
+The corrected fixture enables the isolated repository's read path without installing hooks, then asserts content equality in addition to exit status.
+Local evidence is retained under `~/.local/state/skills-workshop/entire-evaluation/annex-roundtrip-20261007-02/`, including `result.json`, all commands, pointer output, and the recovered transcript.
+Its source checkpoint is `c5a9c4b050fb`; the archive key is `SHA256-s10240--e1f9a93254eafea39865cefa457860a36a84bfe1f553e64e3b71ae4df75eb66c`.
+
+This proves local read compatibility after hydration, using a synthetic fixture.
+It does not test Entire hosted services, Brain retrieval, live agent capture, resume, or cross-project discovery.
+The October 1 Brain parser mismatch remains unresolved by this test.
+The current upstream [backend contract](https://github.com/entireio/cli/blob/main/docs/architecture/ref-checkpoint-backend.md), reviewed October 7, still documents Git-backed primary stores and write-only non-Git mirrors.
+The tested release remains the prior pin; this is not a claim that latest upstream behavior was executed.
+No hosted account, model invocation, or credential was needed for this local probe.
+
+Reproduce after running the earlier synthetic import probe:
+
+```console
+pixi run python experiments/memory-annex/entire_annex_roundtrip.py \
+  --source-repo /absolute/path/to/earlier-probe/repo \
+  --entire /absolute/path/to/pinned/entire \
+  --workspace /absolute/path/to/new-roundtrip \
+  --provenance-script /absolute/path/to/commit-provenance/scripts/resolve.sh
+```
+
+Run through duct, as with the earlier probe.
+Every authored fixture commit resolves fresh provenance.
+Next discriminating test: import a recovered real Workshop capture into a disposable Entire repository, normalize its transcript for Brain if needed, and verify source-linked retrieval.
+Only consider changing Entire's primary storage implementation if that adapter proves too costly or loses required lifecycle functionality.

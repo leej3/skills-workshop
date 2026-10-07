@@ -162,9 +162,8 @@ Read [references/workflow.md](references/workflow.md) for the boundary and verif
 
 ## Record evidence after real use
 
-Use `workshop-feedback` for one schema-validated baseline record per skill/task after material use.
-Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review.
-Routine successes require no narrative, memory registration, or per-record commit.
+Use `workshop-feedback` for one schema-validated record per skill/task after material use; prefer its rich assessment and annex capture path for substantive work. Its policy owns collection exemptions, exceptional qualitative notes, grouping, priority, and publication review. Include a concise freeform utility/efficiency assessment in rich records.
+Routine successes require no separate prose report, memory registration, or per-record commit.
 Inspect, validate, and queue the task's records through the feedback collector before completing it.
 In annex-backed checkouts, publication uses daily batches; do not recreate a Git-tracked memory tree.
 Legacy Git-backed checkouts still require a reviewed task-end commit and authorized push.

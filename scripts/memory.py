@@ -209,6 +209,40 @@ def main():
         type=Path,
         help="upload artifact now; its assessment still joins the daily batch",
     )
+    feedback = commands.add_parser(
+        "capture-feedback",
+        help="snapshot a rich observation and explicit evidence inputs",
+    )
+    feedback.add_argument("observation", type=Path)
+    feedback.add_argument("--manifest", type=Path, required=True)
+    feedback.add_argument("--store", choices=("shared", "sensitive"), required=True)
+    feedback.add_argument("--agent", required=True)
+    feedback.add_argument("--reason")
+    feedback.add_argument(
+        "--config", type=Path, help="upload artifact now; record joins the daily batch"
+    )
+    show = commands.add_parser(
+        "show-capture",
+        help="print full envelope or recover all evidence into a new directory",
+    )
+    show.add_argument("id", help="capture or observation UUID")
+    show.add_argument("--store", choices=("shared", "sensitive"), required=True)
+    show.add_argument("--output", type=Path)
+    show.add_argument(
+        "--config", type=Path, help="fetch missing annex content on demand"
+    )
+    cat = commands.add_parser(
+        "catalog",
+        help="export capture metadata for a Git catalog branch; no payloads or push",
+    )
+    cat.add_argument("--store", choices=("shared", "sensitive"), required=True)
+    cat.add_argument("--output", type=Path, required=True, help="new directory")
+    catalog_import = commands.add_parser(
+        "import-catalog",
+        help="restore capture records from a catalog checkout; payloads stay lazy",
+    )
+    catalog_import.add_argument("directory", type=Path)
+    catalog_import.add_argument("--agent", default="capture-catalog-import")
     fetch = commands.add_parser(
         "fetch-artifact", help="explicitly download one referenced artifact"
     )
@@ -273,17 +307,59 @@ def main():
             from scripts.memory_legacy import recover
 
             result = recover(args.archive.read_bytes(), args.output)
-        elif args.command == "capture-duct":
+        elif args.command == "import-catalog":
+            from scripts.memory_feedback import import_catalog
+
+            result = import_catalog(memory, args.directory, args.agent)
+        elif args.command == "catalog":
+            from scripts.memory_feedback import catalog
+
+            result = catalog(memory, args.store, args.output)
+        elif args.command == "show-capture":
+            from scripts.memory_feedback import find_capture, recover_capture
+
+            row = find_capture(memory, args.store, args.id)
+            result = row
+            if args.output:
+                item = row["external_artifacts"][0]
+                local = memory.store_root(args.store) / "objects" / item["sha256"]
+                if local.exists():
+                    raw = local.read_bytes()
+                elif args.config:
+                    from scripts.memory_annex import AnnexTransport
+
+                    transport = AnnexTransport(memory.root, args.config, args.store)
+                    transport.setup()
+                    raw = transport.fetch_artifact(item)
+                    atomic_bytes(local, raw)
+                else:
+                    raise ValueError(
+                        "capture payload unavailable locally; supply --config"
+                    )
+                result = recover_capture(row, raw, args.output)
+        elif args.command in ("capture-duct", "capture-feedback"):
             from scripts.memory_capture import capture_duct
 
-            result = capture_duct(
-                memory,
-                args.directory,
-                args.store,
-                args.agent,
-                args.reason,
-                args.related,
-            )
+            if args.command == "capture-feedback":
+                from scripts.memory_feedback import capture_feedback
+
+                result = capture_feedback(
+                    memory,
+                    args.observation,
+                    args.manifest,
+                    args.store,
+                    args.agent,
+                    args.reason,
+                )
+            else:
+                result = capture_duct(
+                    memory,
+                    args.directory,
+                    args.store,
+                    args.agent,
+                    args.reason,
+                    args.related,
+                )
             if args.config:
                 from scripts.memory_annex import AnnexTransport
 

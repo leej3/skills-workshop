@@ -362,3 +362,23 @@ one pending batch, and 72 sealed sensitive records with none pending. Annex
 publication and projection rebuild completion are unconfirmed. Restore annex
 transport before another daily attempt. See the
 [checkpoint](../../experiments/context-pilots/context-selection-2026-10-06.md).
+
+## Rich skill-use capture and Entire boundary — October 7, 2026
+
+The [annex round-trip](../../experiments/memory-annex/entire-evaluation.md#annex-round-trip-october-7-2026) advances the Entire CLI assessment beyond synthetic import alone.
+Entire CLI 0.11.3 returned literal annex pointer text from a checkpoint transcript blob, with exit status 0.
+Restoring the exact checkpoint tree from a separately fetched annex archive made its JSON metadata and transcript readers work; the rebuilt tree hash and transcript bytes matched the original.
+Evidence level: executed local synthetic probe with a fresh clone, local bare metadata remote and directory annex remote.
+No hosted/model dependency was exercised.
+
+Decision: retain annex-backed portable evidence and align with Entire through a disposable hydrated checkpoint projection.
+Do not claim direct annex compatibility or adopt its Git primary store merely to obtain its readers.
+The Workshop catalog branch is an explicit format with complete capture envelopes and annex references; it does not impersonate Entire's checkpoint namespace.
+Current upstream backend documentation still requires Git-backed primary storage.
+Original native conversation bytes and Workshop observation/capture IDs remain canonical outside the projection.
+Next test: a real recovered rich capture through Entire import and source-linked Brain retrieval; live hooks, resume and hosted services remain unverified.
+
+The recorder now supports an agent self-assessment plus a linked conversation/log archive through `feedback-local record --capture`.
+This builds on demonstrated recorder use without requiring a new runtime hook for collection.
+Session identities in new duct contexts help validate explicit associations.
+Missing logs, attachments or later conversation content remain explicit scope limits; the collector does not infer completeness from an observation count.

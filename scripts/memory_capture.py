@@ -10,13 +10,22 @@ from pathlib import Path
 from scripts.memory_store import atomic_bytes, digest, envelope, validate
 
 
+def safe_name(name):
+    return (
+        bool(name)
+        and not name.startswith("/")
+        and "\\" not in name
+        and all(part not in ("", ".", "..") for part in name.split("/"))
+    )
+
+
 def store_archive(memory, store, name, files):
     """Stage exact named bytes as an on-demand artifact, irrespective of size."""
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w") as archive:
         for filename, data in sorted(files.items()):
-            if Path(filename).name != filename or filename in (".", ".."):
-                raise ValueError("archive names must be plain filenames")
+            if not safe_name(filename):
+                raise ValueError("archive names must be safe relative paths")
             member = tarfile.TarInfo(filename)
             member.size = len(data)
             member.mode = 0o600

@@ -514,6 +514,71 @@
           },
           "required": [],
           "additionalProperties": false
+        },
+        "assessment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "usefulness",
+            "efficiency",
+            "confidence",
+            "rationale",
+            "improvements",
+            "basis"
+          ],
+          "properties": {
+            "usefulness": {
+              "enum": [
+                "useful",
+                "partly-useful",
+                "not-useful",
+                "harmful",
+                "unknown"
+              ]
+            },
+            "efficiency": {
+              "enum": [
+                "improved",
+                "unchanged",
+                "reduced",
+                "mixed",
+                "unknown"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "basis": {
+              "const": "agent-self-assessment"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16384
+            },
+            "improvements": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "maxItems": 32
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "maxItems": 64
+            }
+          }
         }
       },
       "required": [

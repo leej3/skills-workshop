@@ -33,6 +33,8 @@ def main():
     parser.add_argument("--project-id", default=os.environ.get("DUCT_PROJECT_ID"))
     parser.add_argument("--store", type=Path, default=os.environ.get("DUCT_STORE_ROOT"))
     parser.add_argument("--message", default="")
+    parser.add_argument("--session-id", default=os.environ.get("CODEX_THREAD_ID"))
+    parser.add_argument("--task-id", default=os.environ.get("WORKSHOP_TASK_ID"))
     parser.add_argument(
         "--capture", choices=["all", "none", "stdout", "stderr"], default="all"
     )
@@ -88,6 +90,8 @@ def main():
         status = git(project, "status", "--porcelain")
         context = {
             "schema_version": 1,
+            "session_id": args.session_id,
+            "task_id": args.task_id,
             "project_id": key,
             "project_root": str(project),
             "working_directory": str(cwd),

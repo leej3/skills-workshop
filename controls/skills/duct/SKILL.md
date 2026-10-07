@@ -54,6 +54,8 @@ Worktrees and separate clones are distinct.
 `context.json` records the original root, working directory, commit, and dirty state, not a source snapshot.
 A commit plus a dirty flag cannot reproduce uncommitted code.
 No remote URL or full environment dump is added by the helper.
+The helper records `session_id` from `CODEX_THREAD_ID` (or `--session-id`) and optional `task_id` from `WORKSHOP_TASK_ID` (or `--task-id`) to support explicit capture linkage.
+Unset identities remain null; timestamps and project paths alone do not prove ownership.
 
 Use `--project /path/to/root` to group a non-Git project's subdirectories.
 For a durable identity across relocated checkouts or machines, set `--project-id my-project` (or `DUCT_PROJECT_ID`) consistently.

@@ -1,6 +1,6 @@
 ---
 name: workshop-feedback
-description: Collect schema-validated skill outcomes, keep sensitive details in a private overlay, and group exceptional lessons for improvement. Routine records are shareable; narrative feedback is exceptional.
+description: Collect schema-validated skill outcomes, keep sensitive details in a private overlay, and group exceptional lessons for improvement. Retain rich skill-use assessments and explicit conversation/log captures through Workshop annex.
 ---
 
 # Workshop feedback
@@ -23,7 +23,12 @@ pixi run feedback-local record duct --task build-validation --outcome success
 
 Every write and read validates against [observation-v2.schema.json](schemas/observation-v2.schema.json), JSON Schema draft 2020-12.
 `schema` prints it; `validate` checks stored records.
-The required CLI fields are skill, task category, and skill outcome; generated/default fields complete the record. Use a stable task category, with optional concise context in `--details details.json`. Read [reporting.md](references/reporting.md) for optional fields and an example.
+The minimal command remains available for lightweight observations.
+For substantive skill use, prefer a rich record: supply `--details` with an `assessment` of usefulness, efficiency, confidence, freeform rationale, and possible improvements, plus `--capture` with explicit conversation and finished duct-run inputs.
+Read [reporting.md](references/reporting.md#rich-skill-use-capture) for the schema, complete invocation, retry behavior and full-record retrieval.
+Capture exact available evidence and state what is missing; do not manufacture measurements or associate unrelated sessions.
+Use the sensitive store for private conversations and classify the assessment itself with overlay options when necessary.
+Reuse the returned observation ID when retrying an upload so the original snapshot remains fixed.
 
 Distinguish whether the skill performed its role (`--outcome`) from the surrounding task result (`--task-outcome`).
 Allowed outcomes are success, partial, failure, abandoned, and unknown.
@@ -62,7 +67,7 @@ Collection failure must not block the main task or create a pending obligation f
 ## Exceptional lessons
 
 Write notes for new skill failures, workarounds, unexpected costs, ambiguity, improvements, or newly demonstrated capabilities.
-Routine successes need only baseline records.
+Rich usage assessments can describe ordinary benefits and improvement ideas; separate insight records remain for lessons that warrant grouping or follow-up.
 
 ```console
 pixi run feedback-local note duct --group macos-sampling --priority 1 \

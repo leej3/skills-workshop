@@ -73,13 +73,21 @@ def record(args):
             "quality",
             "evidence",
             "evaluation",
+            "assessment",
         }
         if not isinstance(details, dict) or set(details) - allowed:
             raise ValueError(
                 "details must contain only schema-defined optional reporting groups"
             )
         payload.update(details)
-    return append(args, payload)
+    if args.capture and "assessment" not in payload:
+        raise ValueError("--capture requires an assessment in --details")
+    result = append(args, payload)
+    if args.capture:
+        from capture import capture_record
+
+        result["capture"] = capture_record(args, result)
+    return result
 
 
 def note(args):
@@ -231,6 +239,25 @@ def main(argv=None):
     )
     use.add_argument("skill", type=short)
     use.add_argument(
+        "--capture",
+        type=Path,
+        help="explicit conversation/log inputs JSON; snapshot once per event ID",
+    )
+    use.add_argument(
+        "--capture-store", choices=("shared", "sensitive"), default="sensitive"
+    )
+    use.add_argument(
+        "--capture-reason", help="required classification reason for sensitive capture"
+    )
+    use.add_argument(
+        "--capture-config",
+        type=Path,
+        help="optional Workshop annex transport config; upload immediately",
+    )
+    use.add_argument(
+        "--capture-state", type=Path, help="optional Workshop memory state directory"
+    )
+    use.add_argument(
         "--task",
         required=True,
         type=short,
@@ -363,7 +390,7 @@ def main(argv=None):
         print(json.dumps(result, ensure_ascii=False, allow_nan=False))
         return 0
     except (ValueError, OSError) as error:
-        parser.exit(1, f"Feedback not recorded/read: {error}\n")
+        parser.exit(1, f"Feedback operation failed: {error}\n")
 
 
 if __name__ == "__main__":

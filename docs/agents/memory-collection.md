@@ -217,3 +217,35 @@ For later snapshots, restore/export the shared memory batches and select the `wo
 Feedback records remain independently recoverable from the classified memory batches.
 The one-time migration retains a verified complete local backup, including previously untracked observations; deleting the repository directory does not delete those records.
 An ordinary clone carries the initial snapshot descriptor, not its payload.
+
+## Linked skill-use records — October 7, 2026
+
+The existing `feedback-local record` command accepts `--capture REQUEST.json` alongside a schema-validated `assessment` in `--details`.
+It calls `memory capture-feedback`, retaining the original observation, explicit transcript snapshot, selected finished duct logs, optional skill entrypoint, and hashed manifest in one external annex artifact.
+The envelope links back to the observation UUID and embeds its self-assessment for indexing.
+The source observation remains independently importable through the existing daily collector.
+
+`memory show-capture UUID --store STORE --output NEW_DIRECTORY --config CONFIG` resolves either the observation or capture ID, including captures still in journals, retrieves annex bytes when necessary, and verifies every member before extraction.
+A retry of the same recording uses the first snapshot; transcript appends do not silently change an earlier capture.
+The full supplied transcript is captured through the collection byte boundary.
+The recorder does not install a hook, fetch external attachments, or infer which old duct runs belong to a session.
+Agent utility/efficiency judgments remain self-assessments; later independent evaluations should be linked records.
+
+`memory catalog --store shared --output NEW_DIRECTORY` exports JSON envelopes under `captures/<shard>/<uuid>/metadata.json` with `index.json` at the root.
+This is a Workshop catalog suitable for a separate `workshop/captures/v1` Git branch in this repository, not an Entire checkpoint store.
+It contains metadata and annex descriptors, not transcript or log payloads.
+Exports include staged records; ensure their artifact uploads succeeded before advertising remote availability.
+The exporter does not push or mark records published.
+Sensitive catalogs must remain on a private store; never combine them into the shared branch.
+A fresh checkout can run `memory import-catalog DIRECTORY` followed by `show-capture` with the transport configuration.
+The existing daily batches remain the canonical envelope publication path.
+
+The [Entire round-trip probe](../../experiments/memory-annex/entire-evaluation.md#annex-round-trip-october-7-2026) demonstrates a useful read adapter boundary.
+Annex pointers cannot replace transcript blobs transparently in Entire 0.11.3.
+Hydrating exact checkpoint bytes into a disposable Git tree restores successful metadata and transcript reads.
+
+Verification on October 7 exercised the real recorder on a private task conversation and ten explicitly selected duct runs.
+The configured sensitive transport accepted the 761,861-byte archive; a fresh memory state imported its catalog, downloaded the artifact from the configured remote, and recovered all 55 members with archive and member digest checks.
+The catalog used for this recovery was copied locally; GitHub catalog publication was not established by that test.
+A separate shared synthetic capture remained staged because the GitHub SSH agent had no loaded identity.
+Its original observation and fixed snapshot were retained for retry.

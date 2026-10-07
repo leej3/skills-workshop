@@ -1,7 +1,7 @@
 # Skills Workshop
 
 Skills Workshop remembers which agent skills you considered, installed, and used across projects—and what helped or failed.
-It searches local catalogs and public providers, delegates external skill installation to APM, and stores observations as versioned JSON in Git.
+It searches local catalogs and public providers, delegates external skill installation to APM, and retains versioned evidence with Git metadata and git-annex payloads.
 
 ## Install for Codex
 
@@ -76,7 +76,8 @@ Start a new Codex task in the project you are working on and ask:
 > Use $skills-workshop to find a skill for reviewing this project's releases.
 
 The agent searches remembered skills, pinned local catalogs, and public providers.
-After material skill use, `workshop-feedback` writes a schema-validated concise baseline record.
+After material skill use, `workshop-feedback` writes a schema-validated record.
+For substantive work, its rich capture includes an agent utility assessment, the supplied conversation snapshot, selected duct logs, and an optional skill entrypoint.
 Routine records are shareable; a private overlay holds sensitive fields and classification reasons.
 Exceptional lessons are grouped and prioritized.
 Agents inspect, validate, and queue records before completing each task.
@@ -84,6 +85,19 @@ The annex collector publishes daily batches.
 Curated legacy records use an external local working copy and lossless annex snapshots; see [memory recovery](docs/agents/memory-collection.md).
 See [local feedback and learning](docs/agents/local-feedback.md) for the hook, aggregates, and publication boundary.
 The installed instruction asks the agent to do this, but it is not an automatic runtime hook.
+
+To inspect a complete captured use, run:
+
+```console
+pixi run memory show-capture CAPTURE_OR_OBSERVATION_UUID --store sensitive \
+  --config /absolute/path/to/memory/transport.json --output /new/capture-directory
+```
+
+This retrieves and verifies the original transcript, report, logs and manifest.
+Use `--store shared` for a reviewed shareable capture.
+Older minimal observations do not acquire evidence retroactively.
+See [rich capture inputs and reporting](controls/skills/workshop-feedback/references/reporting.md#rich-skill-use-capture) for the recording command.
+
 
 > Use $skills-workshop to recall which skills helped with release reviews.
 
