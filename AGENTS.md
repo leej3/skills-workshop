@@ -62,3 +62,10 @@ Distinguish source-reviewed claims, local probes, production use, and untested h
 Treat the landscape diagram as a map of interchangeable capabilities, not an installation plan.
 Preserve canonical identities, original evidence, sensitivity decisions, and portable records independently of downstream indexes and application databases.
 Update an existing assessment rather than creating a parallel ledger, and mark superseded conclusions explicitly.
+
+## Real memory evidence
+
+Use collected memories and their existing annex artifacts for analysis and evaluation.
+Do not create synthetic memories, conversations, evaluation corpora, benchmark payloads, or simulated outcomes.
+Isolated software unit-test inputs are permitted, but must never enter memory stores or evaluation results.
+Use shared annex content as shared; preserve actual classification for other records.

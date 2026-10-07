@@ -1,140 +1,39 @@
-# Ongoing context-stack evaluations
+# Evaluation using collected memory
 
-Evaluate the actual candidate tools alongside explicitly named native baselines.
-An enrollment or adapter attempt is not a completed product evaluation.
-Use the account-backed Luna runtime supplied by the scheduler.
-Do not configure an API key, start paid provider jobs, install model weights, or enable Brain network services.
+Use real collected Workshop memories, native conversations and actual duct logs from annex.
+Synthetic memories, authored benchmark conversations, simulated outcomes and generated evaluation corpora are prohibited.
+Isolated unit-test inputs are allowed only within software tests and must never enter memory stores or evaluation results.
 
 ## Daily collection
 
-Run from the Workshop checkout through duct:
-
-```sh
-pixi run memory daily \
-  --private "$HOME/.local/state/skills-workshop/feedback-overlay" \
-  --config "$HOME/.local/state/skills-workshop/memory/transport.json"
-```
-
-This imports both feedback trees before routing whole records, seals yesterday using receive time, retries outstanding uploads, and rebuilds separate SQLite projections.
-It does not delete originals.
-Never print token files.
-If classification/content changed under an existing ID, stop and report the conflict; do not silently publish a new classification or discard the original.
-After collection, run `pixi run --locked experiment-audit` to check retained pilot records and unsealed native trial events without changing or closing them.
+Run the documented `memory daily` command in [memory collection](../../docs/agents/memory-collection.md).
+Import both feedback trees, aggregate yesterday’s records in 1000-record batches, retry publication and rebuild each store’s projections.
+Preserve source IDs, classifications and bytes.
+Report failures without claiming publication succeeded.
 
 ## Daily candidate rotation
 
-Use the local date in America/New_York and the table below.
-Start with PageIndex on Friday October 2, 2026.
-Keep one bounded fixture or adapter milestone per run; do not repeatedly run all tools every day.
-Each model-backed trial is exploratory until its execution and grading conditions support a stronger claim.
+Use America/New_York weekdays: Friday PageIndex, Saturday ChatIndex, Sunday SQLite/qmd/Brain retrieval, Monday skill utility assessment, Tuesday native context selection, Wednesday native capture, Thursday storage/recovery.
+Take one bounded milestone, at most ten minutes and eight account-backed Luna requests.
+Use only the existing account-backed runtime; do not configure paid providers, subscriptions or copied account credentials.
 
-| Day | Layer and candidates | Work to accumulate |
-|---|---|---|
-| Friday | Document trees: actual PageIndex against native heading-tree and lexical baselines | Local index construction, page-cited retrieval, index size, build/query resources and reconstruction |
-| Saturday | Conversation trees: actual ChatIndex against native tree and lexical baselines | Construction, exact message citations, appended messages, superseded decisions, update cost and removal behavior |
-| Sunday | Retrieval: SQLite FTS5, qmd, Entire Brain | Same frozen corpus/queries; precision, recall, abstention, citation correctness and startup-aware latency |
-| Monday | Skill evaluation: Waza and native Luna with/without explicit skill | Preserve executor identity; matched prompt/treatment/rubric, repeated trials and failures |
-| Tuesday | Context selection: native document/conversation baseline | Harder held-out questions and context-volume measurements; avoid ceiling-only fixtures |
-| Wednesday | Capture: Entire CLI and native evidence/duct capture | Coverage, original-byte preservation, missing provenance, export and recovery without the collector |
-| Thursday | Storage: canonical journals, annex and disposable projections | Concurrent ingestion, daily batching, retry/recovery, lazy artifact retrieval and operational cost |
+Select existing accessible records before evaluating a candidate.
+Record the selection query, IDs, content hashes and inclusion criteria.
+Prefer available shared annex content; do not invent a privacy restriction on content already classified as shared.
+Preserve actual sensitivity boundaries for other records.
+If suitable evidence is absent, report the data gap and stop that milestone without generating substitutes.
 
-Read the latest candidate evidence and `docs/agents/context-stack-landscape.md` before choosing the next milestone.
-Work from the existing implementations and pinned local binaries where available.
-Keep source checkouts, dependency environments and generated indexes outside the code repository.
-Record source revision before execution.
-Never silently update a previously measured tool revision.
+Measure source-linked retrieval, capture completeness, recovery correctness, review effort and available runtime/resource costs.
+Keep agent self-assessments separate from measured efficiency.
+Unknown outcomes remain unknown; retrospective observations do not establish causal skill benefit.
+Preserve failed operations and missing evidence.
 
-### PageIndex and ChatIndex enrollment
+PageIndex and ChatIndex require compatible account-backed adapters before product execution.
+Source review or a native baseline is not execution of those products.
+Entire integration is deferred until a concrete unmet capability justifies its maintenance cost.
+Do not recreate retired native-trial, synthetic transport or checkpoint generators.
 
-Both are active evaluation candidates, not deferred selections.
-Their first milestone is an actual product adapter compatible with the account-backed Luna boundary.
-Inspect pinned upstream code and its model interface; implement and test the smallest reversible adapter in `experiments/context-pilots`, then run a small frozen fixture.
-A staged request/response adapter may preserve upstream prompts and resume execution, but it must run the actual indexing/retrieval logic.
-Do not replace that logic with a handwritten tree and label it a product result.
-Avoid maintaining a fork unless an adapter cannot preserve the required semantics.
-
-A model-backed trial may span runs: retain pending requests, responses and checkpoints with exact identities, and resume instead of restarting.
-Cap a daily milestone at ten minutes of experiment execution and eight account-backed model requests; stop earlier when the result or a concrete blocker is established.
-Record actual requests and available usage; the cap is not an observed measurement.
-Keep API-provider accounts and hosted subscriptions unconfigured.
-Do not copy account credentials into third-party providers.
-
-If the runtime cannot supply the required interface, save a `blocked` assessment naming the exact interface, source revision, attempted approach and next discriminating step.
-Never give an unrun tool a performance score.
-On later visits, advance adapter work or check a materially changed boundary; do not repeat an identical unsuccessful probe just to produce another record.
-Use remaining time for a ready comparison in the same layer.
-Report any unresolved user decision explicitly.
-
-### Common retained evidence
-
-For every candidate milestone retain candidate/layer, upstream revision, adapter revision and patch, fixture/protocol/rubric digests and original bytes, runtime/model/limits, status (`planned`, `attempted`, `blocked`, `failed`, `completed`, or `graded`), native output and index artifacts, citations, measured timing/resources and missing measurements.
-Preserve failures and provider restrictions as operational evidence, separate from retrieval quality.
-Record build cost separately from query and incremental-update cost.
-Compare within a layer and keep the canonical source corpus identical across candidates.
-
-Use portable memory envelopes for each attempt and separate annex objects for all collected logs and index artifacts, regardless of size; fetch those only when needed.
-Whole-record sensitivity applies.
-Update cumulative assessments in `docs/agents`; link evidence IDs rather than copying private capture details.
-No tool becomes canonical storage as a consequence of an evaluation.
-Evaluate exit/rebuild, data egress and dependency/account requirements alongside quality.
-
-## Native baseline execution
-
-The following commands run only the native baseline, not PageIndex/ChatIndex.
-Use them on the corresponding baseline or skill-evaluation day, or as a clearly named matched comparison.
-Retain failed and incomplete trials as well as successes.
-Do not infer model cost from an account subscription or claim zero resource cost.
-
-Before execution, run `pixi run python experiments/context-pilots/native_trial.py pending` to replay persisted events and inspect unresolved attempts.
-Do not assume an unresolved attempt is dead; explicitly close a stopped attempt with `finish --workspace PATH --status interrupted --reason TEXT`.
-If `pending` reports unresolved attempts, do not prepare or dispatch another native pair until admission and outcome are reconciled; continue independent collection and data-integrity auditing.
-If an operator explicitly authorizes recovery for a known pair whose admission cannot be resolved, use `native_trial.py prepare-recovery --pair PAIR_JSON --operator-authorized`.
-This creates new execution workspaces with byte-identical frozen inputs, preserves the logical pair ID, and links each alternative to its original trial.
-Never edit or close the originals as part of recovery or count alternatives as additional independent observations.
-After the two alternative outcomes are complete and their matching blinded grade and response provenance have been retained, the runner appends a supersession record.
-It resolves only the admission block: originals remain admission-unknown, and `pending` lists them as historical rather than actionable.
-A late original outcome is surfaced under `reconciliation_required`; it remains an alternative and is excluded from duplicate analysis until reconciled.
-Routine `prepare-pair` may then start the next pair without deleting or relabeling the original attempts.
-For the CLI comparison, run `native_trial.py prepare-pair` and execute both printed workspaces in the recorded randomized order within the same scheduled milestone.
-Use separate fresh executor contexts with the same model, effort and budget; if the host cannot provide those contexts, record the deviation or a blocked outcome rather than claiming isolation.
-Never pass one condition's answer into the other condition.
-For the tree baseline, run `native_trial.py prepare --kind tree`.
-Preparation records an attempted event before any model response is requested.
-It freezes the prompt, rubric, complete treatment skill, fixture, protocol, and source digests.
-Do not consult earlier trial answers or scores.
-Read only `agent-input.json` as the trial input; it contains the prompt and assigned treatment but excludes grading rubrics.
-Keep `fixture.json` and previous answers closed until the response is saved.
-The host may already expose skill descriptions/instructions, so a baseline is ambient host context, not a clean no-skill condition.
-Record that limitation.
-
-For CLI pairs, both conditions share frozen fixture, rubric, skill revision, collector and protocol bytes.
-The baseline asks for a response without explicitly reading the skill.
-Repeat matched pairs across runs; do not interpret between-day treatment alternation as a controlled comparison.
-For tree trials, use the supplied heading outline and inspect the cited document or conversation nodes.
-This measures a native heading-tree baseline only.
-Actual PageIndex/ChatIndex evaluations follow their candidate slots above; keep their product identities separate from this baseline.
-
-Write your answer verbatim to `response.txt` in that workspace.
-Write `runtime.json` with the actual model identifier, reasoning effort and host version if known (otherwise null), elapsed time and token usage only if measured, and any deviations.
-Run `native_trial.py finish --workspace PATH`.
-This appends a separate immutable completed outcome linked to the attempt.
-Exact inputs, logs, raw response and runtime metadata use external annex artifacts; the shared journal contains statuses, hashes and artifact references.
-For a failed, blocked, abandoned or interrupted execution, use `finish --workspace PATH --status STATUS --reason TEXT`; missing response/runtime files are allowed and partial output is preserved. Inspect any failure detail before retaining it: these baseline fixtures are public/synthetic, so do not add ambient sensitive text.
-Retrying an unchanged event is idempotent.
-`pending` replays persisted events after a journal-append interruption without inventing a completion.
-After both pair outcomes complete, use `native_trial.py grading-packet --pair PAIR_JSON --output NEW_DIRECTORY`.
-Give only `grader-input.json` to a fresh grader.
-Keep the separate assignment key closed until grading is saved, and retain the grade, grader identity and deviations as a separate related memory record.
-For an authorized recovery, ingest the returned JSON against the exact packet with `native_trial.py ingest-grade --recovery RECOVERY_JSON --grade-json GRADE.json --packet-json grader-input.json`.
-This verifies the packet digest, rubric entries, scores and source response bytes, stores the raw grade/capture bundle and appends a separate grade record. The exact grader runtime identity remains unknown when the grade source does not report it. The packet withholds treatment/runtime labels, but answer wording may reveal the treatment; do not claim guaranteed blinding.
-Incomplete pairs remain operational evidence, not zero-valued quality scores.
-Synthetic fixtures contain no private project data.
-Do not put ambient conversation text or secrets in shared evidence.
-
-For native response capture, the task response itself must be returned in the final response channel so it can be stored verbatim.
-Do not send the answer through collaboration tools or substitute a receipt that says it was sent elsewhere.
-A transport correction must use the same versioned wrapper for both treatments and retain both source and delivered input hashes.
-
-The fixture rubric supports later independent grading; self-grading is not evidence of effectiveness.
-A scheduled execution alone is not a controlled comparison.
-Report failures or newly useful findings succinctly; do not announce an unrun product integration as completed.
+Retain original outputs and classified duct captures in annex.
+Update the existing cumulative assessments in `docs/agents` with source revision, roles, evidence level, data boundary, dependencies, decision and next discriminating test.
+Follow repository validation, commit provenance and publication rules.
+Report evidence IDs and meaningful changes; do not repeatedly probe an unchanged blocker.

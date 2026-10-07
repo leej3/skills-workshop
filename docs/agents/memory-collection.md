@@ -133,8 +133,9 @@ Artifact downloads remain explicit through `memory fetch-artifact`.
 
 The initial shared transport put Git history on DataLad Hub instead of this project's GitHub repository.
 That deployment was incorrect for the intended repository-backed storage design.
-The replacement published 455 shared records in a new batch and 15 artifact refs to GitHub, with annex location metadata on its `git-annex` branch.
-A fresh GitHub clone restored all 455 records exactly and downloaded all 15 artifacts with matching bytes; batch restore left artifacts absent until explicitly requested.
+The migration published shared records and artifact refs to GitHub, with annex location metadata on its `git-annex` branch.
+Its historical counts included synthetic evaluation records and are withdrawn as evidence of real-memory coverage.
+The October 7 cleanup replaces affected batches while preserving genuine record bytes.
 The active collector now uses this GitHub destination, and the development checkout is annex-enabled with these refs fetched.
 Old batch commits were not imported and the previous shared Hub Git history is not used for recovery or ongoing publication.
 Sensitive records remain on their private endpoints.
@@ -144,8 +145,6 @@ Sensitive records remain on their private endpoints.
 - Imported 386 shared and 3 whole-record sensitive legacy observations without removing originals.
   Further daily imports are idempotent.
 - Regression tests exercise 2452 records from four concurrent agents, 1000/1000/452 aggregation, daily sealing, duplicate/conflicting IDs, private routing, artifact integrity, ambiguous upload retry, recovery, delivery provenance and CLI error streams.
-- A live synthetic roundtrip through the private test-store annex recovered the exact envelope in a fresh checkout.
-  `experiments/context-pilots/check_transport.py` retains an opt-in reproduction harness; it writes a new test ref and requires explicit test configuration.
 - Initial real records were staged on October 1; their first eligible daily publication is October 2.
   Scheduler creation is not evidence that production publication has completed.
 
@@ -175,19 +174,6 @@ Backup/retention must cover both memory and artifact refs plus annex payloads. D
 The associated record and its artifacts share classification; a sensitive capture is kept in the sensitive store.
 A public trial may have a separate private supporting capture containing local execution paths; that private record points to the public trial without exposing its details in the shared store.
 
-## Trial lifecycle and insight publication
-
-Native baseline preparation records an immutable attempted event before execution.
-Completion, failure, interruption, blocking and abandonment are separate linked outcomes; partial output and missing runtime measurements remain evidence.
-Local event files support replay after interrupted journal writes.
-Unresolved attempts are reported, not silently discarded or assumed failed.
-Collected trial logs and responses use external annex artifacts at every size.
-Older immutable records retain their historical inline representation; this policy governs new collection.
-
-Local synthesis can combine shared and sensitive evidence.
-Classify a derived insight on its publishable content after obscuring or omitting sensitive details.
-Publish the resulting insight store while keeping revealing excerpts and full private evidence links local.
-Separate raw-store indexes are inputs to synthesis, not a prohibition on using sensitive evidence for overall insights.
 
 ## Retiring the repository memory directory
 
@@ -247,5 +233,26 @@ Hydrating exact checkpoint bytes into a disposable Git tree restores successful 
 Verification on October 7 exercised the real recorder on a private task conversation and ten explicitly selected duct runs.
 The configured sensitive transport accepted the 761,861-byte archive; a fresh memory state imported its catalog, downloaded the artifact from the configured remote, and recovered all 55 members with archive and member digest checks.
 The catalog used for this recovery was copied locally; GitHub catalog publication was not established by that test.
-A separate shared synthetic capture remained staged because the GitHub SSH agent had no loaded identity.
+The synthetic acceptance capture was removed on October 7; it is not collection evidence.
 Its original observation and fixed snapshot were retained for retry.
+
+## Synthetic evidence removal — October 7, 2026
+
+Synthetic memory generators, authored evaluation corpora and their derived findings were retired at the user’s request.
+Isolated software unit-test inputs remain permitted and must not enter memory stores.
+Evaluations now use collected records and existing annex evidence under the [scheduled protocol](../../experiments/context-pilots/scheduled-protocol.md).
+
+The cleanup removed 73 synthetic or dependent records from local journals and replicas, along with 45 exclusively associated artifacts.
+Six older synthetic v1 batches and two isolated transport/retrieval test batches were also removed.
+Mixed published batches were replaced with genuine records preserved byte-for-byte before deleting their old refs and payloads.
+Direct annex checks verified absence of 60 selected keys across current and legacy endpoints.
+
+Hash checks preserved all 841 shared and 238 sensitive source envelopes in the removal plan.
+These local counts include unpublished records and retained historical classification sources; they are not publication counts.
+A fresh remote restore recovered 683 shared records in seven batches and 69 sensitive records in three batches, with no selected synthetic IDs.
+Twenty-one generator-owned local workspaces/files and 26 raw generator-run directories were removed.
+
+The cleanup receipts contain IDs, hashes, ref changes and verification results in the local `synthetic-removal-20261007` state directory.
+They retain no synthetic payloads.
+Repository history was not rewritten; prior source commits are historical, not active tooling or evaluation evidence.
+Original genuine conversations remain unmodified, including any historical discussion of retired experiments.

@@ -45,7 +45,7 @@ No account-backed model requests were made.
 ## Next discriminating step
 
 Implement a small local adapter that translates PageIndex's indexing request envelopes into account-backed Luna turns and returns the provider response shape without storing account credentials.
-First prove one bounded indexing turn against a synthetic frozen PDF.
+First prove one bounded indexing turn against an existing collected document with recorded source identity.
 Then determine whether the agent host can return structured function calls to PageIndex's actual traversal loop.
 Keep the index and chat interfaces as separate checkpoints, enforce the eight-call cap, and do not report retrieval until the upstream traversal ran.
 

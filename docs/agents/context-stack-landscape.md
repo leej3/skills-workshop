@@ -11,16 +11,25 @@ Adapters preserve native output alongside normalized fields rather than making l
 Sensitivity governs derived indexes and context packets as well as original records.
 
 Current project-native skills and APM dependency management remain in place.
-The recorder and private overlay stage outside the checkout. The repository `memory/` directory was retired on October 2 after lossless migration and remote recovery verification. Curated v0 commands use an external working copy with compact annex snapshots; assessment publication retains the daily 1000-record batch boundary. See [recovery details](memory-collection.md#retiring-the-repository-memory-directory).
+The recorder and private overlay stage outside the checkout.
+The repository `memory/` directory was retired on October 2 after lossless migration and remote recovery verification.
+Curated v0 commands use an external working copy with compact annex snapshots; assessment publication retains the daily 1000-record batch boundary.
+See [recovery details](memory-collection.md#retiring-the-repository-memory-directory).
 The implemented transitional storage path uses per-agent staging, aggregation across agents once daily per store, 1,000-record durable batches plus at most one daily remainder, annex payloads, and independent Git refs.
-The October 2 correction places shared memory/artifact refs and annex metadata in the project's GitHub repository, with DataLad Hub serving payload bytes. The initial Hub-only shared Git destination was an implementation mismatch, not the intended architecture; it is superseded without a compatibility layer.
-Production verification on October 2 recovered 455 shared records exactly from a fresh GitHub clone and explicitly downloaded all 15 referenced artifacts with matching bytes. This replaces the October 1 deployment uncertainty below; it does not establish multi-host coordination or capture of every agent transcript.
-Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled. Duct captures have been uploaded and explicitly retrieved. The first production daily batch cycle and fresh-local-checkout recovery are not yet established by the October 1 evidence.
+The October 2 correction places shared memory/artifact refs and annex metadata in the project's GitHub repository, with DataLad Hub serving payload bytes.
+The initial Hub-only shared Git destination was an implementation mismatch, not the intended architecture; it is superseded without a compatibility layer.
+The historical October 2 recovery count included synthetic evaluation records.
+Those records and dependent results were removed; that mixed count is not evidence of genuine memory coverage.
+Future recovery checks use selected collected record IDs and exact hashes.
+Superseding the initial planning status: the transitional collector is implemented, legacy observations are staged, and daily account-backed collection is scheduled.
+Duct captures have been uploaded and explicitly retrieved.
+The first production daily batch cycle and fresh-local-checkout recovery are not yet established by the October 1 evidence.
 
 Entire CLI and Brain are **probed candidates**, not required dependencies.
 No tool below gains canonical storage authority merely because it provides capture, memory, indexing, evaluation, and a UI in one package.
 
-Multi-host support is an explicit non-goal. Collection and aggregation serve agents sharing one local environment.
+Multi-host support is an explicit non-goal.
+Collection and aggregation serve agents sharing one local environment.
 
 ## Scope diagram
 
@@ -127,7 +136,8 @@ See the dated [skill-management ledger](skill-management-landscape.md) for evide
 | JSON/JSONL + content digests | Existing records; proposed batch envelope | Preserve native evidence and record IDs; do not encode Brain/Waza IDs as sole identity | Lossless projection and reconstruction fixtures |
 | SQLite/FTS5 | Probed rebuildable index, not canonical memory | Fast structured queries and lexical baseline; local rebuild from authorized payloads | Incremental updates, deletions/classification changes, query correctness |
 
-Synthetic evidence: [annex and scaling trial](../../experiments/memory-annex/README.md).
+Evidence policy: evaluate existing collected memories and annex artifacts.
+Synthetic experiments and their derived findings are withdrawn; isolated unit tests remain permitted.
 The daily aggregation contract and Entire probe are detailed in [the integration experiment](../../experiments/memory-annex/entire-evaluation.md).
 Only designated aggregation ownership is proposed for cross-machine coordination; a shared local file lock does not solve distributed aggregation.
 
@@ -155,8 +165,8 @@ Do not install all runners to achieve architectural neutrality.
 
 | Candidate | Roles / evidence | Data/control and operational boundary | Next discriminating test |
 | --- | --- | --- | --- |
-| [Entire CLI](https://github.com/entireio/cli/blob/main/docs/architecture/ref-checkpoint-backend.md) | Probed 0.11.3 synthetic transcript import, idempotence and independent refs; live capture not tested | Git-shaped primary storage, optional hosted functions. Use as removable collector/cache; preserve raw evidence and Workshop identity | Compare added capture/provenance value against native transcript import; prove export and recovery without Entire |
-| Native transcript adapters | Probed Codex-format fixture; baseline collector | Preserve original bytes, digest, host/runtime version; versioned parsers must tolerate format changes | Test real redacted examples, truncation, duplicates, attachment references and host changes |
+| [Entire CLI](https://github.com/entireio/cli/blob/main/docs/architecture/ref-checkpoint-backend.md) | Source-reviewed optional capture/retrieval consumer; prior synthetic results withdrawn October 7 | Git-shaped primary storage; integration deferred because no benefit on collected Workshop memories justifies maintenance | Identify a concrete unmet capability before testing on an existing annex capture |
+| Native transcript adapters | Native transcript collector; assess using collected sessions | Preserve original bytes, digest, host/runtime version; versioned parsers must tolerate format changes | Test real redacted examples, truncation, duplicates, attachment references and host changes |
 | [OpenTelemetry GenAI](https://github.com/open-telemetry/semantic-conventions-genai) / [OpenInference](https://github.com/Arize-ai/openinference) | Source-reviewed instrumentation conventions; model/tool/retrieval timings and traces | Capture where execution is instrumentable; no automatic access to all desktop history. Retain original spans and convention version; a server is not mandatory | Instrument one evaluation run and map IDs/timing to its records |
 | [con/duct](https://github.com/con/duct) | In use: command logs and sampled resource measurements | Local external logs, not automatic canonical memory; export only selected evidence. Sampling and remote-process coverage have limits | Link selected measurements to evaluation identity without publishing raw logs by default |
 | [Langfuse](https://langfuse.com/self-hosting) | Source-reviewed; optional trace/evaluation/prompt UI projection | Self-hosted stack includes app/worker, PostgreSQL, ClickHouse, Redis/Valkey and object storage; some capabilities need licenses/model calls | Justify operational cost for a few users; test complete trace/score export before adopting |
@@ -213,7 +223,7 @@ Test unavailable private evidence explicitly; missing content must not be misrep
 
 ## Review maintenance and coverage
 
-This pass combined existing Workshop ledgers and synthetic experiment evidence with three delegated primary-source reviews: evaluation/optimization, retrieval/memory, and capture/context assembly. Direct repository/documentation inspection covered the linked candidates on 2026-10-01; it was not a registry crawl or an exhaustive search.
+This pass combined existing Workshop ledgers with three delegated primary-source reviews: evaluation/optimization, retrieval/memory, and capture/context assembly. Direct repository/documentation inspection covered the linked candidates on 2026-10-01; it was not a registry crawl or an exhaustive search.
 ASM, gh skill, Vercel discovery, package indexes, and research-paper catalogs were not rerun for this architectural review.
 Discovery of an individual skill must still follow the Workshop workflow.
 
@@ -234,151 +244,62 @@ Root `AGENTS.md` makes this maintenance part of material tool reviews.
 ## Collection and first pilots — 2026-10-01
 
 The [portable collection contract](memory-collection.md) is implemented with per-agent journals, whole-record routing, daily 1000-record batches, immutable annex refs, recovery and rebuildable projections.
-The [pilot results](../../experiments/context-pilots/README.md) retain the execution boundary: Waza paired mock plumbing completed; SQLite/qmd/Brain lexical comparison completed; account-backed Luna trials scheduled locally; actual PageIndex/ChatIndex model-backed adapters remain pending.
-No product becomes canonical storage.
-
-The first six-query comparison passed 6/6 coarse checks for SQLite and qmd and 5/6 for Brain, which returned a result for an absent term.
-This is evidence for a follow-up abstention test, not a general quality ranking.
-Model cost, semantic quality and isolated skill effectiveness remain unmeasured.
-
-## Retrieval milestone — 2026-10-04
-
-The scheduled six-file/six-query lexical comparison was rerun against SQLite
-FTS5 3.53.4, qmd 2.8.3, and Entire Brain 0.1.0. All three returned the
-labeled source for the five positive queries; SQLite and qmd abstained on
-the absent-term query, while Brain returned `README.md`. Brain emitted
-duplicate paths on positive queries. This reproduces the earlier narrow
-fixture result and is not a new held-out or semantic-quality result.
-
-The run remained local with zero model requests. qmd indexed six files but
-did not build embeddings. Brain's local keyword query worked, while setup
-reported that it could not establish a complete readable local checkpoint
-catalog and that semantic/entity retrieval lacked the Entire graph plugin.
-Semantic retrieval, incremental changes/removals, and held-out questions
-remain unmeasured. Query-time medians were about 0.171 s for qmd and 0.047 s
-for Brain including CLI startup; SQLite's about 0.000064 s excludes startup,
-so these timings are not comparable. No performance ranking is warranted.
-See the [retained retrieval checkpoint](../../experiments/context-pilots/retrieval-2026-10-04.md)
-for source revisions, hashes, outcome IDs, and annex references.
-
-Next discriminating step: determine whether Brain's graph plugin and complete
-local checkpoint catalog can be provided without egress. If not, retain the
-lexical-only boundary and evaluate held-out questions plus incremental
-update/removal behavior for SQLite and qmd.
+Synthetic pilot results have been withdrawn.
+Future comparisons use existing collected memories and source-linked annex artifacts.
 
 ## First native Luna baseline and capture retention
 
-On October 1, three account-backed Luna trials completed: CLI baseline and explicit-skill responses each passed 5/5 basic checks, and the native tree response passed 4/4 citation/abstention checks. These are unblinded, agent-graded, single-trial observations; see [retained trial identities and limits](../../experiments/context-pilots/README.md#luna-baseline--october-1-2026). PageIndex/ChatIndex product integrations remain pending.
 
-Duct task captures now have a Workshop-owned path to separately fetched annex objects. The small memory records retain measurements and content identities; the original logs are available on demand. Duct packaging moves from reusable standalone skills into the Workshop control installation.
+Duct task captures now have a Workshop-owned path to separately fetched annex objects.
+The small memory records retain measurements and content identities; the original logs are available on demand.
+Duct packaging moves from reusable standalone skills into the Workshop control installation.
 
 ## Ongoing cross-layer evaluation — October 1, 2026
 
-PageIndex and ChatIndex now have recurring actual-product evaluation slots, with adapter implementation as the first milestone. The daily 10 a.m. Luna automation follows the [cross-layer rotation and evidence contract](../../experiments/context-pilots/scheduled-protocol.md#daily-candidate-rotation), starting with PageIndex on October 2 and ChatIndex on October 3. This enrollment changes the work queue; neither product has a completed performance result yet.
+PageIndex and ChatIndex now have recurring actual-product evaluation slots, with adapter implementation as the first milestone.
+The daily 10 a.m. Luna automation follows the [cross-layer rotation and evidence contract](../../experiments/context-pilots/scheduled-protocol.md#daily-candidate-rotation), starting with PageIndex on October 2 and ChatIndex on October 3.
+This enrollment changes the work queue; neither product has a completed performance result yet.
 
-Current interface evidence: [PageIndex client source](https://github.com/VectifyAI/PageIndex/blob/main/pageindex/client.py) exposes separate local indexing/chat model backends; [ChatIndex quick start](https://github.com/VectifyAI/ChatIndex#quick-start) uses OpenAI for construction and Anthropic for retrieval. Pin exact source revisions for adapter work and retain native prompts, outputs and modifications. Account-backed compatibility must be demonstrated rather than inferred from these provider interfaces.
+Current interface evidence: [PageIndex client source](https://github.com/VectifyAI/PageIndex/blob/main/pageindex/client.py) exposes separate local indexing/chat model backends; [ChatIndex quick start](https://github.com/VectifyAI/ChatIndex#quick-start) uses OpenAI for construction and Anthropic for retrieval.
+Pin exact source revisions for adapter work and retain native prompts, outputs and modifications.
+Account-backed compatibility must be demonstrated rather than inferred from these provider interfaces.
 
-The rotation also covers Waza/native skill evaluation, SQLite/qmd/Brain retrieval, native context selection, Entire/native capture and annex storage. Compare tools within their layer using common fixtures and separate quality, operational cost and portability measurements. A blocked integration is useful compatibility evidence, not a zero-quality result or a reason to omit the candidate.
-
-## STAMPED workflow assessment — October 1, 2026
-
-The [version-pinned STAMPED assessment](stamped-workflow-assessment.md) uses the independent stamped-assess skill and canonical record schemas. Its selected modularity boundary is demonstrated; six principle criteria are partial and workflow optimization is unknown. This does not assign an overall STAMPED score. Prioritize exact execution-source preservation, a versioned recovery manifest, independent handoff/recovery and collection-completeness measurements before treating additional retrieval adapters as the main optimization. Twenty-eight focused tests passed; full independent reproduction and controlled before/after comparisons were not attempted.
-
-## Evaluation reliability follow-up — 2026-10-02
-
-Native trial collection now writes attempted and terminal-outcome events separately, retains unsuccessful/partial output, and supports exact event replay. All newly collected logs use lazy annex artifacts without a size threshold.
-Skill comparisons prepare matched pairs with identical frozen inputs, randomized execution order and harder CLI edge cases. Grading packets withhold assignment/runtime labels; ambient context and answer wording still limit isolation and blinding. These are protocol improvements, not new evidence of skill effectiveness.
-Local synthesis may aggregate across shared and sensitive evidence and publish derived insights with sensitive details obscured; inherited private provenance alone does not force the resulting insight to be private.
-
-SQLite FTS5 and qmd 2.8.3 passed the same three positive and one absent-term queries after a live annex publication and fresh local restore on October 2. Canonical evidence IDs/text hashes agreed and a one-byte log remained lazy until explicit retrieval. This supports interchangeability of these lexical projections, not a general quality ranking. The [reproducible replacement probe](../../experiments/context-pilots/README.md#reliability-and-replaceability--october-2-2026) retains the upload failure/retry and scope limits. Next test: representative held-out questions and incremental rebuild behavior.
+The rotation also covers skill utility assessment, SQLite/qmd/Brain retrieval, native context selection, native capture and annex storage.
+Compare tools within their layer using common fixtures and separate quality, operational cost and portability measurements.
+A blocked integration is useful compatibility evidence, not a zero-quality result or a reason to omit the candidate.
 
 ## PageIndex account-backed adapter checkpoint — 2026-10-02
 
-The pinned PageIndex source changed substantially from the earlier local SDK
-review. Its current local indexing path uses LiteLLM chat completions, while
-local tree traversal uses the OpenAI Agents Responses API or provider-specific
-adapters. The SDK quickstart's Luna model name is configured through an OpenAI
-API key. The available account-backed Luna boundary exposes Codex agent/CLI
-execution, with no callable LiteLLM endpoint or native Responses/function
-call interface. A bridge would have to map upstream request schemas to Luna
-turns and map structured outputs back into provider response envelopes. The
-Friday milestone therefore stopped at source review: no adapter was
-implemented, no model request was made, and no PageIndex indexing/retrieval
-result or performance score is claimed.
+The pinned PageIndex source changed substantially from the earlier local SDK review.
+Its current local indexing path uses LiteLLM chat completions, while local tree traversal uses the OpenAI Agents Responses API or provider-specific adapters.
+The SDK quickstart's Luna model name is configured through an OpenAI API key.
+The available account-backed Luna boundary exposes Codex agent/CLI execution, with no callable LiteLLM endpoint or native Responses/function call interface.
+A bridge would have to map upstream request schemas to Luna turns and map structured outputs back into provider response envelopes.
+The Friday milestone therefore stopped at source review: no adapter was implemented, no model request was made, and no PageIndex indexing/retrieval result or performance score is claimed.
 
-The next discriminating step is a local credential-free bridge for the actual
-index request format, followed by a separate check that structured function
-calls can resume PageIndex's own traversal loop. Retained evidence and exact
-source digests are in [the October 2 checkpoint](../../experiments/context-pilots/pageindex-2026-10-02.md);
-its account-backed request count is zero. The October 3 ChatIndex source
-review is recorded in [its checkpoint](../../experiments/context-pilots/chatindex-2026-10-03.md).
+The next discriminating step is a local credential-free bridge for the actual index request format, followed by a separate check that structured function calls can resume PageIndex's own traversal loop.
+Retained evidence and exact source digests are in [the October 2 checkpoint](../../experiments/context-pilots/pageindex-2026-10-02.md); its account-backed request count is zero.
+The October 3 ChatIndex source review is recorded in [its checkpoint](../../experiments/context-pilots/chatindex-2026-10-03.md).
 
 ## ChatIndex account-backed adapter checkpoint — 2026-10-03
 
-The pinned ChatIndex revision uses OpenAI Chat Completions through
-`ctree.utils.ChatGPT_API` for tree construction and Anthropic Messages with
-structured `tool_use` blocks for non-streaming retrieval; streaming has a
-separate Anthropic event contract. The available scheduled Luna runtime has no
-callable account-backed interface for either contract. The Saturday milestone
-reviewed and retained the exact source but stopped before adapter code, model
-requests, or product execution. No retrieval, update, citation, latency, or
-resource score is claimed. The next discriminating step is a credential-free,
-resumable bridge that preserves both upstream protocols and can be invoked by
-the account-backed runtime. The [checkpoint](../../experiments/context-pilots/chatindex-2026-10-03.md)
-retains exact source digests and annex evidence IDs.
+The pinned ChatIndex revision uses OpenAI Chat Completions through `ctree.utils.ChatGPT_API` for tree construction and Anthropic Messages with structured `tool_use` blocks for non-streaming retrieval; streaming has a separate Anthropic event contract.
+The available scheduled Luna runtime has no callable account-backed interface for either contract.
+The Saturday milestone reviewed and retained the exact source but stopped before adapter code, model requests, or product execution.
+No retrieval, update, citation, latency, or resource score is claimed.
+The next discriminating step is a credential-free, resumable bridge that preserves both upstream protocols and can be invoked by the account-backed runtime.
+The [checkpoint](../../experiments/context-pilots/chatindex-2026-10-03.md) retains exact source digests and annex evidence IDs.
 
-## Waza/native Luna skill evaluation checkpoint — 2026-10-05
+## Evidence correction — October 7, 2026
 
-The Monday milestone was blocked before model execution: the pinned Waza
-0.38.8 executable was absent from `PATH` and the locked Pixi environment, and
-the scheduled turn did not expose fresh isolated account-backed Luna contexts
-for matched native conditions. The earlier Waza mock result remains plumbing
-evidence only. No account requests, skill-effectiveness score, or performance
-measurement were produced. See the
-[checkpoint](../../experiments/context-pilots/skill-eval-2026-10-05.md) and
-daily collection duct evidence `1f304e89-e88d-5e45-8e82-887787791489`.
+Synthetic memories, generated evaluation corpora, benchmark generators and their derived claims are retired.
+Isolated software unit tests remain allowed and must never be published as memories or evaluation evidence.
+The scheduled protocol now requires existing collected records, explicit source IDs and hashes, and honest reporting when suitable evidence is missing.
 
-Next discriminating step: restore Waza 0.38.8 by its verified digest and make
-fresh matched Luna contexts available; keep executor identities separate.
+The rich recorder captures agent utility/efficiency self-assessments, supplied native conversation bytes and selected actual duct logs, with pinned APM skill references.
+Installation is not independent adoption evidence.
+Evaluate the adequacy of collected captures before reconsidering runtime hooks.
 
-## Native context-selection checkpoint — 2026-10-06
-
-The Tuesday native context-selection milestone did not start. Before trial
-preparation, `native_trial.py pending` found two unresolved trials from the
-same CLI pair (ambient baseline and explicit-skill condition). The protocol
-prohibits preparing another native trial until these outcomes are reconciled;
-the original attempts were left untouched. No model requests or context
-quality/volume measurements occurred. See the
-[checkpoint](../../experiments/context-pilots/context-selection-2026-10-06.md).
-
-The experiment audit remained valid with 50 records and no journal-integrity
-errors. It repeats the narrow October 4 Brain false-positive and duplicate-path
-observations; these do not inform context selection. The daily collection
-command reached `memory.publish` but stalled twice during
-`git annex copy --to=payload`; it was stopped after 593.8 seconds and again
-after 200.4 seconds. Feedback import reported 517 shared, 3 sensitive, and 520
-duplicate source records. Local status shows 733 sealed shared records with
-one pending batch, and 72 sealed sensitive records with none pending. Annex
-publication and projection rebuild completion are unconfirmed. Restore annex
-transport before another daily attempt. See the
-[checkpoint](../../experiments/context-pilots/context-selection-2026-10-06.md).
-
-## Rich skill-use capture and Entire boundary — October 7, 2026
-
-The [annex round-trip](../../experiments/memory-annex/entire-evaluation.md#annex-round-trip-october-7-2026) advances the Entire CLI assessment beyond synthetic import alone.
-Entire CLI 0.11.3 returned literal annex pointer text from a checkpoint transcript blob, with exit status 0.
-Restoring the exact checkpoint tree from a separately fetched annex archive made its JSON metadata and transcript readers work; the rebuilt tree hash and transcript bytes matched the original.
-Evidence level: executed local synthetic probe with a fresh clone, local bare metadata remote and directory annex remote.
-No hosted/model dependency was exercised.
-
-Decision (revised after maintainability review): retain annex-backed portable evidence and defer Entire alignment. The hydration probe establishes recoverability, not an economical integration. Maintaining transcript normalization, checkpoint trees and upstream lifecycle compatibility is not justified by the readers tested so far. This supersedes the earlier recommendation to align through a hydrated projection.
-Do not claim direct annex compatibility or adopt its Git primary store merely to obtain its readers.
-The Workshop catalog branch is an explicit format with complete capture envelopes and annex references; it does not impersonate Entire's checkpoint namespace.
-Current upstream backend documentation still requires Git-backed primary storage.
-Original native conversation bytes and Workshop observation/capture IDs remain canonical. No production Entire projection is installed.
-Next discriminating test, only if Entire offers a needed capability: compare that capability against direct Workshop catalog/annex retrieval and measure adapter maintenance. Live hooks, resume and hosted services remain unverified.
-
-The recorder now supports an agent self-assessment plus a linked conversation/log archive through `feedback-local record --capture`.
-This builds on demonstrated recorder use without requiring a new runtime hook for collection.
-Session identities in new duct contexts help validate explicit associations.
-Missing logs, attachments or later conversation content remain explicit scope limits; the collector does not infer completeness from an observation count.
+Entire alignment remains deferred.
+The earlier reconstruction recommendation is withdrawn: no demonstrated benefit on collected memories currently justifies maintaining checkpoint projections.
+See the revised [source assessment](../../experiments/memory-annex/entire-evaluation.md).

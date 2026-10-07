@@ -446,35 +446,6 @@ def test_cli_rejects_invalid_envelope_without_stdout(tmp_path):
     assert "Traceback" not in result.stderr
 
 
-def test_native_trial_freezes_inputs_and_retains_unknowns(tmp_path):
-    import importlib.util
-    from pathlib import Path
-
-    path = (
-        Path(__file__).resolve().parents[1]
-        / "experiments/context-pilots/native_trial.py"
-    )
-    spec = importlib.util.spec_from_file_location("native_trial", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    prepared = module.prepare("tree", tmp_path)
-    work = Path(prepared["workspace"])
-    (work / "response.txt").write_text("Synthetic test response; not a model trial.")
-    (work / "runtime.json").write_text('{"model":null,"synthetic_test":true}')
-    first = module.finish(work, tmp_path)
-    assert module.finish(work, tmp_path)["duplicate"]
-    seal(MemoryStore(tmp_path))
-    records = list(MemoryStore(tmp_path).records("shared"))
-    assert {r["payload"]["status"] for r in records} == {"attempted", "completed"}
-    record = next(r for r in records if r["id"] == first["id"])
-    assert record["external_artifacts"] and not record["artifacts"]
-    assert "model" in record["context"]["missing"]
-    assert record["payload"]["grade"] is None
-    (work / "fixture.json").write_text("{}")
-    with pytest.raises(ValueError, match="frozen input changed"):
-        module.finish(work, tmp_path)
-
-
 def test_legacy_overlay_routes_entire_record_and_original_bytes(tmp_path):
     import base64
 

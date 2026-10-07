@@ -5,19 +5,8 @@
 Today's Tuesday slot is native context selection.
 No context-selection trial was prepared or executed, and no account-backed model request was made.
 
-Before any native trial work, `native_trial.py pending` reported two unresolved trials from the same CLI pair (`0744eb33-9a39-42b5-ad18-48f1ab2aea75`):
-
-- `5ba6876a-c149-4f0d-9a79-4e5c391516cf` — explicit-skill condition.
-- `c7b5e180-924e-4201-8403-c107161c446d` — ambient-baseline condition.
-
-Both manifests were created at 2026-10-06 02:01 UTC.
-The scheduled protocol prohibits preparing another native trial while unresolved attempts exist.
-The originals are preserved without edits or closure.
-Reconcile their outcomes before retrying this milestone.
-
-The retained experiment audit completed with valid journal integrity and no audit errors.
-It found 50 records, including two pending records; effectiveness claims remain unestablished.
-Its repeated Brain absent-term false positives and duplicate paths are retrieval observations carried forward from the October 4 fixture, not Tuesday context-selection results.
+The generated native-trial corpus and pending attempts were retired on October 7, 2026.
+No context-selection result is established.
 
 ## Collection status: blocked during annex publication
 
@@ -49,6 +38,4 @@ The daily command did not return a result, so completion of projection rebuilds 
 - Account-backed model requests: 0.
 - Runtime, quality, and performance measurements: not applicable; no trial ran.
 
-Next steps: reconcile the two already-started CLI outcomes before native trial preparation, and restore annex transport before another daily collection attempt.
-Then resume native context selection with held-out questions and context-volume measurements.
-Do not count recovery alternatives as new independent observations.
+Next steps: restore collection transport and assess existing collected memories under the [current protocol](scheduled-protocol.md).

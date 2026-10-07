@@ -3,7 +3,8 @@
 Assessed October 1, 2026, against Workshop commit `61eba1f6d864186455e395853694fc0fb09ea211`.
 Assessor: Codex, using the local `stamped-assess` skill at `cda6aa85d5c41b63176032240e5da8a1d3934d7f` and its declared assessment tool revision `e367080f40e5f99e9cad31e885c9549d37e21b42`.
 Reference bundle: `stamped-2026-09-25`, principles 0.2.0, checklist 0.3.1.
-[Structured assessment records](stamped-workflow-2026-10-01/records/) preserve criteria, evidence hashes, conditions and judgments.
+The prior structured assessment and scores were withdrawn on October 7 because their evidence included retired synthetic trials.
+The source-based design questions below remain open; they are not validated outcome claims.
 
 ## Finding
 
@@ -46,9 +47,8 @@ It centralizes classification and publication policy, while con/duct remains ind
 ## Have we optimized the workflow?
 
 Not demonstrated.
-Today's Luna trials establish that the harness can collect plausible answers under identified conditions.
-Both CLI responses pass the basic rubric; the skill-assisted answer's additional details are post hoc observations.
-A single simple fixture, unblinded grading, and six coarse lexical queries cannot establish a reliable quality, time or cost improvement.
+The prior synthetic task comparisons are withdrawn.
+Skill benefit must be assessed from collected task evidence, with causal limitations stated.
 
 The current design also introduces work: source/record commits, per-capture annex publication, model-mediated scheduling, classifications and manually prepared evidence relationships.
 Those costs may be justified, but we have not compared them against a simpler workflow over representative tasks.
@@ -75,27 +75,8 @@ The useful denominator is a completed task with complete usable evidence, not th
    Then decide whether to simplify per-capture publication, scheduling or retention.
    No additional retrieval product is required for this test.
 
-## Evidence and limits
+## Evidence limits
 
-Fresh execution in this assessment: **28 focused memory, capture and setup tests passed**.
-[Sanitized execution evidence](stamped-workflow-2026-10-01/execution-evidence.json) records the pinned source, command, result and original capture digests.
-This checks synthetic contracts on the existing macOS/Pixi host, including classification, immutable identity, retries, restoration and on-demand artifact separation.
-It does not reproduce every previous pilot or establish independent recipient access.
-
-The official tool validated all four records; summarize accounts for **15 activities: 10 completed and 5 explicitly not attempted**.
-Completed activity counts reuse the same regression run where relevant; they are not independent replications.
-The eight judgments are one demonstrated, six partial and one unknown (optimization benefit).
-The report is finalized, but the broader activity scope is incomplete.
-All eight judgments remain without human review; the review queue prioritizes unresolved essential criteria.
-
-The exact installed/distributed STAMPED tool revision was taken from the named skill's requirements and extracted locally into disposable state; no new permanent skill installation was needed.
-ASM, gh skill, Vercel discovery and upstream freshness searches were not run because this was an assessment using a specified local method, not alternative-skill selection.
-This is a version-pinned assessment, not a claim about the newest STAMPED release.
-
-To validate these records with the declared tool revision installed in an isolated environment:
-
-```sh
-stamped-assess validate docs/agents/stamped-workflow-2026-10-01/records
-stamped-assess summarize docs/agents/stamped-workflow-2026-10-01/records
-stamped-assess review-queue docs/agents/stamped-workflow-2026-10-01/records
-```
+The earlier assessment included isolated regression tests, which remain valid software checks, and synthetic evaluation results, which are withdrawn.
+No optimized-workflow or independent-recovery conclusion follows from the retired evaluation.
+Reassess using actual collected memories, conversations and duct captures.
