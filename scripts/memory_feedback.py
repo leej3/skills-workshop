@@ -76,7 +76,7 @@ def capture_feedback(memory, observation, request_path, store, agent, reason=Non
         ).encode()
     )
     saved = memory.store_root(store) / "captures" / (report["id"] + ".json")
-    with memory.lock(store):
+    with memory.lock(store, capture_id=report["id"]):
         if saved.exists():
             receipt = json.loads(saved.read_text())
             if receipt["request_sha256"] != signature:

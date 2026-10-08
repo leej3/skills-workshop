@@ -811,8 +811,13 @@ class MemoryStore:
         return [batch for batch in self.pending(store) if batch["id"] not in held]
 
     @contextmanager
-    def lock(self, store):
-        with (self.store_root(store) / "aggregate.lock").open("a") as stream:
+    def lock(self, store, *, capture_id=None):
+        name = (
+            "aggregate.lock"
+            if capture_id is None
+            else "capture-" + digest(capture_id.encode()) + ".lock"
+        )
+        with (self.store_root(store) / name).open("a") as stream:
             fcntl.flock(stream, fcntl.LOCK_EX)
             yield
 

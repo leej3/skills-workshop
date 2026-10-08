@@ -315,3 +315,34 @@ def test_apm_reference_roundtrip_and_reject_embedding(tmp_path):
         capture_feedback(
             MemoryStore(tmp_path / "fresh"), report, request, "shared", "test"
         )
+
+
+def test_capture_can_stage_while_daily_publisher_holds_store_lock(tmp_path):
+    import subprocess
+    import sys
+
+    report, request, _ = inputs(tmp_path)
+    memory = MemoryStore(tmp_path / "state")
+    with memory.lock("shared"):
+        result = subprocess.run(
+            [
+                sys.executable,
+                "scripts/memory.py",
+                "--state",
+                str(memory.root),
+                "capture-feedback",
+                str(report),
+                "--manifest",
+                str(request),
+                "--store",
+                "shared",
+                "--agent",
+                "unit-test",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["store"] == "shared"

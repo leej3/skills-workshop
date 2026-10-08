@@ -30,6 +30,8 @@ Each agent stages in its own SQLite file outside Git.
 An identity registry rejects conflicting IDs across agents and stores.
 A designated aggregator per store seals one day at a time under an OS lock.
 All agents use the local staging area.
+Rich capture snapshots use a separate per-observation lock, so staging new captures does not wait for a daily network publication to finish.
+This does not authorize concurrent operations against the same annex transport checkout.
 Multi-host support is an explicit non-goal; do not design host-to-host transfer or distributed coordination.
 
 When a sealed batch must be replaced without rewriting its original evidence, use `memory supersede-batch --manifest PATH` to append a `memory-batch-supersession-v1` event to that store's `batch-supersessions.jsonl`.
