@@ -58,3 +58,16 @@ Daily collection now emits progress on stderr and preserves final JSON results w
 It attempts the other store and rebuilds local indexes independently of publication success.
 The scheduled protocol and existing automation now distinguish operation timeouts from total backlog duration, use current user-level skill paths, and allow a bounded review of existing evidence when a candidate is blocked.
 No synthetic evaluation evidence was created.
+
+
+### Confirmed shared recovery; sensitive publication in progress
+
+The traced retry published shared batch `ac4e0796-89cd-4a70-b8c0-2cffcd3fe2ad` (172 records, 61 artifacts) and rebuilt its local projection.
+The shared ledger now reports seven published batches, no pending batches and 656 active records; the historical superseded batch remains excluded.
+The sensitive store sealed batch `b996505f-ac8b-40ef-87ca-aeec8a912151` (200 records, 193 artifacts) and is uploading it successfully as of this follow-up.
+Its final publication receipt and index rebuild are not yet confirmed.
+The live run remains in progress; inspect its final `run_info.json`, stdout and stderr before starting another collector.
+Do not describe this interim result as completed daily collection or a fresh recovery test.
+
+The collector changes passed 281 repository tests and nine skill-helper tests, plus metadata, formatting and feedback validation.
+The existing daily automation retains its 10:00 schedule and account-backed Luna configuration.
