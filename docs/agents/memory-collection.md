@@ -86,6 +86,12 @@ pixi run memory export --store sensitive --output /private/path/sensitive.jsonl
 Default state is `~/.local/state/skills-workshop/memory`; override using `memory --state PATH COMMAND`.
 Keep it outside Git.
 Output is JSON; failures use stderr and nonzero status without echoing evidence.
+The daily command streams phase/transport progress to stderr, with a 180-second timeout per Git operation.
+A backlog can take longer than 180 seconds across multiple successful operations.
+After a publication failure it continues to the other store and rebuilds local projections, retaining a final JSON result with `ok: false`, per-store error types, pending batch IDs and confirmed completed batch IDs; exit status is 1.
+Import or snapshot failures before store processing still fail immediately.
+Feedback roots must be the parent of `records`; passing a populated `records` directory is rejected.
+Import counts describe source records, not newly accepted records; duplicates are reported separately.
 Agent-native envelopes enter via `memory ingest - --agent LABEL`.
 
 Local transport configuration has `annex_bin`, `provenance_script`, and `stores`.

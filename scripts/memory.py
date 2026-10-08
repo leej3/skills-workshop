@@ -29,6 +29,9 @@ from scripts.memory_store import (
 
 def import_feedback(memory, public, private):
     # Merge before routing: a private overlay makes the complete record sensitive.
+    for tree in (public, private):
+        if tree.name == "records" and any(tree.glob("*/*/*.json")):
+            raise ValueError("feedback root must be the parent of records")
     rows = {}
     for tree in (public, private):
         for path in sorted(tree.glob("records/*/*/*.json")):
@@ -434,38 +437,13 @@ def main():
             atomic_bytes(args.output, transport.fetch_artifact(item))
             result = {"output": str(args.output), "sha256": item["sha256"]}
         elif args.command == "daily":
-            from scripts.memory_annex import AnnexTransport
-            from scripts.memory_legacy import snapshot
+            from scripts.memory_daily import collect_daily
 
-            result = {
-                "curated": snapshot(memory, args.curated),
-                "imported": import_feedback(memory, args.public, args.private),
-                "stores": {},
-            }
-            today = datetime.now(ZoneInfo(args.timezone)).date()
-            cutoff = (
-                datetime.combine(today, time(), ZoneInfo(args.timezone))
-                .astimezone(timezone.utc)
-                .isoformat()
-            )
-            for store in ("shared", "sensitive"):
-                memory.prepare(store, (today - timedelta(days=1)).isoformat(), cutoff)
-                if memory.pending(store):
-                    if memory.publishable_pending(store):
-                        transport = AnnexTransport(memory.root, args.config, store)
-                        transport.setup()
-                    else:
-                        transport = None
-                    publication = memory.publish(store, transport)
-                else:
-                    publication = {
-                        "published_batches": [],
-                        "withheld_batches": [],
-                    }
-                result["stores"][store] = rebuild_index(
-                    memory, store, memory.store_root(store) / "projection.sqlite"
-                )
-                result["stores"][store].update(publication)
+            result = collect_daily(memory, args)
+            print(json.dumps(result))
+            if not result["ok"]:
+                parser.exit(1, "Daily collection incomplete; see per-store results.\n")
+            return
         elif args.command == "ingest":
             data = (
                 sys.stdin.read() if args.input == "-" else Path(args.input).read_text()

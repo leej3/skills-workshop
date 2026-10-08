@@ -10,6 +10,19 @@ Run the documented `memory daily` command in [memory collection](../../docs/agen
 Import both feedback trees, aggregate yesterday’s records in 1000-record batches, retry publication and rebuild each store’s projections.
 Preserve source IDs, classifications and bytes.
 Report failures without claiming publication succeeded.
+Use the command defaults for both feedback trees; a feedback root is `observations`, never its `records` child.
+Daily stdout is one JSON result, including per-store errors on partial failure; stderr carries phase and transport progress.
+Allow each transport operation its built-in 180-second timeout.
+A quiet interval or a stack sampled inside `git push` does not establish a stall.
+The ten-minute milestone budget below applies to evaluation, not the total collection backlog.
+On failure, retain the result and completed duct log; do not repeatedly rerun publication in the same task.
+The collector still attempts the other store and rebuilds local projections after a publication failure.
+A publication failure does not block analysis of already available, verified evidence.
+
+Read automation notes from `${CODEX_HOME:-$HOME/.codex}/automations/workshop-daily-memory-and-luna-pilot/memory.md`.
+Resolve user-level controls from the current skill catalog; do not look for Workshop controls in project `.agents/skills`.
+Run `memory health --store shared` and `memory health --store sensitive` after collection and report queued/pending records separately from missing evidence.
+Refresh the automation notes with the actual result, evidence IDs and next actionable step; mark superseded blockers explicitly.
 
 ## Daily candidate rotation
 
@@ -37,3 +50,14 @@ Retain original outputs and classified duct captures in annex.
 Update the existing cumulative assessments in `docs/agents` with source revision, roles, evidence level, data boundary, dependencies, decision and next discriminating test.
 Follow repository validation, commit provenance and publication rules.
 Report evidence IDs and meaningful changes; do not repeatedly probe an unchanged blocker.
+
+
+## Productive fallback and reporting
+
+If today's candidate is blocked on an unchanged adapter or missing runtime, choose one bounded review of collected evidence: inspect a real rich capture, check missing evidence with `memory health`, or verify recovery of an existing annex artifact.
+State that this is a fallback and not execution of the blocked candidate.
+Do not make another dated checkpoint or Git commit solely to repeat an unchanged blocker.
+Update cumulative assessments only for new evidence or a changed decision.
+Use `--details PATH` for feedback JSON, not inline JSON; rich assessments belong under the schema's `assessment` field.
+Stage the task's real conversation and finished duct runs using the installed recorder and its actual APM pin.
+Never claim that source counts are new imports: `shared` and `sensitive` count inspected source records, while `duplicates` counts already-present records.

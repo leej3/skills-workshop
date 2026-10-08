@@ -7,6 +7,7 @@ import os
 import shlex
 import subprocess
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -47,6 +48,7 @@ class AnnexTransport:
         self.config_path = Path(config_path).resolve()
         self.config = json.loads(self.config_path.read_text())
         self.store = store
+        self.progress = None
         self.settings = self.config["stores"][store]
         self.repo = Path(root) / store / "transport"
         self.env = os.environ.copy()
@@ -73,6 +75,15 @@ class AnnexTransport:
         )
 
     def git(self, *args, input=None, check=True, role="metadata"):
+        network = args[0] in {"clone", "fetch", "push", "ls-remote"} or (
+            args[0] == "annex"
+            and len(args) > 1
+            and args[1] in {"copy", "get", "sync", "checkpresentkey"}
+        )
+        label = args[0] + (" " + args[1] if args[0] == "annex" else "")
+        started = time.monotonic()
+        if self.progress and network:
+            self.progress(f"{self.store}: {label} started (180s operation timeout)")
         p = subprocess.run(
             ["git", *args],
             cwd=self.repo,
@@ -83,6 +94,10 @@ class AnnexTransport:
             check=False,
             timeout=180,
         )
+        if self.progress and network:
+            self.progress(
+                f"{self.store}: {label} finished in {time.monotonic() - started:.1f}s (exit {p.returncode})"
+            )
         if check and p.returncode:
             # Diagnostics may contain server data; do not leak it into public logs.
             raise RuntimeError("annex/Git operation failed: " + args[0])

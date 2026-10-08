@@ -1,6 +1,6 @@
 # Storage and recovery checkpoint — October 8, 2026
 
-## Status: daily publication blocked; no recovery trial
+## Original scheduled run: interrupted publication; no recovery trial
 
 Today's Thursday slot covered storage/recovery. The documented daily command started through duct 0.22.0, imported/sealed work reached publication, then was interrupted after 134 seconds.
 The stack trace shows the collector in `memory.publish`, publishing an annex artifact through `git push origin <ref>`.
@@ -39,3 +39,22 @@ No new feedback-tree import count was returned by the interrupted command.
   Candidate executions and recovery checks: 0.
 
 Next discriminating step: establish a changed SSH/annex transport state and then run one daily collection. Confirm each publication receipt and projection rebuild before using a fresh state to test restore. Do not infer success from local sealed/pending counts or a push timeout.
+
+
+## Follow-up diagnosis — October 8, 2026
+
+The original diagnosis above is superseded by a traced retry, duct run `20261008T144006.011346Z-05b30f6c728e409586a9bfcd65c29b8a`.
+The scheduled agent interrupted the entire collector at 134 seconds, before an individual Git operation's 180-second timeout.
+Its sampled stack identified the operation executing at interruption, not the duration of that operation.
+The pending shared batch contained 172 records and 61 artifacts, each requiring publication checks.
+The traced retry observed many successful operations around one second and intermittent successful operations around 36 seconds; no SSH or credential reconfiguration was necessary.
+This does not prove the cause of October 6's interruption or guarantee future availability.
+
+The zero-shared import check also used the wrong root: `observations/records` instead of `observations`.
+It therefore did not inspect the shareable observation tree and is not evidence that shared records were absent.
+The importer now rejects that populated child-directory mistake.
+
+Daily collection now emits progress on stderr and preserves final JSON results when one store's publication fails.
+It attempts the other store and rebuilds local indexes independently of publication success.
+The scheduled protocol and existing automation now distinguish operation timeouts from total backlog duration, use current user-level skill paths, and allow a bounded review of existing evidence when a candidate is blocked.
+No synthetic evaluation evidence was created.
