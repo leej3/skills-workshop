@@ -325,6 +325,24 @@ The workshop records only cross-project context and evidence; it does not copy A
 APM's [OpenAPM v0.1 specification](https://microsoft.github.io/apm/specs/openapm-v01/) is an editor's Working Draft under semantic-version-zero, not an accepted ecosystem standard.
 Its current manifest and registry contracts should be treated as versioned implementation interfaces behind a removable integration.
 
+#### con/skills distribution review, October 11, 2026
+
+Source-reviewed [con/skills#13](https://github.com/con/skills/pull/13) at `fb15636bd8e4809307264bd7050e8271522ad5d2`, including its installation and authoring skills, consumer template, and packaging check.
+The package remains a Git-owned collection; APM owns downstream resolution, deployment, and integrity.
+The [APM 0.31.0 package-type reference](https://github.com/microsoft/apm/blob/v0.31.0/docs/src/content/docs/reference/package-types.md) explicitly documents `skills/<name>/SKILL.md` collections and selective installs.
+The [dependency reference](https://github.com/microsoft/apm/blob/v0.31.0/docs/src/content/docs/consumer/manage-dependencies.md) documents generated locks, exact resolved commits, and frozen restoration.
+Tracking metadata while ignoring generated deployment copies fits this model.
+The current PR's four CI checks pass; its packaging harness exercises local collection installation and published-Git subset restoration.
+This review did not rerun the PR tests locally or establish production use of the new skills.
+
+Decision: retain APM and the collection layout, but distinguish local policy from APM requirements.
+The installer requires a source-owned `apm.yml` even though APM 0.31.0 supports manifest-free collections and single-skill bundles.
+Dedicated source repositories and full-SHA manifest refs are stricter choices; APM also supports monorepo subpaths and tags resolved to locked commits.
+The manifest's `includes` field does not make arbitrary source directories discoverable.
+The canonical source, selected revision, and portable consumer manifest/lock remain the export boundary; downstream files remain regenerable projections.
+Git hosting and a pinned local APM runtime are required, with no model service required for installation.
+Next discriminating test: install a real manifest-free upstream skill with the pinned CLI and verify that revised installation guidance accepts it without repackaging its canonical source.
+
 ### GitHub CLI `gh skill`
 
 GitHub CLI 2.90 and later includes `gh skill` in public preview.
