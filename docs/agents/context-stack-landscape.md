@@ -127,6 +127,38 @@ See the dated [skill-management ledger](skill-management-landscape.md) for evide
 | [SkillPort](https://github.com/gotalab/skillport) | Prior review: optional skill search/MCP projection | Do not let provider-specific metadata rewrite canonical skill source | Read-only generated view only if current recall is insufficient |
 | [SkillNote](https://github.com/luna-prompts/skillnote) | Prior review: editing/browsing/ratings UI candidate; not canonical memory | Earlier review found export/history and schema concerns | Demonstrate complete history/identity round-trip before adoption |
 
+## Worktree management: October 14, 2026 probe
+
+[gwq](https://github.com/d-kuro/gwq) overlaps wt-utils in worktree creation, listing, selection, navigation, and removal; it also provides global discovery, status, and tmux integration.
+Decision: **probed, replacement deferred** because absorbed-submodule navigation and removal status need upstream corrections.
+This is not adoption or a decision to archive wt-utils.
+
+Local experiments used the v0.1.2 macOS ARM64 release (commit `0842569`, archive SHA-256 `feebd322b8eff4365e2f90ad63de6d265a8b6d85793228f6425857a976590ec6`).
+The [reproduction](../../experiments/gwq-worktrees/probe.py) uses disposable Git repositories and real git-annex operations.
+These software fixtures are not memory-evaluation data.
+Current main `ec0a9f3d6aef475c7c6ff7323f2038a372284ccd` was source-reviewed, not executed; its worktree parser and submodule-discovery checks retain the relevant limitations.
+
+- Repository-scoped listing found detached and externally stored worktrees.
+  A read-only check against the working project returned the same 71 paths as Git, including 42 missing directories and 11 detached entries.
+- Missing entries appear in the human table and JSON.
+  Global filesystem discovery excludes nonexistent paths but skips absorbed submodules and their linked worktrees, including when their origin is a hosted repository.
+- A common-ancestor discovery root plus a relative naming template found two storage roots while creating new worktrees in a dedicated directory in the fixture.
+  Symlink aggregation did not work.
+  A real home-directory scan did not finish within 45 seconds; this is not a practical replacement for separate discovery roots in this environment.
+- Absorbed-submodule creation succeeded, but `get main` and `cd main` selected `.git/modules/...` instead of the checkout.
+  Explicit destinations work with local remotes; generated paths require a remote URL the parser accepts.
+- An Annex-backed absorbed submodule allowed linked-worktree creation and subsequent `git annex init`/`get`.
+  Creation did not hydrate content.
+  No claim about Annex cleanup or sole-copy preservation follows from this probe.
+- A dirty-worktree removal printed an error but returned 0 and left the directory.
+  Ordinary removal deleted an ignored fixture file.
+  These require explicit postcondition and preservation guidance for agents.
+
+The [candidate skill](../../.apm/skills/gwq/SKILL.md) records these operational limits but is not included in the package or deployed.
+Next discriminating work: resolve primary checkouts through Git's `core.worktree`, distinguish a submodule checkout from its linked worktrees during global discovery, propagate removal failures, and separate discovery roots from creation storage upstream.
+Git remains the portable ownership/export boundary; gwq requires no hosted service or model.
+No upstream issue or pull request has been posted.
+
 ## Storage and evidence ownership
 
 | Component | Evidence and decision | Boundary and tradeoff | Next useful check |
