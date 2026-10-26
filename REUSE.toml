@@ -1,0 +1,9 @@
+version = 1
+
+# Workshop-owned files inherit the existing root LICENSE. Git submodules
+# and ignored dependency deployments retain their own upstream licenses.
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 John Lee"
+SPDX-License-Identifier = "MIT"

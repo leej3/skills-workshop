@@ -1,0 +1,12 @@
+name: workshop-skills
+version: 0.1.0
+description: Reusable workflow skills maintained in Skills Workshop.
+type: skill
+includes:
+  - .apm/skills/commit-provenance
+  - .apm/skills/build-github-app
+  - .apm/skills/unix-cli-design
+  - .apm/skills/wt-utils
+  - .apm/skills/skills-workshop
+targets:
+  - agent-skills

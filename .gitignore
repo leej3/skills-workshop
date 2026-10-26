@@ -1,0 +1,26 @@
+inventory/*
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pixi/
+.backups/
+apm_modules/
+
+# Locks and interrupted temporary writes for schema-validated observations.
+.feedback.lock
+.feedback-*.tmp
+
+# APM-owned deployments; native Workshop skill source stays tracked.
+/.agents/skills/commit-provenance/
+/.agents/skills/build-github-app/
+/.agents/skills/unix-cli-design/
+/.agents/skills/wt-utils/
+/.agents/skills/skills-workshop/
+
+# Retain ignores for earlier local memory and operation state.
+/memory/
+
+# Host configuration and private operational state never belong in code.
+/memory-storage.json
+/operations/
+/receipts/

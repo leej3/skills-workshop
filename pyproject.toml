@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skills-workshop"
+version = "0.1.0"
+description = "Editable skill discovery commands for Skills Workshop"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["PyYAML>=6,<7"]
+
+[project.scripts]
+skills-workshop = "scripts.workshop:main"
+
+[tool.setuptools]
+packages = ["scripts"]
+package-dir = { "" = "." }
+
+# Preserve the pre-packaging lint baseline; runtime Python remains >=3.11.
+[tool.ruff]
+target-version = "py310"

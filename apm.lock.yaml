@@ -1,0 +1,209 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/build-github-app
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/build-github-app/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0d7a55c8accc0739e3ad1eba41d57190d86ecc8ae9886feb06f53f9ac720ca6f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/build-github-app/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/build-github-app/references/artifacts-deployment.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8dd316f3d7ad2b5186d4b69a13f8d428c21f50d441e0530398c1eb33f39cbb0e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/build-github-app/references/oauth-permissions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c36d640f539c18a9653cb103d488c89f15ce02b9af02d0eb2f84082860e877c2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f7f2f1051b1a1958a81f39e8351c60588bbe9c5043a95a02f2793ff1f9194e5a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance/scripts/resolve.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7b99c2dbe34bd90cbd5cf2ac54525e7fbf855f081b0c451733755cbfefc55960
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance/scripts/runtime_context.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2d2389e4ea1dd67782e518d9d3a9bde8f6a536b81804430bac157603573d9a74
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/commit-provenance/scripts/test_runtime_context.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:af6400c53aa038745ed32ef3f615702c3344d64ec0713d34685bebc7bbf0aa6c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/skills-workshop
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/skills-workshop/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5fd982b01ec7dfe635b5d5de8407f0062434b3677d583ee882178fd3b1eee547
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/skills-workshop/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ac868a7bd31d9d2cff5f41da3e54cd85e02071686fe54017cbd17d191af3118e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/skills-workshop/references/workflow.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ea7efdbe68f4c03c15b0e35f574b29910786e7a1cf4378eca27dca3c71f3a047
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unix-cli-design
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unix-cli-design/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/wt-utils
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/wt-utils/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0bdb00cb06d4bb121aa7d233f17183c790acd1d0ad2fe1ee4fa1f4704c9a23bd
+local_deployed_files:
+- .agents/skills/build-github-app
+- .agents/skills/build-github-app/SKILL.md
+- .agents/skills/build-github-app/agents/openai.yaml
+- .agents/skills/build-github-app/references/artifacts-deployment.md
+- .agents/skills/build-github-app/references/oauth-permissions.md
+- .agents/skills/commit-provenance
+- .agents/skills/commit-provenance/SKILL.md
+- .agents/skills/commit-provenance/agents/openai.yaml
+- .agents/skills/commit-provenance/scripts/resolve.sh
+- .agents/skills/commit-provenance/scripts/runtime_context.py
+- .agents/skills/commit-provenance/scripts/test_runtime_context.py
+- .agents/skills/skills-workshop
+- .agents/skills/skills-workshop/SKILL.md
+- .agents/skills/skills-workshop/agents/openai.yaml
+- .agents/skills/skills-workshop/references/workflow.md
+- .agents/skills/unix-cli-design
+- .agents/skills/unix-cli-design/SKILL.md
+- .agents/skills/wt-utils
+- .agents/skills/wt-utils/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/build-github-app/SKILL.md: sha256:0d7a55c8accc0739e3ad1eba41d57190d86ecc8ae9886feb06f53f9ac720ca6f
+  .agents/skills/build-github-app/agents/openai.yaml: sha256:0fe2e3d90aa725239607ebdb3fab618d164bf8c0103634fbe6003110ed815f4e
+  .agents/skills/build-github-app/references/artifacts-deployment.md: sha256:8dd316f3d7ad2b5186d4b69a13f8d428c21f50d441e0530398c1eb33f39cbb0e
+  .agents/skills/build-github-app/references/oauth-permissions.md: sha256:c36d640f539c18a9653cb103d488c89f15ce02b9af02d0eb2f84082860e877c2
+  .agents/skills/commit-provenance/SKILL.md: sha256:f7f2f1051b1a1958a81f39e8351c60588bbe9c5043a95a02f2793ff1f9194e5a
+  .agents/skills/commit-provenance/agents/openai.yaml: sha256:63c947f223861a26b8a475074bd6587dbd1d92ea315c08672caf1767ecdffb87
+  .agents/skills/commit-provenance/scripts/resolve.sh: sha256:7b99c2dbe34bd90cbd5cf2ac54525e7fbf855f081b0c451733755cbfefc55960
+  .agents/skills/commit-provenance/scripts/runtime_context.py: sha256:2d2389e4ea1dd67782e518d9d3a9bde8f6a536b81804430bac157603573d9a74
+  .agents/skills/commit-provenance/scripts/test_runtime_context.py: sha256:af6400c53aa038745ed32ef3f615702c3344d64ec0713d34685bebc7bbf0aa6c
+  .agents/skills/skills-workshop/SKILL.md: sha256:5fd982b01ec7dfe635b5d5de8407f0062434b3677d583ee882178fd3b1eee547
+  .agents/skills/skills-workshop/agents/openai.yaml: sha256:ac868a7bd31d9d2cff5f41da3e54cd85e02071686fe54017cbd17d191af3118e
+  .agents/skills/skills-workshop/references/workflow.md: sha256:ea7efdbe68f4c03c15b0e35f574b29910786e7a1cf4378eca27dca3c71f3a047
+  .agents/skills/unix-cli-design/SKILL.md: sha256:7ab157de646a9068d518938ee98d895cde26ce4a2cc331664d849cbcd4e9ca4d
+  .agents/skills/wt-utils/SKILL.md: sha256:0bdb00cb06d4bb121aa7d233f17183c790acd1d0ad2fe1ee4fa1f4704c9a23bd

@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/TurtleTech-ehf/snapper
+    rev: v0.10.0
+    hooks:
+      - id: snapper
+        exclude: ^LICENSES/
+  - repo: local
+    hooks:
+      - id: reuse
+        name: Check REUSE licensing
+        entry: pixi run --locked reuse-lint
+        language: system
+        pass_filenames: false
+        always_run: true

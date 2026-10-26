@@ -1,0 +1,55 @@
+schema_version = 1
+
+[[skill_roots]]
+name = "codex-user"
+path = "~/.codex/skills"
+
+[[skill_roots]]
+name = "agent-standard"
+path = "~/.agents/skills"
+
+[[skill_roots]]
+name = "claude-user"
+path = "~/.claude/skills"
+
+[[upstreams]]
+name = "scientific-agent-skills"
+url = "https://github.com/K-Dense-AI/scientific-agent-skills.git"
+fork_url = "https://github.com/leej3/scientific-agent-skills.git"
+path = "upstreams/scientific-agent-skills"
+role = "Broad scientific skill discovery and general scientific contributions"
+
+[[upstreams]]
+name = "nipreps-skills-comm"
+url = "https://github.com/nipreps/skills-comm.git"
+fork_url = "https://github.com/leej3/skills-comm.git"
+path = "upstreams/nipreps-skills-comm"
+role = "Neuroimaging workflows, operational guardrails, and skill iteration examples"
+
+[[upstreams]]
+name = "con-skills"
+url = "https://github.com/con/skills.git"
+fork_url = "https://github.com/leej3/skills.git"
+path = "upstreams/con-skills"
+role = "Software maintenance, triage, and automation skills"
+
+[[upstreams]]
+name = "anthropic-skills"
+url = "https://github.com/anthropics/skills.git"
+fork_url = "https://github.com/anthropics/skills.git"
+path = "upstreams/anthropic-skills"
+role = "Official Anthropic examples for creative, document, and developer workflows; inspect each skill's license"
+
+[[upstreams]]
+name = "openai-skills"
+url = "https://github.com/openai/skills.git"
+fork_url = "https://github.com/openai/skills.git"
+path = "upstreams/openai-skills"
+role = "Official OpenAI skill catalog including curated and experimental developer workflows"
+
+[[upstreams]]
+name = "matt-pocock-skills"
+url = "https://github.com/mattpocock/skills.git"
+fork_url = "https://github.com/mattpocock/skills.git"
+path = "upstreams/matt-pocock-skills"
+role = "Matt Pocock's planning interviews, codebase design, and development workflows; grill-me delegates to grilling"

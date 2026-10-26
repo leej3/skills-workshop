@@ -1,0 +1,19 @@
+[workspace]
+name = "workshop-archive"
+channels = ["conda-forge"]
+platforms = [
+  { name = "linux-annex", platform = "linux-64", glibc = "2.34" },
+  { platform = "osx-arm64", macos = "14.0" },
+  { platform = "osx-64", macos = "15.0" },
+]
+conda-pypi-map = { conda-forge = { mapping-mode = "replace" } }
+
+[dependencies]
+python = "3.12.*"
+git = ">=2.40"
+rclone = ">=1.67,<2"
+
+[pypi-dependencies]
+datalad = "==1.7.1"
+git-annex = "==10.20260901.post1"
+agentsview = "==0.46.1"

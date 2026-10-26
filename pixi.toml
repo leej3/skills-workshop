@@ -1,0 +1,65 @@
+[workspace]
+name = "skills-workshop"
+version = "0.1.0"
+description = "Agent skills and thin tooling for discovery and analysis"
+channels = ["conda-forge"]
+platforms = [
+  { platform = "osx-arm64", macos = "14.0" },
+  { platform = "osx-64", macos = "15.0" },
+  { name = "linux-annex", platform = "linux-64", glibc = "2.34" },
+]
+
+[dependencies]
+python = ">=3.11,<3.14"
+git = ">=2.40"
+gh = ">=2.60"
+ruff = ">=0.12"
+visidata = ">=3.3,<4"
+pytest = ">=8.4,<9"
+nodejs = "22.*"
+pyyaml = "6.*"
+pre-commit = ">=4.6,<5"
+reuse = "==6.2.0"
+
+[tasks]
+workshop = "python scripts/workshop.py"
+setup-skills = "apm install --frozen"
+audit-skills = "apm audit --ci"
+check-apm = "python scripts/check_apm.py"
+setup-side-chat-archive = "python scripts/setup_side_chat_archive.py"
+inventory = "python scripts/inventory.py"
+inventory-table = "python scripts/inventory.py --format tsv"
+inventory-vd = "python scripts/inventory.py --format tsv --view"
+configure-upstreams = "python scripts/upstream_status.py configure"
+upstream-status = "python scripts/upstream_status.py status"
+upstream-update = "python scripts/upstream_status.py update"
+trust-inventory = "python scripts/upstream_status.py trust"
+trust-table = "python scripts/upstream_status.py trust --format tsv"
+trust-vd = "python scripts/upstream_status.py trust --format tsv | vd -f tsv"
+review-skill = "python scripts/upstream_status.py review"
+format = "ruff format scripts tests"
+lint = "ruff check scripts tests"
+check-format = "ruff format --check scripts tests"
+compile = "python -m compileall -q scripts tests"
+test = "pytest -q tests"
+test-skill-helpers = { cmd = "pytest -q .apm/skills/commit-provenance/scripts", env = { PYTHONDONTWRITEBYTECODE = "1" } }
+hooks-install = "pre-commit install"
+reuse-lint = "reuse lint"
+validate = { depends-on = ["lint", "check-format", "compile", "test", "test-skill-helpers", "reuse-lint"] }
+
+[pypi-dependencies]
+apm-cli = "==0.31.0"
+
+[feature.security.dependencies]
+python = "3.12.*"
+
+[feature.security.pypi-dependencies]
+cisco-ai-skill-scanner = "==2.1.0"
+pip-audit = "==2.10.1"
+
+[feature.security.tasks]
+scan-skills = "python scripts/check_apm.py --scan-only"
+audit-dependencies = "pip-audit"
+
+[environments]
+security = { features = ["security"], no-default-feature = true }

@@ -1,0 +1,18 @@
+[submodule "upstreams/scientific-agent-skills"]
+	path = upstreams/scientific-agent-skills
+	url = https://github.com/leej3/scientific-agent-skills.git
+[submodule "upstreams/nipreps-skills-comm"]
+	path = upstreams/nipreps-skills-comm
+	url = https://github.com/leej3/skills-comm.git
+[submodule "upstreams/con-skills"]
+	path = upstreams/con-skills
+	url = https://github.com/leej3/skills.git
+[submodule "upstreams/anthropic-skills"]
+	path = upstreams/anthropic-skills
+	url = https://github.com/anthropics/skills.git
+[submodule "upstreams/openai-skills"]
+	path = upstreams/openai-skills
+	url = https://github.com/openai/skills.git
+[submodule "upstreams/matt-pocock-skills"]
+	path = upstreams/matt-pocock-skills
+	url = https://github.com/mattpocock/skills.git
